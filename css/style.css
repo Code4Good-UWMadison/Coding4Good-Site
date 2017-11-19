@@ -2,8 +2,15 @@
   cursor: pointer;
 }
 
+h1,h2,h3,h4,h5,h6{
+  font-family: "Roboto-Light";
+}
 .margin-top{
   margin-top:50px;
+}
+
+.padding-top{
+  padding-top: 50px;
 }
 
 .primary-button{
@@ -22,6 +29,7 @@
   color: white;
   background-color: #33cc33;
   border-color: #33cc33;
+  border-radius: 10px;
 }
 .primary-button:hover {
   color: #33cc33;
@@ -38,10 +46,101 @@
 .large-button{
   height: 2em;
   width: 7em;
-  font-size: 3em;
+  font-size: 2em;
+  border-radius: 10px;
 }
 
 .large-text{
   font-size: 10em;
+}
+
+#homepage .more {
+	-moz-transition: -moz-transform 0.75s ease, opacity 0.75s ease;
+	-webkit-transition: -webkit-transform 0.75s ease, opacity 0.75s ease;
+	-ms-transition: -ms-transform 0.75s ease, opacity 0.75s ease;
+	transition: transform 0.75s ease, opacity 0.75s ease;
+	-moz-transition-delay: 3.5s;
+	-webkit-transition-delay: 3.5s;
+	-ms-transition-delay: 3.5s;
+	transition-delay: 3.5s;
+	-moz-transform: translateY(0);
+	-webkit-transform: translateY(0);
+	-ms-transform: translateY(0);
+	transform: translateY(0);
+	border: none;
+	bottom: 0;
+	color: inherit;
+	font-size: 0.8em;
+	height: 8.5em;
+	left: 50%;
+	letter-spacing: 0.225em;
+	margin-left: -8.5em;
+	opacity: 1;
+	outline: 0;
+	padding-left: 0.225em;
+	position: absolute;
+	text-align: center;
+	text-transform: uppercase;
+	width: 16em;
+	z-index: 1;
+}
+
+#homepage .more:after {
+	background-image: url("images/arrow.svg");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	display: block;
+  bottom: 4em;
+  content: '';
+	height: 1.5em;
+	left: 50%;
+	margin: 0 0 0 -0.75em;
+	position: absolute;
+	width: 1.5em;
+}
+
+#homepage:after {
+	-moz-pointer-events: none;
+	-webkit-pointer-events: none;
+	-ms-pointer-events: none;
+	pointer-events: none;
+	-moz-transition: opacity 3s ease-in-out;
+	-webkit-transition: opacity 3s ease-in-out;
+	-ms-transition: opacity 3s ease-in-out;
+	transition: opacity 3s ease-in-out;
+	-moz-transition-delay: 1.25s;
+	-webkit-transition-delay: 1.25s;
+	-ms-transition-delay: 1.25s;
+	transition-delay: 1.25s;
+	content: '';
+	background: #2e3842;
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	opacity: 0;
+}
+
+.middle {
+  vertical-align: middle;
+}
+
+body, html, .main {
+    height: 100%;
+}
+
+section {
+    min-height: 100%;
+}
+
+#buttontop {
+  display: none;
+  position: fixed;
+  bottom: 100px;
+  right: 50px;
+  z-index: 99;
   font-family: "Roboto-Light";
 }
