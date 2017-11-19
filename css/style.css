@@ -1,0 +1,47 @@
+.clickable {
+  cursor: pointer;
+}
+
+.margin-top{
+  margin-top:50px;
+}
+
+.primary-button{
+  border-radius: 0;
+  height: 2em;
+  padding-top: .5em;
+  padding-bottom: 2em;
+  text-align: center;
+  text-decoration: none;
+  font-size: medium;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+  font-family: "Roboto-Light";
+  color: white;
+  background-color: #33cc33;
+  border-color: #33cc33;
+}
+.primary-button:hover {
+  color: #33cc33;
+  background-color: white;
+}
+.primary-button:focus {
+  color: white;
+}
+.primary-button:focus:hover {
+  color: #33cc33;
+  background-color: white;
+}
+
+.large-button{
+  height: 2em;
+  width: 7em;
+  font-size: 3em;
+}
+
+.large-text{
+  font-size: 10em;
+  font-family: "Roboto-Light";
+}
