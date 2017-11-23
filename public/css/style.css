@@ -4,7 +4,17 @@
 
 h1,h2,h3,h4,h5,h6{
   /*font-family: "Roboto-Light";*/
+  color: #777;
 }
+
+h1{
+  font-size: 60px;
+}
+
+.main-title {
+
+}
+
 .margin-top{
   margin-top:50px;
 }
@@ -14,37 +24,31 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .primary-button{
-  border-radius: 0;
-  height: 2em;
-  padding-top: .5em;
-  padding-bottom: 2em;
+  padding: 6px 12px;
+  border-radius: 2;
   text-align: center;
   text-decoration: none;
-  font-size: medium;
-  margin-top: 1%;
-  margin-bottom: 1%;
-  margin-left: 1%;
-  margin-right: 1%;
+  font-size: 14px;
+  font-family: inherit;
   color: white;
   background-color: #EF6C00;
   border-color: #EF6C00;
   border-radius: 5px;
+  font-weight: 300;
 }
 .primary-button:hover {
   color: #E65100;
   background-color: #FFCC80;
+  -moz-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  -ms-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }
 
 
 .large-button{
-  height: 2em;
-  width: 7em;
-  font-size: 2em;
+  font-size: 24px;
   border-radius: 10px;
-}
-
-.large-text{
-  font-size: 10em;
 }
 
 #homepage .more {
@@ -121,12 +125,28 @@ h1,h2,h3,h4,h5,h6{
   vertical-align: middle;
 }
 
-body, html, .main {
-    height: 100%;
+body, html {
+  height: 100%;
+  color: #333;
+}
+
+.main {
+  text-align: center;
+  padding-top: 200px;
+}
+
+.btn-proposal {
+  font-size: 24px;
+  font-weight: 300;
+  margin-top: 130px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 40px;
+  padding-right: 40px;
 }
 
 section {
-    min-height: 100%;
+  min-height: 100%;
 }
 
 #buttontop {
@@ -143,7 +163,7 @@ section {
   background: #e7e7e7;
   color: #757575;
   font-size: 12px;
-  font-size: "Helvetica Neue,Helvetica,Arial,sans-serif";
+  font-size: "Helvetica,Arial,sans-serif";
   text-align: center;
-  padding-top: 50px;
+  padding-top: 60px;
 }
