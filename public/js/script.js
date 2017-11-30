@@ -21,12 +21,12 @@ $(document).ready(function(){
   });
 });
 
-window.onscroll = function() {scrollFunction()};
-
-function scrollFunction() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        document.getElementById("buttontop").style.display = "block";
-    } else {
-        document.getElementById("buttontop").style.display = "none";
-    }
-}
+// window.onscroll = function() {scrollFunction()};
+//
+// function scrollFunction() {
+//     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+//         document.getElementById("buttontop").style.display = "block";
+//     } else {
+//         document.getElementById("buttontop").style.display = "none";
+//     }
+// }
