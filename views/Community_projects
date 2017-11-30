@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CORGi</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">CORGi</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="./index.ejs#firstpage">About</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle clickable" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Program <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="./Community_projects">Community Projects</a></li>
+                        <li><a href="#">AI competition</a></li>
+                        <li><a href="#">LOOP&infin;</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Frisbee studios</a></li>
+                        <li role="separator" class="divider"></li>
+                    </ul>
+                </li>
+                <li><a href="#">Partners</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+            <div class="navbar-form navbar-right">
+                <input type="text" id="search" class="form-control" placeholder="Search">
+                <button id="search-button" class="primary-button">Search</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="#topsec" id="buttontop" class="btn primary-button">Back to Top</a>
+
+<section id="topsec">
+    <div class="main col-lg-12">
+        <div class="row padding-top middle">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4 text-center">
+                <h1 class="large-text">About</h1>
+                <h2>Code for Good(CORGi) is a student group focusing on the intersection of computer technology
+                    and community service to create social change.</h2>
+                <p>Our mission is to empower students to leverage computer science knowledge and skills to create
+                    social values by encouraging initiation and collaboration.  <\br>
+                    We aim to build community for STEM badgers to improve problem-solving skill and leadership, connect with
+                    Corgis who are passionate in creating social impacts and share inspirations and ideas.
+                </p>
+            </div>
+            <div class="col-lg-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <img src="http://cdn.akc.org/akcdoglovers/PembrokeWelshCorgi_hero.jpg">
+            </div>
+            <div class="col-lg-4">
+                <img src="http://cdn.akc.org/akcdoglovers/PembrokeWelshCorgi_hero.jpg">
+            </div>
+            <div class="col-lg-4">
+                <img src="http://cdn.akc.org/akcdoglovers/PembrokeWelshCorgi_hero.jpg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="main-footer">
+    <p>© 2017 www.coding4good.net All Fucking Rights Reserved</p>
+    <p>Contact us | Abount us</p>
+</footer>
+</body>
+</html>
