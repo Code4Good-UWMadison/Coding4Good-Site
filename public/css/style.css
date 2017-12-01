@@ -2,13 +2,21 @@
   cursor: pointer;
 }
 
-h1,h2,h3,h4,h5,h6{
+h1{
   /*font-family: "Roboto-Light";*/
+  color: #888;
+}
+
+h2,h3,h4,h5,h6 {
   color: #777;
 }
 
 h1{
   font-size: 60px;
+}
+
+.home-nav {
+  background: #EEE;
 }
 
 .main-title {
@@ -97,6 +105,10 @@ h1{
 	width: 1.5em;
 }
 
+#homepage {
+  background: linear-gradient(141deg, #FFF8E1 0%, #FFF3E0 51%, #FBE9E7 75%);
+}
+
 #homepage:after {
 	-moz-pointer-events: none;
 	-webkit-pointer-events: none;
@@ -127,7 +139,7 @@ h1{
 
 body, html {
   height: 100%;
-  color: #333;
+  color: #666;
 }
 
 .main {
@@ -157,6 +169,10 @@ section {
   z-index: 5;
 }
 
+#firstpage {
+  padding-top: 100px;
+}
+
 .main-footer {
   border: 2px solid #d7d7d7;
   height: 200px;
@@ -166,4 +182,14 @@ section {
   font-size: "Helvetica,Arial,sans-serif";
   text-align: center;
   padding-top: 60px;
+}
+
+.home-pg-concept {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.img-center-holder {
+  text-align: center;
 }

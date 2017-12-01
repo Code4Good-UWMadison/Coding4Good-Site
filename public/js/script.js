@@ -23,21 +23,15 @@ $(document).ready(function(){
   $("#proposal").click(function(event){
     var wind = window.open("/proposal", "popupWindow", "width=900,height=600,scrollbars=yes");
   });
-  window.onscroll = function() {scrollFunction()};
-
-  function scrollFunction() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-      $("buttontop").style.display = "block";
-    } else {
-      $("buttontop").style.display = "none";
-    }
-  }
-});
-
-
-
-
-
-
+// window.onscroll = function() {scrollFunction()};
+//
+// function scrollFunction() {
+//     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+//         document.getElementById("buttontop").style.display = "block";
+//     } else {
+//         document.getElementById("buttontop").style.display = "none";
+//     }
+// }
 
 //var email_address, name, major, orgnization, title, description;
+});
