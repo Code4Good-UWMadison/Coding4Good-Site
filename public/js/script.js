@@ -24,7 +24,39 @@ $(document).ready(function(){
     var wind = window.open("/proposal", "popupWindow", "width=900,height=580,scrollbars=yes");
   });
 
-  
+  $("#submit_proposal").click(function(event){
+    var email_address, name, major, orgnization, title, description;
+    email_address = $("#email_address").value;
+    name = $("#name").val();
+    major = $("#major").val();
+    orgnization = $("#orgnization").value;
+    title = $("#program_title").value;
+    description = $("#description").value;
+
+    $.ajax({
+      url: "/api/proposal",
+      dataType: "Json",
+      method:"POST",
+      data: {
+        email: email_address,
+        name: name,
+        major: major,
+        orgnization:orgnization,
+        title:title,
+        description:description
+      },
+      success:function(data){
+        window.close();
+      },
+      error: function(){
+
+      }
+    });
+  })
+
+  $("#discard_proposal").click(function(event)){
+    window.close();
+  }
 // window.onscroll = function() {scrollFunction()};
 //
 // function scrollFunction() {
@@ -35,5 +67,4 @@ $(document).ready(function(){
 //     }
 // }
 
-//var email_address, name, major, orgnization, title, description;
 });
