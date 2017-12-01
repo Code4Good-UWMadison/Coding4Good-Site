@@ -21,8 +21,10 @@ $(document).ready(function(){
   });
 
   $("#proposal").click(function(event){
-    var wind = window.open("/proposal", "popupWindow", "width=900,height=600,scrollbars=yes");
+    var wind = window.open("/proposal", "popupWindow", "width=900,height=580,scrollbars=yes");
   });
+
+  
 // window.onscroll = function() {scrollFunction()};
 //
 // function scrollFunction() {

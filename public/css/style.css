@@ -147,6 +147,11 @@ body, html {
   padding-top: 200px;
 }
 
+.button_position{
+  text-align: center;
+  margin-top: 30px;
+}
+
 .btn-proposal {
   font-size: 20px;
   font-weight: 300;
@@ -157,6 +162,9 @@ body, html {
   padding-right: 40px;
 }
 
+.inputbox{
+  height: 300px;
+}
 section {
   min-height: 100%;
 }
