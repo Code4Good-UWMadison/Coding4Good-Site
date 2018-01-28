@@ -20,13 +20,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="">CORGi</a>
+          <a class="navbar-brand" href="#homepage">CORGi</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="#firstpage">About</a></li>
+            <li><a href="#news">News</a></li>
+            <li><a href="#about">About</a></li>
             <li class="dropdown">
               <a class="dropdown-toggle clickable" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Program <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -51,26 +52,77 @@
 
     <!-- <a href="#homepage" id="buttontop" class="btn primary-button">Back to Top</a> -->
 
-    <section id="homepage">
+    <section id="homepage" class="page">
       <div class="main">
         <h1 class="main-title">Coding For Good</h1>
         <button type="button" id="proposal" class="btn primary-button btn-proposal">Make a Proposal</button>
       </div>
-      <a href="#firstpage" class="more">Learn More</a>
+      <a href="#news" class="more">Learn More</a>
     </section>
 
-    <section id="firstpage">
+    <section id="news" class="page">
+      <div class="row">
+        <div class="col-sm-12 padding-top">
+          <div id="newsCarousel" class="carousel slide" data-ride="carousel">
+
+            <!--dots-->
+            <ol class="carousel-indicators">
+              <li data-target="#newsCarousel" data-slide-to="0" class="active"></li>
+              <li data-target="#newsCarousel" data-slide-to="1"></li>
+              <li data-target="#newsCarousel" data-slide-to="2"></li>
+            </ol>
+            <!--slides-->
+            <div class="carousel-inner">
+              <!--first slide-->
+              <div class="item active">
+                <img class="slide-img" src="/img/who-we-are.png"/>
+                <div class="carousel-caption">
+                  <h3>These are news</h3>
+                </div>
+              </div>
+              <div class="item">
+                <img class="slide-img" src="/img/what-we-do.png"/>
+                <div class="carousel-caption">
+                  <h3>These are news</h3>
+                </div>
+              </div>
+              <!--last slide-->
+              <div class="item">
+                <img class="slide-img" src="/img/get-involved.png"/>
+                <div class="carousel-caption">
+                  <h3>These are news</h3>
+                </div>
+              </div>
+            </div>
+
+            <!--buttons-->
+            <a class="left carousel-control" href="#newsCarousel" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            </a>
+            <a class="right carousel-control" href="#newsCarousel" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="about1" class="page">
       <div class="container">
-        <div class="row">
-          <div class="col-md-4">
+        <div class="row padding-top">
+          <div class="col-sm-4">
             <div class="img-center-holder">
-              <img class="img-rounded home-pg-concept" src="/img/who-we-are.png"><img>
+              <a href="#about2">
+                <img class="img-rounded home-pg-concept" src="/img/who-we-are.png"><img>
+              </a>
             </div>
             <h3>Who are we</h3>
             <p>Code for Good(CORGi) is a student group focusing on the intersection of computer technology
               and community service to create social change.</p>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="img-center-holder">
               <img class="img-rounded home-pg-concept" src="/img/what-we-do.png"><img>
             </div>
@@ -81,7 +133,7 @@
               Corgis who are passionate in creating social impacts and share inspirations and ideas.
             </p>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="img-center-holder">
               <img class="img-rounded home-pg-concept" src="/img/get-involved.png"><img>
             </div>
@@ -93,17 +145,58 @@
           </div>
         </div>
       </div>
-        <!-- <div class="row">
-          <div class="col-lg-4">
-            <img src="http://cdn.akc.org/akcdoglovers/PembrokeWelshCorgi_hero.jpg">
+    </section>
+
+
+    <section id="about2" class="page">
+      <div class="container">
+        <div class="row padding-top img-center-holder">
+          <h1>Our members</h1>
+        </div>
+        <div class="row padding-top">
+          <div class="col-sm-3">
+            <div class="img-center-holder">
+              <img class="portrait-img" src="/img/who-we-are.png"><img>
+              <h3>name</h3>
+              <p>Discription
+              </p>
+            </div>
           </div>
-          <div class="col-lg-4">
-            <img src="http://cdn.akc.org/akcdoglovers/PembrokeWelshCorgi_hero.jpg">
+          <div class="col-sm-3">
+            <div class="img-center-holder">
+              <img class="portrait-img" src="/img/what-we-do.png"><img>
+              <h3>name</h3>
+              <p>Discription
+              </p>
+            </div>
           </div>
-          <div class="col-lg-4">
-            <img src="http://cdn.akc.org/akcdoglovers/PembrokeWelshCorgi_hero.jpg">
+          <div class="col-sm-3">
+            <div class="img-center-holder">
+              <img class="portrait-img" src="/img/get-involved.png"><img>
+              <h3>name</h3>
+              <p>Discription
+              </p>
+            </div>
           </div>
-        </div> -->
+          <div class="col-sm-3">
+            <div class="img-center-holder">
+              <img class="portrait-img" src="/img/get-involved.png"><img>
+              <h3>name</h3>
+              <p>Discription
+              </p>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <section id="unknow" class="page padding-top">
+      <div class="container">
+        <div class="row img-center-holder">
+          <h1 class="">Some title</h1>
+        </div>
+        <div class="row img-center-holder padding-top">
+          <p>Some paragraph</p>
+        </div>
       </div>
     </section>
 

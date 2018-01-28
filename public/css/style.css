@@ -24,13 +24,15 @@ h1{
 }
 
 .margin-top{
-  margin-top:50px;
+  margin-top:100px;
 }
 
 .padding-top{
-  padding-top: 50px;
+  padding-top: 100px;
 }
-
+.padding-bot{
+  padding-bottom: 100px;
+}
 .primary-button{
   padding: 6px 12px;
   border-radius: 2;
@@ -105,8 +107,8 @@ h1{
 	width: 1.5em;
 }
 
-#homepage {
-  background: linear-gradient(141deg, #FFF8E1 0%, #FFF3E0 51%, #FBE9E7 75%);
+#homepage,#about1,#unknow {
+  background: linear-gradient(141deg, #FBE9E7, #FFF8E1, #FFF3E0);
 }
 
 #homepage:after {
@@ -174,10 +176,6 @@ section {
   z-index: 5;
 }
 
-#firstpage {
-  padding-top: 100px;
-}
-
 .main-footer {
   border: 2px solid #d7d7d7;
   height: 200px;
@@ -197,4 +195,23 @@ section {
 
 .img-center-holder {
   text-align: center;
+}
+
+.slide-img{
+  height: 100%;
+  width: auto;
+  text-align: center;
+}
+
+.page{
+  height: 100%;
+}
+.d-page{
+  height:200%;
+}
+.portrait-img{
+  width:15em;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }

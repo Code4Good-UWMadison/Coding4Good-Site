@@ -54,9 +54,9 @@
     });
   })
 
-  $("#discard_proposal").click(function(event)){
+  $("#discard_proposal").click(function(event){
     window.close();
-  }
+  });
 // window.onscroll = function() {scrollFunction()};
 //
 // function scrollFunction() {
@@ -66,5 +66,3 @@
 //         document.getElementById("buttontop").style.display = "none";
 //     }
 // }
-
-});
