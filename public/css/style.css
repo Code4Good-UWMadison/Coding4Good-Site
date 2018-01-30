@@ -79,7 +79,7 @@ h1{
 	border: none;
 	bottom: 0;
 	color: inherit;
-	font-size: 0.8em;
+	font-size: 1.3em;
 	height: 8.5em;
 	left: 50%;
 	letter-spacing: 0.225em;
@@ -100,7 +100,7 @@ h1{
 	background-repeat: no-repeat;
 	background-size: contain;
 	display: block;
-  bottom: 4em;
+  bottom: 5em;
   content: '';
 	height: 1.5em;
 	left: 50%;
