@@ -213,6 +213,7 @@ section {
 }
 .portrait-img{
   width:13em;
+  height:13em;
   border-radius: 50%;
   margin-left: auto;
   margin-right: auto;
