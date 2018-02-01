@@ -110,7 +110,7 @@ h1{
 }
 
 #homepage,#about1,#why,#news {
-  background: linear-gradient(141deg, #FBE9E7, #FFF8E1, #FFF3E0);
+  background: linear-gradient(141deg, #FFF8E1 0%, #FFF3E0 51%, #FBE9E7 75%);
 }
 
 #homepage:after {
@@ -203,7 +203,7 @@ section{
   text-align: center;
 }
 .h-page{
-  height:50%;
+  height:70%;
 }
 .page{
   height: 100%;
@@ -217,4 +217,7 @@ section{
   border-radius: 50%;
   margin-left: auto;
   margin-right: auto;
+}
+.partners-img{
+  max-width:20%;
 }
