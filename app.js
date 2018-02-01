@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var db = require("./server/db");
+var args = process.argv.slice(2);
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -44,5 +46,13 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+if (process.env.INSTALL === 'yes' || args[0] === 'install') {
+  db.reset(function(err){
+    if(err)
+      console.log(err);
+  });
+}
 
 module.exports = app;
