@@ -110,7 +110,8 @@ h1{
 }
 
 #homepage,#about1,#why,#news {
-  background: linear-gradient(141deg, #FFF8E1 0%, #FFF3E0 51%, #FBE9E7 75%);
+  /*background: linear-gradient(-45deg, #FFF8E1 0%, #FFF3E0 49%, #FBE9E7 75%);*/
+  background: #FFF3E0;
 }
 
 #homepage:after {
@@ -219,5 +220,15 @@ section{
   margin-right: auto;
 }
 .partners-img{
-  max-width:20%;
+  width:100%;
+}
+.partner-holder {
+  display: inline-block;
+  width: 300px;
+  height: 20px;
+  margin: 20px 20px;
+}
+
+#partners {
+  text-align: center;
 }
