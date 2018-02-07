@@ -1,0 +1,99 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{
+	margin:0;
+	padding:0;
+	
+}
+
+body{
+	background-color: black;
+	width:100vw;
+	height:100vh;
+}
+
+
+
+.text{
+	list-style: none;
+	
+	display:flex;
+	flex-direction: row;
+	justify-content: space-around;
+	width:60%;
+	position:absolute;
+	left:50%;
+	top:50%;
+	transform: translateX(-50%) translateY(-50%)
+}
+
+.character{
+	color:#fff;
+	
+	font-family: 'Neutra Text Light Alt';
+	font-size:3em;
+	transition:all 2.5s ease;
+	
+	
+}
+
+.text.hidden li:nth-child(1){
+	opacity:0;
+	transform:translateY(100%) translateX(-150%);
+}
+.text.hidden li:nth-child(2){
+	opacity:0;
+	transform:translateY(30%) translateX(-30%);
+} 
+.text.hidden li:nth-child(3){
+	opacity:0;
+	transform:translateY(-60%) translateX(50%);
+}
+.text.hidden li:nth-child(4){
+	opacity:0;
+	transform:translateY(-80%) translateX(200%);
+}
+.text.hidden li:nth-child(5){
+	opacity:0;
+	transform:translateY(120%) translateX(150%);
+}
+.text.hidden li:nth-child(6){
+	opacity:0;
+	transform:translateY(-30%) translateX(-80%);
+}
+.text.hidden li:nth-child(7){
+	opacity:1;
+	
+	
+}
+.text.hidden li:nth-child(8){
+	opacity:0;
+	transform:translateY(-80%) translateX(-220%);
+}
+.text.hidden li:nth-child(9){
+	opacity:0;
+	transform:translateY(-150%) translateX(130%);
+}
+.text.hidden li:nth-child(10){
+	opacity:0;
+	transform:translateY(-50%) translateX(-20%);
+} 
+.text.hidden li:nth-child(11){
+	opacity:0;
+	transform:translateY(120%) translateX(90%);
+}
+
+
+.text li:last-child{
+	margin-right: 0;
+}
+
+#c2{
+		
+}
+
+#c3{
+	
+	
+}
