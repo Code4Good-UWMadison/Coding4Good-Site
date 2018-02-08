@@ -14,6 +14,10 @@ router.get('/contact', function(req, res, next) {
   res.render('contact', {});
 });
 
+router.get('/profile', function(req, res){
+  res.render('profile');
+});
+
 router.get('/login', function(req, res, next) {
   res.render('login', {});
 });
