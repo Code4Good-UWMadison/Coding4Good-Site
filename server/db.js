@@ -6,9 +6,8 @@ var uuid4 = require('uuid4');
 var db = new pg.Pool(config.db);
 
 exports.reset = function(callback) {
-  var query = `drop table if exists users;
-    drop table if exists project_relation;
-    drop table if exists project;
+  var query = `drop table if exists user_profile;
+    drop table if exists users;
 
     create table if not exists users(
       id serial unique primary key,
@@ -16,19 +15,17 @@ exports.reset = function(callback) {
       name text,
       password varchar(255)
     );
-    create table if not exists project(
+    create table if not exists user_profile(
       id serial unique primary key,
-      title text,
-      description text,
-      leader text
+      uid int references users(id),
+      nickname text,
+      year int,
+      intended_teamleader boolean,
+      pl text,
+      dev text,
+      resume text
     );
-    create table if not exists project_relation(
-      id serial unique primary key,
-      pid int references project(id),
-      name text,
-      relation text
-    );
-    `
+    ` //TODO
   db.query(query, function(err, result) {
     if (err) {
       console.log(err);
@@ -89,3 +86,16 @@ exports.getUserInfo = function(uid, callback){
     }
   });
 };
+
+exports.updateProfile = function(uid, profile, callback){
+  var query = `insert into user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume) values($1,$2,$3,$4,$5,$6,$7);`;
+  db.query(query, [uid,profile.nickname, profile.year, profile.intended_teamleader, profile.pl, profile.dev, profile.resume], function(err, result){
+    if(err){
+      callback(err);
+      return;
+    }
+    else {
+      callback(null);
+    }
+  });
+}

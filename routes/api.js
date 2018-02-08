@@ -51,20 +51,18 @@ router.post('/login', function(req, res, next){
   });
 });
 
-router.post('', function(req, res, next){
-  db.verifyUser(req.body, function(err, uid){
+router.post('/upload_profile', function(req, res, next){
+  if(req.session.uid == null){
+    res.status(400).json({msg: 'Please login first'});
+    return;
+  }
+  db.updateProfile(req.session.uid,req.body, function(err){
     if(err){
       console.log(err);
       res.status(400).json({msg: 'Database Error'});
       return;
     }
-    if(uid) {
-      req.session.uid=uid;
-      res.json({});
-    }
-    else {
-      res.status(400).json({msg: 'Username or password is wrong'});
-    }
+    res.json({});
   });
 });
 

@@ -9,6 +9,66 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/jquery-ui.js"></script>
 <script src="js/account.js"></script>
+<script>
+  $(function(){
+    $("#upload-btn").click(function(){
+      var profile={
+        nickname: "",
+        year: -1,
+        intended_teamleader: false,
+        pl: [],
+        dev: []
+      };
+
+      profile.nickname = $("#nickname").val();
+      profile.year = $("#year").val();
+      profile.intended_teamleader = ($(".teamleader").attr("checked"))?true:false;
+
+      $(".pl-checkbox:checked").each(function(){
+        if($(this).val()){
+          profile.pl.push($(this).val());
+        }
+      }).promise().done(function(){
+
+        $(".dev-checkbox:checked").each(function(){
+          if($(this).val()){
+            profile.dev.push($(this).val());
+          }
+        }).promise().done(function(){
+          if($("#resume")[0].files.length>0){
+            var file = $("#resume")[0].files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+              profile.resume = reader.result;
+              console.log(profile);
+              $.ajax({
+                url: "/api/upload_profile",
+                method: "POST",
+                dataType: "json",
+                data: profile,
+                success: function(){
+                  window.location.href="/upload-complete";
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                  $("#error-msg").html(jqXHR.responseJSON);
+                }
+              });
+            };
+            reader.onerror = function (error) {
+              console.log('Error: ', error);
+            };
+          }
+
+
+        });
+      });
+      // alert('fuck');
+      // return false;
+    });
+  });
+
+</script>
 
 </head>
 
@@ -41,9 +101,10 @@
 
   <h3>So tell us a bit about your self</h3>
   <div class="contact-container">
+    <form id="profile-form">
     <div class="input-group login-signup-input">
       <div class="input-group-addon">Nickname: </div>
-      <input class="form-control" type="text" id="email" placeholder="Nickname">
+      <input class="form-control" type="text" id="nickname" placeholder="Nickname">
     </div>
     <div class="input-group login-signup-input">
       <div class="input-group-addon">Years:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
@@ -89,12 +150,13 @@
       <p>When developing softwares in team, there has to be a team leader who directs the development.</p>
       <input type="checkbox" class="teamleader" value="teamleader"> Check this box if you want to be a team leader <br>
     </div>
+    </form>
     <div class="login-signup-input">
       <br>
       <p>(Optional) Resume</p>
-      <input type="file">
+      <input type="file" id="resume">
     </div>
-    <button class="btn login-signup-btn primary-button">Upload Profile</button>
+    <button id="upload-btn" class="btn login-signup-btn primary-button">Upload Profile</button>
   </div>
 
 
