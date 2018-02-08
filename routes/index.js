@@ -22,6 +22,16 @@ router.get('/profile', function(req, res){
   res.render('profile');
 });
 
+router.get('/upload-complete', function(req, res){
+  if(req.session.uid == null){
+    res.redirect('/login');
+    return;
+  }
+  res.render('upload-complete');
+});
+
+
+
 router.get('/login', function(req, res, next) {
   res.render('login', {});
 });
