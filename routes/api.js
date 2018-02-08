@@ -51,4 +51,21 @@ router.post('/login', function(req, res, next){
   });
 });
 
+router.post('', function(req, res, next){
+  db.verifyUser(req.body, function(err, uid){
+    if(err){
+      console.log(err);
+      res.status(400).json({msg: 'Database Error'});
+      return;
+    }
+    if(uid) {
+      req.session.uid=uid;
+      res.json({});
+    }
+    else {
+      res.status(400).json({msg: 'Username or password is wrong'});
+    }
+  });
+});
+
 module.exports = router;
