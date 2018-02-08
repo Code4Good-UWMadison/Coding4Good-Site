@@ -8,7 +8,8 @@
 }
 
 
-body{
+.body{
+	
 	background-color: rgb(255, 187, 153);
 	width:100vw;
 	height:100vh;

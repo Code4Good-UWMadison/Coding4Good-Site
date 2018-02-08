@@ -293,9 +293,12 @@
   
 </body>
 <script>
-
+	
+	
 
 	$(function(){
+			
+			
 			loop1();
 			// setInterval(loop1,9000);
 	});
@@ -320,8 +323,11 @@
 		,2800)	
 
     setTimeout(function(){
-      $('.main-display').show();
-      $('.body').hide();
+      
+      $('.body').fadeOut(400);
+		setTimeout(function(){
+			$('.main-display').fadeIn(500);
+		}, 350)
     }, 4100);
 
 		// setTimeout(
