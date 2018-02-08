@@ -108,6 +108,14 @@
 	margin-right: 0;
 }
 
+.text li:nth-child(6){
+	margin-right: 3%;
+}
+
+.text li:nth-child(9){
+	margin-right: 3%;
+}
+
 #c2{
 		
 }
