@@ -8,6 +8,32 @@
 <link rel = "stylesheet" type = "text/css" href = "css/neutra/stylesheet.css"/>
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/jquery-ui.js"></script>
+<script>
+  $(function(){
+    $("#login-form").submit(function(){
+      if(($("#password").val()=='')|($("#email").val()=='')){
+        $("#error-msg").html('Please fill out all the fields');
+        return false;
+      }
+      $.ajax({
+        url: "/api/login",
+        method: "POST",
+        dataType: "json",
+        data: {
+          email: $("#email").val(),
+          password: $("#password").val()
+        },
+        success: function(){
+          window.location.href="/profile";
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          $("#error-msg").html(jqXHR.responseJSON);
+        }
+      });
+      return false;
+    });
+  });
+</script>
 
 </head>
 
@@ -27,18 +53,12 @@
           <li><a href="/projects">Projects</a></li>
           <li><a href="/contact">Contact Us</a></li>
         </ul>
-        <div class="navbar-form navbar-right">
-          <ul class="nav navbar-nav">
-            <li><a href="/login">Login</a></li>
-            <li><a>|</a></li>
-            <li><a href="/signup">Signup</a></li>
-          </ul>
-        </div>
       </div>
     </div>
   </nav>
 
   <div class="login-signup">
+    <form id="login-form">
     <div class="input-group login-signup-input">
       <div class="input-group-addon">Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
       <input class="form-control" type="text" id="email" placeholder="Email">
@@ -48,7 +68,8 @@
       <input class="form-control" type="password" id="password" placeholder="Password">
     </div>
     <p>I don't have an account yet, <a href="signup">sign me up!</a></p>
-    <button class="btn login-signup-btn primary-button">Login</button>
+    </form>
+    <button type="submit" form="login-form" class="btn login-signup-btn primary-button">Login</button>
   </div>
 
 

@@ -65,13 +65,10 @@
   </div>
 
 
-  <div class="main-display">
-
-
-    <footer class="main-footer">
-      <p>© 2018 www.coding4good.net | All Rights Reserved</p>
-      <p>Contact us | Abount us</p>
-    </footer>
+  <div class="main-display" hidden="true">
+    <a class="btn primary-button" href="/profile">Create Profile</a>
+    <a class="btn primary-button" href="/about">About Us</a>
+    <a class="btn primary-button" href="/contact">Contact Us</a>
   </div>
 
 
@@ -93,10 +90,10 @@
 			function(){
 				$('.text').removeClass('hidding')
 			}
-		,100)
+		,10)
 
 		setTimeout(
-			change, 850);
+			change, 50);
 
 		setTimeout(
 			change1, 1550);
@@ -106,6 +103,10 @@
 				// $('.text').addClass('hidding')
 			}
 		,2800)
+
+    setTimeout(function(){
+      $('.main-display').fadeIn(1000);
+    }, 1500);
 
     setTimeout(function(){
 

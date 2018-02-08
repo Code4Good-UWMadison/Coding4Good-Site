@@ -15,6 +15,10 @@ router.get('/contact', function(req, res, next) {
 });
 
 router.get('/profile', function(req, res){
+  if(req.session.uid == null){
+    res.redirect('/login');
+    return;
+  }
   res.render('profile');
 });
 
@@ -24,6 +28,11 @@ router.get('/login', function(req, res, next) {
 
 router.get('/signup', function(req, res, next) {
   res.render('signup', {});
+});
+
+router.get('/logout', function(req, res, next) {
+  req.session.uid=null;
+  res.redirect('/');
 });
 
 router.get('/proposal', function(req, res){

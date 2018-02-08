@@ -8,6 +8,37 @@
 <link rel = "stylesheet" type = "text/css" href = "css/neutra/stylesheet.css"/>
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/jquery-ui.js"></script>
+<script>
+  $(function(){
+    $("#signup-form").submit(function(){
+      if(($("#password").val()=='')|($("#email").val()=='')|($("#name").val()=='')){
+        $("#error-msg").html('Please fill out all the fields');
+        return false;
+      }
+      if($("#password").val()!=$("#confirm-password").val()){
+        $("#error-msg").html('Password does not match');
+        return false;
+      }
+      $.ajax({
+        url: "/api/signup",
+        method: "POST",
+        dataType: "json",
+        data: {
+          email: $("#email").val(),
+          fullname: $("#name").val(),
+          password: $("#password").val()
+        },
+        success: function(){
+          window.location.href="/profile";
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          $("#error-msg").html(jqXHR.responseJSON);
+        }
+      });
+      return false;
+    });
+  });
+</script>
 
 </head>
 
@@ -27,18 +58,13 @@
           <li><a href="/projects">Projects</a></li>
           <li><a href="/contact">Contact Us</a></li>
         </ul>
-        <div class="navbar-form navbar-right">
-          <ul class="nav navbar-nav">
-            <li><a href="/login">Login</a></li>
-            <li><a>|</a></li>
-            <li><a href="/signup">Signup</a></li>
-          </ul>
-        </div>
       </div>
     </div>
   </nav>
 
   <div class="login-signup">
+    <p style="color:red;" id="error-msg"></p>
+    <form id="signup-form">
     <div class="input-group login-signup-input">
       <div class="input-group-addon">Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
       <input class="form-control" type="text" id="email" placeholder="Email">
@@ -55,8 +81,9 @@
       <div class="input-group-addon">Password: </div>
       <input class="form-control" type="password" id="confirm-password" placeholder="Confirm Password">
     </div>
+    </form>
     <p>I already had an account yet, <a href="login">Log me in!</a></p>
-    <button class="btn login-signup-btn primary-button">Signup</button>
+    <button type="submit" form="signup-form" class="btn login-signup-btn primary-button">Signup</button>
   </div>
 
 
