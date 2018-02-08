@@ -143,7 +143,6 @@ h1{
 }
 
 body, html {
-  height: 100%;
   color: #666;
 }
 
@@ -231,4 +230,31 @@ section{
 
 #partners {
   text-align: center;
+}
+
+.contact-container {
+  margin: 100px auto;
+  width: 400px;
+}
+
+.login-signup {
+  margin: 200px auto;
+  text-align: center;
+  width: 400px;
+}
+
+.login-signup-input {
+  margin: 10px auto;
+}
+
+.login-signup-btn {
+  width: 100%;
+}
+
+.login-signup-input-prompt {
+  width: 30%;
+}
+
+.error-container {
+  height: 100vh;
 }
