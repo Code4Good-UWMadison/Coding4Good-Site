@@ -45,7 +45,7 @@
   	<!-- <div class="check">
   		ates ullamcorper no, ignota cetero no vel, an per menandri tractatos philosophia. Sea tritani tincidunt concludaturque ut, ad elit debet est. Vim hinc singulis posidonium eu, qui vivendum moderatius ea, sit pericula adipiscing ei. Sit odio euripidis eu, nec in eius choro. Noluisse voluptatum signiferumque mei ne, mei eu ceteros similique assueverit.
   	</div> -->
-  	<ul class="text hidden">
+  	<ul class="text hidding">
 
   		<li class="character" id="c1">C</li>
   		<li class="character" id="c2">O</li>
@@ -65,17 +65,25 @@
   </div>
 
 
+  <div class="main-display" hidden="true">
+
 
     <footer class="main-footer">
       <p>© 2018 www.coding4good.net | All Rights Reserved</p>
       <p>Contact us | Abount us</p>
     </footer>
   </div>
+  
+
+
 </body>
 <script>
 
 
+
 	$(function(){
+
+
 			loop1();
 			// setInterval(loop1,9000);
 	});
@@ -83,18 +91,29 @@
 	function loop1(){
 		setTimeout(
 			function(){
-				$('.text').removeClass('hidden');
+				$('.text').removeClass('hidding')
 			}
-		,1000)
+		,100)
 
-		setTimeout(change, 2050);
+		setTimeout(
+			change, 850);
 
-		setTimeout(change1, 3450);
+		setTimeout(
+			change1, 1550);
+
+		setTimeout(
+			function(){
+				$('.text').addClass('hidding')
+			}
+		,2800)
 
     setTimeout(function(){
-      $('.main-display').show();
-      $('.starting-display').hide();
-    }, 5000);
+
+      $('.body').fadeOut(400);
+		setTimeout(function(){
+			$('.main-display').fadeIn(500);
+		}, 350)
+    }, 4100);
 
 		// setTimeout(
 		// 	function(){
@@ -107,7 +126,7 @@
 	function change() {
 
 		var iniBeginTime = 100;
-		var bAdd = 50;
+
 
 		var iniDelayTime = 150;
 		var dAdd = 50;
@@ -122,42 +141,42 @@
 				setTimeout(function(){
 					$("#c2").animate({
 					color: color1,
-					}, iniBeginTime+1*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime)
 
 				setTimeout(function(){
 					$("#c3").animate({
 					color: color1,
-					}, iniBeginTime+2*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+1*dAdd)
 
 				setTimeout(function(){
 					$("#c4").animate({
 					color: color1,
-					}, iniBeginTime+3*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+2*dAdd)
 
 				setTimeout(function(){
 					$("#c5").animate({
 					color: color1,
-					}, iniBeginTime+4*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+3*dAdd)
 
 				setTimeout(function(){
 					$("#c6").animate({
 					color: color1,
-					}, iniBeginTime+5*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+4*dAdd)
 
 				setTimeout(function(){
 					$("#c7").animate({
 					color: color1,
-					}, iniBeginTime+6*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+5*dAdd)
 
@@ -165,7 +184,7 @@
 				setTimeout(function(){
 					$("#c8").animate({
 					color: color1,
-					}, iniBeginTime+7*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+6*dAdd)
 
@@ -173,35 +192,35 @@
 				setTimeout(function(){
 					$("#c9").animate({
 					color: color1,
-					}, iniBeginTime+8*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+7*dAdd)
 
 				setTimeout(function(){
 					$("#c10").animate({
 					color: color1,
-					}, iniBeginTime+9*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+8*dAdd)
 
 				setTimeout(function(){
 					$("#c11").animate({
 					color: color1,
-					}, iniBeginTime+10*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+9*dAdd)
 
 				setTimeout(function(){
 					$("#c12").animate({
 					color: color1,
-					}, iniBeginTime+11*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+10*dAdd)
 
 				setTimeout(function(){
 					$("#c13").animate({
 					color: color1,
-					}, iniBeginTime+12*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+11*dAdd)
 
@@ -212,7 +231,7 @@
 	function change1() {
 
 				var iniBeginTime = 100;
-		var bAdd = 50;
+
 
 		var iniDelayTime = 150;
 		var dAdd = 50;
@@ -226,42 +245,42 @@
 				setTimeout(function(){
 					$("#c2").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+1*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime)
 
 				setTimeout(function(){
 					$("#c3").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+2*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+1*dAdd)
 
 				setTimeout(function(){
 					$("#c4").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+3*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+2*dAdd)
 
 				setTimeout(function(){
 					$("#c5").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+4*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+3*dAdd)
 
 				setTimeout(function(){
 					$("#c6").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+5*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+4*dAdd)
 
 				setTimeout(function(){
 					$("#c7").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+6*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+5*dAdd)
 
@@ -269,7 +288,7 @@
 				setTimeout(function(){
 					$("#c8").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+7*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+6*dAdd)
 
@@ -277,48 +296,41 @@
 				setTimeout(function(){
 					$("#c9").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+8*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+7*dAdd)
 
 				setTimeout(function(){
 					$("#c10").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+9*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+8*dAdd)
 
 				setTimeout(function(){
 					$("#c11").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+10*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+9*dAdd)
 
 				setTimeout(function(){
 					$("#c12").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+11*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+10*dAdd)
 
 				setTimeout(function(){
 					$("#c13").animate({
 					color: "rgb(255,255,255)",
-					}, iniBeginTime+12*bAdd,
+					}, iniBeginTime,
 					);
 				}, iniDelayTime+11*dAdd)
 
 
+
 			}
-
-
-
-
-
-
-
-
 
 	</script>
 </html>
