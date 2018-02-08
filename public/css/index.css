@@ -4,12 +4,12 @@
 *{
 	margin:0;
 	padding:0;
-	
+
 }
 
 
 .body{
-	
+
 	background-color: rgb(255, 187, 153);
 	width:100vw;
 	height:100vh;
@@ -28,25 +28,25 @@
 
 .text{
 	list-style: none;
-	
+
 	display:flex;
 	flex-direction: row;
 	justify-content: space-around;
-	width:60%;
+	width:50%;
 	position:absolute;
 	left:50%;
-	top:50%;
+	top:30%;
 	transform: translateX(-50%) translateY(-50%);
 }
 
 .character{
 	color:#fff;
-	
+
 	font-family: 'Neutra Text Light Alt';
 	font-size:3.5em;
 	transition:all 1.5s ease;
-	
-	
+
+
 }
 
 .text.hidding li:nth-child(1){
@@ -56,7 +56,7 @@
 .text.hidding li:nth-child(2){
 	opacity:0;
 	transform:translateY(30%) translateX(-30%);
-} 
+}
 .text.hidding li:nth-child(3){
 	opacity:0;
 	transform:translateY(-60%) translateX(50%);
@@ -76,8 +76,8 @@
 .text.hidding li:nth-child(7){
 	opacity:0;
 	transform:translateY(120%) translateX(-30%);
-	
-	
+
+
 }
 .text.hidding li:nth-child(8){
 	opacity:0;
@@ -90,7 +90,7 @@
 .text.hidding li:nth-child(10){
 	opacity:0;
 	transform:translateY(-50%) translateX(-20%);
-} 
+}
 .text.hidding li:nth-child(11){
 	opacity:0;
 	transform:translateY(120%) translateX(90%);
@@ -117,10 +117,10 @@
 }
 
 #c2{
-		
+
 }
 
 #c3{
-	
-	
+
+
 }

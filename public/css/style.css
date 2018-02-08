@@ -179,7 +179,7 @@ section{
 
 .main-footer {
   border: 2px solid #d7d7d7;
-  height: 200px;
+  height: 30vh;
   background: #e7e7e7;
   color: #757575;
   font-size: 12px;
@@ -257,4 +257,8 @@ section{
 
 .error-container {
   height: 100vh;
+}
+
+.starting-display {
+  height: 70vh;
 }
