@@ -59,6 +59,20 @@
               console.log('Error: ', error);
             };
           }
+          else{
+            $.ajax({
+              url: "/api/upload_profile",
+              method: "POST",
+              dataType: "json",
+              data: profile,
+              success: function(){
+                window.location.href="/upload-complete";
+              },
+              error: function(jqXHR, textStatus, errorThrown){
+                $("#error-msg").html(jqXHR.responseJSON);
+              }
+            });
+          }
 
 
         });
