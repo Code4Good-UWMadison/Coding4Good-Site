@@ -98,4 +98,30 @@ exports.updateProfile = function(uid, profile, callback){
       callback(null);
     }
   });
-}
+};
+
+exports.getProfile = function(pid, callback){
+  var query = `select
+      u.name as name,
+      n.nickname as nickname,
+      n.year as year,
+      n.intended_teamleader as intended_teamleader,
+      n.pl as pl,
+      n.dev as dev,
+      n.resume as resume
+    from user_profile as n, users as u where n.id=$1 and n.uid=u.id;`;
+  db.query(query, [pid], function(err, result){
+    if(err){
+      callback(err);
+      return;
+    }
+    else {
+      if(result.rows.length > 0){
+        callback(null, result.rows[0]);
+      }
+      else{
+        callback('No matching profile id');
+      }
+    }
+  });
+};

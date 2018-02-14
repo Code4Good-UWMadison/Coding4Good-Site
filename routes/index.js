@@ -22,6 +22,14 @@ router.get('/profile', function(req, res){
   res.render('profile');
 });
 
+router.get('/admin', function(req, res){
+  if(req.session.uid!=1){
+    res.redirect('/');
+    return;
+  }
+  res.render('admin');
+});
+
 router.get('/upload-complete', function(req, res){
   if(req.session.uid == null){
     res.redirect('/login');

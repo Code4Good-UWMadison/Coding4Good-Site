@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Coding for Good</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel = "stylesheet" type = "text/css" href = "css/index.css"/>
+<link rel = "stylesheet" type = "text/css" href = "css/style.css"/>
+<link rel = "stylesheet" type = "text/css" href = "css/neutra/stylesheet.css"/>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script src="js/account.js"></script>
+<script>
+  $(function(){
+    $("#get-profile-btn").click(function(){
+      var pid = $("#pid-input").val();
+      $.ajax({
+        url: "/api/admin/get_profile",
+        method: "POST",
+        dataType: "json",
+        data: {
+          pid: pid
+        },
+        success: function(data){
+          console.log(data.resume);
+          $("#name").html(data.name);
+          $("#nickname").html(data.nickname);
+          $("#year").html(data.year);
+          $("#intended_teamleader").html(data.intended_teamleader);
+          $("#pl").html(data.pl);
+          $("#dev").html(data.dev);
+          $("#resume").attr("src", data.resume);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          alert("Error");
+        }
+      });
+    });
+  });
+</script>
+
+</head>
+
+<body>
+  <input id="pid-input" type="number" />
+  <button id="get-profile-btn">ok</button>
+  <p id="name"></p>
+  <p id="nickname"></p>
+  <p id="year"></p>
+  <p id="intended_teamleader"></p>
+  <p id="pl"></p>
+  <p id="dev"></p>
+  <iframe id="resume" width="800" height="800"></iframe>
+</body>
+</html>

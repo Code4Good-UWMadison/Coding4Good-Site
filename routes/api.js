@@ -66,4 +66,19 @@ router.post('/upload_profile', function(req, res, next){
   });
 });
 
+router.post('/admin/get_profile', function(req, res, next){
+  if(req.session.uid != 1){
+    res.status(400).json({msg: 'Not Authorized'});
+    return;
+  }
+  db.getProfile(req.body.pid, function(err, profile){
+    if(err){
+      console.log(err);
+      res.status(400).json({msg: 'Database Error'});
+      return;
+    }
+    res.json(profile);
+  });
+});
+
 module.exports = router;
