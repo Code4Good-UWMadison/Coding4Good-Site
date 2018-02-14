@@ -26,7 +26,7 @@
           $("#name").html(data.name);
           $("#nickname").html(data.nickname);
           $("#year").html(data.year);
-          $("#intended_teamleader").html(data.intended_teamleader);
+          $("#intended_teamleader").html((data.intended_teamleader)?"Yes for teamlead":"No for teamlead");
           $("#pl").html(data.pl);
           $("#dev").html(data.dev);
           $("#resume").attr("src", data.resume);
