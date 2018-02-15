@@ -14,6 +14,14 @@ router.get('/contact', function(req, res, next) {
   res.render('contact', {});
 });
 
+router.get('/project', function(req, res, next){
+  res.render('project',{});
+});
+
+router.get('/projectDetail', function(req, res, next){
+  res.render('projectDetail',{});
+});
+
 router.get('/profile', function(req, res){
   if(req.session.uid == null){
     res.redirect('/login');

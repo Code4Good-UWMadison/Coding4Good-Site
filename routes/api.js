@@ -81,4 +81,15 @@ router.post('/admin/get_profile', function(req, res, next){
   });
 });
 
+// router.get?('/project/get_projectSet', function(req, res, next){
+//   db.get_projectSet(req, function(err, projectSet){
+//     if(err){
+//       console.log(err);
+//       res.status(400).json({msg: 'Database Error'});
+//       return;
+//     }
+//     res.json(projectSet);
+//   });
+// });
+
 module.exports = router;
