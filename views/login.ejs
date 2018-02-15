@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Coding for Good</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel = "stylesheet" type = "text/css" href = "css/style.css"/>
+<link rel = "stylesheet" type = "text/css" href = "css/neutra/stylesheet.css"/>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script>
+  $(function(){
+    $("#login-form").submit(function(){
+      if(($("#password").val()=='')|($("#email").val()=='')){
+        $("#error-msg").html('Please fill out all the fields');
+        return false;
+      }
+      $.ajax({
+        url: "/api/login",
+        method: "POST",
+        dataType: "json",
+        data: {
+          email: $("#email").val(),
+          password: $("#password").val()
+        },
+        success: function(){
+          window.location.href="/profile";
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          $("#error-msg").html(jqXHR.responseJSON);
+        }
+      });
+      return false;
+    });
+  });
+</script>
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Coding for Good</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="/about">About</a></li>
+          <li><a href="/project">Projects</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="login-signup">
+    <form id="login-form">
+    <div class="input-group login-signup-input">
+      <div class="input-group-addon">Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
+      <input class="form-control" type="text" id="email" placeholder="Email">
+    </div>
+    <div class="input-group login-signup-input">
+      <div class="input-group-addon">Password: </div>
+      <input class="form-control" type="password" id="password" placeholder="Password">
+    </div>
+    <p>I don't have an account yet, <a href="signup">sign me up!</a></p>
+    </form>
+    <button type="submit" form="login-form" class="btn login-signup-btn primary-button">Login</button>
+  </div>
+
+
+  <footer class="main-footer">
+    <p>© 2018 www.coding4good.net | All Rights Reserved</p>
+    <p>Contact us | Abount us</p>
+  </footer>
+</body>
+</html>

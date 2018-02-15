@@ -1,262 +1,338 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>CORGi</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/script.js"></script>
-  </head>
-  <body>
+<head>
+<meta charset="utf-8">
+<title>Coding for Good</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel = "stylesheet" type = "text/css" href = "css/index.css"/>
+<link rel = "stylesheet" type = "text/css" href = "css/style.css"/>
+<link rel = "stylesheet" type = "text/css" href = "css/neutra/stylesheet.css"/>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script src="js/account.js"></script>
+
+</head>
+
+<body>
+
+  <div class="main-display">
+
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#homepage">CORGi</a>
+          <a class="navbar-brand" href="/">Coding for Good</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="#news">News</a></li>
-            <li><a href="#about1">About</a></li>
-            <li class="dropdown">
-              <a class="dropdown-toggle clickable" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Program <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Community Projects</a></li>
-                <li><a href="#">AI competition</a></li>
-                <li><a href="#">LOOP&infin;</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Frisbee studios</a></li>
-                <li role="separator" class="divider"></li>
-              </ul>
-            </li>
-            <li><a href="#partners">Partners</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/project">Projects</a></li>
+            <li><a href="/contact">Contact Us</a></li>
           </ul>
           <div class="navbar-form navbar-right">
-            <input type="text" id="search" class="form-control" placeholder="Search">
-            <button id="search-button" class="primary-button">Search</button>
+            <ul class="nav navbar-nav">
+              <li><a href="/login">Login</a></li>
+              <li><a>|</a></li>
+              <li><a href="/signup">Signup</a></li>
+            </ul>
           </div>
         </div>
       </div>
     </nav>
+  </div>
+  <div class="starting-display">
+  	<!-- <div class="check">
+  		ates ullamcorper no, ignota cetero no vel, an per menandri tractatos philosophia. Sea tritani tincidunt concludaturque ut, ad elit debet est. Vim hinc singulis posidonium eu, qui vivendum moderatius ea, sit pericula adipiscing ei. Sit odio euripidis eu, nec in eius choro. Noluisse voluptatum signiferumque mei ne, mei eu ceteros similique assueverit.
+  	</div> -->
+  	<ul class="text hidding">
 
-    <!-- <a href="#homepage" id="buttontop" class="btn primary-button">Back to Top</a> -->
+  		<li class="character" id="c1">C</li>
+  		<li class="character" id="c2">O</li>
+  		<li class="character" id="c3">D</li>
+  		<li class="character" id="c4">I</li>
+  		<li class="character" id="c5">N</li>
+  		<li class="character" id="c6">G</li>
+  		<li class="character" id="c7">F</li>
+  		<li class="character" id="c8">O</li>
+  		<li class="character" id="c9">R</li>
+  		<li class="character" id="c10">G</li>
+  		<li class="character" id="c11">O</li>
+  		<li class="character" id="c12">O</li>
+  		<li class="character" id="c13">D</li>
 
-    <section id="homepage" class="page">
-      <div class="main">
-        <h1 class="main-title">Coding For Good</h1>
-        <!--button type="button" id="proposal" class="btn primary-button btn-proposal">Make a Proposal</button-->
-      </div>
-      <a href="#news" class="more">Learn More</a>
-    </section>
-
-    <section id="news" class="h-page">
-      <div class="container">
-        <div class="row margin-top img-center-holder">
-          <h1>It matters</h1>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 ">
-            <div id="newsCarousel" class="carousel slide" data-ride="carousel">
-
-              <!--dots-->
-              <ol class="carousel-indicators">
-                <li data-target="#newsCarousel" data-slide-to="0" class="active"></li>
-                <li data-target="#newsCarousel" data-slide-to="1"></li>
-                <!--li data-target="#newsCarousel" data-slide-to="2"></li-->
-              </ol>
-              <!--slides-->
-              <div class="carousel-inner">
-                <!--first slide-->
-                <div class="item active">
-                  <a href="https://www.csmonitor.com/Environment/2018/0131/Robots-could-help-retain-toxic-spills-inside-old-mines">
-                    <div class="img-center-holder">
-                      <h2>Robots could help retain toxic spills inside old mines</h2>
-                    </div>
-                    <img class="slide-img" src="/img/news000.jpg"/>
-                  </a>
-                </div>
-                <div class="item">
-                  <a href="https://www.seas.harvard.edu/news/2018/01/detecting-deception-with-machine-learning">
-                    <div class="img-center-holder">
-                      <h2>Detecting deception with machine learning</h2>
-                    </div>
-                    <img class="slide-img" src="/img/news001.jpg"/>
-                  </a>
-                </div>
-                <!--last slide>
-                <div class="item">
-                  <a href="#">
-                    <div class="img-center-holder">
-                      <h2>These are news</h2>
-                    </div>
-                    <img class="slide-img" src="/img/news002.jpg"/>
-                  </a>
-                </div-->
-              </div>
-
-              <!--buttons-->
-              <a class="left carousel-control" href="#newsCarousel" role="button" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-              </a>
-              <a class="right carousel-control" href="#newsCarousel" role="button" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-              </a>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+  	</ul>
+  </div>
 
 
-    <section id="about1" class="page">
-      <div class="container">
-        <div class="row padding-top">
-          <div class="col-sm-4">
-            <div class="img-center-holder">
-              <a href="#about2">
-                <img class="img-rounded home-pg-concept" src="/img/who-we-are.png"><img>
-              </a>
-            </div>
-            <h3>Who we are</h3>
-            <p>Code for Good(CORGi) is a student group focusing on the intersection of computer technology
-              and community service to create social change.</br>
-              Our mission is to expand the use of technology as a force for good, minimize the potential harms of technology,
-              and support new generation of global leaders working at the intersection of technology and social impact.
-            </p>
-          </div>
-          <div class="col-sm-4">
-            <div class="img-center-holder">
-              <a href="#why">
-                <img class="img-rounded home-pg-concept" src="/img/what-we-do.png"><img>
-              </a>
-            </div>
-            <h3>What do we do</h3>
-            <p>We aim to build community for CS badgers to improve problem-solving skill and leadership, connect with
-              Corgis who are passionate in creating social impacts and share inspirations and ideas.
-            </p>
-          </div>
-          <div class="col-sm-4">
-            <div class="img-center-holder">
-              <img class="img-rounded home-pg-concept" src="/img/get-involved.png"><img>
-            </div>
-            <h3>How to get involved</h3>
-            <p>
-              The easiest way to get involved is to let us know your innovative ideas of new applications.
-              If you feel confidant in your problem solving skills, you can also join us to help achieving the most brilliant ideas proposed by other people in this community.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+  <div class="main-display" hidden="true">
+    <a class="btn primary-button" href="/profile">Create Profile</a>
+    <a class="btn primary-button" href="/about">About Us</a>
+    <a class="btn primary-button" href="/contact">Contact Us</a>
+  </div>
 
 
-    <section id="about2" class="page">
-      <div class="container">
-        <div class="row margin-top img-center-holder">
-          <h1>Our members</h1>
-        </div>
-        <div class="row margin-top">
-          <div class="col-sm-2">
-            <a href="https://www.linkedin.com/in/yuke-liang-6b9087135/">
-              <img class="portrait-img" src="/img/L00.jpg"><img>
-            </a>
-          </div>
-          <div class="col-sm-2">
-            <h3>Yuke Liang</h3>
-            <h3>President</h3>
-          </div>
-          <div class="col-sm-2">
-            <a href="https://www.linkedin.com/in/qiuxuan-wu-1111b0107/">
-              <img class="portrait-img" src="/img/L01.jpg"><img>
-            </a>
-          </div>
-          <div class="col-sm-2">
-            <h3>Qiuxuan Wu</h3>
-            <h3>Outreach Chair</h3>
-          </div>
-          <div class="col-sm-2">
-            <a href="https://www.linkedin.com/in/yuanchen-li-62054b131/">
-              <img class="portrait-img" src="/img/L02.jpg"><img>
-            </a>
-          </div>
-          <div class="col-sm-2">
-            <h3>Yuanchen Li</h3>
-            <h3>Tech Chair</h3>
-          </div>
-        </div>
-        <div class="row margin-top">
-          <div class="col-sm-2">
-            <a href="https://www.linkedin.com/in/muhamad-firdaus-husaini-6a0b5113b/">
-              <img class="portrait-img" src="/img/L03.jpg"><img>
-            </a>
-          </div>
-          <div class="col-sm-2">
-            <h3>Firdaus Husaini</h3>
-            <h3>Vice President</h3>
-          </div>
-          <div class="col-sm-2">
-            <a href="https://www.linkedin.com/in/haikal-azizi-abu-bakar-712543158/">
-              <img class="portrait-img" src="/img/L04.jpg"><img>
-            </a>
-          </div>
-          <div class="col-sm-2">
-            <h3>Haikal Azizi</h3>
-            <h3>Communication Chair</h3>
-          </div>
-          <div class="col-sm-2">
-            <a href="https://www.linkedin.com/in/jialuo-gao-7743b2148/">
-              <img class="portrait-img" src="/img/L05.jpg"><img>
-            </a>
-          </div>
-          <div class="col-sm-2">
-            <h3>Jialuo Gao</h3>
-            <h3>Web Master</h3>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <section id="why" class="page padding-top">
-      <div class="container">
-        <div class="row img-center-holder">
-          <h1 class="">Why we do this? Why this is important?</h1>
-        </div>
-        <div class="row img-center-holder padding-top">
-          <p>Some paragraph</p>
-        </div>
-      </div>
-    </section>
+</body>
+<script>
 
-    <section id="partners" class="page">
-      <div class="row margin-top img-center-holder">
-        <h1>Partners</h1>
-      </div>
-      <div class="row margin-top img-center-holder">
-        <img class="partners-img" src="/img/partners000.jpg">
-      </div>
-      <div class="row margin-top img-center-holder">
-        <img class="partners-img" src="/img/partners001.jpg">
-      </div>
-      <div class="row margin-top img-center-holder">
-        <img class="partners-img" src="/img/partners002.jpg">
-      </div>
-    </section>
 
-    <footer class="main-footer">
-      <p>© 2017 www.coding4good.net All Rights Reserved</p>
-      <p>Contact us | Abount us</p>
-    </footer>
-  </body>
+
+	$(function(){
+
+
+			loop1();
+			// setInterval(loop1,9000);
+	});
+
+	function loop1(){
+		setTimeout(
+			function(){
+				$('.text').removeClass('hidding')
+			}
+		,10)
+
+		setTimeout(
+			change, 50);
+
+		setTimeout(
+			change1, 1550);
+
+		setTimeout(
+			function(){
+				// $('.text').addClass('hidding')
+			}
+		,2800)
+
+    setTimeout(function(){
+      $('.main-display').fadeIn(1000);
+    }, 1500);
+
+    setTimeout(function(){
+
+		setTimeout(function(){
+			// $('.main-display').fadeIn(500);
+		}, 350)
+    }, 4100);
+
+		// setTimeout(
+		// 	function(){
+		// 		$('.text').addClass('hidden')
+		// 	}
+		// ,6000)
+
+	}
+
+	function change() {
+
+		var iniBeginTime = 100;
+
+
+		var iniDelayTime = 150;
+		var dAdd = 50;
+
+		// var color1 = "rgb(255, 77, 77)";
+    var color1 = "#EF6C00";
+
+				$("#c1").animate({
+				color: color1,
+				}, iniBeginTime,
+				);
+
+				setTimeout(function(){
+					$("#c2").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime)
+
+				setTimeout(function(){
+					$("#c3").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+1*dAdd)
+
+				setTimeout(function(){
+					$("#c4").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+2*dAdd)
+
+				setTimeout(function(){
+					$("#c5").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+3*dAdd)
+
+				setTimeout(function(){
+					$("#c6").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+4*dAdd)
+
+				setTimeout(function(){
+					$("#c7").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+5*dAdd)
+
+
+				setTimeout(function(){
+					$("#c8").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+6*dAdd)
+
+
+				setTimeout(function(){
+					$("#c9").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+7*dAdd)
+
+				setTimeout(function(){
+					$("#c10").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+8*dAdd)
+
+				setTimeout(function(){
+					$("#c11").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+9*dAdd)
+
+				setTimeout(function(){
+					$("#c12").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+10*dAdd)
+
+				setTimeout(function(){
+					$("#c13").animate({
+					color: color1,
+					}, iniBeginTime,
+					);
+				}, iniDelayTime+11*dAdd)
+
+
+
+			}
+
+	function change1() {
+
+				var iniBeginTime = 100;
+
+
+		var iniDelayTime = 150;
+		var dAdd = 50;
+
+
+				// $("#c1").animate({
+				// color: "rgb(255,255,255)",
+				// }, iniBeginTime,
+				// );
+        //
+				// setTimeout(function(){
+				// 	$("#c2").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime)
+        //
+				// setTimeout(function(){
+				// 	$("#c3").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+1*dAdd)
+        //
+				// setTimeout(function(){
+				// 	$("#c4").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+2*dAdd)
+        //
+				// setTimeout(function(){
+				// 	$("#c5").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+3*dAdd)
+        //
+				// setTimeout(function(){
+				// 	$("#c6").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+4*dAdd)
+        //
+				// setTimeout(function(){
+				// 	$("#c7").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+5*dAdd)
+        //
+        //
+				// setTimeout(function(){
+				// 	$("#c8").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+6*dAdd)
+        //
+        //
+				// setTimeout(function(){
+				// 	$("#c9").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+7*dAdd)
+        //
+				// setTimeout(function(){
+				// 	$("#c10").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+8*dAdd)
+        //
+				// setTimeout(function(){
+				// 	$("#c11").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+9*dAdd)
+        //
+				// setTimeout(function(){
+				// 	$("#c12").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+10*dAdd)
+        //
+				// setTimeout(function(){
+				// 	$("#c13").animate({
+				// 	color: "rgb(255,255,255)",
+				// 	}, iniBeginTime,
+				// 	);
+				// }, iniDelayTime+11*dAdd)
+
+
+
+			}
+
+	</script>
 </html>

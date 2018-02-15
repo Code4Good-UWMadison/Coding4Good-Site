@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session')
 var db = require("./server/db");
 var args = process.argv.slice(2);
 
@@ -20,8 +21,12 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(session({
+  secret: 'aptgamestempsecret123',
+  cookie: {expires: new Date(253402300000000)}  // cookie never expire
+}))
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

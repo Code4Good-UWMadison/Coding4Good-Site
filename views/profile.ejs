@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Coding for Good</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel = "stylesheet" type = "text/css" href = "css/style.css"/>
+<link rel = "stylesheet" type = "text/css" href = "css/neutra/stylesheet.css"/>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script src="js/account.js"></script>
+<script>
+  $(function(){
+    $("#upload-btn").click(function(){
+      var profile={
+        nickname: "",
+        year: -1,
+        intended_teamleader: false,
+        pl: [],
+        dev: []
+      };
+
+      profile.nickname = $("#nickname").val();
+      profile.year = $("#year").val();
+      profile.intended_teamleader = ($(".teamleader").attr("checked"))?true:false;
+
+      $(".pl-checkbox:checked").each(function(){
+        if($(this).val()){
+          profile.pl.push($(this).val());
+        }
+      }).promise().done(function(){
+
+        $(".dev-checkbox:checked").each(function(){
+          if($(this).val()){
+            profile.dev.push($(this).val());
+          }
+        }).promise().done(function(){
+          if($("#resume")[0].files.length>0){
+            var file = $("#resume")[0].files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+              profile.resume = reader.result;
+              console.log(profile);
+              $.ajax({
+                url: "/api/upload_profile",
+                method: "POST",
+                dataType: "json",
+                data: profile,
+                success: function(){
+                  window.location.href="/upload-complete";
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                  $("#error-msg").html(jqXHR.responseJSON);
+                }
+              });
+            };
+            reader.onerror = function (error) {
+              console.log('Error: ', error);
+            };
+          }
+          else{
+            $.ajax({
+              url: "/api/upload_profile",
+              method: "POST",
+              dataType: "json",
+              data: profile,
+              success: function(){
+                window.location.href="/upload-complete";
+              },
+              error: function(jqXHR, textStatus, errorThrown){
+                $("#error-msg").html(jqXHR.responseJSON);
+              }
+            });
+          }
+
+
+        });
+      });
+      // alert('fuck');
+      // return false;
+    });
+  });
+
+</script>
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Coding for Good</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="/about">About</a></li>
+          <li><a href="/project">Projects</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+        </ul>
+        <div class="navbar-form navbar-right">
+          <ul class="nav navbar-nav">
+            <li><a href="/login">Login</a></li>
+            <li><a>|</a></li>
+            <li><a href="/signup">Signup</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <h3>So tell us a bit about your self</h3>
+  <div class="contact-container">
+    <form id="profile-form">
+    <div class="input-group login-signup-input">
+      <div class="input-group-addon">Nickname: </div>
+      <input class="form-control" type="text" id="nickname" placeholder="Nickname">
+    </div>
+    <div class="input-group login-signup-input">
+      <div class="input-group-addon">Years:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
+      <select class="form-control" id="year">
+        <option value="1">Freshman</option>
+        <option value="2">Sophomore</option>
+        <option value="3">Junior</option>
+        <option value="4">Senior</option>
+        <option value="5">Super-senior (5th year)</option>
+      </select>
+    </div>
+    <div class="login-signup-input">
+      <p style="font-size:15px;">What programming languages are you familiar with?</p>
+      <input type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java"> Java <br>
+      <input type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript"> Javascript <br>
+      <input type="checkbox" class="pl-checkbox" id="pl-c" value="pl-c"> C <br>
+      <input type="checkbox" class="pl-checkbox" value="pl-cpp"> C++ <br>
+      <input type="checkbox" class="pl-checkbox" value="pl-csharp"> C# <br>
+      <input type="checkbox" class="pl-checkbox" value="pl-objectivec"> Objective-C <br>
+      <input type="checkbox" class="pl-checkbox" value="pl-swift"> Swift <br>
+      <input type="checkbox" class="pl-checkbox" value="pl-python"> Python <br>
+      <input type="checkbox" class="pl-checkbox" value="pl-matlab"> Matlab <br>
+      <input type="checkbox" class="pl-checkbox" value="pl-assembly"> Assembly <br>
+      <input type="checkbox" class="pl-checkbox" value="pl-lisp"> LISP <br>
+    </div>
+    <div class="login-signup-input">
+      <p style="font-size:15px;">What kinds of development are you familiar with?</p>
+      <input type="checkbox" class="dev-checkbox" value="dev-frontend"> Front End (Web) <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-backend"> Back End (Web) <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-ios"> IOS <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-android"> Android <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-windows"> Windows Desktop Application <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-mac"> Mac OS X Desktop Application <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-linux"> Linux software <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-algorithm"> Algorithm <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-network"> Networking <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-ml"> Machine Learning <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-ds"> Data Science <br>
+      <input type="checkbox" class="dev-checkbox" value="dev-communication"> Communicate with people :) <br>
+    </div>
+    <div class="login-signup-input">
+      <br>
+      <p>When developing softwares in team, there has to be a team leader who directs the development.</p>
+      <input type="checkbox" class="teamleader" value="teamleader"> Check this box if you want to be a team leader <br>
+    </div>
+    </form>
+    <div class="login-signup-input">
+      <br>
+      <p>(Optional) Resume</p>
+      <input type="file" id="resume">
+    </div>
+    <button id="upload-btn" class="btn login-signup-btn primary-button">Upload Profile</button>
+  </div>
+
+
+  <footer class="main-footer">
+    <p>© 2018 www.coding4good.net | All Rights Reserved</p>
+    <p>Contact us | Abount us</p>
+  </footer>
+</body>
+</html>
