@@ -9,11 +9,22 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/jquery-ui.js"></script>
 <script src="js/account.js"></script>
+<script src="js/SearchScript.js"></script>
+<script src="js/SortScript.js"></script>
 <script type="text/javascript">
   $(function(){
     $(".projectRow").click(function(){
-      $(location).attr('href', '/projectDetail#'+this.getAttribute("value"));
-    })
+      $(location).attr('href', '/project/detail#'+this.getAttribute("value"));
+    });
+    $("#myProjectFilter").click(function(){
+
+    });
+    $("th").click(function(){
+      toggleSort("projectTable",$("th").index(this));
+    });
+    $("#projectSearchInput").on("change textInput input", function(){
+      search("projectTable",$("#projectSearchInput").val());
+    });
   //   $.ajax({
   //     url: "/api/admin/get_profile",
   //     method: "GET",
@@ -69,35 +80,46 @@
     <div class="row margin-top img-center-holder">
       <h2>Projects</h2>
     </div>
-    <table id="projectTable" class="table" align="center">
+    <div class="row margin-htop">
+      <div class="col-sm-1">
+        <h4>Search: </h4>
+      </div>
+      <div class="col-sm-5">
+        <input id="projectSearchInput" type="text" class="input" placeholder="Input format with NO SPACE: keyword,keyword,keyword"/>
+      </div>
+      <div class="col-sm-8-offset" align="right">
+        <a class="btn primary-button" id="myProjectFilter">My Project</a>
+      </div>
+    </div>
+    <table id="projectTable" class="table margin-htop" align="center">
       <thead class="row margin-top">
         <tr class="tr clickable">
-          <th><h4>Project ID</h4></th>
-          <th><h4>Project Name</h4></th>
-          <th><h4>Project Type</h4></th>
+          <th>Project ID</th>
+          <th>Project Name</th>
+          <th>Project Type</th>
         </tr>
       </thead>
       <tbody id="projectTbody">
-          <tr value="1" class="tr clickable projectRow">
-            <td class="td"><h5>1</h5></td>
-            <td class="td"><h5>Edible Landscapes Project</h5></td>
-            <td class="td"><h5>Website; Mobile application</h5></td>
-          </tr>
-          <tr value="2" class="tr clickable projectRow">
-            <td class="td"><h5>2</h5></td>
-            <td class="td"><h5>How to help the blind use website?</h5></td>
-            <td class="td"><h5>Independent Project</h5></td>
-          </tr>
-          <tr value="3" class="tr clickable projectRow">
-            <td class="td"><h5>3</h5></td>
-            <td class="td"><h5>Multicultural Students Center</h5></td>
-            <td class="td"><h5>N/A</h5></td>
-          </tr>
-          <tr value="4" class="tr clickable projectRow">
-            <td class="td"><h5>4</h5></td>
-            <td class="td"><h5>WI Council of the Blind & Visually Impaired</h5></td>
-            <td class="td"><h5>Software</h5></td>
-          </tr>
+        <tr value="1" class="tr clickable projectRow">
+          <td class="td">1</td>
+          <td class="td">Edible Landscapes Project</td>
+          <td class="td">Website; Mobile application</td>
+        </tr>
+        <tr value="2" class="tr clickable projectRow">
+          <td class="td">2</td>
+          <td class="td">How to help the blind use website?</td>
+          <td class="td">Independent Project</td>
+        </tr>
+        <tr value="3" class="tr clickable projectRow">
+          <td class="td">3</td>
+          <td class="td">Multicultural Students Center</td>
+          <td class="td">N/A</td>
+        </tr>
+        <tr value="4" class="tr clickable projectRow">
+          <td class="td">4</td>
+          <td class="td">WI Council of the Blind & Visually Impaired</td>
+          <td class="td">Software</td>
+        </tr>
       </tbody>
     </table>
   </div>
