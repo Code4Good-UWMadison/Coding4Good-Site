@@ -19,26 +19,6 @@
         $("#projectSearchInput").on("change textInput input", function () {
           search("projectTable", $("#projectSearchInput").val());
         });
-        //   $.ajax({
-        //     url: "/api/admin/get_profile",
-        //     method: "GET",
-        //     dataType: "json",
-        //     //get info from db (get from /api/admin/get_projectSet ????)
-        //     sucess: function(data){
-        //       var html = "";
-        //       foreach(entry in data){
-        //         html += "<tr class="tr clickable" onclick="functionPage(entry.id)">
-        //                 <td class="td">entry.id</td>
-        //                 <td class="td">entry.name</td>
-        //                 <td class="td">entry.type</td>
-        //                 </tr>";
-        //       }
-        //       $("#projectTbody").html(html);
-        //     },
-        //     error: function(jqXHR, textStatus, errorThrown){
-        //       alert("Error");
-        //     }
-        //   });
       });
     </script>
 </head>
