@@ -26,20 +26,20 @@
       search("projectTable",$("#projectSearchInput").val());
     });
     $.ajax({
-      url: "/api/admin/get_profile",
+      url: "/api/project/get_projectSet",
       method: "GET",
       dataType: "json",
       //get info from db (get from /api/admin/get_projectSet ????)
       success: function(data){
         var content = "";
         console.log(data);
-        // foreach(entry in data){
-        //   html += "<tr class=\"tr clickable\" onclick=\"functionPage(entry.id)\">"+
-        //           "<td class=\"td\">entry.id</td>"+
-        //           "<td class=\"td\">entry.name</td>"+
-        //           "<td class=\"td\">entry.type</td>"+
-        //           "</tr>";
-        // }
+        data.forEach(function(row){
+          content += "<tr class=\"tr clickable\" onclick=\"functionPage(entry.id)\">"+
+                  "<td class=\"td\">"+row.id+"</td>"+
+                  "<td class=\"td\">entry.name</td>"+
+                  "<td class=\"td\">entry.type</td>"+
+                  "</tr>";
+        });
         $("#projectTbody").html(content);
       },
       error: function(jqXHR, textStatus, errorThrown){

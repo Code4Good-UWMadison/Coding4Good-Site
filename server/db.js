@@ -127,8 +127,7 @@ exports.getProfile = function(pid, callback){
 };
 
 exports.getProjectSet = function(callback){
-  var query = `select
-      * from user_profile;`;
+  var query = `SELECT * FROM project;`;
   db.query(query, function(err, result){
     if(err){
       callback(err);
@@ -136,10 +135,28 @@ exports.getProjectSet = function(callback){
     }
     else {
       if(result.rows.length > 0){
-        callback(null, result.rows[0]);
+        callback(null, result);
       }
       else{
-        callback('No matching profile id');
+        callback('There are no element exists in the table.');
+      }
+    }
+  });
+}
+
+exports.getProjectSet2 = function(callback){
+  var query = `SELECT * FROM user_profile;`;
+  db.query(query, function(err, result){
+    if(err){
+      callback(err);
+      return;
+    }
+    else {
+      if(result.rows.length > 0){
+        callback(null, result.rows);
+      }
+      else{
+        callback('There are no projects exist.');
       }
     }
   });
