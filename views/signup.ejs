@@ -44,25 +44,10 @@
 
 <body>
 
-  <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/">Coding for Good</a>
-      </div>
+  <% include template/nav.ejs %>
 
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li><a href="/about">About</a></li>
-          <li><a href="/project">Projects</a></li>
-          <li><a href="/contact">Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
 
-  <div class="login-signup">
+<div class="login-signup">
     <p style="color:red;" id="error-msg"></p>
     <form id="signup-form">
     <div class="input-group login-signup-input">
@@ -87,9 +72,6 @@
   </div>
 
 
-  <footer class="main-footer">
-    <p>© 2018 www.coding4good.net | All Rights Reserved</p>
-    <p>Contact us | Abount us</p>
-  </footer>
+  <% include template/footer.ejs %>
 </body>
 </html>

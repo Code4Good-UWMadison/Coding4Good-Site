@@ -25,7 +25,9 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(session({
   secret: 'aptgamestempsecret123',
-  cookie: {expires: new Date(253402300000000)}  // cookie never expire
+  cookie: {expires: new Date(253402300000000)},  // cookie never expire
+  resave: true,
+  saveUninitialized: true
 }))
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

@@ -18,7 +18,7 @@ router.get('/project', function(req, res, next){
   res.render('project',{});
 });
 
-router.get('/projectDetail', function(req, res, next){
+router.get('/project/detail', function(req, res, next){
   res.render('projectDetail',{});
 });
 
