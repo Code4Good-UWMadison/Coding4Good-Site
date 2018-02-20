@@ -81,26 +81,4 @@ router.post('/admin/get_profile', function(req, res, next){
   });
 });
 
-
-// router.post('/project/:userId'function(req, res, next){
-//   var userId = request.params.userId;
-//   //find user by userId(userId, function(error, user){
-//   //  if error then do..
-//   //  generate page by using userInfo
-//   //  res.render('project',{})
-//   //})
-//   //
-// });
-
-// router.get?('/project/get_projectSet', function(req, res, next){
-//   db.get_projectSet(req, function(err, projectSet){
-//     if(err){
-//       console.log(err);
-//       res.status(400).json({msg: 'Database Error'});
-//       return;
-//     }
-//     res.json(projectSet);
-//   });
-// });
-
 module.exports = router;
