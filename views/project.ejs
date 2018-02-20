@@ -25,13 +25,14 @@
     $("#projectSearchInput").on("change textInput input", function(){
       search("projectTable",$("#projectSearchInput").val());
     });
-  //   $.ajax({
-  //     url: "/api/admin/get_profile",
-  //     method: "GET",
-  //     dataType: "json",
-  //     //get info from db (get from /api/admin/get_projectSet ????)
-  //       var html = "";
+    $.ajax({
+      url: "/api/admin/get_profile",
+      method: "GET",
+      dataType: "json",
+      //get info from db (get from /api/admin/get_projectSet ????)
       success: function(data){
+        var content = "";
+        console.log(data);
         // foreach(entry in data){
         //   html += "<tr class=\"tr clickable\" onclick=\"functionPage(entry.id)\">"+
         //           "<td class=\"td\">entry.id</td>"+
@@ -39,12 +40,12 @@
         //           "<td class=\"td\">entry.type</td>"+
         //           "</tr>";
         // }
-  //       $("#projectTbody").html(html);
-  //     },
-  //     error: function(jqXHR, textStatus, errorThrown){
-  //     }
-  //   });
+        $("#projectTbody").html(content);
+      },
+      error: function(jqXHR, textStatus, errorThrown){
         alert("Error"+errorThrown);
+      }
+    });
   });
 </script>
 </head>
