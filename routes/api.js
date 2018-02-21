@@ -93,7 +93,7 @@ router.post('/admin/get_profile', function(req, res, next){
 // });
 
 router.get('/project/get_projectSet', function(req, res, next){
-  db.getProjectSet2(function(err, projectSet){
+  db.getProjectSet(function(err, projectSet){
     if(err){
       console.log(err);
       res.status(400).json({msg: 'Database Error'});

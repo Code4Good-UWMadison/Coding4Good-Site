@@ -36,8 +36,8 @@
         data.forEach(function(row){
           content += "<tr class=\"tr clickable\" onclick=\"functionPage(entry.id)\">"+
                   "<td class=\"td\">"+row.id+"</td>"+
-                  "<td class=\"td\">entry.name</td>"+
-                  "<td class=\"td\">entry.type</td>"+
+                  "<td class=\"td\">"+row.title+"</td>"+
+                  "<td class=\"td\">"+row.npo"</td>"+
                   "</tr>";
         });
         $("#projectTbody").html(content);

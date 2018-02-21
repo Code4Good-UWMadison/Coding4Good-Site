@@ -144,20 +144,21 @@ exports.getProjectSet = function(callback){
   });
 }
 
-exports.getProjectSet2 = function(callback){
-  var query = `SELECT * FROM user_profile;`;
-  db.query(query, function(err, result){
-    if(err){
-      callback(err);
-      return;
-    }
-    else {
-      if(result.rows.length > 0){
-        callback(null, result.rows);
-      }
-      else{
-        callback('There are no projects exist.');
-      }
-    }
-  });
-}
+//for testing
+// exports.getProjectSet2 = function(callback){
+//   var query = `SELECT * FROM user_profile;`;
+//   db.query(query, function(err, result){
+//     if(err){
+//       callback(err);
+//       return;
+//     }
+//     else {
+//       if(result.rows.length > 0){
+//         callback(null, result.rows);
+//       }
+//       else{
+//         callback('There are no projects exist.');
+//       }
+//     }
+//   });
+// }
