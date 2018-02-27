@@ -1,7 +1,7 @@
 var self = this;
 var pg = require('pg');
 var config = require('./dbconfig.js');
-var bcrypt = require('bcrypt');
+// var bcrypt = require('bcrypt');
 var uuid4 = require('uuid4');
 var db = new pg.Pool(config.db);
 
