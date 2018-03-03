@@ -65,7 +65,6 @@ exports.verifyUser = function(user, callback){
       else{
         callback(null, result.rows[0].id);
       }
-
     }
   });
 };
@@ -155,21 +154,20 @@ exports.getProjectSet = function(callback){
   });
 }
 
-//for testing
-// exports.getProjectSet2 = function(callback){
-//   var query = `SELECT * FROM user_profile;`;
-//   db.query(query, function(err, result){
-//     if(err){
-//       callback(err);
-//       return;
-//     }
-//     else {
-//       if(result.rows.length > 0){
-//         callback(null, result.rows);
-//       }
-//       else{
-//         callback('There are no projects exist.');
-//       }
-//     }
-//   });
-// }
+exports.getProjectDetailById = function(projectId,callback){
+  var query = `SELECT * FROM project WHERE id=$1;`
+  db.query(query, [projectId], function(err, result){
+    if(err){
+      callback(err);
+      return;
+    }
+    else {
+      if(result.rows.length > 0){
+        callback(null, result.rows[0]);
+      }
+      else{
+        callback('No matching project id');
+      }
+    }
+  });
+}
