@@ -34,6 +34,17 @@ router.post('/signup', function(req, res, next){
   });
 });
 
+router.post('/createProject',function(req,res,next){
+    db.createProject(req.body,function(err){
+      if(err){
+        console.log(err);
+        res.status(400).json({msg: 'Database Error'});
+        return;
+      }
+      res.json({});
+    })
+});
+
 router.post('/login', function(req, res, next){
   db.verifyUser(req.body, function(err, uid){
     if(err){
