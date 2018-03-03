@@ -65,7 +65,6 @@ exports.verifyUser = function(user, callback){
       else{
         callback(null, result.rows[0].id);
       }
-
     }
   });
 };
@@ -126,6 +125,17 @@ exports.getProfile = function(pid, callback){
   });
 };
 
+exports.createProject = function(project, callback){
+
+  var query = `insert into project (title, description, leader, members, contact, npo, creation_time, status) values($1,$2,$3,$4,$5,$6,$7,$8);`;
+  db.query(query, [project.title,project.description,project.leader,project.members,project.contact,project.npo,project.creation_time,project.status], function(err, result){
+    if (err) {
+      console.log(err);
+      callback(err);
+    }
+  });
+};
+
 exports.getProjectSet = function(callback){
   var query = `SELECT * FROM project;`;
   db.query(query, function(err, result){
@@ -144,21 +154,20 @@ exports.getProjectSet = function(callback){
   });
 }
 
-//for testing
-// exports.getProjectSet2 = function(callback){
-//   var query = `SELECT * FROM user_profile;`;
-//   db.query(query, function(err, result){
-//     if(err){
-//       callback(err);
-//       return;
-//     }
-//     else {
-//       if(result.rows.length > 0){
-//         callback(null, result.rows);
-//       }
-//       else{
-//         callback('There are no projects exist.');
-//       }
-//     }
-//   });
-// }
+exports.getProjectDetailById = function(projectId,callback){
+  var query = `SELECT * FROM project WHERE id=$1;`
+  db.query(query, [projectId], function(err, result){
+    if(err){
+      callback(err);
+      return;
+    }
+    else {
+      if(result.rows.length > 0){
+        callback(null, result.rows[0]);
+      }
+      else{
+        callback('No matching project id');
+      }
+    }
+  });
+}

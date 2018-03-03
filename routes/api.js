@@ -103,6 +103,17 @@ router.post('/admin/get_profile', function(req, res, next){
 //   })
 // });
 
+router.post('/project/createProject',function(req,res,next){
+    db.createProject(req.body,function(err){
+      if(err){
+        console.log(err);
+        res.status(400).json({msg: 'Database Error'});
+        return;
+      }
+      res.json({});
+    })
+});
+
 // router.post('/project/:userId'function(req, res, next){
 //   var userId = request.params.userId;
 //   //find user by userId(userId, function(error, user){
