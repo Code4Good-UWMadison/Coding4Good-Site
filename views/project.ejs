@@ -34,7 +34,7 @@
         var content = "";
         console.log(data);
         data.forEach(function(row){
-          content += "<tr class=\"tr clickable\" onclick=\"functionPage(entry.id)\">"+
+          content += "<tr class=\"tr clickable\" onclick=\"projectDetail("+row.id+")\">"+
                   "<td class=\"td\">"+row.id+"</td>"+
                   "<td class=\"td\">"+row.title+"</td>"+
                   "<td class=\"td\">"+row.npo"</td>"+
@@ -46,6 +46,20 @@
         alert("Error"+errorThrown);
       }
     });
+    function projectDetail(projectId){
+      url: "api/project/getProjectDetailById",
+      method: "POST",
+      dataType: "json",
+      data:{
+        projectId:projectId
+      },
+      success: function(data){
+
+      },
+      error: function(jqXHR, textStatus, errorThrown){
+        alert("Error");
+      }
+    }
   });
 </script>
 </head>
