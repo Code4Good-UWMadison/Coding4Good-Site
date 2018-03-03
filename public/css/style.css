@@ -190,6 +190,10 @@ section {
   width: 500px;
 }
 
+.new-project-input {
+  margin: 10px auto;
+}
+
 .login-signup {
   margin: 200px auto;
   text-align: center;
