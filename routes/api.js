@@ -34,7 +34,7 @@ router.post('/signup', function(req, res, next){
   });
 });
 
-router.post('/createProject',function(req,res,next){
+router.post('/project/createProject',function(req,res,next){
     db.createProject(req.body,function(err){
       if(err){
         console.log(err);
@@ -92,16 +92,16 @@ router.post('/admin/get_profile', function(req, res, next){
   });
 });
 
-router.post('/project/getProjectDetailById'function(req, res, next){
-  db.getProjectById(req.body.projectId,function(err,project){
-    if(err){
-      console.log(err);
-      res.status(400).json({msg: 'Database Error'});
-      return;
-    }
-    res.render('projectDetail', {project:project});
-  })
-});
+// router.post('/project/getProjectDetailById'function(req, res, next){
+//   db.getProjectById(req.body.projectId,function(err,project){
+//     if(err){
+//       console.log(err);
+//       res.status(400).json({msg: 'Database Error'});
+//       return;
+//     }
+//     res.render('projectDetail', {project:project});
+//   })
+// });
 
 // router.post('/project/:userId'function(req, res, next){
 //   var userId = request.params.userId;

@@ -22,6 +22,10 @@ router.get('/project/detail', function(req, res, next){
   res.render('projectDetail',{});
 });
 
+router.get('/project/new', function(req, res, next){
+  res.render('projectCreate',{});
+});
+
 router.get('/profile', function(req, res){
   if(req.session.uid == null){
     res.redirect('/login');
