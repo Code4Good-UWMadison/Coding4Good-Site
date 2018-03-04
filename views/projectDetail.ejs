@@ -22,22 +22,18 @@
 
 <div class="container" style="margin: 50px auto;">
     <div class="row margin-top img-center-holder">
-        <h2>Edible Landscapes Project</h2>
+        <h2><%= projectDetail.title %></h2>
     </div>
     <div class="img-center-holder">
-        <h4>Urban agriculture and food production</br>
-            Increase food security and food accessibility</br>
-            6 raised bed gardens and one permaculture</br>
-            New Projects: update website; mobile application!</br>
-            </br>
-            Facebook: Edible Landscapes Project, UW-Madison</br>
-            Website: <a
-                    href="http://ediblelandscapes.wixsite.com/edible">http://ediblelandscapes.wixsite.com/edible</a>
-        </h4>
+        <h4><%= projectDetail.description %></h4>
     </div>
     <div class="row img-center-holder">
-        <h4>Project Contact: Aida</h4>
-        <h4>Group members:</h4>
+        <h4>Project Contact: <%= projectDetail.contact %></h4>
+        <h4>Leader: <%= projectDetail.leader %></h4>
+        <h4>Group members: <%= projectDetail.members %></h4>
+        <h4>NPO: <%= projectDetail.npo %></h4>
+        <h4>Creation time: <%= projectDetail.creation_time %></h4>
+        <h4>Status: <%= projectDetail.status %></h4>
     </div>
 </div>
 
