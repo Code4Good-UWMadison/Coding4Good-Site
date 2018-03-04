@@ -25,11 +25,11 @@
   });
 
   $("#submit_proposal").click(function(event){
-    var email_address, name, major, orgnization, title, description;
+    var email_address, name, major, organization, title, description;
     email_address = $("#email_address").value;
     name = $("#name").val();
     major = $("#major").val();
-    orgnization = $("#orgnization").value;
+    organization = $("#organization").value;
     title = $("#program_title").value;
     description = $("#description").value;
 
@@ -41,7 +41,7 @@
         email: email_address,
         name: name,
         major: major,
-        orgnization:orgnization,
+        organization:organization,
         title:title,
         description:description
       },
