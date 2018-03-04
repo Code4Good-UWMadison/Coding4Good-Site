@@ -19,7 +19,20 @@ router.get('/project', function(req, res, next){
 });
 
 router.get('/project/detail', function(req, res, next){
-  res.render('projectDetail',{});
+  var url = require('url');
+  var url_parts = url.parse(request.url, true);
+  var query = url_parts.query;
+  var projectId = query.id;
+  var projectDetail;
+  db.getProjectById(projectId, function (err, project) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({msg: 'Database Error'});
+      return;
+    }
+    projectDetail = project;
+  }
+  res.render('projectDetail',{projectDetail: projectDetail});
 });
 
 router.get('/project/new', function(req, res, next){
