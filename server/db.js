@@ -126,12 +126,27 @@ exports.getProfile = function (pid, callback) {
 };
 
 exports.createProject = function (project, callback) {
-
-  var query = `insert into project (title, description, leader, members, contact, npo, creation_time) values($1,$2,$3,$4,$5,$6,to_timestamp(${Date.now()} / 1000.0));`;
-  db.query(query, [project.title, project.description, project.leader, project.members, project.contact, project.npo], function (err, result) {
+  var status=project.status;
+  if(status==0){
+    status = "Succeed"
+  }
+  else if(status ==1){
+    status = "Failed"
+  }
+  else if(status==2){
+    status = "On Hold"
+  }
+  else if (status==3) {
+    status = "In Progress"
+  }
+  var query = `insert into project (title, description, leader, members, contact, npo, creation_time,status) values($1,$2,$3,$4,$5,$6,to_timestamp(${Date.now()} / 1000.0),$7);`;
+  db.query(query, [project.title, project.description, project.leader, project.members, project.contact, project.npo,status], function (err) {
     if (err) {
       console.log(err);
       callback(err);
+    }
+    else{
+      callback(null);
     }
   });
 };
