@@ -12,7 +12,7 @@ function toggleSort(tableId, index) {
     curIndex = index;
   }
   if (curOrder === 0) {
-    curOrder = 1;
+    curOrder = -1;
   } else {
     curOrder = -curOrder;
   }
