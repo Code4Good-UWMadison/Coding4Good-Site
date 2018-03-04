@@ -212,6 +212,12 @@ section {
   width: 30%;
 }
 
+.creat-project {
+  margin: 150px auto;
+  text-align: center;
+  width: 60%;
+}
+
 .error-container {
   height: 100vh;
 }
