@@ -92,16 +92,16 @@ router.post('/admin/get_profile', function (req, res, next) {
   });
 });
 
-router.post('/project/getProjectDetailById', function (req, res, next) {
-  db.getProjectById(req.body.projectId, function (err, project) {
-    if (err) {
-      console.log(err);
-      res.status(400).json({msg: 'Database Error'});
-      return;
-    }
-    res.json(project);
-  })
-});
+// router.post('/project/getProjectDetailById', function (req, res, next) {
+//   db.getProjectById(req.body.projectId, function (err, project) {
+//     if (err) {
+//       console.log(err);
+//       res.status(400).json({msg: 'Database Error'});
+//       return;
+//     }
+//     res.json(project);
+//   })
+// });
 
 router.post('/project/createProject', function (req, res, next) {
   if (req.session.uid != 1) {
