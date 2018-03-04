@@ -154,7 +154,7 @@ exports.getProjectSet = function(callback){
   });
 }
 
-exports.getProjectDetailById = function(projectId,callback){
+exports.getProjectById = function(projectId,callback){
   var query = `SELECT * FROM project WHERE id=$1;`
   db.query(query, [projectId], function(err, result){
     if(err){

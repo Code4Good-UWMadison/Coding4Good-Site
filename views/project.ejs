@@ -12,6 +12,24 @@
     <script src="js/SearchScript.js"></script>
     <script src="js/SortScript.js"></script>
     <script type="text/javascript">
+      function projectDetail(projectId) {
+        $.ajax({
+          url: "api/project/getProjectDetailById",
+          method: "POST",
+          dataType: "json",
+          data: {
+            projectId: projectId
+          },
+          success: function (data) {
+
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            alert("Error");
+          }
+
+        });
+      };
+
       $(function () {
         $(".projectRow").click(function () {
           $(location).attr('href', '/project/detail#' + this.getAttribute("value"));
@@ -45,24 +63,6 @@
             alert("Error" + errorThrown);
           }
         });
-
-        function projectDetail(projectId) {
-          $.ajax({
-            url: "api/project/getProjectDetailById",
-            method: "POST",
-            dataType: "json",
-            data: {
-              projectId: projectId
-            },
-            success: function (data) {
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-              alert("Error");
-            }
-
-          });
-        };
       });
     </script>
 </head>
