@@ -11,20 +11,7 @@
     <script src="/js/account.js"></script>
     <script type="text/javascript">
       $(function () {
-        $.ajax({
-          url: "api/project/getProjectDetailById",
-          method: "POST",
-          dataType: "json",
-          data: {
-            projectId: projectId
-          },
-          success: function (data) {
-            data
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-            alert("Error");
-          }
-        });
+
       });
     </script>
 </head>

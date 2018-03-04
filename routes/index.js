@@ -19,7 +19,20 @@ router.get('/project', function(req, res, next){
 });
 
 router.get('/project/detail', function(req, res, next){
-  res.render('projectDetail',{});
+  $.ajax({
+    url: "/api/project/getProjectDetailById",
+    method: "POST",
+    dataType: "json",
+    data: {
+      projectId: req.query.id
+    },
+    success: function (data) {
+      res.render('projectDetail',data);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      alert("Error");
+    }
+  });
 });
 
 router.get('/project/new', function(req, res, next){
