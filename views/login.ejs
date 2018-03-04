@@ -1,62 +1,55 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Coding for Good</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel = "stylesheet" type = "text/css" href = "css/style.css"/>
-<link rel = "stylesheet" type = "text/css" href = "css/neutra/stylesheet.css"/>
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="js/jquery-ui.js"></script>
-<script>
-  $(function(){
-    $("#login-form").submit(function(){
-      if(($("#password").val()=='')|($("#email").val()=='')){
-        $("#error-msg").html('Please fill out all the fields');
-        return false;
-      }
-      $.ajax({
-        url: "/api/login",
-        method: "POST",
-        dataType: "json",
-        data: {
-          email: $("#email").val(),
-          password: $("#password").val()
-        },
-        success: function(){
-          window.location.href="/profile";
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-          $("#error-msg").html(jqXHR.responseJSON);
-        }
+    <% include template/head.ejs %>
+    <script>
+      $(function () {
+        $("#login-form").submit(function () {
+          if (($("#password").val() == '') | ($("#email").val() == '')) {
+            $("#error-msg").html('Please fill out all the fields');
+            return false;
+          }
+          $.ajax({
+            url: "/api/login",
+            method: "POST",
+            dataType: "json",
+            data: {
+              email: $("#email").val(),
+              password: $("#password").val()
+            },
+            success: function () {
+              window.location.href = "/profile";
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              $("#error-msg").html(jqXHR.responseJSON);
+            }
+          });
+          return false;
+        });
       });
-      return false;
-    });
-  });
-</script>
+    </script>
 
 </head>
 
 <body>
 
-  <% include template/nav.ejs %>
+<% include template/nav.ejs %>
 
-  <div class="login-signup">
+<div class="login-signup">
     <form id="login-form">
-    <div class="input-group login-signup-input">
-      <div class="input-group-addon">Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
-      <input class="form-control" type="text" id="email" placeholder="Email">
-    </div>
-    <div class="input-group login-signup-input">
-      <div class="input-group-addon">Password: </div>
-      <input class="form-control" type="password" id="password" placeholder="Password">
-    </div>
-    <p>I don't have an account yet, <a href="signup">sign me up!</a></p>
+        <div class="input-group login-signup-input">
+            <div class="input-group-addon">Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control" type="text" id="email" placeholder="Email">
+        </div>
+        <div class="input-group login-signup-input">
+            <div class="input-group-addon">Password:</div>
+            <input class="form-control" type="password" id="password" placeholder="Password">
+        </div>
+        <p>I don't have an account yet, <a href="signup">sign me up!</a></p>
     </form>
     <button type="submit" form="login-form" class="btn login-signup-btn primary-button">Login</button>
-  </div>
+</div>
 
-
-  <% include template/footer.ejs %>
+<% include template/footer.ejs %>
 </body>
 </html>

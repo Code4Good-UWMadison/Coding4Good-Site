@@ -1,49 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>CORGi</title>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/script.js"></script>
-  </head>
-  <body>
-    <div class="container">
-      <div>
-        <h4>Orgnization:</h4>
-        <input class="form-control" type="text" id="orgnization" name="orgnization" placeholder="Orgnization">
-      </div>
+<head>
+    <% include template/head.ejs %>
+    <script type="text/javascript" src="/js/proposal.js"></script>
+</head>
+<body>
+<div class="container">
+    <div>
+        <h4>Organization:</h4>
+        <input class="form-control" type="text" id="organization" name="organization" placeholder="Organization">
+    </div>
 
-      <div>
+    <div>
         <h4>Name:</h4>
         <input class="form-control" type="text" id="name" name="name" placeholder="Name">
-      </div>
+    </div>
 
-      <div>
+    <div>
         <h4>Email Address:</h4>
         <input class="form-control" type="text" id="email_address" name="email_address" placeholder="Email Address">
-      </div>
+    </div>
 
-      <div>
+    <div>
         <h4>Major:</h4>
         <input class="form-control" type="text" id="major" name="major" placeholder="Major">
-      </div>
+    </div>
 
-      <div>
+    <div>
         <h4>Program Title:</h4>
         <input class="form-control" type="text" id="program_title" name="program_title" placeholder="Program Title">
-      </div>
-
-      <div>
-        <h4>Description:</h4>
-        <textarea row="10" class="form-control" type="text" id="description" name="description" placeholder="Description"></textarea>
-      </div>
-
-      <div class=" button_position">
-        <button type="button" class ="primary-button" id="submit_proposal">Submit</button>
-      </div>
     </div>
-  </body>
-  </html>
+
+    <div>
+        <h4>Description:</h4>
+        <textarea row="10" class="form-control" type="text" id="description" name="description"
+                  placeholder="Description"></textarea>
+    </div>
+
+    <div class=" button_position">
+        <button type="button" class="primary-button" id="submit_proposal">Submit</button>
+    </div>
+</div>
+</body>
+</html>

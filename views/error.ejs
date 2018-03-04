@@ -5,51 +5,44 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Coding for Good</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel = "stylesheet" type = "text/css" href = "css/style.css"/>
-<link rel = "stylesheet" type = "text/css" href = "css/neutra/stylesheet.css"/>
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="js/jquery-ui.js"></script>
-<script src="js/account.js"></script>
-
+    <% include template/head.ejs %>
+    <script src="/js/account.js"></script>
 </head>
 
 <body class="error-container">
 
-  <nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/">Coding for Good</a>
-      </div>
-
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li><a href="/about">About</a></li>
-          <li><a href="/project">Projects</a></li>
-          <li><a href="/contact">Contact Us</a></li>
-        </ul>
-        <div class="navbar-form navbar-right">
-          <ul class="nav navbar-nav">
-            <li><a href="/login">Login</a></li>
-            <li><a>|</a></li>
-            <li><a href="/signup">Signup</a></li>
-          </ul>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Coding for Good</a>
         </div>
-      </div>
-    </div>
-  </nav>
 
-  <div class="container" style="margin: 50px auto;">
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/about">About</a></li>
+                <li><a href="/project">Projects</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+            </ul>
+            <div class="navbar-form navbar-right">
+                <ul class="nav navbar-nav">
+                    <li><a href="/login">Login</a></li>
+                    <li><a>|</a></li>
+                    <li><a href="/signup">Signup</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="margin: 50px auto;">
     <h1 style="color: #EF6C00;"><%= message %></h1>
     <h2>Oops! We can't find the content you want at this point!</h2>
-    <p>Our servers might be down at this point. Please try again later. <br>For any question, please contact info@coding4good.net</p>
-  </div>
+    <p>Our servers might be down at this point. Please try again later. <br>For any question, please contact
+        info@coding4good.net</p>
+</div>
 
-
-  <% include template/footer.ejs %>
+<% include template/footer.ejs %>
 </body>
 </html>
