@@ -4,7 +4,7 @@
     <% include template/head.ejs %>
     <script>
       $(function () {
-        $("#signup-form").submit(function () {
+        $("#project-form").submit(function () {
           if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
             $("#error-msg").html('Please fill out all the fields');
             return false;
@@ -20,7 +20,8 @@
               npo: $("#npo").val(),
             },
             success: function () {
-              window.location.href = "/profile";
+              alert("aaaa");
+              window.location.href = "/project";
             },
             error: function (jqXHR, textStatus, errorThrown) {
               $("#error-msg").html(jqXHR.responseJSON);
@@ -38,10 +39,10 @@
     <div class="col-sm-8-offset" align="right">
       <a class="btn primary-button" href="/project/">Back</a>
     </div>
-    <p style="color:red;" id="error-msg"></p>
-    <form id="signup-form">
+    <p class="error-msg" id="error-msg"></p>
+    <form id="project-form">
         <div class="input-group new-project-input">
-            <div class="input-group-addon">Title:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group-addon">Project Title:&nbsp;</div>
             <input class="form-control" type="text" id="title" placeholder="Title">
         </div>
         <!--
@@ -56,7 +57,7 @@
                 </div>
         -->
         <div class="input-group new-project-input">
-            <div class="input-group-addon">Contact:</div>
+            <div class="input-group-addon">Contact Info:</div>
             <input class="form-control" type="text" id="contact" placeholder="Contact">
         </div>
 
@@ -70,7 +71,7 @@
         </div>
 
     </form>
-    <button type="submit" form="signup-form" class="btn login-signup-btn primary-button">Create!</button>
+    <button type="submit" form="project-form" class="btn login-signup-btn primary-button">Create!</button>
 </div>
 
 <% include template/footer.ejs %>
