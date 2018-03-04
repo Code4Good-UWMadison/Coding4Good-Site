@@ -1,124 +1,127 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Coding for Good</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel = "stylesheet" type = "text/css" href = "css/style.css"/>
-<link rel = "stylesheet" type = "text/css" href = "css/neutra/stylesheet.css"/>
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="js/jquery-ui.js"></script>
-<script src="js/account.js"></script>
-<script src="js/SearchScript.js"></script>
-<script src="js/SortScript.js"></script>
-<script type="text/javascript">
-  $(function(){
-    $(".projectRow").click(function(){
-      $(location).attr('href', '/project/detail#'+this.getAttribute("value"));
-    });
-    $("#myProjectFilter").click(function(){
-
-    });
-    $("th").click(function(){
-      toggleSort("projectTable",$("th").index(this));
-    });
-    $("#projectSearchInput").on("change textInput input", function(){
-      search("projectTable",$("#projectSearchInput").val());
-    });
-    $.ajax({
-      url: "/api/project/get_projectSet",
-      method: "GET",
-      dataType: "json",
-      //get info from db (get from /api/admin/get_projectSet ????)
-      success: function(data){
-        var content = "";
-        console.log(data);
-        data.forEach(function(row){
-          content += "<tr class=\"tr clickable\" onclick=\"projectDetail("+row.id+")\">"+
-                  "<td class=\"td\">"+row.id+"</td>"+
-                  "<td class=\"td\">"+row.title+"</td>"+
-                  "<td class=\"td\">"+row.npo"</td>"+
-                  "</tr>";
+    <meta charset="utf-8">
+    <title>Coding for Good</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/neutra/stylesheet.css"/>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script src="js/account.js"></script>
+    <script src="js/SearchScript.js"></script>
+    <script src="js/SortScript.js"></script>
+    <script type="text/javascript">
+      $(function () {
+        console.log("Test");
+        $(".projectRow").click(function () {
+          $(location).attr('href', '/project/detail#' + this.getAttribute("value"));
         });
-        $("#projectTbody").html(content);
-      },
-      error: function(jqXHR, textStatus, errorThrown){
-        alert("Error"+errorThrown);
-      }
-    });
-    function projectDetail(projectId){
-      url: "api/project/getProjectDetailById",
-      method: "POST",
-      dataType: "json",
-      data:{
-        projectId:projectId
-      },
-      success: function(data){
+        $("#myProjectFilter").click(function () {
 
-      },
-      error: function(jqXHR, textStatus, errorThrown){
-        alert("Error");
-      }
-    }
-  });
-</script>
+        });
+        $("th").click(function () {
+          toggleSort("projectTable", $("th").index(this));
+        });
+        $("#projectSearchInput").on("change textInput input", function () {
+          search("projectTable", $("#projectSearchInput").val());
+        });
+        $.ajax({
+          url: "/api/project/get_projectSet",
+          method: "GET",
+          dataType: "json",
+          //get info from db (get from /api/admin/get_projectSet ????)
+          success: function (data) {
+            var content = "";
+            data.rows.forEach(function (row) {
+              content += "<tr class=\"tr clickable\" onclick=\"projectDetail(" + row.id + ")\">" +
+                "<td class=\"td\">" + row.id + "</td>" +
+                "<td class=\"td\">" + row.title + "</td>" +
+                "<td class=\"td\">" + row.npo + "</td>" +
+                "</tr>";
+            });
+            $("#projectTbody").html(content);
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            alert("Error" + errorThrown);
+          }
+        });
+
+        function projectDetail(projectId) {
+          $.ajax({
+            url: "api/project/getProjectDetailById",
+            method: "POST",
+            dataType: "json",
+            data: {
+              projectId: projectId
+            },
+            success: function (data) {
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              alert("Error");
+            }
+
+          });
+        };
+      });
+    </script>
 </head>
 
 <body>
 
-  <% include template/nav.ejs %>
+<% include template/nav.ejs %>
 
-  <div class="container" style="margin: 50px auto;">
+<div class="container" style="margin: 50px auto;">
     <div class="row margin-top img-center-holder">
-      <h2>Projects</h2>
+        <h2>Projects</h2>
     </div>
     <div class="row margin-htop">
-      <div class="col-sm-1">
-        <h4>Search: </h4>
-      </div>
-      <div class="col-sm-5">
-        <input id="projectSearchInput" type="text" class="input" placeholder="Input format with NO SPACE: keyword,keyword,keyword"/>
-      </div>
-      <div class="col-sm-8-offset" align="right">
-        <a class="btn primary-button" id="newProjectFilter" href="/project/new">New Project</a>
-        <a class="btn primary-button" id="myProjectFilter">My Project</a>
-      </div>
+        <div class="col-sm-1">
+            <h4>Search: </h4>
+        </div>
+        <div class="col-sm-5">
+            <input id="projectSearchInput" type="text" class="input"
+                   placeholder="Input format with NO SPACE: keyword,keyword,keyword"/>
+        </div>
+        <div class="col-sm-8-offset" align="right">
+            <a class="btn primary-button" id="newProjectFilter" href="/project/new">New Project</a>
+            <a class="btn primary-button" id="myProjectFilter">My Project</a>
+        </div>
     </div>
     <table id="projectTable" class="table margin-htop" align="center">
-      <thead class="row margin-top">
+        <thead class="row margin-top">
         <tr class="tr clickable">
-          <th>Project ID</th>
-          <th>Project Name</th>
-          <th>Project Type</th>
+            <th>Project ID</th>
+            <th>Project Name</th>
+            <th>Project Type</th>
         </tr>
-      </thead>
-      <tbody id="projectTbody">
+        </thead>
+        <tbody id="projectTbody">
         <tr value="1" class="tr clickable projectRow">
-          <td class="td">1</td>
-          <td class="td">Edible Landscapes Project</td>
-          <td class="td">Website; Mobile application</td>
+            <td class="td">1</td>
+            <td class="td">Edible Landscapes Project</td>
+            <td class="td">Website; Mobile application</td>
         </tr>
         <tr value="2" class="tr clickable projectRow">
-          <td class="td">2</td>
-          <td class="td">How to help the blind use website?</td>
-          <td class="td">Independent Project</td>
+            <td class="td">2</td>
+            <td class="td">How to help the blind use website?</td>
+            <td class="td">Independent Project</td>
         </tr>
         <tr value="3" class="tr clickable projectRow">
-          <td class="td">3</td>
-          <td class="td">Multicultural Students Center</td>
-          <td class="td">N/A</td>
+            <td class="td">3</td>
+            <td class="td">Multicultural Students Center</td>
+            <td class="td">N/A</td>
         </tr>
         <tr value="4" class="tr clickable projectRow">
-          <td class="td">4</td>
-          <td class="td">WI Council of the Blind & Visually Impaired</td>
-          <td class="td">Software</td>
+            <td class="td">4</td>
+            <td class="td">WI Council of the Blind & Visually Impaired</td>
+            <td class="td">Software</td>
         </tr>
-      </tbody>
+        </tbody>
     </table>
-  </div>
+</div>
 
-
-
-  <% include template/footer.ejs %>
+<% include template/footer.ejs %>
 </body>
 </html>

@@ -127,8 +127,8 @@ exports.getProfile = function(pid, callback){
 
 exports.createProject = function(project, callback){
 
-  var query = `insert into project (title, description, leader, members, contact, npo, creation_time, status) values($1,$2,$3,$4,$5,$6,$7,$8);`;
-  db.query(query, [project.title,project.description,project.leader,project.members,project.contact,project.npo,project.creation_time,project.status], function(err, result){
+  var query = `insert into project (title, description, leader, members, contact, npo, creation_time) values($1,$2,$3,$4,$5,$6,to_timestamp(${Date.now()} / 1000.0));`;
+  db.query(query, [project.title,project.description,project.leader,project.members,project.contact,project.npo], function(err, result){
     if (err) {
       console.log(err);
       callback(err);

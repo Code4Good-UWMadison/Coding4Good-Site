@@ -11,7 +11,7 @@
     <script>
       $(function () {
         $("#signup-form").submit(function () {
-          if (($("#title").val() == '') | ($("#description").val() == '') | ($("#leader").val() == '') | ($("#members").val() == '')) {
+          if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
             $("#error-msg").html('Please fill out all the fields');
             return false;
           }
@@ -22,8 +22,8 @@
             data: {
               title: $("#title").val(),
               description: $("#description").val(),
-              leader: $("#leader").val(),
-              members: $("#members").val()
+              contact: $("#contact").val(),
+              npo: $("#npo").val(),
             },
             success: function () {
               window.location.href = "/profile";
@@ -48,7 +48,7 @@
             <div class="input-group-addon">Title:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <input class="form-control" type="text" id="title" placeholder="Title">
         </div>
-
+<!--
         <div class="input-group new-project-input">
             <div class="input-group-addon">Leader:</div>
             <input class="form-control" type="text" id="leader" placeholder="Leader">
@@ -57,6 +57,16 @@
         <div class="input-group new-project-input">
             <div class="input-group-addon">Members:</div>
             <input class="form-control" type="text" id="members" placeholder="Members">
+        </div>
+-->
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Contact:</div>
+            <input class="form-control" type="text" id="contact" placeholder="Contact">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Non-profit Organization Name:</div>
+            <input class="form-control" type="text" id="npo" placeholder="Non-profit Organization Name">
         </div>
 
         <div class="new-project-input">
