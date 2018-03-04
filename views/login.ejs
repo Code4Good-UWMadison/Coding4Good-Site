@@ -17,8 +17,13 @@
               email: $("#email").val(),
               password: $("#password").val()
             },
-            success: function () {
-              window.location.href = "/profile";
+            success: function (valid) {
+              if(valid){
+                window.location.href = "/profile";
+              }
+              else{
+                $("#error-msg").html('Your username or password is wrong, please try again!');
+              }
             },
             error: function (jqXHR, textStatus, errorThrown) {
               $("#error-msg").html(jqXHR.responseJSON);
@@ -36,6 +41,7 @@
 <% include template/nav.ejs %>
 
 <div class="login-signup">
+    <p class="error-msg" id="error-msg"></p>
     <form id="login-form">
         <div class="input-group login-signup-input">
             <div class="input-group-addon">Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>

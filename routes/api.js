@@ -54,10 +54,10 @@ router.post('/login', function (req, res, next) {
     }
     if (uid) {
       req.session.uid = uid;
-      res.json({});
+      res.json(true);
     }
     else {
-      res.status(400).json({msg: 'Username or password is wrong'});
+      res.json(false);
     }
   });
 });
