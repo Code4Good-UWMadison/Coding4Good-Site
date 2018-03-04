@@ -16,7 +16,14 @@ router.get('/contact', function (req, res, next) {
 });
 
 router.get('/project', function (req, res, next) {
-  res.render('project', {uid:req.session.uid});
+  db.getProjectSet(function (err, projectSet) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({msg: 'Database Error'});
+      return;
+    }
+  res.render('project', {projectSet: projectSet.rows,uid:req.session.uid});
+  });
 });
 
 router.get('/project/detail', function (req, res, next) {

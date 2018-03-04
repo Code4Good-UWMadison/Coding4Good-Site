@@ -141,15 +141,9 @@ exports.getProjectSet = function (callback) {
   db.query(query, function (err, result) {
     if (err) {
       callback(err);
-
     }
     else {
-      if (result.rows.length > 0) {
-        callback(null, result);
-      }
-      else {
-        callback('There are no element exists in the table.');
-      }
+      callback(null, result);
     }
   });
 };

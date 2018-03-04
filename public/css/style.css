@@ -212,6 +212,9 @@ section {
   width: 30%;
 }
 
+.error-msg{
+  color:red;
+}
 .creat-project {
   margin: 150px auto;
   text-align: center;

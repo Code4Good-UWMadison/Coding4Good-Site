@@ -2,13 +2,9 @@
 <html>
 <head>
     <% include template/head.ejs %>
-    <script src="js/SearchScript.js"></script>
-    <script src="js/SortScript.js"></script>
+    <script src="/js/SearchScript.js"></script>
+    <script src="/js/SortScript.js"></script>
     <script type="text/javascript">
-      function projectDetail(projectId) {
-        $(location).attr('href', '/project/detail?id=' + projectId);
-      };
-
       $(function () {
         $("#myProjectFilter").click(function () {
 
@@ -20,26 +16,31 @@
         $("#projectSearchInput").on("change textInput input", function () {
           search("projectTable", $("#projectSearchInput").val());
         });
-        $.ajax({
-          url: "/api/project/get_projectSet",
-          method: "GET",
-          dataType: "json",
-          //get info from db (get from /api/admin/get_projectSet ????)
-          success: function (data) {
-            var content = "";
-            data.rows.forEach(function (row) {
-              content += "<tr class=\"tr clickable\" onclick=\"projectDetail(" + row.id + ")\">" +
-                "<td class=\"td\">" + row.id + "</td>" +
-                "<td class=\"td\">" + row.title + "</td>" +
-                "<td class=\"td\">" + row.npo + "</td>" +
-                "</tr>";
-            });
-            $("#projectTbody").html(content);
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-            alert("Error" + errorThrown);
-          }
+        $(".projectRow").click(function() {
+          var projectId = this.id;
+          console.log(projectId);
+          $(location).attr('href', '/project/detail?id=' + projectId);
         });
+        // $.ajax({
+        //   url: "/api/project/get_projectSet",
+        //   method: "GET",
+        //   dataType: "json",
+        //   //get info from db (get from /api/admin/get_projectSet ????)
+        //   success: function (data) {
+        //     var content = "";
+        //     data.rows.forEach(function (row) {
+        //       content += "<tr class=\"tr clickable\" onclick=\"projectDetail(" + row.id + ")\">" +
+        //         "<td class=\"td\">" + row.id + "</td>" +
+        //         "<td class=\"td\">" + row.title + "</td>" +
+        //         "<td class=\"td\">" + row.npo + "</td>" +
+        //         "</tr>";
+        //     });
+        //     $("#projectTbody").html(content);
+        //   },
+        //   error: function (jqXHR, textStatus, errorThrown) {
+        //     alert("Error" + errorThrown);
+        //   }
+        // });
       });
     </script>
 </head>
@@ -72,30 +73,20 @@
         <tr class="tr clickable">
             <th>Project ID</th>
             <th>Project Name</th>
-            <th>Project Type</th>
+            <th>Organization Name</th>
         </tr>
         </thead>
         <tbody id="projectTbody">
-        <!--tr value="1" class="tr clickable projectRow">
-            <td class="td">1</td>
-            <td class="td">Edible Landscapes Project</td>
-            <td class="td">Website; Mobile application</td>
-        </tr>
-        <tr value="3" class="tr clickable projectRow">
-          <td class="td">3</td>
-          <td class="td">Multicultural Students Center</td>
-          <td class="td">N/A</td>
-        </tr>
-        <tr value="2" class="tr clickable projectRow">
-            <td class="td">2</td>
-            <td class="td">How to help the blind use website?</td>
-            <td class="td">Independent Project</td>
-        </tr>
-        <tr value="4" class="tr clickable projectRow">
-            <td class="td">4</td>
-            <td class="td">WI Council of the Blind & Visually Impaired</td>
-            <td class="td">Software</td>
-        </tr-->
+          <% if(projectSet.length==0){ %>
+            <tr><td class="error-msg">Sorry! Currently, there are no project available</td></tr>
+          <% } %>
+          <% projectSet.forEach(function(row){ %>
+            <tr class="tr clickable projectRow" id=<%=row.id%>>
+                <td class="td"><%= row.id %></td>
+                <td class="td"><%= row.title %></td>
+                <td class="td"><%= row.npo %></td>
+            </tr>
+          <% }); %>
         </tbody>
     </table>
 </div>
