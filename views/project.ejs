@@ -5,7 +5,6 @@
     <script src="js/account.js"></script>
     <script src="js/SearchScript.js"></script>
     <script src="js/SortScript.js"></script>
-
     <script type="text/javascript">
       function projectDetail(projectId) {
         $(location).attr('href', '/project/detail?id=' + projectId);
@@ -62,7 +61,9 @@
                    placeholder="Input format with NO SPACE: keyword,keyword,keyword"/>
         </div>
         <div class="col-sm-8-offset" align="right">
+            <%if (uid==1) { %>
             <a class="btn primary-button" id="newProjectFilter" href="/project/new">New Project</a>
+            <% } %>
             <a class="btn primary-button" id="myProjectFilter">My Project</a>
         </div>
     </div>
@@ -75,7 +76,26 @@
         </tr>
         </thead>
         <tbody id="projectTbody">
-
+        <!--tr value="1" class="tr clickable projectRow">
+            <td class="td">1</td>
+            <td class="td">Edible Landscapes Project</td>
+            <td class="td">Website; Mobile application</td>
+        </tr>
+        <tr value="2" class="tr clickable projectRow">
+            <td class="td">2</td>
+            <td class="td">How to help the blind use website?</td>
+            <td class="td">Independent Project</td>
+        </tr>
+        <tr value="3" class="tr clickable projectRow">
+            <td class="td">3</td>
+            <td class="td">Multicultural Students Center</td>
+            <td class="td">N/A</td>
+        </tr>
+        <tr value="4" class="tr clickable projectRow">
+            <td class="td">4</td>
+            <td class="td">WI Council of the Blind & Visually Impaired</td>
+            <td class="td">Software</td>
+        </tr-->
         </tbody>
     </table>
 </div>

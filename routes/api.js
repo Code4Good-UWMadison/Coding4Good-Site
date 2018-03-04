@@ -104,6 +104,10 @@ router.post('/project/getProjectDetailById', function (req, res, next) {
 });
 
 router.post('/project/createProject', function (req, res, next) {
+  if (req.session.uid != 1) {
+    res.status(400).json({msg: 'Not Authorized'});
+    return;
+  }
   db.createProject(req.body, function (err) {
     if (err) {
       console.log(err);
