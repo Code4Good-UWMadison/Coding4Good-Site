@@ -99,7 +99,7 @@ router.post('/project/getProjectDetailById', function (req, res, next) {
       res.status(400).json({msg: 'Database Error'});
       return;
     }
-    res.render('projectDetail', {project: project});
+    res.json(project);
   })
 });
 
