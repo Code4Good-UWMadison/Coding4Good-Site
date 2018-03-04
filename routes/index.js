@@ -16,7 +16,7 @@ router.get('/contact', function (req, res, next) {
 });
 
 router.get('/project', function (req, res, next) {
-  res.render('project', {});
+  res.render('project', {uid:req.session.uid});
 });
 
 router.get('/project/detail', function (req, res, next) {
@@ -31,6 +31,10 @@ router.get('/project/detail', function (req, res, next) {
 });
 
 router.get('/project/new', function (req, res, next) {
+  if (req.session.uid != 1) {
+    res.redirect('/');
+    return;
+  }
   res.render('projectCreate', {});
 });
 
