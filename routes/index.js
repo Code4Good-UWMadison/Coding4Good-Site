@@ -27,6 +27,10 @@ router.get('/project', function (req, res, next) {
 });
 
 router.get('/project/my', function (req, res, next) {
+  if(req.session.uid==null){
+    res.redirect('/project');
+    return;
+  }
   db.getProjectByUserIdser(req.session.uid, function (err, projectSet) {
     if (err) {
       console.log(err);
@@ -50,7 +54,7 @@ router.get('/project/detail', function (req, res, next) {
 
 router.get('/project/new', function (req, res, next) {
   if (req.session.uid != 1) {
-    res.redirect('/');
+    res.redirect('/project');
     return;
   }
   res.render('projectCreate', {});
