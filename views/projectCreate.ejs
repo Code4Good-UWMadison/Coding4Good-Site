@@ -9,7 +9,7 @@
             $("#error-msg").html('Please fill out all the fields');
             return false;
           }
-          var teams = [{id:1, isLeader:true}, {id:2, isLeader:false}];
+          var teams = [{id:1, memberTitle:"Member"}, {id:2, memberTitle:"Leader"}];
           $.ajax({
             url: "/api/project/createProject",
             method: "POST",
