@@ -3,9 +3,7 @@
 <head>
     <% include template/head.ejs %>
     <script type="text/javascript">
-        $(function(){
-            var team =
-        })
+
     </script>
 </head>
 
@@ -29,12 +27,12 @@
         <h4>Status: <%= projectDetail.status %></h4>
         <h4>Creation time: <%= projectDetail.creation_time %></h4>
         <% users.forEach(function(user){ %>
-        <h4><%= user.fullname %></h4>
-        <h4>Title:&nbsp<%= user.relation %></h4>
+        <h4><%= user.name %></h4>
+        <h4>Title: <%= user.relation %></h4>
         <% }); %>
     </div>
     <div class="row img-center-holder">
-      <h4><%= projectDetail.description %></h4>
+      <h4>Description: <%= projectDetail.description %></h4>
     </div>
 </div>
 

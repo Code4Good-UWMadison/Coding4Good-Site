@@ -188,7 +188,7 @@ exports.getAssociatedProjectsByUserId = function (uid, callback) {
 };
 
 exports.getAssociatedUsersByProjectId = function (projectId, callback) {
-    var query = `SELECT u.fullname as fullname, r.relation as relation, u.id as uid FROM project_relation r, users u, project p where u.id = r.uid and p.id = $1 and p.id = r.pid`;
+    var query = `SELECT u.name as name, r.relation as relation, u.id as uid FROM project_relation r, users u, project p where u.id = r.uid and p.id = $1 and p.id = r.pid`;
     db.query(query, [projectId], function (err, result) {
         if (err) {
             callback(err);
