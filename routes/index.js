@@ -4,102 +4,124 @@ var db = require("../server/db");
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('index', {});
+    res.render('index', {});
 });
 
 router.get('/about', function (req, res, next) {
-  res.render('about', {});
+    res.render('about', {});
 });
 
 router.get('/contact', function (req, res, next) {
-  res.render('contact', {});
+    res.render('contact', {});
 });
 
 router.get('/project', function (req, res, next) {
-  db.getProjectSet(function (err, projectSet) {
-    if (err) {
-      console.log(err);
-      res.status(400).json({msg: 'Database Error'});
-      return;
-    }
-  res.render('project', {projectSet: projectSet,isMy:false,uid:req.session.uid});
-  });
+    db.getProjectSet(function (err, projectSet) {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        res.render('project', {projectSet: projectSet, isMy: false, uid: req.session.uid});
+    });
 });
 
 router.get('/project/my', function (req, res, next) {
-  if(req.session.uid==null){
-    res.redirect('/project');
-    return;
-  }
-  db.getProjectByUserIdser(req.session.uid, function (err, projectSet) {
-    if (err) {
-      console.log(err);
-      res.status(400).json({msg: 'Database Error'});
-      return;
+    if (req.session.uid == null) {
+        res.redirect('/project');
+        return;
     }
-  res.render('project', {projectSet: projectSet,isMy:true,uid:null});
-  });
+    db.getAssociatedProjectsByUserId(req.session.uid, function (err, projectSet) {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        res.render('project', {projectSet: projectSet, isMy: true, uid: null});
+    });
 });
 
 router.get('/project/detail', function (req, res, next) {
-  db.getProjectById(req.query.id, function (err, project) {
-    if (err) {
-      console.log(err);
-      res.status(400).json({msg: 'Database Error'});
-      return;
-    }
-    res.render('projectDetail', {projectDetail: project,uid:req.session.uid});
-  });
+    db.getProjectById(req.query.id, function (err, project) {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        db.getAssociatedUsersByProjectId(project.id,function(err, users){
+            if(err){
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            res.render('projectDetail', {projectDetail: project, users: users, uid: req.session.uid});
+        })
+    });
 });
 
 router.get('/project/new', function (req, res, next) {
-  if (req.session.uid != 1) {
-    res.redirect('/project');
-    return;
-  }
-  res.render('projectCreate', {});
+    if (req.session.uid != 1) {
+        res.redirect('/project');
+        return;
+    }
+    res.render('projectCreate', {});
 });
 
+// router.get('/project/edit', function (req, res, next) {
+//     if (req.session.uid != 1) {
+//         res.redirect('/project');
+//         return;
+//     }
+//     db.getProjectById(req.query.projectId, function (err, project) {
+//         if (err) {
+//             console.log(err);
+//             res.status(400).json({msg: 'Database Error'});
+//             return;
+//         }
+//         res.render('projectEdit', {projectDetail:project});
+//     });
+// });
+
 router.get('/profile', function (req, res) {
-  if (req.session.uid == null) {
-    res.redirect('/login');
-    return;
-  }
-  res.render('profile');
+    if (req.session.uid == null) {
+        res.redirect('/login');
+        return;
+    }
+    res.render('profile');
 });
 
 router.get('/admin', function (req, res) {
-  if (req.session.uid != 1) {
-    res.redirect('/');
-    return;
-  }
-  res.render('admin');
+    if (req.session.uid != 1) {
+        res.redirect('/');
+        return;
+    }
+    res.render('admin');
 });
 
 router.get('/upload-complete', function (req, res) {
-  if (req.session.uid == null) {
-    res.redirect('/login');
-    return;
-  }
-  res.render('upload-complete');
+    if (req.session.uid == null) {
+        res.redirect('/login');
+        return;
+    }
+    res.render('upload-complete');
 });
 
 
 router.get('/login', function (req, res, next) {
-  res.render('login', {});
+    res.render('login', {});
 });
 
 router.get('/signup', function (req, res, next) {
-  res.render('signup', {});
+    res.render('signup', {});
 });
 
 router.get('/logout', function (req, res, next) {
-  req.session.uid = null;
-  res.redirect('/');
+    req.session.uid = null;
+    res.redirect('/');
 });
 
 router.get('/proposal', function (req, res) {
-  res.render('proposal');
+    res.render('proposal');
 });
 
 module.exports = router;

@@ -6,9 +6,6 @@
     <script src="/js/SortScript.js"></script>
     <script type="text/javascript">
         $(function () {
-            // $("#myProjectFilter").click(function () {
-            //
-            // });
             sortTable("projectTable", 0, 1);
             $("th").click(function () {
                 toggleSort("projectTable", $("th").index(this));
@@ -21,26 +18,6 @@
                 console.log(projectId);
                 $(location).attr('href', '/project/detail?id=' + projectId);
             });
-            // $.ajax({
-            //   url: "/api/project/get_projectSet",
-            //   method: "GET",
-            //   dataType: "json",
-            //   //get info from db (get from /api/admin/get_projectSet ????)
-            //   success: function (data) {
-            //     var content = "";
-            //     data.rows.forEach(function (row) {
-            //       content += "<tr class=\"tr clickable\" onclick=\"projectDetail(" + row.id + ")\">" +
-            //         "<td class=\"td\">" + row.id + "</td>" +
-            //         "<td class=\"td\">" + row.title + "</td>" +
-            //         "<td class=\"td\">" + row.npo + "</td>" +
-            //         "</tr>";
-            //     });
-            //     $("#projectTbody").html(content);
-            //   },
-            //   error: function (jqXHR, textStatus, errorThrown) {
-            //     alert("Error" + errorThrown);
-            //   }
-            // });
         });
     </script>
 </head>

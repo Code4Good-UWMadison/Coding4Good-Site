@@ -175,10 +175,7 @@ exports.getProjectSet = function (callback) {
   });
 };
 
-//select b.model from SAILER s, RESERVATION r,
-//BOAT b where b.id=r.bid and s.id=r.sid and
-//r.date=yesterday and s.name='a'
-exports.getProjectByUserIdser = function (uid, callback) {
+exports.getAssociatedProjectsByUserId = function (uid, callback) {
   var query = `SELECT * FROM project_relation r, users u, project p where u.id = r.uid and u.id = $1 and p.id = r.pid`;
   db.query(query, [uid], function (err, result) {
     if (err) {
@@ -188,6 +185,18 @@ exports.getProjectByUserIdser = function (uid, callback) {
       callback(null, result.rows);
     }
   });
+};
+
+exports.getAssociatedUsersByProjectId = function (projectId, callback) {
+    var query = `SELECT u.fullname as fullname, r.relation as relation, u.id as uid FROM project_relation r, users u, project p where u.id = r.uid and p.id = $1 and p.id = r.pid`;
+    db.query(query, [projectId], function (err, result) {
+        if (err) {
+            callback(err);
+        }
+        else {
+            callback(null, result.rows);
+        }
+    });
 };
 
 exports.getProjectById = function (projectId, callback) {
@@ -206,21 +215,3 @@ exports.getProjectById = function (projectId, callback) {
     }
   });
 };
-
-// exports.getProjectByUserId = function (uid, callback) {
-//   var query = `SELECT * FROM project WHERE leader=$1 or member`;
-//   db.query(query, [uid], function (err, result) {
-//     if (err) {
-//       callback(err);
-//
-//     }
-//     else {
-//       if (result.rows.length > 0) {
-//         callback(null, result.rows[0]);
-//       }
-//       else {
-//         callback('No matching project id');
-//       }
-//     }
-//   });
-// };
