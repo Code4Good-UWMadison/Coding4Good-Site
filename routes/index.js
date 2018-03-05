@@ -67,20 +67,20 @@ router.get('/project/new', function (req, res, next) {
     res.render('projectCreate', {});
 });
 
-// router.get('/project/edit', function (req, res, next) {
-//     if (req.session.uid != 1) {
-//         res.redirect('/project');
-//         return;
-//     }
-//     db.getProjectById(req.query.projectId, function (err, project) {
-//         if (err) {
-//             console.log(err);
-//             res.status(400).json({msg: 'Database Error'});
-//             return;
-//         }
-//         res.render('projectEdit', {projectDetail:project});
-//     });
-// });
+router.get('/project/edit', function (req, res, next) {
+    if (req.session.uid != 1) {
+        res.redirect('/project');
+        return;
+    }
+    db.getProjectById(req.query.projectId, function (err, project) {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        res.render('projectEdit', {projectDetail:project});
+    });
+});
 
 router.get('/profile', function (req, res) {
     if (req.session.uid == null) {
