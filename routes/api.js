@@ -111,15 +111,4 @@ router.post('/project/createProject', function (req, res, next) {
 //     })
 // });
 
-// router.post('/project/:userId'function(req, res, next){
-//   var userId = request.params.userId;
-//   //find user by userId(userId, function(error, user){
-//   //  if error then do..
-//   //  generate page by using userInfo
-//   //  res.render('project',{})
-//   //})
-//   //
-// });
-
-
 module.exports = router;
