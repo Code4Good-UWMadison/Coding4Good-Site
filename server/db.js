@@ -126,6 +126,8 @@ exports.getProfile = function (pid, callback) {
 };
 
 exports.createProject = function (project, callback) {
+  console.log("fuck!");
+  console.log(JSON.stringify(project));
   var status=project.status;
   if(status==0){
     status = "Succeed";
