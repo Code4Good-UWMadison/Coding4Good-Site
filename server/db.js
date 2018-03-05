@@ -128,24 +128,40 @@ exports.getProfile = function (pid, callback) {
 exports.createProject = function (project, callback) {
   var status=project.status;
   if(status==0){
-    status = "Succeed"
+    status = "Succeed";
   }
   else if(status ==1){
-    status = "Failed"
+    status = "Failed";
   }
   else if(status==2){
-    status = "On Hold"
+    status = "On Hold";
   }
   else if (status==3) {
-    status = "In Progress"
+    status = "In Progress";
   }
-  var query = `insert into project (title, description, leader, members, contact, npo, creation_time,status) values($1,$2,$3,$4,$5,$6,to_timestamp(${Date.now()} / 1000.0),$7);`;
-  db.query(query, [project.title, project.description, project.leader, project.members, project.contact, project.npo,status], function (err) {
+  var query = `insert into project (title, description, contact, npo, creation_time,status) values($1,$2,$3,$4,to_timestamp(${Date.now()} / 1000.0),$5) return id;`;
+  var link = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`
+  db.query(query, [project.title, project.description, project.contact, project.npo,status], function (err,projectId) {
     if (err) {
       console.log(err);
       callback(err);
     }
-    else{
+    else if(project.team.length>0){
+      var team = project.team;
+      team.forEach(function(person){
+        var uid = person[0];
+        var isLeader=person[1];
+        var relation="Member";
+        if(isLeader){
+            relation = "Leader";
+        }
+        db.query(query,[projectId,uid,relation], function(err){
+          if(err){
+            console.log(err);
+            callback(err);
+          }
+        });
+      });
       callback(null);
     }
   });
@@ -158,7 +174,22 @@ exports.getProjectSet = function (callback) {
       callback(err);
     }
     else {
-      callback(null, result);
+      callback(null, result.rows);
+    }
+  });
+};
+
+//select b.model from SAILER s, RESERVATION r,
+//BOAT b where b.id=r.bid and s.id=r.sid and
+//r.date=yesterday and s.name='a'
+exports.getProjectByUserIdser = function (uid, callback) {
+  var query = `SELECT * FROM project_relation r, user u, project p where u.id = r.uid and u.id = $1 and p.id = r.pid`;
+  db.query(query, [uid], function (err, result) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      callback(null, result.rows);
     }
   });
 };
@@ -168,7 +199,6 @@ exports.getProjectById = function (projectId, callback) {
   db.query(query, [projectId], function (err, result) {
     if (err) {
       callback(err);
-
     }
     else {
       if (result.rows.length > 0) {
@@ -180,3 +210,21 @@ exports.getProjectById = function (projectId, callback) {
     }
   });
 };
+
+// exports.getProjectByUserId = function (uid, callback) {
+//   var query = `SELECT * FROM project WHERE leader=$1 or member`;
+//   db.query(query, [uid], function (err, result) {
+//     if (err) {
+//       callback(err);
+//
+//     }
+//     else {
+//       if (result.rows.length > 0) {
+//         callback(null, result.rows[0]);
+//       }
+//       else {
+//         callback('No matching project id');
+//       }
+//     }
+//   });
+// };

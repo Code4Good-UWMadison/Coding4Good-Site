@@ -9,7 +9,7 @@
             $("#error-msg").html('Please fill out all the fields');
             return false;
           }
-          var members = [1,1];
+          var teams = [[1,true],[2,false]];
           $.ajax({
             url: "/api/project/createProject",
             method: "POST",
@@ -19,9 +19,8 @@
               description: $("#description").val(),
               contact: $("#contact").val(),
               npo: $("#npo").val(),
-              // leader: 1,
-              // members: members,
-              status: StatusEnum.InProgress
+              status: StatusEnum.InProgress,
+              team:teams
             },
             success: function () {
               window.location.href = "/project";

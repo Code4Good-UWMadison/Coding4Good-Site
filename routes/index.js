@@ -22,7 +22,18 @@ router.get('/project', function (req, res, next) {
       res.status(400).json({msg: 'Database Error'});
       return;
     }
-  res.render('project', {projectSet: projectSet.rows,uid:req.session.uid});
+  res.render('project', {projectSet: projectSet,uid:req.session.uid});
+  });
+});
+
+router.get('/project/my', function (req, res, next) {
+  db.getProjectByUserIdser(req.session.uid, function (err, projectSet) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({msg: 'Database Error'});
+      return;
+    }
+  res.render('project', {projectSet: projectSet,uid:null});
   });
 });
 
