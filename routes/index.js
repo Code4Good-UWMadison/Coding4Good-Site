@@ -22,7 +22,7 @@ router.get('/project', function (req, res, next) {
       res.status(400).json({msg: 'Database Error'});
       return;
     }
-  res.render('project', {projectSet: projectSet,uid:req.session.uid});
+  res.render('project', {projectSet: projectSet,isMy:false,uid:req.session.uid});
   });
 });
 
@@ -33,7 +33,7 @@ router.get('/project/my', function (req, res, next) {
       res.status(400).json({msg: 'Database Error'});
       return;
     }
-  res.render('project', {projectSet: projectSet,uid:null});
+  res.render('project', {projectSet: projectSet,isMy:true,uid:null});
   });
 });
 

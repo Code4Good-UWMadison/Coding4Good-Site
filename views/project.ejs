@@ -62,12 +62,12 @@
                    placeholder="Input format with NO SPACE: keyword,keyword,keyword"/>
         </div>
         <div class="col-sm-8-offset" align="right">
-          <% if (uid!=null){ %
+          <% if (uid!=null){ %>
               <%if (uid==1) { %>
               <a class="btn primary-button" href="/project/new">New Project</a>
               <% } %>
             <a class="btn primary-button" href="/project/my">My Project</a>
-          <% } else { %>
+          <% } else if(isMy) { %>
             <a class="btn primary-button" href="/project/">Back</a>
           <% } %>
         </div>

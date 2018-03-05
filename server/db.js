@@ -139,7 +139,7 @@ exports.createProject = function (project, callback) {
   else if (status==3) {
     status = "In Progress";
   }
-  var query = `insert into project (title, description, contact, npo, creation_time,status) values($1,$2,$3,$4,to_timestamp(${Date.now()} / 1000.0),$5) return id;`;
+  var query = `insert into project (title, description, contact, npo, creation_time,status) values($1,$2,$3,$4,now(),$5) returning id;`;
   var link = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`
   db.query(query, [project.title, project.description, project.contact, project.npo,status], function (err,projectId) {
     if (err) {
@@ -149,13 +149,16 @@ exports.createProject = function (project, callback) {
     else if(project.team.length>0){
       var team = project.team;
       team.forEach(function(person){
-        var uid = person[0];
+        var uid = parseInt(person[0]);
         var isLeader=person[1];
-        var relation="Member";
+        var relation= "Member";
+        console.log(relation);
+        console.log(isLeader);
         if(isLeader){
             relation = "Leader";
+            console.log(relation);
         }
-        db.query(query,[projectId,uid,relation], function(err){
+        db.query(link,[projectId.rows[0].id,uid,relation], function(err){
           if(err){
             console.log(err);
             callback(err);
@@ -183,7 +186,7 @@ exports.getProjectSet = function (callback) {
 //BOAT b where b.id=r.bid and s.id=r.sid and
 //r.date=yesterday and s.name='a'
 exports.getProjectByUserIdser = function (uid, callback) {
-  var query = `SELECT * FROM project_relation r, user u, project p where u.id = r.uid and u.id = $1 and p.id = r.pid`;
+  var query = `SELECT * FROM project_relation r, users u, project p where u.id = r.uid and u.id = $1 and p.id = r.pid`;
   db.query(query, [uid], function (err, result) {
     if (err) {
       callback(err);
