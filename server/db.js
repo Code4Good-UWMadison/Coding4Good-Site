@@ -149,16 +149,9 @@ exports.createProject = function (project, callback) {
     else if(project.team.length>0){
       var team = project.team;
       team.forEach(function(person){
-        var uid = parseInt(person[0]);
-        var isLeader=person[1];
-        var relation= "Member";
-        console.log(relation);
-        console.log(isLeader);
-        if(isLeader){
-            relation = "Leader";
-            console.log(relation);
-        }
-        db.query(link,[projectId.rows[0].id,uid,relation], function(err){
+        var uid = parseInt(person.id);
+        var memberTitle=person.memberTitle;
+        db.query(link,[projectId.rows[0].id,uid,memberTitle], function(err){
           if(err){
             console.log(err);
             callback(err);
