@@ -4,6 +4,7 @@
     <% include template/head.ejs %>
     <script>
       $(function () {
+        $('.member-list').editableSelect({ effects: 'slide' });
         $("#project-form").submit(function () {
           if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
             $("#error-msg").html('Please fill out all the fields');
@@ -59,15 +60,29 @@
             <input class="form-control" type="text" id="title" placeholder="Title">
         </div>
 
-        <div class="input-group new-project-input">
-            <div class="input-group-addon">Leader:&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            <input class="form-control dropdown-item" type="text" id="leader-search" value="" placeholder="Search For Leader" list="leader-list"/>
-            <datalist id = "leader-list" class="dropdown-toggle">
-                <% allUserNameAndId.forEach(function(user){ %>
-                   <option class="dropdown-item"><%= user.id%>. <%= user.name%></option>
-                <% }) %>
-            </datalist>
+        <div class="input-group new-project-input row">
+            <div class="input-group-addon">Team:&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div class="form-control ">
+                <div class="col-sm-6 img-center-holder divider-vertical">Name</div>
+                <div class="col-sm-6 img-center-holder">Title</div>
+            </div>
+            <div class="input-group-btn">
+                <button id="add-member-button" class="btn btn-defult">Add Members</button>
+            </div>
         </div>
+        <div class="input-group new-project-input row">
+            <div class="input-group-addon">Member 1: </div>
+            <input class="form-control" type="text" id="leader-search" value="" placeholder="Search For Leader" list="member-list"/>
+            <select class="form-control" list="member-list">
+
+            </select>
+        </div>
+        <!--<input class="form-control dropdown-item" type="text" id="leader-search" value="" placeholder="Search For Leader" list="leader-list"/>-->
+        <datalist id = "member-list" class="">
+        <% allUserNameAndId.forEach(function(user){ %>
+        <option class="dropdown-item"><%= user.id%>|<%= user.name%></option>
+        <% }) %>
+        </datalist>
         <!--<div class="input-group new-project-input">-->
             <!--<div class="input-group-addon">Members:</div>-->
             <!--<input class="form-control" type="text" id="members-search" placeholder="Search For Member">-->
