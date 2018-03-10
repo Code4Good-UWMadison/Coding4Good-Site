@@ -3,47 +3,67 @@
 <head>
     <% include template/head.ejs %>
     <script>
-      $(function () {
-        $('.member-list').editableSelect({ effects: 'slide' });
-        $("#project-form").submit(function () {
-          if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
-            $("#error-msg").html('Please fill out all the fields');
-            return false;
-          }
-          var leader=$("#leader-search").val();
-          var leaderSplit=leader.split(". ");
-          allUserNameAndId.forEach(function (user) {
-              if(user.id == leaderSplit[0]){
-                  if(user.name === leaderSplit[1]){
-                      leader = user.id;
-                  }
-                  $("#error-msg").html('Please select leader from the list, or type valid info in the create format');
-                  return false;
-              }
-          })
-          var teams = [{id:1, memberTitle:"Leader"}, {id:2, memberTitle:"Member"},{id:3,memberTitle:"Member"},{id:4,memberTitle:"Member"},{id:5,memberTitle:"Member"}];
-          $.ajax({
-            url: "/api/project/createProject",
-            method: "POST",
-            dataType: "json",
-            data: {
-              title: $("#title").val(),
-              description: $("#description").val(),
-              contact: $("#contact").val(),
-              npo: $("#npo").val(),
-              status: StatusEnum.InProgress,
-              team:teams
-            },
-            success: function () {
-              window.location.href = "/project";
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-              $("#error-msg").html(jqXHR.responseJSON);
-            }
-          });
-          return false;
+        function addMemberRow() {
+            var currentRow = $('.member-list').length/2+1;
+            // var html=$('#member-input-space').html();
+            // html="";
+            html=" <div class=\"input-group new-project-input row\">\n" +
+                "       <div class=\"input-group-addon\">Member "+currentRow+":</div>\n" +
+                "       <select id=\"name"+currentRow+"\" class=\"form-control member-list\">\n" +
+                "           <% allUserNameAndId.forEach(function(user){ %>\n" +
+                "           <option id=\"<%= user.id %>\" value=\"<%= user.id %>\"><%= user.name %></option>\n" +
+                "           <% }) %>\n" +
+                "       </select>\n" +
+                "       <div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;Title "+currentRow+":&nbsp;&nbsp;</div>\n" +
+                "       <select id=\"title"+currentRow+"\" class=\"form-control member-list\">\n" +
+                "           <option>Manager</option>\n" +
+                "           <option>Leader</option>\n" +
+                "           <option>Member</option>\n" +
+                "       </select>\n" +
+                "   </div>";
+            //$('#member-input-space').html(html);
+            $('#member-input-space').append(html);
+            $(".member-list").editableSelect({effects: 'slide'});
+        }
+        $(function () {
+            addMemberRow();
+            $('.member-list').editableSelect({effects: 'slide'});
+            $('#add-member-button').click(function(){
+                addMemberRow();
+            });
+            $("#project-form").submit(function () {
+                if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
+                    $("#error-msg").html('Please fill out all the fields');
+                    return false;
+                }
+                var teamMembers = $(".member-list")
+                var teams = [   {id: 1, memberTitle: "Leader"},
+                                {id: 2, memberTitle: "Member"},
+                                {id: 3, memberTitle: "Member"},
+                                {id: 4, memberTitle: "Member"},
+                                {id: 5, memberTitle: "Member"}];
+                $.ajax({
+                    url: "/api/project/createProject",
+                    method: "POST",
+                    dataType: "json",
+                    data: {
+                        title: $("#title").val(),
+                        description: $("#description").val(),
+                        contact: $("#contact").val(),
+                        npo: $("#npo").val(),
+                        status: StatusEnum.InProgress,
+                        team: teams
+                    },
+                    success: function () {
+                        window.location.href = "/project";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $("#error-msg").html(jqXHR.responseJSON);
+                    }
+                });
+                return false;
+            });
         });
-      });
     </script>
 </head>
 <body>
@@ -51,7 +71,7 @@
 <% include template/nav.ejs %>
 <div class="creat-project">
     <div class="col-sm-8-offset" align="right">
-      <a class="btn primary-button" href="/project">Back</a>
+        <a class="btn primary-button" href="/project">Back</a>
     </div>
     <p class="error-msg" id="error-msg"></p>
     <form id="project-form">
@@ -61,37 +81,18 @@
         </div>
 
         <div class="input-group new-project-input row">
-            <div class="input-group-addon">Team:&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group-addon">Team Members: </div>
             <div class="form-control ">
                 <div class="col-sm-6 img-center-holder divider-vertical">Name</div>
                 <div class="col-sm-6 img-center-holder">Title</div>
             </div>
             <div class="input-group-btn">
-                <button id="add-member-button" class="btn btn-defult">Add Members</button>
+                <button type="button" id="add-member-button" class="btn primary-button">Add Members</button>
             </div>
         </div>
-        <div class="input-group new-project-input row">
-            <div class="input-group-addon">Member 1: </div>
-            <input class="form-control" type="text" id="leader-search" value="" placeholder="Search For Leader" list="member-list"/>
-            <select class="form-control" list="member-list">
-
-            </select>
+        <div id="member-input-space">
+            <!--member row goes here-->
         </div>
-        <!--<input class="form-control dropdown-item" type="text" id="leader-search" value="" placeholder="Search For Leader" list="leader-list"/>-->
-        <datalist id = "member-list" class="">
-        <% allUserNameAndId.forEach(function(user){ %>
-        <option class="dropdown-item"><%= user.id%>|<%= user.name%></option>
-        <% }) %>
-        </datalist>
-        <!--<div class="input-group new-project-input">-->
-            <!--<div class="input-group-addon">Members:</div>-->
-            <!--<input class="form-control" type="text" id="members-search" placeholder="Search For Member">-->
-            <!--<datalist id = "member-list" class="dropdown-toggle">-->
-                <!--<% allUserNameAndId.forEach(function(user){ %>-->
-                <!--<option class="dropdown-item" id="<%= user.id%>>"><%= user.name%></option>-->
-                <!--<% }) %>-->
-            <!--</datalist>-->
-        <!--</div>-->
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">Contact Info:</div>
