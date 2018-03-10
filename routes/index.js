@@ -64,7 +64,14 @@ router.get('/project/new', function (req, res, next) {
         res.redirect('/project');
         return;
     }
-    res.render('projectCreate', {});
+    db.getAllUserNameAndId(function(err, allUserNameAndId){
+        if(err){
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        res.render('projectCreate', {allUserNameAndId:allUserNameAndId});
+    })
 });
 
 router.get('/project/edit', function (req, res, next) {

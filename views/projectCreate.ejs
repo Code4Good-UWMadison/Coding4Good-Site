@@ -9,6 +9,17 @@
             $("#error-msg").html('Please fill out all the fields');
             return false;
           }
+          var leader=$("#leader-search").val();
+          var leaderSplit=leader.split(". ");
+          allUserNameAndId.forEach(function (user) {
+              if(user.id == leaderSplit[0]){
+                  if(user.name === leaderSplit[1]){
+                      leader = user.id;
+                  }
+                  $("#error-msg").html('Please select leader from the list, or type valid info in the create format');
+                  return false;
+              }
+          })
           var teams = [{id:1, memberTitle:"Leader"}, {id:2, memberTitle:"Member"},{id:3,memberTitle:"Member"},{id:4,memberTitle:"Member"},{id:5,memberTitle:"Member"}];
           $.ajax({
             url: "/api/project/createProject",
@@ -47,17 +58,26 @@
             <div class="input-group-addon">Project Title:&nbsp;</div>
             <input class="form-control" type="text" id="title" placeholder="Title">
         </div>
-        <!--
-                <div class="input-group new-project-input">
-                    <div class="input-group-addon">Leader:</div>
-                    <input class="form-control" type="text" id="leader" placeholder="Leader">
-                </div>
 
-                <div class="input-group new-project-input">
-                    <div class="input-group-addon">Members:</div>
-                    <input class="form-control" type="text" id="members" placeholder="Members">
-                </div>
-        -->
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Leader:&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control dropdown-item" type="text" id="leader-search" value="" placeholder="Search For Leader" list="leader-list"/>
+            <datalist id = "leader-list" class="dropdown-toggle">
+                <% allUserNameAndId.forEach(function(user){ %>
+                   <option class="dropdown-item"><%= user.id%>. <%= user.name%></option>
+                <% }) %>
+            </datalist>
+        </div>
+        <!--<div class="input-group new-project-input">-->
+            <!--<div class="input-group-addon">Members:</div>-->
+            <!--<input class="form-control" type="text" id="members-search" placeholder="Search For Member">-->
+            <!--<datalist id = "member-list" class="dropdown-toggle">-->
+                <!--<% allUserNameAndId.forEach(function(user){ %>-->
+                <!--<option class="dropdown-item" id="<%= user.id%>>"><%= user.name%></option>-->
+                <!--<% }) %>-->
+            <!--</datalist>-->
+        <!--</div>-->
+
         <div class="input-group new-project-input">
             <div class="input-group-addon">Contact Info:</div>
             <input class="form-control" type="text" id="contact" placeholder="Contact">

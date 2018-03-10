@@ -86,6 +86,18 @@ exports.getUserInfo = function (uid, callback) {
   });
 };
 
+exports.getAllUserNameAndId = function(callback){
+  var query = `select name,id from users;`;
+  db.query(query,function(err,result){
+      if(err){
+          callback(err);
+      }
+      else{
+          callback(null,result.rows);
+      }
+    });
+};
+
 exports.updateProfile = function (uid, profile, callback) {
   var query = `insert into user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume) values($1,$2,$3,$4,$5,$6,$7);`;
   db.query(query, [uid, profile.nickname, profile.year, profile.intended_teamleader, profile.pl, profile.dev, (profile.resume) ? profile.resume : ''], function (err, result) {
