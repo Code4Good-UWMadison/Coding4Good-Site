@@ -5,9 +5,7 @@
     <script>
         function addMemberRow() {
             var currentRow = $('.member-list').length/2+1;
-            // var html=$('#member-input-space').html();
-            // html="";
-            html=" <div class=\"input-group new-project-input row\">\n" +
+            var html=" <div class=\"input-group new-project-input row\">\n" +
                 "       <div class=\"input-group-addon\">Member "+currentRow+":</div>\n" +
                 "       <select id=\"name"+currentRow+"\" class=\"form-control member-list\">\n" +
                 "           <% allUserNameAndId.forEach(function(user){ %>\n" +
@@ -21,7 +19,6 @@
                 "           <option>Member</option>\n" +
                 "       </select>\n" +
                 "   </div>";
-            //$('#member-input-space').html(html);
             $('#member-input-space').append(html);
             $(".member-list").editableSelect({effects: 'slide'});
         }
@@ -32,11 +29,16 @@
                 addMemberRow();
             });
             $("#project-form").submit(function () {
-                if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
-                    $("#error-msg").html('Please fill out all the fields');
-                    return false;
-                }
-                var teamMembers = $(".member-list")
+                // if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
+                //     $("#error-msg").html('Please fill out all the fields');
+                //     return false;
+                // }
+                var teamMembers = $(".member-list").get(0);
+                console.log("id "+teamMembers);
+                // teamMembers.each(function (member){
+                //     console.log("id "+member);
+                // });
+                return false;
                 var teams = [   {id: 1, memberTitle: "Leader"},
                                 {id: 2, memberTitle: "Member"},
                                 {id: 3, memberTitle: "Member"},
