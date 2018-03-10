@@ -7,13 +7,13 @@
         function addMemberRow() {
             var currentRow = $('.member-list').length/2+1;
             var html=" <div class=\"input-group new-project-input row\">\n" +
-                "       <div class=\"input-group-addon\">Member "+currentRow+":</div>\n" +
+                "       <div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member "+currentRow+":&nbsp;&nbsp;&nbsp;</div>\n" +
                 "       <select id=\"name"+currentRow+"\" class=\"form-control member-list\">\n" +
                 "           <% allUserNameAndId.forEach(function(user){ %>\n" +
                 "           <option id=\"<%= user.id %>\" value=\"<%= user.id %>\"><%= user.name %></option>\n" +
                 "           <% }) %>\n" +
                 "       </select>\n" +
-                "       <div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;Title "+currentRow+":&nbsp;&nbsp;</div>\n" +
+                "       <div class=\"input-group-addon\">Member Title:</div>\n" +
                 "       <select id=\"title"+currentRow+"\" class=\"form-control member-list\">\n" +
                 "           <option>Manager</option>\n" +
                 "           <option>Leader</option>\n" +
@@ -98,7 +98,7 @@
             <div class="input-group-addon">Team Members: </div>
             <div class="form-control ">
                 <div class="col-sm-6 img-center-holder divider-vertical">Name</div>
-                <div class="col-sm-6 img-center-holder">Title</div>
+                <div class="col-sm-6 img-center-holder">Member Title</div>
             </div>
             <div class="input-group-btn">
                 <button type="button" id="add-member-button" class="btn primary-button">Add Members</button>
@@ -109,7 +109,7 @@
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">Contact Info:</div>
+            <div class="input-group-addon">Contact Information:</div>
             <input class="form-control" type="text" id="contact" placeholder="Contact">
         </div>
 
