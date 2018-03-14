@@ -8,40 +8,40 @@
 // <param name="value"> The value(s) to search for</param>
 // <result>Positive search results will be visible</result>
 function search(tableId, value) {
-    try {
-        $('#' + tableId + ' > tbody > tr').show();
-        var params = value.split(',');
-        for (var param = 0; param < params.length; param++) {
-            if (params[param] != "") {
-                var $rows = $('#' + tableId + ' > tbody > tr').filter(":visible");
-                for (var i = 0; i < $rows.length; i++) {
-                    var $dataValue = $rows.eq(i).children();
-                    var match = false;
-                    for (var data = 0; data < $dataValue.length; data++) {
-                        var $dataHtml = $.trim($dataValue.eq(data).html());
-                        if (param != params.length - 1) {
-                            if ($dataHtml.toLowerCase() == params[param].toLowerCase()) {
-                                match = true;
-                            }
-                        }
-                        else if ($dataHtml.toLowerCase().includes(params[param].toLowerCase())) {
-                            match = true;
-                        }
-                    }
-                    if (!match) {
-                        $rows.eq(i).hide();
-                    }
-                    else {
-                        $rows.eq(i).show();
-                    }
-                }
+  try {
+    $('#' + tableId + ' > tbody > tr').show();
+    var params = value.split(',');
+    for (var param = 0; param < params.length; param++) {
+      if (params[param] != "") {
+        var $rows = $('#' + tableId + ' > tbody > tr').filter(":visible");
+        for (var i = 0; i < $rows.length; i++) {
+          var $dataValue = $rows.eq(i).children();
+          var match = false;
+          for (var data = 0; data < $dataValue.length; data++) {
+            var $dataHtml = $.trim($dataValue.eq(data).html());
+            if (param != params.length - 1) {
+              if ($dataHtml.toLowerCase() == params[param].toLowerCase()) {
+                match = true;
+              }
             }
+            else if ($dataHtml.toLowerCase().includes(params[param].toLowerCase())) {
+              match = true;
+            }
+          }
+          if (!match) {
+            $rows.eq(i).hide();
+          }
+          else {
+            $rows.eq(i).show();
+          }
         }
+      }
     }
-    catch(err){
-      console.log(err);
-        // LogErrorScript(err.message, "SearchScript.search")
-    }
+  }
+  catch (err) {
+    console.log(err);
+    // LogErrorScript(err.message, "SearchScript.search")
+  }
 }
 
 //<summary>
@@ -53,54 +53,53 @@ function search(tableId, value) {
 // <result>Positive search results will be visible</result>
 // Note:  date input format "mm/dd/yyyy 12:00:00 XM"
 function searchDateRange(tableId, date1, date2) {
-    try {
-        if (date1 != "" || date2 != "") {
-            if (date1 != "") {
-                date1 = parseDateTime(date1);
-            }
+  try {
+    if (date1 != "" || date2 != "") {
+      if (date1 != "") {
+        date1 = parseDateTime(date1);
+      }
+      if (date2 != "") {
+        date2 = parseDateTime(date2);
+      }
+      if (date1 != "" && date2 != "" && date1 > date2) {
+        var temp = date2;
+        date2 = date1;
+        date1 = temp;
+      }
+      var $rows = $('#' + tableId + ' > tbody > tr').filter(":visible");
+      for (var i = 0; i < $rows.length; i++) {
+        var $dataValue = $rows.eq(i).children();
+        var match = false;
+        for (var data = 0; data < $dataValue.length; data++) {
+          var $dataHtml = $.trim($dataValue.eq(data).html()).toLowerCase();
+          if ($dataHtml.includes('/') && $dataHtml.includes(' ') && $dataHtml.includes(':')) {
+            var stringfound = parseDateTime($dataHtml);
             if (date2 != "") {
-                date2 = parseDateTime(date2);
+              if (stringfound <= date2)
+                match = true;
+              if (date1 != "") {
+                if (stringfound <= date1)
+                  match = false;
+              }
             }
-            if (date1!="" && date2!="" && date1 > date2)
-            {
-                var temp = date2;
-                date2 = date1;
-                date1 = temp;
+            else if (date1 != "") {
+              if (stringfound >= date1)
+                match = true;
             }
-            var $rows = $('#' + tableId + ' > tbody > tr').filter(":visible");
-            for (var i = 0; i < $rows.length; i++) {
-                var $dataValue = $rows.eq(i).children();
-                var match = false;
-                for (var data = 0; data < $dataValue.length; data++) {
-                    var $dataHtml = $.trim($dataValue.eq(data).html()).toLowerCase();
-                    if ($dataHtml.includes('/') && $dataHtml.includes(' ') && $dataHtml.includes(':')) {
-                        var stringfound = parseDateTime($dataHtml);
-                        if (date2!= "") {
-                            if (stringfound <= date2)
-                                match = true;
-                            if (date1!="") {
-                                if (stringfound <= date1)
-                                    match = false;
-                            }
-                        }
-                        else if (date1!="") {
-                            if (stringfound >= date1)
-                                match = true;
-                        }
-                    }
-                }
-                if (!match) {
-                    $rows.eq(i).hide();
-                }
-                else {
-                    $rows.eq(i).show();
-                }
-            }
+          }
         }
+        if (!match) {
+          $rows.eq(i).hide();
+        }
+        else {
+          $rows.eq(i).show();
+        }
+      }
     }
-    catch(err){
-        LogErrorScript(err.message, "SearchScript.searchDateRange")
-    }
+  }
+  catch (err) {
+    LogErrorScript(err.message, "SearchScript.searchDateRange")
+  }
 }
 
 //<summary>
@@ -110,17 +109,17 @@ function searchDateRange(tableId, date1, date2) {
 // <return>A parsed date</result>
 // Note:  date input format "mm/dd/yyyy 12:00:00 XM"
 function parseDateTime(dateTime) {
-    try {
-        var string = dateTime.toLowerCase().split(' ')[0];
-        var parse = string.split('/');
-        if (parse[0].length == 1)
-            parse[0] = "0" + parse[0];
-        if (parse[1].length == 1)
-            parse[1] = "0" + parse[1];
-        string = parse[2] + parse[0] + parse[1];
-        return string;
-    }
-    catch (err) {
-        LogErrorScript(err.message, "SearchScript.parseDateTime")
-    }
+  try {
+    var string = dateTime.toLowerCase().split(' ')[0];
+    var parse = string.split('/');
+    if (parse[0].length == 1)
+      parse[0] = "0" + parse[0];
+    if (parse[1].length == 1)
+      parse[1] = "0" + parse[1];
+    string = parse[2] + parse[0] + parse[1];
+    return string;
+  }
+  catch (err) {
+    LogErrorScript(err.message, "SearchScript.parseDateTime")
+  }
 }

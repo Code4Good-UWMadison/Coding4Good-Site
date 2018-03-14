@@ -5,7 +5,7 @@ var config = require('./dbconfig.js');
 var uuid4 = require('uuid4');
 var db = new pg.Pool(config.db);
 
-exports.reset = function(callback) {
+exports.reset = function (callback) {
   var query = `drop table if exists user_profile;
     drop table if exists users;
 
@@ -25,8 +25,8 @@ exports.reset = function(callback) {
       dev text,
       resume text
     );
-    ` //TODO
-  db.query(query, function(err, result) {
+    `; //TODO
+  db.query(query, function (err, result) {
     if (err) {
       console.log(err);
       callback(err);
@@ -38,10 +38,10 @@ exports.reset = function(callback) {
   });
 };
 
-exports.createUser = function(user, callback){
+exports.createUser = function (user, callback) {
 
   var query = `insert into users (email, name, password) values($1,$2,$3);`;
-  db.query(query, [user.email, user.fullname, user.password], function(err, result){
+  db.query(query, [user.email, user.fullname, user.password], function (err, result) {
     if (err) {
       console.log(err);
       callback(err);
@@ -52,47 +52,58 @@ exports.createUser = function(user, callback){
   });
 };
 
-exports.verifyUser = function(user, callback){
+exports.verifyUser = function (user, callback) {
   var query = `select id from users where email=$1 and password=$2;`;
-  db.query(query, [user.email, user.password], function(err, result){
-    if(err){
+  db.query(query, [user.email, user.password], function (err, result) {
+    if (err) {
       callback(err);
     }
-    else{
-      if(result.rows.length==0){
+    else {
+      if (result.rows.length == 0) {
         callback(null, null);
       }
-      else{
+      else {
         callback(null, result.rows[0].id);
       }
-
     }
   });
 };
 
-exports.getUserInfo = function(uid, callback){
+exports.getUserInfo = function (uid, callback) {
   var query = `select email,name as fullname from users where id=$1;`;
-  db.query(query, [uid], function(err, result){
-    if(err){
+  db.query(query, [uid], function (err, result) {
+    if (err) {
       callback(err);
     }
-    else{
-      if(result.rows.length==0){
+    else {
+      if (result.rows.length == 0) {
         callback(null, null);
       }
-      else{
+      else {
         callback(null, result.rows[0]);
       }
     }
   });
 };
 
-exports.updateProfile = function(uid, profile, callback){
+exports.getAllUserNameAndId = function(callback){
+  var query = `select name,id from users;`;
+  db.query(query,function(err,result){
+      if(err){
+          callback(err);
+      }
+      else{
+          callback(null,result.rows);
+      }
+    });
+};
+
+exports.updateProfile = function (uid, profile, callback) {
   var query = `insert into user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume) values($1,$2,$3,$4,$5,$6,$7);`;
-  db.query(query, [uid,profile.nickname, profile.year, profile.intended_teamleader, profile.pl, profile.dev, (profile.resume)?profile.resume:''], function(err, result){
-    if(err){
+  db.query(query, [uid, profile.nickname, profile.year, profile.intended_teamleader, profile.pl, profile.dev, (profile.resume) ? profile.resume : ''], function (err, result) {
+    if (err) {
       callback(err);
-      return;
+
     }
     else {
       callback(null);
@@ -100,7 +111,7 @@ exports.updateProfile = function(uid, profile, callback){
   });
 };
 
-exports.getProfile = function(pid, callback){
+exports.getProfile = function (pid, callback) {
   var query = `select
       u.name as name,
       n.nickname as nickname,
@@ -110,17 +121,111 @@ exports.getProfile = function(pid, callback){
       n.dev as dev,
       n.resume as resume
     from user_profile as n, users as u where n.id=$1 and n.uid=u.id;`;
-  db.query(query, [pid], function(err, result){
-    if(err){
+  db.query(query, [pid], function (err, result) {
+    if (err) {
       callback(err);
-      return;
+
     }
     else {
-      if(result.rows.length > 0){
+      if (result.rows.length > 0) {
         callback(null, result.rows[0]);
       }
-      else{
+      else {
         callback('No matching profile id');
+      }
+    }
+  });
+};
+
+exports.createProject = function (project, callback) {
+  var status=project.status;
+  if(status==0){
+    status = "Starting";
+  }
+  else if(status ==1){
+    status = "In Progress";
+  }
+  else if(status==2){
+    status = "On Hold";
+  }
+  else if (status==3) {
+    status = "Succeed";
+  }
+  else if (status==4){
+    status = "Failed";
+  }
+  var query = `insert into project (title, description, contact, npo, creation_time,status) values($1,$2,$3,$4,now(),$5) returning id;`;
+  var link = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`
+  db.query(query, [project.title, project.description, project.contact, project.npo,status], function (err,projectId) {
+    if (err) {
+      console.log(err);
+      callback(err);
+    }
+    else if(project.team.length>0){
+      var team = project.team;
+      team.forEach(function(person){
+        var uid = parseInt(person.id);
+        var memberTitle=person.memberTitle;
+        db.query(link,[projectId.rows[0].id,uid,memberTitle], function(err){
+          if(err){
+            console.log(err);
+            callback(err);
+          }
+        });
+      });
+      callback(null);
+    }
+  });
+};
+
+exports.getProjectSet = function (callback) {
+  var query = `SELECT * FROM project;`;
+  db.query(query, function (err, result) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      callback(null, result.rows);
+    }
+  });
+};
+
+exports.getAssociatedProjectsByUserId = function (uid, callback) {
+  var query = `SELECT * FROM project_relation r, users u, project p where u.id = r.uid and u.id = $1 and p.id = r.pid`;
+  db.query(query, [uid], function (err, result) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      callback(null, result.rows);
+    }
+  });
+};
+
+exports.getAssociatedUsersByProjectId = function (projectId, callback) {
+    var query = `SELECT u.name as name, r.relation as relation, u.id as uid FROM project_relation r, users u, project p where u.id = r.uid and p.id = $1 and p.id = r.pid`;
+    db.query(query, [projectId], function (err, result) {
+        if (err) {
+            callback(err);
+        }
+        else {
+            callback(null, result.rows);
+        }
+    });
+};
+
+exports.getProjectById = function (projectId, callback) {
+  var query = `SELECT * FROM project WHERE id=$1;`;
+  db.query(query, [projectId], function (err, result) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      if (result.rows.length > 0) {
+        callback(null, result.rows[0]);
+      }
+      else {
+        callback('No matching project id');
       }
     }
   });

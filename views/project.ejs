@@ -2,24 +2,23 @@
 <html>
 <head>
     <% include template/head.ejs %>
-    <script src="/js/account.js"></script>
     <script src="/js/SearchScript.js"></script>
     <script src="/js/SortScript.js"></script>
     <script type="text/javascript">
-      $(function () {
-        $(".projectRow").click(function () {
-          $(location).attr('href', '/project/detail#' + this.getAttribute("value"));
+        $(function () {
+            sortTable("projectTable", 0, 1);
+            $("th").click(function () {
+                toggleSort("projectTable", $("th").index(this));
+            });
+            $("#projectSearchInput").on("change textInput input", function () {
+                search("projectTable", $("#projectSearchInput").val());
+            });
+            $(".projectRow").click(function () {
+                var projectId = this.id;
+                console.log(projectId);
+                $(location).attr('href', '/project/detail?id=' + projectId);
+            });
         });
-        $("#myProjectFilter").click(function () {
-
-        });
-        $("th").click(function () {
-          toggleSort("projectTable", $("th").index(this));
-        });
-        $("#projectSearchInput").on("change textInput input", function () {
-          search("projectTable", $("#projectSearchInput").val());
-        });
-      });
     </script>
 </head>
 
@@ -29,7 +28,11 @@
 
 <div class="container" style="margin: 50px auto;">
     <div class="row margin-top img-center-holder">
+        <% if(isMy){ %>
+        <h2>My Projects</h2>
+        <% } else{ %>
         <h2>Projects</h2>
+        <% } %>
     </div>
     <div class="row margin-htop">
         <div class="col-sm-1">
@@ -39,36 +42,38 @@
             <input id="projectSearchInput" type="text" class="input"
                    placeholder="Input format with NO SPACE: keyword,keyword,keyword"/>
         </div>
+        <div class="col-sm-8-offset" align="right">
+            <% if (uid != null){ %>
+            <% if (uid == 1) { %>
+            <a class="btn primary-button" href="/project/new">New Project</a>
+            <% } %>
+            <a class="btn primary-button" href="/project/my">My Project</a>
+            <% } else if(isMy) { %>
+            <a class="btn primary-button" href="/project">Back</a>
+            <% } %>
+        </div>
     </div>
     <table id="projectTable" class="table margin-htop" align="center">
         <thead class="row margin-top">
         <tr class="tr clickable">
-            <th>Project ID</th>
             <th>Project Name</th>
-            <th>Project Type</th>
+            <th>Organization Name</th>
+            <th>Project Status</th>
         </tr>
         </thead>
         <tbody id="projectTbody">
-        <tr value="1" class="tr clickable projectRow">
-            <td class="td">1</td>
-            <td class="td">Edible Landscapes Project</td>
-            <td class="td">Website; Mobile application</td>
+        <% if(projectSet.length == 0){ %>
+        <tr>
+            <td class="error-msg">Sorry! Currently, there are no project available</td>
         </tr>
-        <tr value="2" class="tr clickable projectRow">
-            <td class="td">2</td>
-            <td class="td">How to help the blind use website?</td>
-            <td class="td">Independent Project</td>
+        <% } %>
+        <% projectSet.forEach(function(row){ %>
+        <tr class="tr clickable projectRow" id=<%= row.id %>>
+            <td class="td"><%= row.title %></td>
+            <td class="td"><%= row.npo %></td>
+            <td class="td"><%= row.status %></td>
         </tr>
-        <tr value="3" class="tr clickable projectRow">
-            <td class="td">3</td>
-            <td class="td">Multicultural Students Center</td>
-            <td class="td">N/A</td>
-        </tr>
-        <tr value="4" class="tr clickable projectRow">
-            <td class="td">4</td>
-            <td class="td">WI Council of the Blind & Visually Impaired</td>
-            <td class="td">Software</td>
-        </tr>
+        <% }); %>
         </tbody>
     </table>
 </div>

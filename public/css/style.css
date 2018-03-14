@@ -190,6 +190,10 @@ section {
   width: 500px;
 }
 
+.new-project-input {
+  margin: 10px auto;
+}
+
 .login-signup {
   margin: 200px auto;
   text-align: center;
@@ -206,6 +210,15 @@ section {
 
 .login-signup-input-prompt {
   width: 30%;
+}
+
+.error-msg{
+  color:red;
+}
+.creat-project {
+  margin: 150px auto;
+  text-align: center;
+  width: 60%;
 }
 
 .error-container {
@@ -265,4 +278,13 @@ section {
 
 .sponsor-container {
   margin-bottom: 50px;
+}
+
+.divider-vertical {
+  height: 100%;
+  border-right: 1px solid #757575;
+}
+
+input::-webkit-calendar-picker-indicator {
+  display: none;
 }
