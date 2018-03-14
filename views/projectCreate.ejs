@@ -5,18 +5,32 @@
     <script>
 		var data =<%-JSON.stringify(allUserNameAndId)%>;
 
-        function selectListOffFocus(){
+        function selectListFocus(){
             var list = $(".member-list").toArray();
             list.forEach(function (input) {
-                input = $(input);
-                input.click(function(){
-                    if(input.attr("focused")){
-                        input.val("");
-                    }
-                    console.log(input.attr("focused"));
-                })
+                // input.addEventListener("focus",$(input).attr("focused",true));
+                // input.addEventListener("blur",$(input).attr("focused",false));
+                $(input).click(function(){
+                    input.value="";
+                    $(input).trigger("change");
+                });
+                // clearValue();
             });
         }
+        // function clearValue(){
+        //     var list = $(".member-list").toArray();
+        //     list.forEach(function (input) {
+        //         input = $(input);
+        //         if (input.attr("focused")) {
+        //             input.click(function(){
+        //                 input.val("");
+        //             });
+        //         }
+        //         else{
+        //             input.click(function(){input.attr("focused",true)});
+        //         }
+        //     });
+        // }
         function addMemberRow() {
             var currentRow = $('.member-list').length/2+1;
             var html=" <div class=\"input-group new-project-input row\">\n" +
@@ -35,7 +49,7 @@
                 "   </div>";
             $('#member-input-space').append(html);
             $(".member-list").editableSelect({effects: 'slide'});
-            selectListOffFocus();
+            selectListFocus();
         }
         $(function () {
             addMemberRow();
