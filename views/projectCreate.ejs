@@ -57,10 +57,19 @@
             $('#add-member-button').click(function(){
                 addMemberRow();
             });
+            var statusHtml = ""
+            for (var status in StatusEnum) {
+                if (isNaN(Number(status))) {
+                    statusHtml += "<option value=\"" + status + "\">" + status + "</option>";
+                }
+            }
+            $('#status').html(statusHtml);
             $("#project-form").submit(function () {
+                var validInput = true;
+                $("#error-msg").html("");
                 if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
                     $("#error-msg").html('Please fill out all the fields');
-                    return false;
+                    validInput = false;
                 }
                 var teamMembers = $(".member-list");
 				var teams = [];
@@ -68,41 +77,51 @@
 					var name = teamMembers[i].value;
 					var id = $(teamMembers[i]).attr("data-value");
 					var title = teamMembers[i+1].value;
+                    var foundMembers = false;
 					data.forEach(function(people){
 						if(people.id==id){
+						    foundMembers = true;
 							if(title===""){
-								$("#error-msg").html('Please choose a title for member '+i);
-								return false;
+								$("#error-msg").html('Please input a title for member '+(i/2+1));
+                                validInput = false;
 							}
 							if(people.name===name){
 								teams.push({id: id, memberTitle:title});
 							}
 							else{
 								$("#error-msg").html('Member '+i+" is not a valid member");
-								return false;
+                                validInput = false;
 							}
 						}
+						if(!foundMembers){
+                            if(name==="" && title!=""){
+                                $("#error-msg").html('Please input valid name for member '+(i/2+1));
+                                validInput = false;
+                            }
+                        }
 					});
 				}
-                $.ajax({
-                    url: "/api/project/createProject",
-                    method: "POST",
-                    dataType: "json",
-                    data: {
-                        title: $("#title").val(),
-                        description: $("#description").val(),
-                        contact: $("#contact").val(),
-                        npo: $("#npo").val(),
-                        status: StatusEnum.InProgress,
-                        team: teams
-                    },
-                    success: function () {
-                        window.location.href = "/project";
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        $("#error-msg").html(jqXHR.responseJSON);
-                    }
-                });
+				if(validInput){
+                    $.ajax({
+                        url: "/api/project/createProject",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            title: $("#title").val(),
+                            description: $("#description").val(),
+                            contact: $("#contact").val(),
+                            npo: $("#npo").val(),
+                            status: $("#status").val(),
+                            team: teams
+                        },
+                        success: function () {
+                            window.location.href = "/project";
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#error-msg").html(jqXHR.responseJSON);
+                        }
+                    });
+                }
                 return false;
             });
         });
@@ -138,12 +157,8 @@
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">Project status:</div>
-            <select class="form-control" id="status" value="">
-                <option></option>
-                <option></option>
-                <option></option>
-                <option></option>
-                <option></option>
+            <select class="form-control" id="status">
+
             </select>
         </div>
 
