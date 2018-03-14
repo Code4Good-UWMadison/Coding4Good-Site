@@ -3,7 +3,20 @@
 <head>
     <% include template/head.ejs %>
     <script>
-		var data =<%-JSON.stringify(allUserNameAndId)%>	
+		var data =<%-JSON.stringify(allUserNameAndId)%>;
+
+        function selectListOffFocus(){
+            var list = $(".member-list").toArray();
+            list.forEach(function (input) {
+                input = $(input);
+                input.click(function(){
+                    if(input.attr("focused")){
+                        input.val("");
+                    }
+                    console.log(input.attr("focused"));
+                })
+            });
+        }
         function addMemberRow() {
             var currentRow = $('.member-list').length/2+1;
             var html=" <div class=\"input-group new-project-input row\">\n" +
@@ -22,6 +35,7 @@
                 "   </div>";
             $('#member-input-space').append(html);
             $(".member-list").editableSelect({effects: 'slide'});
+            selectListOffFocus();
         }
         $(function () {
             addMemberRow();
@@ -106,6 +120,17 @@
         </div>
         <div id="member-input-space">
             <!--member row goes here-->
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Project status:</div>
+            <select class="form-control" id="status" value="">
+                <option></option>
+                <option></option>
+                <option></option>
+                <option></option>
+                <option></option>
+            </select>
         </div>
 
         <div class="input-group new-project-input">
