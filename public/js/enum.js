@@ -1,4 +1,4 @@
 
 var StatusEnum = Object.freeze({
-    Starting:0, InProgress:1, OnHold:2, Succeed:3, Failed:4
+    Starting:0, InProgress:1, OnHold:2, Succeed:3, Failed:4, Maintaining:5
 });
