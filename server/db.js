@@ -161,20 +161,22 @@ exports.createProject = function (project, callback) {
       console.log(err);
       callback(err);
     }
-    else if(project.team.length>0){
-      var team = project.team;
-      team.forEach(function(person){
-        var uid = parseInt(person.id);
-        var memberTitle=person.memberTitle;
-        db.query(link,[projectId.rows[0].id,uid,memberTitle], function(err){
-          if(err){
-            console.log(err);
-            callback(err);
-          }
+    else if(project.team!=null){
+      if(project.team.length>0){
+        var team = project.team;
+        team.forEach(function(person){
+          var uid = parseInt(person.id);
+          var memberTitle=person.memberTitle;
+          db.query(link,[projectId.rows[0].id,uid,memberTitle], function(err){
+            if(err){
+              console.log(err);
+              callback(err);
+            }
+          });
         });
-      });
-      callback(null);
+      }
     }
+    callback(null);
   });
 };
 
