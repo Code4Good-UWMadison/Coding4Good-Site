@@ -89,8 +89,8 @@
                                     badId = false;
                                     teams.forEach(function (member) {
                                         if (member.id == id) {
-                                            duplicate = true;
                                             validInput = false;
+                                            $("#error-msg").html("There are duplicate member, " + people.name + " please check your input");
                                         }
                                     });
                                     if (!duplicate) {
@@ -98,13 +98,6 @@
                                             teams.push({id: id, memberTitle: title});
                                         }
                                     }
-                                }
-                                else {
-                                    validInput = false;
-                                }
-                                if (duplicate) {
-                                    $("#error-msg").html("There are duplicate member, " + people.name + " please check your input");
-                                    validInput = false;
                                 }
                             });
                             if (badId) {
