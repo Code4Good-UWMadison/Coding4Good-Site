@@ -79,13 +79,27 @@ router.get('/project/edit', function (req, res, next) {
         res.redirect('/project');
         return;
     }
-    db.getProjectById(req.query.projectId, function (err, project) {
+    db.getProjectById(req.query.id, function (err, project) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        res.render('projectEdit', {projectDetail:project});
+        db.getAssociatedUsersByProjectId(project.id,function(err, users){
+            if(err){
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            db.getAllUserNameAndId(function(err, allUserNameAndId){
+                if(err){
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
+                }
+                res.render('projectEdit', {projectDetail: project, users: users, uid: req.session.uid, allUserNameAndId:allUserNameAndId});
+            });
+        });
     });
 });
 
