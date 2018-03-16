@@ -4,7 +4,6 @@
     <% include template/head.ejs %>
     <script>
         var data =<%-JSON.stringify(allUserNameAndId)%>;
-        var projectDetail = <%- JSON.stringify(projectDetail)%>>;
 
         function selectListFocus(){
             var list = $(".member-list").toArray();
@@ -110,7 +109,7 @@
                 }
                 if(validInput){
                     $.ajax({
-                        url: "/api/project/createProject",
+                        url: "/api/project/saveProject",
                         method: "POST",
                         dataType: "json",
                         data: {
@@ -137,9 +136,6 @@
             $("#contact").val(data.contact);
             $("#npo").val(data.npo);
             $("#status").val(data.status);
-            teams.forEach(function(){
-
-            });
         });
     </script>
 </head>
@@ -169,11 +165,29 @@
         </div>
         <div id="member-input-space">
             <!--member row goes here-->
+            <% currentRow = 1; %>
+            <% users.forEach(function(user){ %>
+            <div class="input-group new-project-input row">
+                   <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member "+currentRow+":&nbsp;&nbsp;&nbsp;</div>
+                   <select value="<%=user.id%>>" id="<%="name"+currentRow%>" class="form-control member-list">
+                       <% allUserNameAndId.forEach(function(userChoice){ %>
+                       <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"><%= userChoice.name %></option>
+                       <% }) %>
+                   </select>
+                   <div class="input-group-addon">Member Title:</div>
+                   <select value="<%=user.relation%>" id="<%="title"+currentRow%>" class="form-control member-list">
+                       <option value="Manager">Manager</option>
+                       <option value="Leader">Leader</option>
+                       <option value="Member">Member</option>
+                   </select>
+               </div>
+            <% currentRow++; %>
+            <% }) %>
         </div>
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
-            <select class="form-control" id="status">
+            <select value="<%=projectDetail.status%>>" class="form-control" id="status">
                 <!--status option goes here-->
             </select>
         </div>
@@ -193,7 +207,7 @@
         </div>
 
     </form>
-    <button type="submit" form="project-form" class="btn login-signup-btn primary-button">Create!</button>
+    <button type="submit" form="project-form" class="btn login-signup-btn primary-button">Save</button>
 </div>
 
 <% include template/footer.ejs %>

@@ -97,7 +97,7 @@ router.get('/project/edit', function (req, res, next) {
                     res.status(400).json({msg: 'Database Error'});
                     return;
                 }
-                res.render('projectEdit', {projectDetail: project, users: users, uid: req.session.uid, allUserNameAndId:allUserNameAndId});
+                res.render('projectEdit', {projectDetail: project, users: users, allUserNameAndId:allUserNameAndId});
             });
         });
     });
