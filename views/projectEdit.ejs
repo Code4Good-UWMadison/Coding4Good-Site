@@ -130,17 +130,7 @@
                 }
                 return false;
             });
-            //load data from database
-            $("#title").val(projectDetail.title);
-            $("#description").val(projectDetail.description);
-            $("#contact").val(projectDetail.contact);
-            $("#npo").val(projectDetail.npo);
             $("#status").val(enumExchange(projectDetail.status));
-            console.log(projectDetail.title);
-            console.log(projectDetail.description);
-            console.log(projectDetail.contact);
-            console.log(projectDetail.npo);
-            console.log(projectDetail.status);
         });
     </script>
 </head>
@@ -149,15 +139,14 @@
 <% include template/nav.ejs %>
 <div class="creat-project">
     <div class="col-sm-8-offset" align="right">
-        <a class="btn primary-button" href="/project">Back</a>
+        <a class="btn primary-button" href="/project/detail?id=<%=projectDetail.id%>">Back</a>
     </div>
     <p class="error-msg" id="error-msg"></p>
     <form id="project-form">
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
-            <input class="form-control" type="text" id="title" placeholder="Project Title">
+            <input class="form-control" type="text" id="title" placeholder="Project Title" value="<%=projectDetail.title%>">
         </div>
-
         <div class="input-group new-project-input row">
             <div class="input-group-addon">Team Members: </div>
             <div class="form-control ">
@@ -189,26 +178,25 @@
             <% currentRow++; %>
             <% }) %>
         </div>
-
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
-            <select value="<%=projectDetail.status%>" class="form-control" id="status">
+            <select value="" class="form-control" id="status">
                 <!--status option goes here-->
             </select>
         </div>
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">Contact Information:</div>
-            <input class="form-control" type="text" id="contact" placeholder="Contact Information">
+            <input class="form-control" type="text" id="contact" placeholder="Contact Information" value="<%=projectDetail.contact%>">
         </div>
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">Non-profit Organization Name:</div>
-            <input class="form-control" type="text" id="npo" placeholder="Non-profit Organization Name">
+            <input class="form-control" type="text" id="npo" placeholder="Non-profit Organization Name" value="<%= projectDetail.npo%>">
         </div>
 
         <div class="new-project-input">
-            <textarea class="form-control" type="text" id="description" placeholder="Description" rows="10"></textarea>
+            <textarea class="form-control" type="text" id="description" placeholder="Description" rows="10"><%=projectDetail.description%></textarea>
         </div>
 
     </form>
