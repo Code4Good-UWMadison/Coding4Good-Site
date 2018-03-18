@@ -4,6 +4,7 @@
     <% include template/head.ejs %>
     <script>
         var data =<%-JSON.stringify(allUserNameAndId)%>;
+        var projectDetail = <%- JSON.stringify(projectDetail)%>;
 
         function selectListFocus(){
             var list = $(".member-list").toArray();
@@ -35,7 +36,6 @@
             selectListFocus();
         }
         $(function () {
-            addMemberRow();
             $('.member-list').editableSelect({effects: 'slide'});
             $('#add-member-button').click(function(){
                 addMemberRow();
@@ -107,7 +107,7 @@
                         }
                     }
                 }
-                if(validInput){
+                if(false){//validInput){
                     $.ajax({
                         url: "/api/project/saveProject",
                         method: "POST",
@@ -131,11 +131,16 @@
                 return false;
             });
             //load data from database
-            $("#title").val(data.title);
-            $("#description").val(data.fullname);
-            $("#contact").val(data.contact);
-            $("#npo").val(data.npo);
-            $("#status").val(data.status);
+            $("#title").val(projectDetail.title);
+            $("#description").val(projectDetail.description);
+            $("#contact").val(projectDetail.contact);
+            $("#npo").val(projectDetail.npo);
+            $("#status").val(enumExchange(projectDetail.status));
+            console.log(projectDetail.title);
+            console.log(projectDetail.description);
+            console.log(projectDetail.contact);
+            console.log(projectDetail.npo);
+            console.log(projectDetail.status);
         });
     </script>
 </head>
@@ -168,10 +173,10 @@
             <% currentRow = 1; %>
             <% users.forEach(function(user){ %>
             <div class="input-group new-project-input row">
-                   <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member "+currentRow+":&nbsp;&nbsp;&nbsp;</div>
-                   <select value="<%=user.id%>>" id="<%="name"+currentRow%>" class="form-control member-list">
+                   <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member <%=currentRow%>:&nbsp;&nbsp;&nbsp;</div>
+                   <select value="<%=user.uid%>" id="<%="name"+currentRow%>" class="form-control member-list">
                        <% allUserNameAndId.forEach(function(userChoice){ %>
-                       <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"><%= userChoice.name %></option>
+                       <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"<% if(userChoice.id==user.uid){ %> selected="selected"<% }%>><%= userChoice.name %></option>
                        <% }) %>
                    </select>
                    <div class="input-group-addon">Member Title:</div>
@@ -187,14 +192,14 @@
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
-            <select value="<%=projectDetail.status%>>" class="form-control" id="status">
+            <select value="<%=projectDetail.status%>" class="form-control" id="status">
                 <!--status option goes here-->
             </select>
         </div>
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">Contact Information:</div>
-            <input class="form-control" type="text" id="ontact" placeholder="Contact Information">
+            <input class="form-control" type="text" id="contact" placeholder="Contact Information">
         </div>
 
         <div class="input-group new-project-input">
