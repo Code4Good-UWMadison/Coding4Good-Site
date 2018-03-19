@@ -11,6 +11,8 @@
             list.forEach(function (input) {
                 $(input).click(function(){
                     input.value="";
+                    $(input).attr("data-value","");
+                    input.id="";
                     $(input).trigger("change");
                 });
             });
@@ -37,6 +39,7 @@
         }
         $(function () {
             $('.member-list').editableSelect({effects: 'slide'});
+            selectListFocus();
             $('#add-member-button').click(function(){
                 addMemberRow();
             });
