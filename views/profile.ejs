@@ -4,7 +4,8 @@
     <% include template/head.ejs %>
     <script>
       $(function () {
-        $("#upload-btn").click(function () {
+        $("#submit-button").click(function () {
+          $("#submit-button").attr('disabled',true);
           var profile = {
             nickname: "",
             year: -1,
@@ -45,6 +46,7 @@
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                       $("#error-msg").html(jqXHR.responseJSON);
+                      $("#submit-button").attr('disabled',false);
                     }
                   });
                 };
@@ -63,6 +65,7 @@
                   },
                   error: function (jqXHR, textStatus, errorThrown) {
                     $("#error-msg").html(jqXHR.responseJSON);
+                    $("#submit-button").attr('disabled',false);
                   }
                 });
               }
@@ -70,7 +73,6 @@
 
             });
           });
-          // alert('fuck');
           // return false;
         });
       });
@@ -141,7 +143,7 @@
         <p>(Optional) Resume</p>
         <input type="file" id="resume">
     </div>
-    <button id="upload-btn" class="btn login-signup-btn primary-button">Upload Profile</button>
+    <button id="submit-button" class="btn login-signup-btn primary-button">Upload Profile</button>
 </div>
 
 <% include template/footer.ejs %>

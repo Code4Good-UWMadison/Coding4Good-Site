@@ -157,20 +157,28 @@ exports.editProject = function (project, callback){
     else if (status==5){
         status = "Maintaining";
     }
-    var query = `update project set project.title=$2, project.description=$3, project.contact=$4, project.npo=$5, project.status=$6 where project.id = $1;`;
-    var link = `SELECT u.name as name, r.relation as relation, u.id as uid FROM project_relation r, users u, project p where u.id = r.uid and p.id = $1 and p.id = r.pid;`
-    db.query(query, [project.id, project.title, project.description, project.contact, project.npo,status], function (err,projectId) {
+    console.log(status);
+    var query = `update project set title=$2, description=$3, contact=$4, npo=$5, status=$6 where project.id = $1;`;
+    var oldLink = `DELETE FROM project_relation WHERE project_relation.pid = $1`;
+    var newLink = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`
+    db.query(query, [project.id, project.title, project.description, project.contact, project.npo,status], function (err) {
         if (err) {
             console.log(err);
             callback(err);
         }
         else if(project.team!=null){
+            db.query(oldLink,[project.id],function (err) {
+                if(err){
+                    console.log(err);
+                    callback(err);
+                }
+            });
             if(project.team.length>0){
                 var team = project.team;
                 team.forEach(function(person){
                     var uid = parseInt(person.id);
                     var memberTitle=person.memberTitle;
-                    db.query(link,[projectId.rows[0].id,uid,memberTitle], function(err){
+                    db.query(newLink,[project.id,uid,memberTitle], function(err){
                         if(err){
                             console.log(err);
                             callback(err);

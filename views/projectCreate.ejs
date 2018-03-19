@@ -48,6 +48,7 @@
             }
             $('#status').html(statusHtml);
             $("#project-form").submit(function () {
+                $("#submit-button").attr('disabled',true);
                 var validInput = true;
                 $("#error-msg").html("");
                 if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
@@ -128,7 +129,10 @@
                         }
                     });
                 }
-                return false;
+                else{
+                    $("#submit-button").attr('disabled',false);
+                    return false;
+                }
             });
         });
     </script>
@@ -136,7 +140,7 @@
 <body>
 
 <% include template/nav.ejs %>
-<div class="creat-project">
+<div class="create-project">
     <div class="col-sm-8-offset" align="right">
         <a class="btn primary-button" href="/project">Back</a>
     </div>
@@ -183,7 +187,7 @@
         </div>
 
     </form>
-    <button type="submit" form="project-form" class="btn login-signup-btn primary-button">Create!</button>
+    <button id="submit-button" type="submit" form="project-form" class="btn login-signup-btn primary-button">Create!</button>
 </div>
 
 <% include template/footer.ejs %>

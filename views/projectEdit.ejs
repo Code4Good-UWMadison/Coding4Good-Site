@@ -48,6 +48,7 @@
             }
             $('#status').html(statusHtml);
             $("#project-form").submit(function () {
+                $("#submit-button").attr('disabled',true);
                 var validInput = true;
                 $("#error-msg").html("");
                 if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
@@ -107,7 +108,7 @@
                         }
                     }
                 }
-                if(false){//validInput){
+                if(validInput){
                     $.ajax({
                         url: "/api/project/saveProject",
                         method: "POST",
@@ -122,14 +123,17 @@
                             team: teams
                         },
                         success: function () {
-                            window.location.href = "/project";
+                            window.location.href = "/project/detail?id=<%= projectDetail.id %>";
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
                         }
                     });
                 }
-                return false;
+                else{
+                    $("#submit-button").attr('disabled',false);
+                    return false;
+                }
             });
             $("#status").val(enumExchange(projectDetail.status));
         });
@@ -138,7 +142,7 @@
 <body>
 
 <% include template/nav.ejs %>
-<div class="creat-project">
+<div class="create-project">
     <div class="col-sm-8-offset" align="right">
         <a class="btn primary-button" href="/project/detail?id=<%=projectDetail.id%>">Back</a>
     </div>
@@ -164,7 +168,7 @@
             <% users.forEach(function(user){ %>
             <div class="input-group new-project-input row">
                    <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member <%=currentRow%>:&nbsp;&nbsp;&nbsp;</div>
-                   <select value="<%=user.uid%>" id="<%="name"+currentRow%>" class="form-control member-list">
+                   <select data-value="<%=user.uid%>" value="<%=user.uid%>" id="<%="name"+currentRow%>" class="form-control member-list">
                        <% allUserNameAndId.forEach(function(userChoice){ %>
                        <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"<% if(userChoice.id==user.uid){ %> selected="selected"<% }%>><%= userChoice.name %></option>
                        <% }) %>
@@ -201,7 +205,7 @@
         </div>
 
     </form>
-    <button type="submit" form="project-form" class="btn login-signup-btn primary-button">Save</button>
+    <button id="submit-button" type="submit" form="project-form" class="btn login-signup-btn primary-button">Save</button>
 </div>
 
 <% include template/footer.ejs %>
