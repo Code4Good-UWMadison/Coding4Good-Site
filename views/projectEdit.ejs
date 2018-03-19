@@ -168,13 +168,13 @@
             <% users.forEach(function(user){ %>
             <div class="input-group new-project-input row">
                    <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member <%=currentRow%>:&nbsp;&nbsp;&nbsp;</div>
-                   <select data-value="<%=user.uid%>" value="<%=user.uid%>" id="<%="name"+currentRow%>" class="form-control member-list">
+                   <select placeholder="Member Name" data-value="<%=user.uid%>" value="<%=user.uid%>" id="<%="name"+currentRow%>" class="form-control member-list">
                        <% allUserNameAndId.forEach(function(userChoice){ %>
                        <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"<% if(userChoice.id==user.uid){ %> selected="selected"<% }%>><%= userChoice.name %></option>
                        <% }) %>
                    </select>
                    <div class="input-group-addon">Member Title:</div>
-                   <select value="<%=user.relation%>" id="<%="title"+currentRow%>" class="form-control member-list">
+                   <select placeholder="Member Title" value="<%=user.relation%>" id="<%="title"+currentRow%>" class="form-control member-list">
                        <option value="Manager">Manager</option>
                        <option value="Leader">Leader</option>
                        <option value="Member">Member</option>
