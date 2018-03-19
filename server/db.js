@@ -137,6 +137,52 @@ exports.getProfile = function (pid, callback) {
   });
 };
 
+exports.editProject = function (project, callback){
+    var status=project.status;
+    if(status==0){
+        status = "Starting";
+    }
+    else if(status ==1){
+        status = "In Progress";
+    }
+    else if(status==2){
+        status = "On Hold";
+    }
+    else if (status==3) {
+        status = "Succeed";
+    }
+    else if (status==4){
+        status = "Failed";
+    }
+    else if (status==5){
+        status = "Maintaining";
+    }
+    var query = `update project set project.title=$2, project.description=$3, project.contact=$4, project.npo=$5, project.status=$6 where project.id = $1;`;
+    var link = `SELECT u.name as name, r.relation as relation, u.id as uid FROM project_relation r, users u, project p where u.id = r.uid and p.id = $1 and p.id = r.pid;`
+    db.query(query, [project.id, project.title, project.description, project.contact, project.npo,status], function (err,projectId) {
+        if (err) {
+            console.log(err);
+            callback(err);
+        }
+        else if(project.team!=null){
+            if(project.team.length>0){
+                var team = project.team;
+                team.forEach(function(person){
+                    var uid = parseInt(person.id);
+                    var memberTitle=person.memberTitle;
+                    db.query(link,[projectId.rows[0].id,uid,memberTitle], function(err){
+                        if(err){
+                            console.log(err);
+                            callback(err);
+                        }
+                    });
+                });
+            }
+        }
+        callback(null);
+    });
+}
+
 exports.createProject = function (project, callback) {
   var status=project.status;
   if(status==0){
