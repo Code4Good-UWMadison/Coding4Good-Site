@@ -157,22 +157,21 @@ exports.editProject = function (project, callback){
     else if (status==5){
         status = "Maintaining";
     }
-    console.log(status);
     var query = `update project set title=$2, description=$3, contact=$4, npo=$5, status=$6 where project.id = $1;`;
     var oldLink = `DELETE FROM project_relation WHERE project_relation.pid = $1`;
     var newLink = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`
     db.query(query, [project.id, project.title, project.description, project.contact, project.npo,status], function (err) {
+        db.query(oldLink,[project.id],function (err) {
+            if(err){
+                console.log(err);
+                callback(err);
+            }
+        });
         if (err) {
             console.log(err);
             callback(err);
         }
         else if(project.team!=null){
-            db.query(oldLink,[project.id],function (err) {
-                if(err){
-                    console.log(err);
-                    callback(err);
-                }
-            });
             if(project.team.length>0){
                 var team = project.team;
                 team.forEach(function(person){

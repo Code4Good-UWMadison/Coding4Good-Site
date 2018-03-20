@@ -12,7 +12,7 @@
                 $(input).click(function(){
                     input.value="";
                     $(input).attr("data-value","");
-                    input.id="";
+                    $(input).attr("id","");
                     $(input).trigger("change");
                 });
             });
@@ -50,7 +50,7 @@
                 }
             }
             $('#status').html(statusHtml);
-            $("#project-form").submit(function () {
+            $("#submit-button").click(function () {
                 $("#submit-button").attr('disabled',true);
                 var validInput = true;
                 $("#error-msg").html("");
@@ -150,7 +150,7 @@
         <a class="btn primary-button" href="/project/detail?id=<%=projectDetail.id%>">Back</a>
     </div>
     <p class="error-msg" id="error-msg"></p>
-    <form id="project-form">
+    <div>
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
             <input class="form-control" type="text" id="title" placeholder="Project Title" value="<%=projectDetail.title%>">
@@ -207,8 +207,8 @@
             <textarea class="form-control" type="text" id="description" placeholder="Description" rows="10"><%=projectDetail.description%></textarea>
         </div>
 
-    </form>
-    <button id="submit-button" type="submit" form="project-form" class="btn login-signup-btn primary-button">Save</button>
+    </div>
+    <button id="submit-button" type="button" class="btn login-signup-btn primary-button">Save</button>
 </div>
 
 <% include template/footer.ejs %>
