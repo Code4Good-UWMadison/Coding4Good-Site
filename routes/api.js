@@ -89,11 +89,11 @@ router.post('/project/createProject', function (req, res, next) {
     db.createProject(req.body, function (err) {
         if (err) {
             console.log(err);
-            res.status(400).json({msg: 'Database Error'});
+            res.status(400).json({msg: 'Failed to create'});
             return;
         }
         res.json({});
-    })
+    });
 });
 
 router.post('/project/saveProject', function (req, res, next) {
@@ -104,11 +104,26 @@ router.post('/project/saveProject', function (req, res, next) {
     db.editProject(req.body, function (err) {
         if (err) {
             console.log(err);
-            res.status(400).json({msg: 'Database Error'});
+            res.status(400).json({msg: 'Failed to save'});
             return;
         }
         res.json({});
-    })
+    });
 });
+
+router.get('/project/removeProject', function(req, res, next){
+    if(req.session.uid!=1){
+        res.status(400).json({msg: 'Not Authorized'});
+        return;
+    }
+    db.removeProject(req.id,function (err) {
+        if(err){
+            console.log(err);
+            res.status(400).json({msg: 'Failed to remove'});
+            return;
+        }
+        res.json({});
+    });
+})
 
 module.exports = router;

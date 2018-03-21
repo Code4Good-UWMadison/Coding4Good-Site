@@ -3,7 +3,30 @@
 <head>
     <% include template/head.ejs %>
     <script type="text/javascript">
-
+        var projectDetail = <%- JSON.stringify(projectDetail)%>;
+        $("#remove-confirmation").click(function () {
+            //html show alert
+        });
+        $("#remove-canceled").click(function(){
+            //html hide alert
+        });
+        $("#remove-confirmed").click(function () {
+            $("#remove-confirmed").attr('disabled', true);
+            $.ajax({
+                url: "/api/project/removeProject",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    id: projectDetail.id
+                },
+                success: function () {
+                    window.location.href = "/project";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#error-msg").html(jqXHR.responseJSON);
+                }
+            });
+        });
     </script>
 </head>
 
@@ -14,6 +37,7 @@
 <div class="container" style="margin: 150px auto;">
     <div class="col-sm-8-offset" align="right">
         <%if (uid==1) { %>
+        <button id="remove-confirmation" class="btn primary-button">Remove</button>
         <a class="btn primary-button" href="/project/edit?id=<%= projectDetail.id%>">Edit</a>
         <% } %>
         <a class="btn primary-button" href="/project">Back</a>

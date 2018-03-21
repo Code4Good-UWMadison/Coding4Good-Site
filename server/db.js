@@ -288,3 +288,20 @@ exports.getProjectById = function (projectId, callback) {
     }
   });
 };
+
+exports.removeProjectById = function(projectId, callback){
+    var query = `DELETE FROM project WHERE project.id = $1`;
+    db.qeury(query,[projectId],function(err,result){
+        if(err){
+            callback(err);
+        }
+        else{
+            if(result.rows.length > 0){
+                callback(null, result.rows[0]);
+            }
+            else {
+                callback('No matching project id');
+            }
+        }
+    });
+}
