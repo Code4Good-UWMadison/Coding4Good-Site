@@ -112,11 +112,12 @@ router.post('/project/saveProject', function (req, res, next) {
 });
 
 router.get('/project/removeProject', function(req, res, next){
+    console.log(req.body.id);
     if(req.session.uid!=1){
         res.status(400).json({msg: 'Not Authorized'});
         return;
     }
-    db.removeProject(req.id,function (err) {
+    db.removeProjectById(req.body.id,function (err) {
         if(err){
             console.log(err);
             res.status(400).json({msg: 'Failed to remove'});

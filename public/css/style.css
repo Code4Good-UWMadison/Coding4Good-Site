@@ -76,6 +76,29 @@ h1 {
   transition: all 0.2s linear;
 }
 
+.highPriority-button {
+    padding: 6px 12px;
+    border-radius: 2px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: inherit;
+    color: #FFF;
+    background-color: #F00;
+    border-color: #F00;
+    border-radius: 5px;
+    font-weight: 300;
+}
+
+.highPriority-button:hover {
+    color: #F00;
+    background-color: #FCC;
+    -moz-transition: all 0.2s linear;
+    -webkit-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
 .large-button {
   font-size: 24px;
   border-radius: 10px;
@@ -287,4 +310,13 @@ section {
 
 input::-webkit-calendar-picker-indicator {
   display: none;
+}
+
+.confirmation-box{
+    width: 40%;
+    min-width: 300px;
+    margin: auto;
+    text-align: center;
+    color: #F55;
+    font-size: 32px;
 }
