@@ -111,8 +111,7 @@ router.post('/project/saveProject', function (req, res, next) {
     });
 });
 
-router.get('/project/removeProject', function(req, res, next){
-    console.log(req.body.id);
+router.post('/project/removeProject', function(req, res, next){
     if(req.session.uid!=1){
         res.status(400).json({msg: 'Not Authorized'});
         return;
