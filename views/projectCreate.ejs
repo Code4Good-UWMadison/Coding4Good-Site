@@ -47,7 +47,8 @@
                 }
             }
             $('#status').html(statusHtml);
-            $("#project-form").submit(function () {
+            $("#submit-button").click(function () {
+                $("#submit-button").attr('disabled',true);
                 var validInput = true;
                 $("#error-msg").html("");
                 if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
@@ -128,7 +129,10 @@
                         }
                     });
                 }
-                return false;
+                else{
+                    $("#submit-button").attr('disabled',false);
+                    return false;
+                }
             });
         });
     </script>
@@ -136,12 +140,12 @@
 <body>
 
 <% include template/nav.ejs %>
-<div class="creat-project">
+<div class="create-project">
     <div class="col-sm-8-offset" align="right">
         <a class="btn primary-button" href="/project">Back</a>
     </div>
     <p class="error-msg" id="error-msg"></p>
-    <form id="project-form">
+    <div>
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
             <input class="form-control" type="text" id="title" placeholder="Project Title">
@@ -170,7 +174,7 @@
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">Contact Information:</div>
-            <input class="form-control" type="text" id="ontact" placeholder="Contact Information">
+            <input class="form-control" type="text" id="contact" placeholder="Contact Information">
         </div>
 
         <div class="input-group new-project-input">
@@ -182,8 +186,8 @@
             <textarea class="form-control" type="text" id="description" placeholder="Description" rows="10"></textarea>
         </div>
 
-    </form>
-    <button type="submit" form="project-form" class="btn login-signup-btn primary-button">Create!</button>
+    </div>
+    <button id="submit-button" type="button" class="btn login-signup-btn primary-button">Create!</button>
 </div>
 
 <% include template/footer.ejs %>

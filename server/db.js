@@ -137,6 +137,59 @@ exports.getProfile = function (pid, callback) {
   });
 };
 
+exports.editProject = function (project, callback){
+    var status=project.status;
+    if(status==0){
+        status = "Starting";
+    }
+    else if(status ==1){
+        status = "In Progress";
+    }
+    else if(status==2){
+        status = "On Hold";
+    }
+    else if (status==3) {
+        status = "Succeed";
+    }
+    else if (status==4){
+        status = "Failed";
+    }
+    else if (status==5){
+        status = "Maintaining";
+    }
+    var query = `update project set title=$2, description=$3, contact=$4, npo=$5, status=$6 where project.id = $1;`;
+    var oldLink = `DELETE FROM project_relation WHERE project_relation.pid = $1`;
+    var newLink = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`
+    db.query(query, [project.id, project.title, project.description, project.contact, project.npo,status], function (err) {
+        db.query(oldLink,[project.id],function (err) {
+            if(err){
+                console.log(err);
+                callback(err);
+            }
+        });
+        if (err) {
+            console.log(err);
+            callback(err);
+        }
+        else if(project.team!=null){
+            if(project.team.length>0){
+                var team = project.team;
+                team.forEach(function(person){
+                    var uid = parseInt(person.id);
+                    var memberTitle=person.memberTitle;
+                    db.query(newLink,[project.id,uid,memberTitle], function(err){
+                        if(err){
+                            console.log(err);
+                            callback(err);
+                        }
+                    });
+                });
+            }
+        }
+        callback(null);
+    });
+}
+
 exports.createProject = function (project, callback) {
   var status=project.status;
   if(status==0){
@@ -235,3 +288,25 @@ exports.getProjectById = function (projectId, callback) {
     }
   });
 };
+
+exports.removeProjectById = function(projectId, callback){
+    var queryRelation = `DELETE FROM project_relation WHERE pid=$1;`;
+    var queryProject = `DELETE FROM project WHERE id=$1;`
+    db.query(queryRelation,[projectId],function(err,result){
+        if(err){
+            callback(err);
+        }
+        else{
+            db.query(queryProject,[projectId],function(err){
+                if(err){
+                    callback(err);
+                }
+                if(result.rowCount>0){
+                    callback(null);
+                }else{
+                    callback('No matching project id');
+                }
+            });
+        }
+    });
+}
