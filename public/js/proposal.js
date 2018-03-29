@@ -57,12 +57,3 @@ $("#submit_proposal").click(function (event) {
 $("#discard_proposal").click(function (event) {
   window.close();
 });
-// window.onscroll = function() {scrollFunction()};
-//
-// function scrollFunction() {
-//     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-//         document.getElementById("buttontop").style.display = "block";
-//     } else {
-//         document.getElementById("buttontop").style.display = "none";
-//     }
-// }

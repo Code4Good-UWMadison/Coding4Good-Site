@@ -138,14 +138,6 @@ section {
   overflow: hidden;
 }
 
-#buttontop {
-  display: none;
-  position: fixed;
-  bottom: 100px;
-  right: 50px;
-  z-index: 5;
-}
-
 .main-footer {
   border: 2px solid #d7d7d7;
   background: #e7e7e7;
@@ -313,7 +305,6 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .confirmation-box{
-    width: 40%;
     min-width: 300px;
     margin: auto;
     text-align: center;
