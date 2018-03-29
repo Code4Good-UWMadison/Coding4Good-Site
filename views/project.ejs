@@ -9,13 +9,16 @@
             sortTable("projectTable", 0, 1);
             $("th").click(function () {
                 toggleSort("projectTable", $("th").index(this));
+                $(".projectRow").click(function () {
+                    var projectId = this.id;
+                    $(location).attr('href', '/project/detail?id=' + projectId);
+                });
             });
             $("#projectSearchInput").on("change textInput input", function () {
                 search("projectTable", $("#projectSearchInput").val());
             });
             $(".projectRow").click(function () {
                 var projectId = this.id;
-                console.log(projectId);
                 $(location).attr('href', '/project/detail?id=' + projectId);
             });
         });
