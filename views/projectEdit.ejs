@@ -36,10 +36,12 @@
                 "   </div>";
             $('#member-input-space').append(html);
             $(".member-list").editableSelect({effects: 'slide'});
+            $('#member-input-space').removeClass('hide');
             selectListFocus();
         }
         $(function () {
             $('.member-list').editableSelect({effects: 'slide'});
+            $('#member-input-space').removeClass('hide');
             selectListFocus();
             $('#add-member-button').click(function(){
                 addMemberRow();
@@ -166,7 +168,7 @@
                 <button type="button" id="add-member-button" class="btn primary-button">Add Members</button>
             </div>
         </div>
-        <div id="member-input-space">
+        <div id="member-input-space" class="hide">
             <!--member row goes here-->
             <% currentRow = 1; %>
             <% users.forEach(function(user){ %>
