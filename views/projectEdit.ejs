@@ -133,6 +133,7 @@
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
+                            $("#submit-button").attr('disabled',false);
                         }
                     });
                 }

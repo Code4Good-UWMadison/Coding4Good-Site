@@ -204,12 +204,6 @@ section {
   margin: 10px auto;
 }
 
-.login-signup {
-  margin: 200px auto;
-  text-align: center;
-  width: 400px;
-}
-
 .login-signup-input {
   margin: 10px auto;
 }
@@ -303,4 +297,7 @@ input::-webkit-calendar-picker-indicator {
     margin-top: 100px;
     margin-bottom: 100px;
     width: 70%;
+}
+.min-body-layout{
+  width: 500px;
 }
