@@ -200,11 +200,6 @@ section {
   text-align: center;
 }
 
-.contact-container {
-  margin: 100px auto;
-  width: 500px;
-}
-
 .new-project-input {
   margin: 10px auto;
 }
@@ -230,15 +225,6 @@ section {
 .error-msg{
   color:red;
 }
-.create-project {
-  margin: 150px auto;
-  text-align: center;
-  width: 60%;
-}
-
-.error-container {
-  height: 100vh;
-}
 
 .starting-display {
   height: 70vh;
@@ -259,7 +245,7 @@ section {
 }
 
 .input {
-  width: 80%;
+  width: 90%;
   height: 34px;
   display: block;
   padding: 6px 12px;
@@ -279,7 +265,7 @@ section {
 }
 
 .input:focus {
-  width: 80%;
+  width: 90%;
   height: 34px;
   border-color: #66afe9;
   outline: 0;
@@ -310,4 +296,11 @@ input::-webkit-calendar-picker-indicator {
     text-align: center;
     color: #F55;
     font-size: 32px;
+}
+
+.body-layout{
+    min-height: 63vh;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    width: 70%;
 }

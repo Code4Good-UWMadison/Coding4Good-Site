@@ -35,28 +35,9 @@
 </head>
 
 <body>
-
 <% include template/nav.ejs %>
 
-<div id="remove-confirmation-box" class="modal fade confirmation-box">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <p class="modal-title">Remove Confirmation</p>
-            </div>
-            <div class="modal-body">
-                <h4>Are you sure you want to permanently remove this project?</h4>
-            </div>
-            <div class="modal-footer">
-                <button id="remove-confirmed" class="btn highPriority-button">Remove</button>
-                <button id="remove-canceled" class="btn primary-button">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container" style="margin: 150px auto;">
+<div class="container body-layout">
     <p class="error-msg" id="error-msg"></p>
     <div class="col-sm-8-offset" align="right">
         <%if (uid==1) { %>
@@ -80,6 +61,24 @@
     </div>
     <div class="row img-center-holder">
       <h4>Description: <%= projectDetail.description %></h4>
+    </div>
+</div>
+
+<div id="remove-confirmation-box" class="modal fade confirmation-box">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <p class="modal-title">Remove Confirmation</p>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to permanently remove this project?</h4>
+            </div>
+            <div class="modal-footer">
+                <button id="remove-confirmed" class="btn highPriority-button">Remove</button>
+                <button id="remove-canceled" class="btn primary-button">Cancel</button>
+            </div>
+        </div>
     </div>
 </div>
 
