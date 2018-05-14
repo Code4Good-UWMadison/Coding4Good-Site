@@ -310,4 +310,4 @@ exports.removeProjectById = function(projectId, callback){
             });
         }
     });
-}
+};

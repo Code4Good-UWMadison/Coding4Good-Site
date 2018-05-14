@@ -16,7 +16,7 @@
 
           profile.nickname = $("#nickname").val();
           profile.year = $("#year").val();
-          profile.intended_teamleader = ($(".teamleader").attr("checked")) ? true : false;
+          profile.intended_teamleader = !!($(".teamleader").attr("checked"));
 
           $(".pl-checkbox:checked").each(function () {
             if ($(this).val()) {

@@ -56,24 +56,18 @@
     <div class="input-group new-project-input row">
         <div class="input-group-addon">Leaders:</div>
         <div class="form-control" type="text">
-            <% users.filter(e => e.relation=="Leader").forEach(function(user){ %>
-            <%= user.name %>,
-            <% }); %>
+            <%= users.filter(e => e.relation=="Leader").map(e=>e.name).join(", ")%>
         </div>
         <div class="input-group-addon">Manager:</div>
         <div class="form-control" type="text">
-            <% users.filter(e => e.relation=="Manager").forEach(function(user){ %>
-            <%= user.name %>,
-            <% }); %>
+            <%= users.filter(e => e.relation=="Manager").map(e=>e.name).join(", ")%>
         </div>
     </div>
 
     <div class="input-group new-project-input row">
         <div class="input-group-addon">Members:</div>
         <div class="form-control" type="text">
-            <% users.filter(e => e.relation=="Member").forEach(function(user){ %>
-            <%= user.name %>,
-            <% }); %>
+            <%= users.filter(e => e.relation=="Member").map(e=>e.name).join(", ")%>
         </div>
 
     </div>

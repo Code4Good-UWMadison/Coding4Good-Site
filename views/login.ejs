@@ -4,7 +4,7 @@
     <% include template/head.ejs %>
     <script>
       $(function () {
-        $("#login-form").submit(function () {
+        $("#login-form").submit(() => {
           $("#submit-button").attr('disabled',true);
           if (($("#password").val() == '') | ($("#email").val() == '')) {
             $("#error-msg").html('Please fill out all the fields');
