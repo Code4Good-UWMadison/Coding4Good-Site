@@ -2,10 +2,62 @@
 <html>
 <head>
     <% include template/head.ejs %>
-    <script type="text/javascript" src="/js/proposal.js"></script>
+    <script type="text/javascript">
+        // $(document).ready(function(){
+        //   $("a").click(function(event) {
+        //
+        //     // Make sure this.hash has a value before overriding default behavior
+        //     if (this.hash !== "") {
+        //       // Prevent default anchor click behavior
+        //       event.preventDefault();
+        //
+        //       // Store hash
+        //       var hash = this.hash;
+        //
+        //       // Using jQuery's animate() method to add smooth page scroll
+        //       // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+        //       $('html, body').animate({
+        //         scrollTop: $(hash).offset().top
+        //       }, 800, function(){
+        //         // Add hash (#) to URL when done scrolling (default click behavior)
+        //         window.location.hash = hash;
+        //       });
+        //     } // End if
+        //   });
+
+        // $("#submit_proposal").click(function (event) {
+        //     var email_address, name, major, organization, title, description;
+        //     email_address = $("#email_address").value;
+        //     name = $("#name").val();
+        //     major = $("#major").val();
+        //     organization = $("#organization").value;
+        //     title = $("#program_title").value;
+        //     description = $("#description").value;
+        //
+        //     $.ajax({
+        //         url: "/api/proposal",
+        //         dataType: "Json",
+        //         method: "POST",
+        //         data: {
+        //             email: email_address,
+        //             name: name,
+        //             major: major,
+        //             organization: organization,
+        //             title: title,
+        //             description: description
+        //         },
+        //         success: function (data) {
+        //             window.close();
+        //         },
+        //         error: function () {
+        //
+        //         }
+        //     });
+        // });
+    </script>
 </head>
 <body>
-<div class="container">
+<div class="container body-layout">
     <div>
         <h4>Organization:</h4>
         <input class="form-control" type="text" id="organization" name="organization" placeholder="Organization">

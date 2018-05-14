@@ -3,16 +3,47 @@
 <head>
     <% include template/head.ejs %>
     <script type="text/javascript">
-
+        var projectDetail = <%- JSON.stringify(projectDetail)%>;
+        $(function(){
+            $("#remove-confirmation").click(function () {
+                $("#remove-confirmation-box").modal('show');
+            });
+            $("#remove-canceled").click(function(){
+                $("#remove-confirmation-box").modal('hide');
+            });
+            $("#remove-confirmed").click(function () {
+                $("#remove-confirmed").attr('disabled', true);
+                $.ajax({
+                    url: "/api/project/removeProject",
+                    method: "POST",
+                    dataType: "json",
+                    data: {
+                        id: projectDetail.id
+                    },
+                    success: function () {
+                        window.location.href="/project";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $("#error-msg").html(jqXHR.responseJSON);
+                        $("#remove-confirmation-box").modal('hide');
+                        $("#remove-confirmed").attr('disabled', false);
+                    }
+                });
+            });
+        });
     </script>
 </head>
 
 <body>
-
 <% include template/nav.ejs %>
 
-<div class="container" style="margin: 150px auto;">
+<div class="container body-layout">
+    <p class="error-msg" id="error-msg"></p>
     <div class="col-sm-8-offset" align="right">
+        <%if (uid==1) { %>
+        <button id="remove-confirmation" class="btn primary-button">Remove</button>
+        <a class="btn primary-button" href="/project/edit?id=<%= projectDetail.id%>">Edit</a>
+        <% } %>
         <a class="btn primary-button" href="/project">Back</a>
     </div>
 
@@ -68,6 +99,24 @@
     <div class="new-project-input">
         <textarea class="form-control" type="text" id="description"
              rows="10"><%= projectDetail.description %></textarea>
+    </div>
+</div>
+
+<div id="remove-confirmation-box" class="modal fade confirmation-box">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <p class="modal-title">Remove Confirmation</p>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to permanently remove this project?</h4>
+            </div>
+            <div class="modal-footer">
+                <button id="remove-confirmed" class="btn highPriority-button">Remove</button>
+                <button id="remove-canceled" class="btn primary-button">Cancel</button>
+            </div>
+        </div>
     </div>
 </div>
 

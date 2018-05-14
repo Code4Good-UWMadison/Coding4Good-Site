@@ -8,34 +8,9 @@
     <% include template/head.ejs %>
 </head>
 
-<body class="error-container">
-
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">Coding for Good</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li><a href="/about">About</a></li>
-                <li><a href="/project">Projects</a></li>
-                <li><a href="/contact">Contact Us</a></li>
-            </ul>
-            <div class="navbar-form navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="/login">Login</a></li>
-                    <li><a>|</a></li>
-                    <li><a href="/signup">Signup</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<div class="container" style="margin: 50px auto;">
+<body>
+<% include template/nav.ejs %>
+<div class="container body-layout">
     <h1 style="color: #EF6C00;"><%= message %></h1>
     <h2>Oops! We can't find the content you want at this point!</h2>
     <p>Our servers might be down at this point. Please try again later. <br>For any question, please contact

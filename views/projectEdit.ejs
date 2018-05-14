@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+<head>
+    <% include template/head.ejs %>
+    <script>
+        var data =<%-JSON.stringify(allUserNameAndId)%>;
+        var projectDetail = <%- JSON.stringify(projectDetail)%>;
+
+        function selectListFocus(){
+            var list = $(".member-list").toArray();
+            list.forEach(function (input) {
+                $(input).click(function(){
+                    input.value="";
+                    $(input).attr("data-value","");
+                    $(input).attr("id","");
+                    $(input).trigger("change");
+                });
+            });
+        }
+        //TODO: $( ".hello" ).remove();
+        function addMemberRow() {
+            var currentRow = $('.member-list').length/2+1;
+            var html=" <div class=\"input-group new-project-input row\">\n" +
+                "       <div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member "+currentRow+":&nbsp;&nbsp;&nbsp;</div>\n" +
+                "       <select placeholder=\"Member Name\" id=\"name"+currentRow+"\" class=\"form-control member-list\">\n" +
+                "           <% allUserNameAndId.forEach(function(user){ %>\n" +
+                "           <option id=\"<%= user.id %>\" value=\"<%= user.id %>\"><%= user.name %></option>\n" +
+                "           <% }) %>\n" +
+                "       </select>\n" +
+                "       <div class=\"input-group-addon\">Member Title:</div>\n" +
+                "       <select  placeholder=\"Member Title\" id=\"title"+currentRow+"\" class=\"form-control member-list\">\n" +
+                "           <option>Manager</option>\n" +
+                "           <option>Leader</option>\n" +
+                "           <option>Member</option>\n" +
+                "       </select>\n" +
+                "   </div>";
+            $('#member-input-space').append(html);
+            $(".member-list").editableSelect({effects: 'slide'});
+            $('#member-input-space').removeClass('hide');
+            selectListFocus();
+        }
+        $(function () {
+            $('.member-list').editableSelect({effects: 'slide'});
+            $('#member-input-space').removeClass('hide');
+            selectListFocus();
+            $('#add-member-button').click(function(){
+                addMemberRow();
+            });
+            var statusHtml = ""
+            for (var status in StatusEnum) {
+                if (isNaN(Number(status))) {
+                    statusHtml += "<option value=\"" + StatusEnum[status] + "\">" + status + "</option>";
+                }
+            }
+            $('#status').html(statusHtml);
+            $("#submit-button").click(function () {
+                $("#submit-button").attr('disabled',true);
+                var validInput = true;
+                $("#error-msg").html("");
+                if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
+                    $("#error-msg").html('Please fill out all the fields');
+                    validInput = false;
+                }
+                //collect team data
+                var teamMembers = $(".member-list");
+                var teams = [];
+                for(var i=0;i<teamMembers.length;i+=2){
+                    //data
+                    var name = teamMembers[i].value;
+                    var id = $(teamMembers[i]).attr("data-value");
+                    var title = teamMembers[i+1].value;
+                    //error checking variable
+                    var duplicate = false;
+                    var hasTitle = title!=="";
+                    var hasName = name!=="";
+                    var hasId = id!=="";
+                    var allEmpty = name==="" && title==="";
+                    var hasAll = name!=="" && title!=="" && id!=="";
+                    var badId = true;
+                    if(!allEmpty) {
+                        if (!hasTitle) {
+                            $("#error-msg").html('Please input a title for member ' + (i / 2 + 1));
+                            validInput = false;
+                        }
+                        else if (!hasName) {
+                            $("#error-msg").html('Please input valid name for member ' + (i / 2 + 1));
+                            validInput = false;
+                        }
+                        else if (!hasId) {
+                            $("#error-msg").html("Member " + (i / 2 + 1) + " is not a valid member, please check your spelling");
+                            validInput = false;
+                        }
+                        else if (hasAll) {
+                            data.forEach(function (people) {
+                                if (people.id == id) {
+                                    badId = false;
+                                    teams.forEach(function (member) {
+                                        if (member.id == id) {
+                                            validInput = false;
+                                            $("#error-msg").html("There are duplicate member, " + people.name + " please check your input");
+                                        }
+                                    });
+                                    if (!duplicate) {
+                                        if (people.name === name) {
+                                            teams.push({id: id, memberTitle: title});
+                                        }
+                                    }
+                                }
+                            });
+                            if (badId) {
+                                $("#error-msg").html("Member " + (i / 2 + 1) + " is not a valid member, please check your spelling");
+                                validInput = false;
+                            }
+                        }
+                    }
+                }
+                if(validInput){
+                    $.ajax({
+                        url: "/api/project/saveProject",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            id: projectDetail.id,
+                            title: $("#title").val(),
+                            description: $("#description").val(),
+                            contact: $("#contact").val(),
+                            npo: $("#npo").val(),
+                            status: $("#status").val(),
+                            team: teams
+                        },
+                        success: function () {
+                            window.location.href = "/project/detail?id=<%= projectDetail.id %>";
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#error-msg").html(jqXHR.responseJSON);
+                            $("#submit-button").attr('disabled',false);
+                        }
+                    });
+                }
+                else{
+                    $("#submit-button").attr('disabled',false);
+                    return false;
+                }
+            });
+            $("#status").val(enumExchange(projectDetail.status));
+        });
+    </script>
+</head>
+<body>
+
+<% include template/nav.ejs %>
+<div class="container body-layout">
+    <div class="col-sm-8-offset" align="right">
+        <a class="btn primary-button" href="/project/detail?id=<%=projectDetail.id%>">Back</a>
+    </div>
+    <p class="error-msg" id="error-msg"></p>
+    <div>
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control" type="text" id="title" placeholder="Project Title" value="<%=projectDetail.title%>">
+        </div>
+        <div class="input-group new-project-input row">
+            <div class="input-group-addon">Team Members: </div>
+            <div class="form-control ">
+                <div class="col-sm-6 img-center-holder divider-vertical">Name</div>
+                <div class="col-sm-6 img-center-holder">Member Title</div>
+            </div>
+            <div class="input-group-btn">
+                <button type="button" id="add-member-button" class="btn primary-button">Add Members</button>
+            </div>
+        </div>
+        <div id="member-input-space" class="hide">
+            <!--member row goes here-->
+            <% currentRow = 1; %>
+            <% users.forEach(function(user){ %>
+            <div class="input-group new-project-input row">
+                   <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member <%=currentRow%>:&nbsp;&nbsp;&nbsp;</div>
+                   <select placeholder="Member Name" data-value="<%=user.uid%>" value="<%=user.uid%>" id="<%="name"+currentRow%>" class="form-control member-list">
+                       <% allUserNameAndId.forEach(function(userChoice){ %>
+                       <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"<% if(userChoice.id==user.uid){ %> selected="selected"<% }%>><%= userChoice.name %></option>
+                       <% }) %>
+                   </select>
+                   <div class="input-group-addon">Member Title:</div>
+                   <select placeholder="Member Title" value="<%=user.relation%>" id="<%="title"+currentRow%>" class="form-control member-list">
+                       <option value="Manager">Manager</option>
+                       <option value="Leader">Leader</option>
+                       <option value="Member">Member</option>
+                   </select>
+               </div>
+            <% currentRow++; %>
+            <% }) %>
+        </div>
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
+            <select value="" class="form-control" id="status">
+                <!--status option goes here-->
+            </select>
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Contact Information:</div>
+            <input class="form-control" type="text" id="contact" placeholder="Contact Information" value="<%=projectDetail.contact%>">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Non-profit Organization Name:</div>
+            <input class="form-control" type="text" id="npo" placeholder="Non-profit Organization Name" value="<%= projectDetail.npo%>">
+        </div>
+
+        <div class="new-project-input">
+            <textarea class="form-control" type="text" id="description" placeholder="Description" rows="10"><%=projectDetail.description%></textarea>
+        </div>
+
+    </div>
+    <button id="submit-button" type="button" class="btn login-signup-btn primary-button">Save</button>
+</div>
+
+<% include template/footer.ejs %>
+</body>
+</html>

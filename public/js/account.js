@@ -16,7 +16,7 @@ $(function () {
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      // $("#error-msg").html(jqXHR.responseJSON);
+      console.log(jqXHR.responseJSON);
     }
   });
 });

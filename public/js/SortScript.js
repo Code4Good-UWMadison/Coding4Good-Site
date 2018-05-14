@@ -53,7 +53,6 @@ function sortTable(tableId, index, order) {
     else {
       $rows.sort(sortByNumStr);
     }
-
     //rearrange the table
     $('#' + tableId + ' > tbody').html($rows);
 

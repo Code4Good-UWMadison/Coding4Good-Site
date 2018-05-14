@@ -4,7 +4,8 @@
     <% include template/head.ejs %>
     <script>
       $(function () {
-        $("#upload-btn").click(function () {
+        $("#submit-button").click(function () {
+          $("#submit-button").attr('disabled',true);
           var profile = {
             nickname: "",
             year: -1,
@@ -45,6 +46,7 @@
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                       $("#error-msg").html(jqXHR.responseJSON);
+                      $("#submit-button").attr('disabled',false);
                     }
                   });
                 };
@@ -63,6 +65,7 @@
                   },
                   error: function (jqXHR, textStatus, errorThrown) {
                     $("#error-msg").html(jqXHR.responseJSON);
+                    $("#submit-button").attr('disabled',false);
                   }
                 });
               }
@@ -70,7 +73,6 @@
 
             });
           });
-          // alert('fuck');
           // return false;
         });
       });
@@ -83,8 +85,8 @@
 
 <% include template/nav.ejs %>
 
-<h3>So tell us a bit about your self</h3>
-<div class="contact-container">
+<div class="container body-layout min-body-layout">
+    <h3>So tell us a bit about yourself!</h3>
     <form id="profile-form">
         <div class="input-group login-signup-input">
             <div class="input-group-addon">Nickname:</div>
@@ -98,6 +100,7 @@
                 <option value="3">Junior</option>
                 <option value="4">Senior</option>
                 <option value="5">Super-senior (5th year)</option>
+                <option value="6">Graduate or Above</option>
             </select>
         </div>
         <div class="login-signup-input">
@@ -141,7 +144,7 @@
         <p>(Optional) Resume</p>
         <input type="file" id="resume">
     </div>
-    <button id="upload-btn" class="btn login-signup-btn primary-button">Upload Profile</button>
+    <button id="submit-button" class="btn login-signup-btn primary-button">Upload Profile</button>
 </div>
 
 <% include template/footer.ejs %>

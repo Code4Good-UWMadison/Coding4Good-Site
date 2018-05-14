@@ -28,7 +28,7 @@ router.get('/project', function (req, res, next) {
 
 router.get('/project/my', function (req, res, next) {
     if (req.session.uid == null) {
-        res.redirect('/project');
+        res.redirect('/login');
         return;
     }
     db.getAssociatedProjectsByUserId(req.session.uid, function (err, projectSet) {
@@ -60,6 +60,10 @@ router.get('/project/detail', function (req, res, next) {
 });
 
 router.get('/project/new', function (req, res, next) {
+    if (req.session.uid == null) {
+        res.redirect('/login');
+        return;
+    }
     if (req.session.uid != 1) {
         res.redirect('/project');
         return;
@@ -75,17 +79,35 @@ router.get('/project/new', function (req, res, next) {
 });
 
 router.get('/project/edit', function (req, res, next) {
+    if (req.session.uid == null) {
+        res.redirect('/login');
+        return;
+    }
     if (req.session.uid != 1) {
         res.redirect('/project');
         return;
     }
-    db.getProjectById(req.query.projectId, function (err, project) {
+    db.getProjectById(req.query.id, function (err, project) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        res.render('projectEdit', {projectDetail:project});
+        db.getAssociatedUsersByProjectId(project.id,function(err, users){
+            if(err){
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            db.getAllUserNameAndId(function(err, allUserNameAndId){
+                if(err){
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
+                }
+                res.render('projectEdit', {projectDetail: project, users: users, allUserNameAndId:allUserNameAndId});
+            });
+        });
     });
 });
 
@@ -98,6 +120,10 @@ router.get('/profile', function (req, res) {
 });
 
 router.get('/admin', function (req, res) {
+    if (req.session.uid == null) {
+        res.redirect('/login');
+        return;
+    }
     if (req.session.uid != 1) {
         res.redirect('/');
         return;
@@ -127,8 +153,12 @@ router.get('/logout', function (req, res, next) {
     res.redirect('/');
 });
 
-router.get('/proposal', function (req, res) {
-    res.render('proposal');
-});
+// router.get('/proposal', function (req, res) {
+//     if (req.session.uid == null) {
+//         res.redirect('/login');
+//         return;
+//     }
+//     res.render('proposal');
+// });
 
 module.exports = router;
