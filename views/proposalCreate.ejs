@@ -3,7 +3,6 @@
 <head>
     <% include template/head.ejs %>
     <script>
-        var data =<%-JSON.stringify(allUserNameAndId)%>;
 
         $(function () {
 
@@ -11,78 +10,30 @@
                 $("#submit-button").attr('disabled',true);
                 var validInput = true;
                 $("#error-msg").html("");
-                if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
-                    $("#error-msg").html('Please fill out all the fields');
+                if (($("#organization").val() == '') | ($("#org_type").val() == '') | ($("#org_detail").val() == '') | ($("#name").val() == '')
+                    |($("#position").val() == '') |($("#email").val() == '') |($("#title").val() == '') |($("#description").val() == '')) {
+                    $("#error-msg").html('Please fill out all required fields');
                     validInput = false;
                 }
-                //collect team data
-                var teamMembers = $(".member-list");
-                var teams = [];
-                for(var i=0;i<teamMembers.length;i+=2){
-                    //data
-                    var name = teamMembers[i].value;
-                    var id = $(teamMembers[i]).attr("data-value");
-                    var title = teamMembers[i+1].value;
-                    //error checking variable
-                    var duplicate = false;
-                    var hasTitle = title!=="";
-                    var hasName = name!=="";
-                    var hasId = id!=="";
-                    var allEmpty = name==="" && title==="";
-                    var hasAll = name!=="" && title!=="" && id!=="";
-                    var badId = true;
-                    if(!allEmpty) {
-                        if (!hasTitle) {
-                            $("#error-msg").html('Please input a title for member ' + (i / 2 + 1));
-                            validInput = false;
-                        }
-                        else if (!hasName) {
-                            $("#error-msg").html('Please input valid name for member ' + (i / 2 + 1));
-                            validInput = false;
-                        }
-                        else if (!hasId) {
-                            $("#error-msg").html("Member " + (i / 2 + 1) + " is not a valid member, please check your spelling");
-                            validInput = false;
-                        }
-                        else if (hasAll) {
-                            data.forEach(function (people) {
-                                if (people.id == id) {
-                                    badId = false;
-                                    teams.forEach(function (member) {
-                                        if (member.id == id) {
-                                            validInput = false;
-                                            $("#error-msg").html("There are duplicate member, " + people.name + " please check your input");
-                                        }
-                                    });
-                                    if (!duplicate) {
-                                        if (people.name === name) {
-                                            teams.push({id: id, memberTitle: title});
-                                        }
-                                    }
-                                }
-                            });
-                            if (badId) {
-                                $("#error-msg").html("Member " + (i / 2 + 1) + " is not a valid member, please check your spelling");
-                                validInput = false;
-                            }
-                        }
-                    }
-                }
+
                 if(validInput){
                     $.ajax({
-                        url: "/api/project/createProject",
+                        url: "/api/proposal/createProposal",
                         method: "POST",
                         dataType: "json",
                         data: {
-                            title: $("#title").val(),
-                            description: $("#description").val(),
+                            organization: $("#organization").val(),
+                            org_type: $("#org_type").val(),
+                            org_detail: $("#org_detail").val(),
+                            name: $("#name").val(),
+                            position: $("#position").val(),
+                            email: $("#email").val(),
                             contact: $("#contact").val(),
-                            npo: $("#npo").val(),
-                            status: $("#status").val(),
-                            team: teams
+                            title: $("#title").val(),
+                            description: $("#description").val()
                         },
                         success: function () {
-                            window.location.href = "/project";
+                            window.location.href = "/";
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
@@ -113,6 +64,22 @@
         </div>
 
         <div class="input-group new-project-input">
+        <div class="input-group-addon">&nbsp;Organization Type: &nbsp;</div>
+        <select class="form-control" id="org_type" placeholder="Input For Other Types">
+            <option>Nonprofit</option>
+            <option>Government</option>
+            <option>Political</option>
+            <option>Charity</option>
+            <option>Educational Institution</option>
+        </select>
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Organization Detail:&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control" type="text" id="org_detail" placeholder="Organization Detail">
+        </div>
+
+        <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Proposer Name:&nbsp;&nbsp;&nbsp;</div>
             <input class="form-control" type="text" id="name" placeholder="Proposer Name">
         </div>
@@ -128,7 +95,7 @@
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Other Contact Info:&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Other Contact(Optional):&nbsp;&nbsp;&nbsp;</div>
             <input class="form-control" type="text" id="contact" placeholder="Other Contact Information">
         </div>
 
@@ -136,12 +103,6 @@
             <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Proposal Title:&nbsp;&nbsp;&nbsp;</div>
             <input class="form-control" type="text" id="title" placeholder="Proposal Title">
         </div>
-        <!--<div class="input-group new-project-input">-->
-            <!--<div class="input-group-addon">&nbsp;Project status: &nbsp;</div>-->
-            <!--<select class="form-control" id="status">-->
-                <!--&lt;!&ndash;status option goes here&ndash;&gt;-->
-            <!--</select>-->
-        <!--</div>-->
 
         <div class="new-project-input">
             <textarea class="form-control" type="text" id="description" placeholder="Description" rows="10"></textarea>

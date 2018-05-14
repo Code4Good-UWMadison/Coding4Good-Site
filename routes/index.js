@@ -59,7 +59,7 @@ router.get('/project/detail', function (req, res, next) {
     });
 });
 
-router.get('/project/new', function (req, res, next) {
+router.get('/project/create', function (req, res, next) {
     if (req.session.uid == null) {
         res.redirect('/login');
         return;
@@ -109,6 +109,14 @@ router.get('/project/edit', function (req, res, next) {
             });
         });
     });
+});
+
+router.get('/proposal/create', function (req, res, next) {
+    // if (req.session.uid == null) {
+    //     res.redirect('/login');
+    //     return;
+    // }
+    res.render('proposalCreate', {});
 });
 
 router.get('/profile', function (req, res) {
