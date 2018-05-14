@@ -291,7 +291,7 @@ exports.getProjectById = function (projectId, callback) {
 
 exports.removeProjectById = function(projectId, callback){
     var queryRelation = `DELETE FROM project_relation WHERE pid=$1;`;
-    var queryProject = `DELETE FROM project WHERE id=$1;`
+    var queryProject = `DELETE FROM project WHERE id=$1;`;
     db.query(queryRelation,[projectId],function(err){
         if(err){
             callback(err);

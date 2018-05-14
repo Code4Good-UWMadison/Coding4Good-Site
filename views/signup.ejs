@@ -4,40 +4,51 @@
     <% include template/head.ejs %>
     <script>
       $(function () {
-        $("#signup-form").submit(function () {
-          $("#submit-button").attr('disabled',true);
-          if (($("#password").val() == '') | ($("#email").val() == '') | ($("#name").val() == '')) {
-            $("#error-msg").html('Please fill out all the fields');
-            $("#submit-button").attr('disabled',false);
+        $("#signup-form").submit(() => {
+          const submit = $("#submit-button");
+          const msg = $("#error-msg");
+
+          const password = $("#password").val();
+          const confirm_password = $("#confirm-password").val();
+          const email = $("#email").val();
+          const name = $("#name").val();
+
+
+          submit.attr('disabled',true);
+
+          if (password === '' || email === '' || name === '' || confirm_password === '') {
+            msg.html('Please fill out all the fields');
+            submit.attr('disabled', false);
             return false;
           }
-          if ($("#password").val() != $("#confirm-password").val()) {
-            $("#error-msg").html('Password does not match');
-            $("#submit-button").attr('disabled',false);
+
+          if (password !== confirm_password) {
+            msg.html('Password does not match');
+            submit.attr('disabled', false);
             return false;
           }
+
           $.ajax({
             url: "/api/signup",
             method: "POST",
             dataType: "json",
             data: {
-              email: $("#email").val(),
-              fullname: $("#name").val(),
-              password: $("#password").val()
+              email: email,
+              fullname: name,
+              password: password
             },
             success: function () {
               window.location.href = "/profile";
             },
             error: function (jqXHR, textStatus, errorThrown) {
-              $("#error-msg").html(jqXHR.responseJSON);
-              $("#submit-button").attr('disabled',false);
+              msg.html(jqXHR.responseJSON);
+              submit.attr('disabled',false);
             }
           });
           return false;
         });
       });
     </script>
-
 </head>
 
 <body>
@@ -48,7 +59,7 @@
     <p class="error-msg margin-dtop" id="error-msg"></p>
     <form id="signup-form">
         <div class="input-group login-signup-input">
-            <div class="input-group-addon">Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group-addon">Email:</div>
             <input class="form-control" type="text" id="email" placeholder="Email">
         </div>
         <div class="input-group login-signup-input">
@@ -60,12 +71,12 @@
             <input class="form-control" type="password" id="password" placeholder="Password">
         </div>
         <div class="input-group login-signup-input">
-            <div class="input-group-addon">Password:</div>
+            <div class="input-group-addon">Confirm:</div>
             <input class="form-control" type="password" id="confirm-password" placeholder="Confirm Password">
         </div>
     </form>
     <p>I already had an account yet, <a href="login">Log me in!</a></p>
-    <button id="submit-button" type="submit" form="signup-form" class="btn login-signup-btn primary-button">Sign Up</button>
+    <button id="submit-button" type="submit" form="signup-form" class="btn long-btn primary-button">Sign Up</button>
 </div>
 
 <% include template/footer.ejs %>

@@ -124,6 +124,6 @@ router.post('/project/removeProject', function(req, res, next){
         }
         res.json({});
     });
-})
+});
 
 module.exports = router;
