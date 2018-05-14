@@ -157,10 +157,10 @@ exports.editProject = function (project, callback){
     else if (status==5){
         status = "Maintaining";
     }
-    var query = `update project set title=$2, description=$3, contact=$4, npo=$5, status=$6 where project.id = $1;`;
+    var query = `update project set title=$2, description=$3, contact=$4, org_name=$5, status=$6 where project.id = $1;`;
     var oldLink = `DELETE FROM project_relation WHERE project_relation.pid = $1`;
     var newLink = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`
-    db.query(query, [project.id, project.title, project.description, project.contact, project.npo,status], function (err) {
+    db.query(query, [project.id, project.title, project.description, project.contact, project.org_name,status], function (err) {
         db.query(oldLink,[project.id],function (err) {
             if(err){
                 console.log(err);
@@ -210,9 +210,9 @@ exports.createProject = function (project, callback) {
   else if (status==5){
     status = "Maintaining";
   }
-  var query = `insert into project (title, description, contact, npo, creation_time,status) values($1,$2,$3,$4,now(),$5) returning id;`;
+  var query = `insert into project (title, description, contact, org_name, creation_time,status) values($1,$2,$3,$4,now(),$5) returning id;`;
   var link = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`
-  db.query(query, [project.title, project.description, project.contact, project.npo,status], function (err,projectId) {
+  db.query(query, [project.title, project.description, project.contact, project.org_name,status], function (err,projectId) {
     if (err) {
       console.log(err);
       callback(err);
