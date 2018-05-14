@@ -46,21 +46,59 @@
         <% } %>
         <a class="btn primary-button" href="/project">Back</a>
     </div>
-    <div class="row img-center-holder">
-        <h2><%= projectDetail.title %></h2>
+
+
+    <div class="input-group new-project-input">
+        <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
+        <div class="form-control" type="text" id="title"><%= projectDetail.title %></div>
     </div>
-    <div class="row img-center-holder">
-        <h4>NPO: <%= projectDetail.npo %></h4>
-        <h4>Project Contact: <%= projectDetail.contact %></h4>
-        <h4>Status: <%= projectDetail.status %></h4>
-        <h4>Creation time: <%= projectDetail.creation_time %></h4>
-        <% users.forEach(function(user){ %>
-        <h4><%= user.name %></h4>
-        <h4>Title: <%= user.relation %></h4>
-        <% }); %>
+
+    <div class="input-group new-project-input row">
+        <div class="input-group-addon">Leaders:</div>
+        <div class="form-control" type="text">
+            <% users.filter(e => e.relation=="Leader").forEach(function(user){ %>
+            <%= user.name %>;
+            <% }); %>
+        </div>
+        <div class="input-group-addon">Manager:</div>
+        <div class="form-control" type="text">
+            <% users.filter(e => e.relation=="Manager").forEach(function(user){ %>
+            <%= user.name %>;
+            <% }); %>
+        </div>
     </div>
-    <div class="row img-center-holder">
-      <h4>Description: <%= projectDetail.description %></h4>
+
+    <div class="input-group new-project-input row">
+        <div class="input-group-addon">Members:</div>
+        <div class="form-control" type="text">
+            <% users.filter(e => e.relation=="Member").forEach(function(user){ %>
+            <%= user.name %>;
+            <% }); %>
+        </div>
+
+    </div>
+
+    <div class="input-group new-project-input row">
+        <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
+        <div class="form-control" type="text" id="status"><%= projectDetail.status %></div>
+        <div class="input-group-addon">&nbsp;Creation time: &nbsp;</div>
+        <div class="form-control" type="text" id="creation_time"><%= projectDetail.creation_time %></div>
+
+    </div>
+
+    <div class="input-group new-project-input">
+        <div class="input-group-addon">Contact Information:</div>
+        <div class="form-control" type="text" id="ontact"><%= projectDetail.contact %></div>
+    </div>
+
+    <div class="input-group new-project-input">
+        <div class="input-group-addon">Non-profit Organization Name:</div>
+        <div class="form-control" type="text" id="npo"><%= projectDetail.npo %></div>
+    </div>
+
+    <div class="new-project-input">
+        <textarea class="form-control" type="text" id="description"
+             rows="10"><%= projectDetail.description %></textarea>
     </div>
 </div>
 
