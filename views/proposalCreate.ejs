@@ -3,8 +3,12 @@
 <head>
     <% include template/head.ejs %>
     <script>
-
         $(function () {
+            $("#org_type").editableSelect({effects: 'slide'});
+            $("#org_type").click(function(){
+                $("#org_type").val("");
+                $("#org_type").trigger("change");
+            });
 
             $("#submit-button").click(function () {
                 $("#submit-button").attr('disabled',true);
@@ -95,7 +99,7 @@
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Other Contact(Optional):&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Other Contact (Optional):&nbsp;&nbsp;&nbsp;</div>
             <input class="form-control" type="text" id="contact" placeholder="Other Contact Information">
         </div>
 
