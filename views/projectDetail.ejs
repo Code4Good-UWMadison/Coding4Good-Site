@@ -29,7 +29,12 @@
             <%= user.name %>;
             <% }); %>
         </div>
-
+        <div class="input-group-addon">Manager:</div>
+        <div class="form-control" type="text">
+            <% users.filter(e => e.relation=="Manager").forEach(function(user){ %>
+            <%= user.name %>;
+            <% }); %>
+        </div>
     </div>
 
     <div class="input-group new-project-input row">

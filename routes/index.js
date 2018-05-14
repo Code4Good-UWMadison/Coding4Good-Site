@@ -54,7 +54,7 @@ router.get('/project/detail', function (req, res, next) {
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            res.render('projectDetail', {projectDetail: project, users: users, uid: req.session.uid});
+            res.render('projectDetail', {projectDetail: project, users: users});
         })
     });
 });
