@@ -4,7 +4,8 @@
     <% include template/head.ejs %>
     <script>
         $(function () {
-            //const org_type = $("#org_type");
+            const msg = $("#error-msg");
+
             $("#org_type").editableSelect({effects: 'slide'});
             $("#org_type").click(function(){
                 $("#org_type").val("");
@@ -14,10 +15,19 @@
             $("#submit-button").click(function () {
                 $("#submit-button").attr('disabled',true);
                 var validInput = true;
+                const org_name= $("#org_name").val();
+                const org_type= $("#org_type").val();
+                const org_detail= $("#org_detail").val();
+                const name= $("#name").val();
+                const position= $("#position").val();
+                const email= $("#email").val();
+                const contact= $("#contact").val();
+                const title= $("#title").val();
+                const description= $("#description").val();
                 $("#error-msg").html("");
-                if (($("#organization").val() == '') | ($("#org_type").val() == '') | ($("#org_detail").val() == '') | ($("#name").val() == '')
-                    |($("#position").val() == '') |($("#email").val() == '') |($("#title").val() == '') |($("#description").val() == '')) {
-                    $("#error-msg").html('Please fill out all required fields');
+                if ((org_name == '') | (org_type == '') | (org_detail == '') | (name == '')
+                    |(position == '') |(email == '') |(title == '') |(description == '')) {
+                    msg.html('Please fill out all required fields');
                     validInput = false;
                 }
 
@@ -27,15 +37,15 @@
                         method: "POST",
                         dataType: "json",
                         data: {
-                            org_name: $("#organization").val(),
-                            org_type: $("#org_type").val(),
-                            org_detail: $("#org_detail").val(),
-                            name: $("#name").val(),
-                            position: $("#position").val(),
-                            email: $("#email").val(),
-                            contact: $("#contact").val(),
-                            title: $("#title").val(),
-                            description: $("#description").val()
+                            org_name: org_name,
+                            org_type: org_type,
+                            org_detail: org_detail,
+                            name: name,
+                            position: position,
+                            email: email,
+                            contact: contact,
+                            title: title,
+                            description: description
                         },
                         success: function () {
                             window.location.href = "/";
@@ -65,7 +75,7 @@
     <div>
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Organization:&nbsp;&nbsp;&nbsp;</div>
-            <input class="form-control" type="text" id="organization" placeholder="Organization">
+            <input class="form-control" type="text" id="org_name" placeholder="Organization">
         </div>
 
         <div class="input-group new-project-input">
