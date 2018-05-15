@@ -4,6 +4,7 @@
     <% include template/head.ejs %>
     <script>
         $(function () {
+            //const org_type = $("#org_type");
             $("#org_type").editableSelect({effects: 'slide'});
             $("#org_type").click(function(){
                 $("#org_type").val("");
@@ -26,7 +27,7 @@
                         method: "POST",
                         dataType: "json",
                         data: {
-                            organization: $("#organization").val(),
+                            org_name: $("#organization").val(),
                             org_type: $("#org_type").val(),
                             org_detail: $("#org_detail").val(),
                             name: $("#name").val(),

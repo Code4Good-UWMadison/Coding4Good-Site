@@ -126,4 +126,15 @@ router.post('/project/removeProject', function(req, res, next){
     });
 });
 
+router.post('/proposal/createProposal', function (req, res, next) {
+    db.createProposal(req.body, function (err) {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Failed to create'});
+            return;
+        }
+        res.json({});
+    });
+});
+
 module.exports = router;
