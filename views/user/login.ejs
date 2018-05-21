@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <% include template/head.ejs %>
+    <% include ../template/head.ejs %>
     <script>
       $(function () {
         $("#login-form").submit(() => {
@@ -49,7 +49,7 @@
 
 <body>
 
-<% include template/nav.ejs %>
+<% include ../template/nav.ejs %>
 
 <div class="container body-layout min-body-layout">
     <p class="error-msg margin-dtop" id="error-msg"></p>
@@ -67,6 +67,6 @@
     <button id="submit-button" type="submit" form="login-form" class="btn long-btn primary-button">Log In</button>
 </div>
 
-<% include template/footer.ejs %>
+<% include ../template/footer.ejs %>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <% include template/head.ejs %>
+    <% include ../template/head.ejs %>
     <script type="text/javascript">
         var projectDetail = <%- JSON.stringify(projectDetail)%>;
         $(function(){
@@ -35,7 +35,7 @@
 </head>
 
 <body>
-<% include template/nav.ejs %>
+<% include ../template/nav.ejs %>
 
 <div class="container body-layout">
     <p class="error-msg" id="error-msg"></p>
@@ -114,6 +114,6 @@
     </div>
 </div>
 
-<% include template/footer.ejs %>
+<% include ../template/footer.ejs %>
 </body>
 </html>

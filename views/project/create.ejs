@@ -1,23 +1,19 @@
 <!doctype html>
 <html>
 <head>
-    <% include template/head.ejs %>
+    <% include ../template/head.ejs %>
     <script>
-        var data =<%-JSON.stringify(allUserNameAndId)%>;
-        var projectDetail = <%- JSON.stringify(projectDetail)%>;
+		var data =<%-JSON.stringify(allUserNameAndId)%>;
 
         function selectListFocus(){
             var list = $(".member-list").toArray();
             list.forEach(function (input) {
                 $(input).click(function(){
                     input.value="";
-                    $(input).attr("data-value","");
-                    $(input).attr("id","");
                     $(input).trigger("change");
                 });
             });
         }
-        //TODO: $( ".hello" ).remove();
         function addMemberRow() {
             var currentRow = $('.member-list').length/2+1;
             var html=" <div class=\"input-group new-project-input row\">\n" +
@@ -36,13 +32,11 @@
                 "   </div>";
             $('#member-input-space').append(html);
             $(".member-list").editableSelect({effects: 'slide'});
-            $('#member-input-space').removeClass('hide');
             selectListFocus();
         }
         $(function () {
+            addMemberRow();
             $('.member-list').editableSelect({effects: 'slide'});
-            $('#member-input-space').removeClass('hide');
-            selectListFocus();
             $('#add-member-button').click(function(){
                 addMemberRow();
             });
@@ -63,13 +57,13 @@
                 }
                 //collect team data
                 var teamMembers = $(".member-list");
-                var teams = [];
-                for(var i=0;i<teamMembers.length;i+=2){
+				var teams = [];
+				for(var i=0;i<teamMembers.length;i+=2){
                     //data
-                    var name = teamMembers[i].value;
-                    var id = $(teamMembers[i]).attr("data-value");
-                    var title = teamMembers[i+1].value;
-                    //error checking variable
+					var name = teamMembers[i].value;
+					var id = $(teamMembers[i]).attr("data-value");
+					var title = teamMembers[i+1].value;
+					//error checking variable
                     var duplicate = false;
                     var hasTitle = title!=="";
                     var hasName = name!=="";
@@ -113,14 +107,13 @@
                             }
                         }
                     }
-                }
+				}
                 if(validInput){
                     $.ajax({
-                        url: "/api/project/saveProject",
+                        url: "/api/project/createProject",
                         method: "POST",
                         dataType: "json",
                         data: {
-                            id: projectDetail.id,
                             title: $("#title").val(),
                             description: $("#description").val(),
                             contact: $("#contact").val(),
@@ -129,7 +122,7 @@
                             team: teams
                         },
                         success: function () {
-                            window.location.href = "/project/detail?id=<%= projectDetail.id %>";
+                            window.location.href = "/project";
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
@@ -142,23 +135,23 @@
                     return false;
                 }
             });
-            $("#status").val(enumExchange(projectDetail.status));
         });
     </script>
 </head>
 <body>
 
-<% include template/nav.ejs %>
+<% include ../template/nav.ejs %>
 <div class="container body-layout">
     <div class="col-sm-8-offset" align="right">
-        <a class="btn primary-button" href="/project/detail?id=<%=projectDetail.id%>">Back</a>
+        <a class="btn primary-button" href="/project">Back</a>
     </div>
     <p class="error-msg" id="error-msg"></p>
     <div>
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
-            <input class="form-control" type="text" id="title" placeholder="Project Title" value="<%=projectDetail.title%>">
+            <input class="form-control" type="text" id="title" placeholder="Project Title">
         </div>
+
         <div class="input-group new-project-input row">
             <div class="input-group-addon">Team Members: </div>
             <div class="form-control ">
@@ -169,52 +162,35 @@
                 <button type="button" id="add-member-button" class="btn primary-button">Add Members</button>
             </div>
         </div>
-        <div id="member-input-space" class="hide">
+        <div id="member-input-space">
             <!--member row goes here-->
-            <% currentRow = 1; %>
-            <% users.forEach(function(user){ %>
-            <div class="input-group new-project-input row">
-                   <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member <%=currentRow%>:&nbsp;&nbsp;&nbsp;</div>
-                   <select placeholder="Member Name" data-value="<%=user.uid%>" value="<%=user.uid%>" id="<%="name"+currentRow%>" class="form-control member-list">
-                       <% allUserNameAndId.forEach(function(userChoice){ %>
-                       <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"<% if(userChoice.id==user.uid){ %> selected="selected"<% }%>><%= userChoice.name %></option>
-                       <% }) %>
-                   </select>
-                   <div class="input-group-addon">Member Title:</div>
-                   <select placeholder="Member Title" value="<%=user.relation%>" id="<%="title"+currentRow%>" class="form-control member-list">
-                       <option value="Manager">Manager</option>
-                       <option value="Leader">Leader</option>
-                       <option value="Member">Member</option>
-                   </select>
-               </div>
-            <% currentRow++; %>
-            <% }) %>
         </div>
+
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
-            <select value="" class="form-control" id="status">
+            <select class="form-control" id="status">
                 <!--status option goes here-->
             </select>
         </div>
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">Contact Information:</div>
-            <input class="form-control" type="text" id="contact" placeholder="Contact Information" value="<%=projectDetail.contact%>">
+            <input class="form-control" type="text" id="contact" placeholder="Contact Information">
         </div>
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">Organization Name:</div>
-            <input class="form-control" type="text" id="org_name" placeholder="Organization Name" value="<%= projectDetail.org_name%>">
+            <input class="form-control" type="text" id="org_name" placeholder="Organization Name">
         </div>
 
         <div class="new-project-input">
-            <textarea class="form-control" type="text" id="description" placeholder="Description" rows="10"><%=projectDetail.description%></textarea>
+            <textarea class="form-control" type="text" id="description" placeholder="Description" rows="10"></textarea>
         </div>
 
     </div>
-    <button id="submit-button" type="button" class="btn long-btn primary-button">Save</button>
+    <button id="submit-button" type="button" class="btn long-btn primary-button">Create!</button>
 </div>
 
-<% include template/footer.ejs %>
+<% include ../template/footer.ejs %>
 </body>
 </html>
