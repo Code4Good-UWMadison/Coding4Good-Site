@@ -2,10 +2,6 @@ var express = require('express');
 var db = require('../server/db');
 var router = express.Router();
 
-// router.post('/proposal', function (req, res, next) {
-//     res.json({});
-// });
-
 router.get('/account_check', function (req, res, next) {
     if (req.session.uid != null) {
         db.getUserInfo(req.session.uid, function (err, user) {

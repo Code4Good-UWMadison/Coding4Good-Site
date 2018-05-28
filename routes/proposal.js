@@ -9,7 +9,7 @@ router.get('/proposal', function (req, res, next) {
       res.status(400).json({msg: 'Database Error'});
       return;
     }
-    res.render('proposal/index', {proposalSet: proposalSet, isMy: false, uid: req.session.uid});
+    res.render('proposal/create', {proposalSet: proposalSet, isMy: false, uid: req.session.uid});
   });
 });
 
