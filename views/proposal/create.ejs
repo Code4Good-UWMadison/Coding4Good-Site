@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../template/head.ejs %>
+    <script>
+        $(function () {
+            const msg = $("#error-msg");
+
+            $("#org_type").editableSelect({effects: 'slide'});
+            $("#org_type").click(function(){
+                $("#org_type").val("");
+                $("#org_type").trigger("change");
+            });
+
+            $("#submit-button").click(function () {
+                $("#submit-button").attr('disabled',true);
+                var validInput = true;
+                const org_name= $("#org_name").val();
+                const org_type= $("#org_type").val();
+                const org_detail= $("#org_detail").val();
+                const name= $("#name").val();
+                const position= $("#position").val();
+                const email= $("#email").val();
+                const contact= $("#contact").val();
+                const title= $("#title").val();
+                const description= $("#description").val();
+                $("#error-msg").html("");
+                if ((org_name == '') | (org_type == '') | (org_detail == '') | (name == '')
+                    |(position == '') |(email == '') |(title == '') |(description == '')) {
+                    msg.html('Please fill out all required fields');
+                    validInput = false;
+                }
+
+                if(validInput){
+                    $.ajax({
+                        url: "/api/proposal/createProposal",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            org_name: org_name,
+                            org_type: org_type,
+                            org_detail: org_detail,
+                            name: name,
+                            position: position,
+                            email: email,
+                            contact: contact,
+                            title: title,
+                            description: description
+                        },
+                        success: function () {
+                            window.location.href = "/";
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#error-msg").html(jqXHR.responseJSON);
+                            $("#submit-button").attr('disabled',false);
+                        }
+                    });
+                }
+                else{
+                    $("#submit-button").attr('disabled',false);
+                    return false;
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+<% include ../template/nav.ejs %>
+<div class="container body-layout">
+    <div class="col-sm-8-offset" align="right">
+        <a class="btn primary-button" href="/project">Back</a>
+    </div>
+    <p class="error-msg" id="error-msg"></p>
+    <div>
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Organization:&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control" type="text" id="org_name" placeholder="Organization">
+        </div>
+
+        <div class="input-group new-project-input">
+        <div class="input-group-addon">&nbsp;Organization Type: &nbsp;</div>
+        <select class="form-control" id="org_type" placeholder="Input For Other Types">
+            <option>Nonprofit</option>
+            <option>Government</option>
+            <option>Political</option>
+            <option>Charity</option>
+            <option>Educational Institution</option>
+        </select>
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Organization Detail:&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control" type="text" id="org_detail" placeholder="Organization Detail">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Proposer Name:&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control" type="text" id="name" placeholder="Proposer Name">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Current Position:&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control" type="text" id="position" placeholder="Current Position">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Email Address:&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control" type="text" id="email" placeholder="Email Address">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Other Contact (Optional):&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control" type="text" id="contact" placeholder="Other Contact Information">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Proposal Title:&nbsp;&nbsp;&nbsp;</div>
+            <input class="form-control" type="text" id="title" placeholder="Proposal Title">
+        </div>
+
+        <div class="new-project-input">
+            <textarea class="form-control" type="text" id="description" placeholder="Description" rows="10"></textarea>
+        </div>
+
+    </div>
+    <button id="submit-button" type="button" class="btn long-btn primary-button">Create!</button>
+</div>
+
+<% include ../template/footer.ejs %>
+</body>
+</html>
+

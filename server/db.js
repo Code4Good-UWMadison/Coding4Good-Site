@@ -1,8 +1,6 @@
 var self = this;
 var pg = require('pg');
 var config = require('./dbconfig.js');
-// var bcrypt = require('bcrypt');
-var uuid4 = require('uuid4');
 var db = new pg.Pool(config.db);
 
 exports.reset = function (callback) {
@@ -138,29 +136,11 @@ exports.getProfile = function (pid, callback) {
 };
 
 exports.editProject = function (project, callback){
-    var status=project.status;
-    if(status==0){
-        status = "Starting";
-    }
-    else if(status ==1){
-        status = "In Progress";
-    }
-    else if(status==2){
-        status = "On Hold";
-    }
-    else if (status==3) {
-        status = "Succeed";
-    }
-    else if (status==4){
-        status = "Failed";
-    }
-    else if (status==5){
-        status = "Maintaining";
-    }
-    var query = `update project set title=$2, description=$3, contact=$4, npo=$5, status=$6 where project.id = $1;`;
-    var oldLink = `DELETE FROM project_relation WHERE project_relation.pid = $1`;
-    var newLink = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`
-    db.query(query, [project.id, project.title, project.description, project.contact, project.npo,status], function (err) {
+  const status = ["Starting", "In Progress", "On Hold", "Succeed", "Failed", "Maintaining"][project.status];
+  const query = `update project set title=$2, description=$3, contact=$4, org_name=$5, status=$6 where project.id = $1;`;
+  const oldLink = `DELETE FROM project_relation WHERE project_relation.pid = $1`;
+  const newLink = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`;
+  db.query(query, [project.id, project.title, project.description, project.contact, project.org_name,status], function (err) {
         db.query(oldLink,[project.id],function (err) {
             if(err){
                 console.log(err);
@@ -188,31 +168,13 @@ exports.editProject = function (project, callback){
         }
         callback(null);
     });
-}
+};
 
 exports.createProject = function (project, callback) {
-  var status=project.status;
-  if(status==0){
-    status = "Starting";
-  }
-  else if(status ==1){
-    status = "In Progress";
-  }
-  else if(status==2){
-    status = "On Hold";
-  }
-  else if (status==3) {
-    status = "Succeed";
-  }
-  else if (status==4){
-    status = "Failed";
-  }
-  else if (status==5){
-    status = "Maintaining";
-  }
-  var query = `insert into project (title, description, contact, npo, creation_time,status) values($1,$2,$3,$4,now(),$5) returning id;`;
-  var link = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`
-  db.query(query, [project.title, project.description, project.contact, project.npo,status], function (err,projectId) {
+  const status = ["Starting", "In Progress", "On Hold", "Succeed", "Failed", "Maintaining"][project.status];
+  var query = `insert into project (title, description, contact, org_name, creation_time,status) values($1,$2,$3,$4,now(),$5) returning id;`;
+  var link = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`;
+  db.query(query, [project.title, project.description, project.contact, project.org_name,status], function (err,projectId) {
     if (err) {
       console.log(err);
       callback(err);
@@ -291,7 +253,7 @@ exports.getProjectById = function (projectId, callback) {
 
 exports.removeProjectById = function(projectId, callback){
     var queryRelation = `DELETE FROM project_relation WHERE pid=$1;`;
-    var queryProject = `DELETE FROM project WHERE id=$1;`
+    var queryProject = `DELETE FROM project WHERE id=$1;`;
     db.query(queryRelation,[projectId],function(err){
         if(err){
             callback(err);
@@ -310,4 +272,15 @@ exports.removeProjectById = function(projectId, callback){
             });
         }
     });
-}
+};
+
+exports.createProposal = function (proposal, callback) {
+    var query = `insert into proposal (org_name, org_type, org_detail, name, position, email, contact, title, description, creation_time) values($1,$2,$3,$4,$5,$6,$7,$8,$9,now())`;
+    db.query(query, [proposal.org_name, proposal.org_type, proposal.org_detail, proposal.name, proposal.position, proposal.email, proposal.contact, proposal.title, proposal.description], function (err) {
+        if (err) {
+            console.log(err);
+            callback(err);
+        }
+        callback(null);
+    });
+};

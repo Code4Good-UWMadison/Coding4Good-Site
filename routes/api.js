@@ -2,10 +2,6 @@ var express = require('express');
 var db = require('../server/db');
 var router = express.Router();
 
-// router.post('/proposal', function (req, res, next) {
-//     res.json({});
-// });
-
 router.get('/account_check', function (req, res, next) {
     if (req.session.uid != null) {
         db.getUserInfo(req.session.uid, function (err, user) {
@@ -124,6 +120,17 @@ router.post('/project/removeProject', function(req, res, next){
         }
         res.json({});
     });
-})
+});
+
+router.post('/proposal/createProposal', function (req, res, next) {
+    db.createProposal(req.body, function (err) {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Failed to create'});
+            return;
+        }
+        res.json({});
+    });
+});
 
 module.exports = router;
