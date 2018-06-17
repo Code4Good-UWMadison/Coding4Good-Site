@@ -161,4 +161,15 @@ router.get('/logout', function (req, res, next) {
 //     res.render('proposal');
 // });
 
+router.get('/events', function (req, res, next) {
+    db.getEventSet(function (err, eventsSet) {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        res.render('events', {eventsSet: eventsSet, uid: req.session.uid});
+    });
+});
+
 module.exports = router;

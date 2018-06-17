@@ -236,6 +236,7 @@ exports.createProject = function (project, callback) {
   });
 };
 
+
 exports.getProjectSet = function (callback) {
   var query = `SELECT * FROM project;`;
   db.query(query, function (err, result) {
@@ -311,3 +312,15 @@ exports.removeProjectById = function(projectId, callback){
         }
     });
 }
+
+exports.getEventSet = function (callback) {
+  var query = `SELECT * FROM event;`;
+  db.query(query, function (err, result) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      callback(null, result.rows);
+    }
+  });
+};
