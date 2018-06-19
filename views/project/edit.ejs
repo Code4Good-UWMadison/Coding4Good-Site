@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <% include template/head.ejs %>
+    <% include ../template/head.ejs %>
     <script>
         var data =<%-JSON.stringify(allUserNameAndId)%>;
         var projectDetail = <%- JSON.stringify(projectDetail)%>;
@@ -57,7 +57,7 @@
                 $("#submit-button").attr('disabled',true);
                 var validInput = true;
                 $("#error-msg").html("");
-                if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#npo").val() == '')) {
+                if (($("#title").val() == '') | ($("#description").val() == '') | ($("#contact").val() == '') | ($("#org_name").val() == '')) {
                     $("#error-msg").html('Please fill out all the fields');
                     validInput = false;
                 }
@@ -124,7 +124,7 @@
                             title: $("#title").val(),
                             description: $("#description").val(),
                             contact: $("#contact").val(),
-                            npo: $("#npo").val(),
+                            org_name: $("#org_name").val(),
                             status: $("#status").val(),
                             team: teams
                         },
@@ -148,7 +148,7 @@
 </head>
 <body>
 
-<% include template/nav.ejs %>
+<% include ../template/nav.ejs %>
 <div class="container body-layout">
     <div class="col-sm-8-offset" align="right">
         <a class="btn primary-button" href="/project/detail?id=<%=projectDetail.id%>">Back</a>
@@ -203,8 +203,8 @@
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">Non-profit Organization Name:</div>
-            <input class="form-control" type="text" id="npo" placeholder="Non-profit Organization Name" value="<%= projectDetail.npo%>">
+            <div class="input-group-addon">Organization Name:</div>
+            <input class="form-control" type="text" id="org_name" placeholder="Organization Name" value="<%= projectDetail.org_name%>">
         </div>
 
         <div class="new-project-input">
@@ -212,9 +212,9 @@
         </div>
 
     </div>
-    <button id="submit-button" type="button" class="btn login-signup-btn primary-button">Save</button>
+    <button id="submit-button" type="button" class="btn long-btn primary-button">Save</button>
 </div>
 
-<% include template/footer.ejs %>
+<% include ../template/footer.ejs %>
 </body>
 </html>

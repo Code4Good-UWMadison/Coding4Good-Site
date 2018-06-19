@@ -204,16 +204,17 @@ section {
   margin: 10px auto;
 }
 
-.login-signup-input {
-  margin: 10px auto;
-}
-
-.login-signup-btn {
+.long-btn {
   width: 100%;
 }
 
-.login-signup-input-prompt {
-  width: 30%;
+.login-signup-input {
+  margin: 10px auto;
+  width: 100%;
+}
+
+.login-signup-input .input-group-addon {
+  width: 100px;
 }
 
 .error-msg{

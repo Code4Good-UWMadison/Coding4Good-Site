@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <% include template/head.ejs %>
+    <% include ../template/head.ejs %>
     <script>
       $(function () {
         $("#submit-button").click(function () {
@@ -16,7 +16,7 @@
 
           profile.nickname = $("#nickname").val();
           profile.year = $("#year").val();
-          profile.intended_teamleader = ($(".teamleader").attr("checked")) ? true : false;
+          profile.intended_teamleader = !!($(".teamleader").attr("checked"));
 
           $(".pl-checkbox:checked").each(function () {
             if ($(this).val()) {
@@ -83,7 +83,7 @@
 
 <body>
 
-<% include template/nav.ejs %>
+<% include ../template/nav.ejs %>
 
 <div class="container body-layout min-body-layout">
     <h3>So tell us a bit about yourself!</h3>
@@ -144,9 +144,9 @@
         <p>(Optional) Resume</p>
         <input type="file" id="resume">
     </div>
-    <button id="submit-button" class="btn login-signup-btn primary-button">Upload Profile</button>
+    <button id="submit-button" class="btn long-btn primary-button">Upload Profile</button>
 </div>
 
-<% include template/footer.ejs %>
+<% include ../template/footer.ejs %>
 </body>
 </html>

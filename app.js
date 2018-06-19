@@ -1,18 +1,18 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var db = require("./server/db");
-var args = process.argv.slice(2);
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const db = require("./server/db");
+const args = process.argv.slice(2);
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var api = require('./routes/api');
+const index = require('./routes/index');
+const api = require('./routes/api');
+const project = require('./routes/project');
+const proposal = require('./routes/proposal');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,12 +33,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/', project);
+app.use('/', proposal);
 app.use('/api', api);
-app.use('/users', users);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });

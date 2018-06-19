@@ -1,36 +1,43 @@
 <!doctype html>
 <html>
 <head>
-    <% include template/head.ejs %>
+    <% include ../template/head.ejs %>
     <script>
       $(function () {
-        $("#login-form").submit(function () {
-          $("#submit-button").attr('disabled',true);
-          if (($("#password").val() == '') | ($("#email").val() == '')) {
-            $("#error-msg").html('Please fill out all the fields');
-            $("#submit-button").attr('disabled',false);
+        $("#login-form").submit(() => {
+          const submit = $("#submit-button");
+          const msg = $("#error-msg");
+          const password = $("#password").val();
+          const email = $("#email").val();
+
+          submit.attr('disabled',true);
+
+          if ((password=== '') || (email === '')) {
+            msg.html('Please fill out all the fields');
+            submit.attr('disabled',false);
             return false;
           }
+
           $.ajax({
             url: "/api/login",
             method: "POST",
             dataType: "json",
             data: {
-              email: $("#email").val(),
-              password: $("#password").val()
+              email: email,
+              password: password
             },
             success: function (valid) {
               if(valid){
                 window.location.href = "/profile";
               }
               else{
-                $("#error-msg").html('Your username or password is wrong, please try again!');
-                $("#submit-button").attr('disabled',false);
+                msg.html('Your username or password is wrong, please try again!');
+                submit.attr('disabled',false);
               }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-              $("#error-msg").html(jqXHR.responseJSON);
-              $("#submit-button").attr('disabled',false);
+              msg.html(jqXHR.responseJSON);
+              submit.attr('disabled',false);
             }
           });
           return false;
@@ -42,13 +49,13 @@
 
 <body>
 
-<% include template/nav.ejs %>
+<% include ../template/nav.ejs %>
 
 <div class="container body-layout min-body-layout">
     <p class="error-msg margin-dtop" id="error-msg"></p>
     <form id="login-form">
         <div class="input-group login-signup-input">
-            <div class="input-group-addon">Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group-addon">Email:</div>
             <input class="form-control" type="text" id="email" placeholder="Email">
         </div>
         <div class="input-group login-signup-input">
@@ -57,9 +64,9 @@
         </div>
         <p>I don't have an account yet, <a href="signup">sign me up!</a></p>
     </form>
-    <button id="submit-button" type="submit" form="login-form" class="btn login-signup-btn primary-button">Log In</button>
+    <button id="submit-button" type="submit" form="login-form" class="btn long-btn primary-button">Log In</button>
 </div>
 
-<% include template/footer.ejs %>
+<% include ../template/footer.ejs %>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <% include template/head.ejs %>
+    <% include ../template/head.ejs %>
     <script src="/js/SearchScript.js"></script>
     <script src="/js/SortScript.js"></script>
     <script type="text/javascript">
@@ -27,14 +27,14 @@
 
 <body>
 
-<% include template/nav.ejs %>
+<% include ../template/nav.ejs %>
 
 <div class="container body-layout">
     <div class="row img-center-holder">
         <% if(isMy){ %>
-        <h2>My Projects</h2>
+        <h2>My Proposals</h2>
         <% } else{ %>
-        <h2>Projects</h2>
+        <h2>Proposals</h2>
         <% } %>
     </div>
     <div class="row margin-htop">
@@ -48,7 +48,7 @@
         <div class="col-sm-8-offset" align="right">
             <% if (uid != null){ %>
             <% if (uid == 1) { %>
-            <a class="btn primary-button" href="/project/new">New Project</a>
+            <a class="btn primary-button" href="/project/create">New Project</a>
             <% } %>
             <a class="btn primary-button" href="/project/my">My Project</a>
             <% } else if(isMy) { %>
@@ -65,22 +65,24 @@
         </tr>
         </thead>
         <tbody id="projectTbody">
-        <% if(projectSet.length == 0){ %>
+        <% if(proposalSet.length == 0){ %>
         <tr>
-            <td class="error-msg">Sorry! Currently, there are no project available</td>
+            <td class="error-msg">Sorry! Currently, there are no proposal available</td>
         </tr>
         <% } %>
-        <% projectSet.forEach(function(row){ %>
+
+        <% proposalSet.forEach(function(row){ %>
         <tr class="tr clickable projectRow" id=<%= row.id %>>
             <td class="td"><%= row.title %></td>
-            <td class="td"><%= row.npo %></td>
+            <td class="td"><%= row.org_name %></td>
             <td class="td"><%= row.status %></td>
         </tr>
         <% }); %>
+
         </tbody>
     </table>
 </div>
 
-<% include template/footer.ejs %>
+<% include ../template/footer.ejs %>
 </body>
 </html>
