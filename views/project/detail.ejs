@@ -14,7 +14,7 @@
             $("#remove-confirmed").click(function () {
                 $("#remove-confirmed").attr('disabled', true);
                 $.ajax({
-                    url: "/api/project/removeProject",
+                    url: "/project/removeProject",
                     method: "POST",
                     dataType: "json",
                     data: {
@@ -69,8 +69,17 @@
         <div class="form-control" type="text">
             <%= users.filter(e => e.relation=="Member").map(e=>e.name).join(", ")%>
         </div>
-
     </div>
+
+    <% const others = users.filter(e => e.relation!="Member" && e.relation!="Manager" && e.relation!="Leader")%>
+    <% if(others.length>0){ %>
+    <div class="input-group new-project-input row">
+        <div class="input-group-addon">Others:</div>
+        <div class="form-control" type="text">
+           <%= others.map(e=>e.name).join(", ")%>
+        </div>
+    </div>
+    <%}%>
 
     <div class="input-group new-project-input row">
         <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>

@@ -1,9 +1,9 @@
 var express = require('express');
-var db = require('../server/eventdb');
+var db = require('../../server/event_db');
 var router = express.Router();
 
 //might be createEvents, not quite sure where will this be posted?
-router.post('/events/createEvent', function (req, res, next) {
+router.post('/createEvent', function (req, res, next) {
     if (req.session.uid != 1) {
         res.status(400).json({msg: 'Not Authorized'});
         return;
@@ -18,7 +18,7 @@ router.post('/events/createEvent', function (req, res, next) {
     });
 });
 
-router.post('/events/saveEvent', function (req, res, next) {
+router.post('/saveEvent', function (req, res, next) {
     if (req.session.uid != 1) {
         res.status(400).json({msg: 'Not Authorized'});
         return;
@@ -33,7 +33,7 @@ router.post('/events/saveEvent', function (req, res, next) {
     });
 });
 
-router.post('/events/removeEvent', function(req, res, next){
+router.post('/removeEvent', function(req, res, next){
     if(req.session.uid!=1){
         res.status(400).json({msg: 'Not Authorized'});
         return;

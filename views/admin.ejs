@@ -8,7 +8,7 @@
         $("#get-profile-btn").click(function () {
           var pid = $("#pid-input").val();
           $.ajax({
-            url: "/api/admin/get_profile",
+            url: "/admin/get_profile",
             method: "POST",
             dataType: "json",
             data: {

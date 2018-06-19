@@ -37,7 +37,7 @@
                   profile.resume = reader.result;
                   console.log(profile);
                   $.ajax({
-                    url: "/api/upload_profile",
+                    url: "/upload_profile",
                     method: "POST",
                     dataType: "json",
                     data: profile,
@@ -56,7 +56,7 @@
               }
               else {
                 $.ajax({
-                  url: "/api/upload_profile",
+                  url: "/upload_profile",
                   method: "POST",
                   dataType: "json",
                   data: profile,

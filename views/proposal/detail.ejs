@@ -14,14 +14,14 @@
             $("#remove-confirmed").click(function () {
                 $("#remove-confirmed").attr('disabled', true);
                 $.ajax({
-                    url: "/api/project/removeProject",
+                    url: "/proposal/removeProposal",
                     method: "POST",
                     dataType: "json",
                     data: {
                         id: projectDetail.id
                     },
                     success: function () {
-                        window.location.href="/project";
+                        window.location.href="/proposal";
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         $("#error-msg").html(jqXHR.responseJSON);

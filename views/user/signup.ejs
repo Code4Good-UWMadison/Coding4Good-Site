@@ -29,7 +29,7 @@
           }
 
           $.ajax({
-            url: "/api/signup",
+            url: "/signup",
             method: "POST",
             dataType: "json",
             data: {
@@ -38,7 +38,7 @@
               password: password
             },
             success: function () {
-              window.location.href = "/profile";
+              window.location.href = "/";
             },
             error: function (jqXHR, textStatus, errorThrown) {
               msg.html(jqXHR.responseJSON);

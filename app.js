@@ -4,13 +4,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const db = require("./server/db");
 const args = process.argv.slice(2);
-
-const index = require('./routes/index');
-const api = require('./routes/api');
-const project = require('./routes/project/project');
-const proposal = require('./routes/proposal');
 
 const app = express();
 
@@ -32,10 +26,29 @@ app.use(session({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const event = require('./routes/event/event');
+const event_api = require('./routes/event/event_api');
+//const event_db = require("./server/event_db");
+app.use('/event', event);
+app.use('/event', event_api);
+
+const index = require('./routes/index/index');
+const index_api = require('./routes/index/index_api');
+//const index_db = require("./server/index_db");
 app.use('/', index);
-app.use('/', project);
-app.use('/', proposal);
-app.use('/api', api);
+app.use('/', index_api);
+
+const project = require('./routes/project/project');
+const project_api = require('./routes/project/project_api');
+//const project_db = require('./server/project_db');
+app.use('/project', project);
+app.use('/project', project_api);
+
+const proposal = require('./routes/proposal/proposal');
+const proposal_api = require('./routes/proposal/proposal_api');
+//const proposal_db = require('./server/proposal_db');
+app.use('/proposal', proposal);
+app.use('/proposal', proposal_api);
 
 
 // catch 404 and forward to error handler

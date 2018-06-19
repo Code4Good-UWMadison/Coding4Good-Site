@@ -1,5 +1,5 @@
 var express = require('express');
-var db = require('../server/db');
+var db = require('../../server/index_db');
 var router = express.Router();
 
 router.get('/account_check', function (req, res, next) {
@@ -74,17 +74,6 @@ router.post('/admin/get_profile', function (req, res, next) {
             return;
         }
         res.json(profile);
-    });
-});
-
-router.post('/proposal/createProposal', function (req, res, next) {
-    db.createProposal(req.body, function (err) {
-        if (err) {
-            console.log(err);
-            res.status(400).json({msg: 'Failed to create'});
-            return;
-        }
-        res.json({});
     });
 });
 

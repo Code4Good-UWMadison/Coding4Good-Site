@@ -1,6 +1,6 @@
 $(function () {
   $.ajax({
-    url: "/api/account_check",
+    url: "/account_check",
     method: "GET",
     dataType: "json",
     data: {},

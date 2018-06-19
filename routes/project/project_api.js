@@ -1,8 +1,8 @@
 var express = require('express');
-var db = require('../server/projectdb');
+var db = require('../../server/project_db');
 var router = express.Router();
 
-router.post('/project/createProject', function (req, res, next) {
+router.post('/createProject', function (req, res, next) {
     if (req.session.uid != 1) {
         res.status(400).json({msg: 'Not Authorized'});
         return;
@@ -17,7 +17,7 @@ router.post('/project/createProject', function (req, res, next) {
     });
 });
 
-router.post('/project/saveProject', function (req, res, next) {
+router.post('/saveProject', function (req, res, next) {
     if (req.session.uid != 1) {
         res.status(400).json({msg: 'Not Authorized'});
         return;
@@ -32,7 +32,7 @@ router.post('/project/saveProject', function (req, res, next) {
     });
 });
 
-router.post('/project/removeProject', function(req, res, next){
+router.post('/removeProject', function(req, res, next){
     if(req.session.uid!=1){
         res.status(400).json({msg: 'Not Authorized'});
         return;
@@ -46,3 +46,5 @@ router.post('/project/removeProject', function(req, res, next){
         res.json({});
     });
 });
+
+module.exports = router;

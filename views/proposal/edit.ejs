@@ -116,7 +116,7 @@
                 }
                 if(validInput){
                     $.ajax({
-                        url: "/api/project/saveProject",
+                        url: "/proposal/saveProject",
                         method: "POST",
                         dataType: "json",
                         data: {
@@ -129,7 +129,7 @@
                             team: teams
                         },
                         success: function () {
-                            window.location.href = "/project/detail?id=<%= projectDetail.id %>";
+                            window.location.href = "/proposal/detail?id=<%= projectDetail.id %>";
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
