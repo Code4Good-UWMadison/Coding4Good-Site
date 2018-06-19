@@ -19,7 +19,7 @@
           }
 
           $.ajax({
-            url: "/api/login",
+            url: "/login",
             method: "POST",
             dataType: "json",
             data: {
@@ -28,7 +28,7 @@
             },
             success: function (valid) {
               if(valid){
-                window.location.href = "/profile";
+                window.location.href = "/";
               }
               else{
                 msg.html('Your username or password is wrong, please try again!');
