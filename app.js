@@ -9,7 +9,7 @@ const args = process.argv.slice(2);
 
 const index = require('./routes/index');
 const api = require('./routes/api');
-const project = require('./routes/project');
+const project = require('./routes/project/project');
 const proposal = require('./routes/proposal');
 
 const app = express();

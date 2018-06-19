@@ -77,51 +77,6 @@ router.post('/admin/get_profile', function (req, res, next) {
     });
 });
 
-router.post('/project/createProject', function (req, res, next) {
-    if (req.session.uid != 1) {
-        res.status(400).json({msg: 'Not Authorized'});
-        return;
-    }
-    db.createProject(req.body, function (err) {
-        if (err) {
-            console.log(err);
-            res.status(400).json({msg: 'Failed to create'});
-            return;
-        }
-        res.json({});
-    });
-});
-
-router.post('/project/saveProject', function (req, res, next) {
-    if (req.session.uid != 1) {
-        res.status(400).json({msg: 'Not Authorized'});
-        return;
-    }
-    db.editProject(req.body, function (err) {
-        if (err) {
-            console.log(err);
-            res.status(400).json({msg: 'Failed to save'});
-            return;
-        }
-        res.json({});
-    });
-});
-
-router.post('/project/removeProject', function(req, res, next){
-    if(req.session.uid!=1){
-        res.status(400).json({msg: 'Not Authorized'});
-        return;
-    }
-    db.removeProjectById(req.body.id,function (err) {
-        if(err){
-            console.log(err);
-            res.status(400).json({msg: 'Failed to remove'});
-            return;
-        }
-        res.json({});
-    });
-});
-
 router.post('/proposal/createProposal', function (req, res, next) {
     db.createProposal(req.body, function (err) {
         if (err) {
@@ -133,50 +88,5 @@ router.post('/proposal/createProposal', function (req, res, next) {
     });
 });
 
-//might be createEvents, not quite sure where will this be posted?
-router.post('/events/createEvent', function (req, res, next) {
-    if (req.session.uid != 1) {
-        res.status(400).json({msg: 'Not Authorized'});
-        return;
-    }
-    db.createEvent(req.body, function (err) {
-        if (err) {
-            console.log(err);
-            res.status(400).json({msg: 'Failed to create'});
-            return;
-        }
-        res.json({});
-    });
-});
-
-router.post('/events/saveEvent', function (req, res, next) {
-    if (req.session.uid != 1) {
-        res.status(400).json({msg: 'Not Authorized'});
-        return;
-    }
-    db.editEvent(req.body, function (err) {
-        if (err) {
-            console.log(err);
-            res.status(400).json({msg: 'Failed to save'});
-            return;
-        }
-        res.json({});
-    });
-});
-
-router.post('/events/removeEvent', function(req, res, next){
-    if(req.session.uid!=1){
-        res.status(400).json({msg: 'Not Authorized'});
-        return;
-    }
-    db.removeEventById(req.body.id,function (err) {
-        if(err){
-            console.log(err);
-            res.status(400).json({msg: 'Failed to remove'});
-            return;
-        }
-        res.json({});
-    });
-})
 
 module.exports = router;

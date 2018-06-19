@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var db = require("../server/db");
+var db = require("../../server/db");
 
 router.get('/project', function (req, res, next) {
   db.getProjectSet(function (err, projectSet) {
