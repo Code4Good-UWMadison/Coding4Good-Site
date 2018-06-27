@@ -5,19 +5,18 @@
 // <param name="tableId"> The ID of the table to sort</param>
 // <param name="index"> The field index to sort by - Note: it must match the header of the table </param>
 var curOrder = 0;
-var curIndex = 0;
 
-function toggleSort(tableId, index) {
-  if (curIndex != index) {
-    curIndex = index;
-  }
-  if (curOrder === 0) {
-    curOrder = -1;
-  } else {
-    curOrder = -curOrder;
-  }
-  sortTable(tableId, curIndex, curOrder);
-}
+$(function () {
+    sortTable(0, 1);
+    $(".sortable>thead>tr>th").click(function () {
+        if (curOrder === 0) {
+            curOrder = -1;
+        } else {
+            curOrder = -curOrder;
+        }
+        sortTable($("th").index(this), curOrder);
+    });
+})
 
 //Precondition:  You must create/generate headers for your table.
 //Note:  The headers you create/generate will be used for sorting the table.
@@ -28,12 +27,12 @@ function toggleSort(tableId, index) {
 // <param name="tableId"> The ID of the table to sort</param>
 // <param name="value"> The field name to sort by - Note: it must match the header of the table </param>
 // <param name="order"> ascending = 1, descending = -1 </param>
-function sortTable(tableId, index, order) {
+function sortTable(index, order) {
   try {
     if ($.isNumeric(order)) {
       order = parseInt(order);
     }
-    var $rows = $('#' + tableId + ' > tbody > tr');
+    var $rows = $('.sortable> tbody > tr');
     //check if the html content is a date
     var isDate = false;
     var count = 0;
@@ -54,7 +53,7 @@ function sortTable(tableId, index, order) {
       $rows.sort(sortByNumStr);
     }
     //rearrange the table
-    $('#' + tableId + ' > tbody').html($rows);
+    $('.sortable> tbody').html($rows);
 
     //sort function properties
     function sortByNumStr(a, b) {

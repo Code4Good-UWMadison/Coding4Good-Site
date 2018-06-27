@@ -13,5 +13,4 @@ router.post('/createProposal', function (req, res, next) {
     });
 });
 
-
 module.exports = router;

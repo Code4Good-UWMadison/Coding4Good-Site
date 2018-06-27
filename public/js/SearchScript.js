@@ -1,4 +1,11 @@
-﻿//<summary>
+﻿$(function(){
+    $('input.searchable').on("change textInput input", function () {
+        search(this.value);
+    });
+})
+
+
+//<summary>
 // Search a table for
 // 1.  a given value - partial and equality
 // 2.  multiple values - last value will be tested for partial and equality, other values will be tested for equality
@@ -7,13 +14,13 @@
 // <param name="tableId"> The table ID to search</param>
 // <param name="value"> The value(s) to search for</param>
 // <result>Positive search results will be visible</result>
-function search(tableId, value) {
+function search(value) {
   try {
-    $('#' + tableId + ' > tbody > tr').show();
+    $('table.searchable > tbody > tr').show();
     var params = value.split(',');
     for (var param = 0; param < params.length; param++) {
       if (params[param] != "") {
-        var $rows = $('#' + tableId + ' > tbody > tr').filter(":visible");
+        var $rows = $('table.searchable > tbody > tr').filter(":visible");
         for (var i = 0; i < $rows.length; i++) {
           var $dataValue = $rows.eq(i).children();
           var match = false;
