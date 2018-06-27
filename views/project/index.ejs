@@ -6,17 +6,17 @@
     <script src="/js/SortScript.js"></script>
     <script type="text/javascript">
         $(function () {
-            $("th").click(function () {
-                $(".projectRow").click(function () {
-                    var projectId = this.id;
-                    $(location).attr('href', '/project/detail?id=' + projectId);
-                });
-            });
+            addLink();
+        });
+        function addLink(){
             $(".projectRow").click(function () {
                 var projectId = this.id;
                 $(location).attr('href', '/project/detail?id=' + projectId);
             });
-        });
+        }
+        function afterSort(){
+            addLink();
+        }
     </script>
 </head>
 

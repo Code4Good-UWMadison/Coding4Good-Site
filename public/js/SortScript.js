@@ -15,6 +15,7 @@ $(function () {
             curOrder = -curOrder;
         }
         sortTable($("th").index(this), curOrder);
+        afterSort();
     });
 })
 
