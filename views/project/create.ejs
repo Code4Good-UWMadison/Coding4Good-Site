@@ -55,6 +55,14 @@
                     $("#error-msg").html('Please fill out all the fields');
                     validInput = false;
                 }
+                if($("#title").val().includes(",")){
+                    $("#error-msg").html('Invalid title input, please do not add a comma');
+                    validInput = false;
+                }
+                if($("#org_name").val().includes(",")){
+                    $("#error-msg").html('Invalid organization name input, please do not add a comma');
+                    validInput = false;
+                }
                 //collect team data
                 var teamMembers = $(".member-list");
 				var teams = [];

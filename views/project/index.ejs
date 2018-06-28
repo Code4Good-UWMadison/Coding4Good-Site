@@ -14,6 +14,7 @@
                 $(location).attr('href', '/project/detail?id=' + projectId);
             });
         }
+        //this is used by sortscript for sorting purpose
         function afterSort(){
             addLink();
         }
@@ -38,7 +39,7 @@
         </div>
         <div class="col-sm-5">
             <input type="text" class="input searchable"
-                   placeholder="Input format: keyword,keyword,keyword"/>
+                   placeholder="keyword, key words, key words"/>
         </div>
         <div class="col-sm-8-offset" align="right">
             <% if (uid != null){ %>
