@@ -16,8 +16,7 @@
 
           profile.nickname = $("#nickname").val();
           profile.year = $("#year").val();
-          profile.intended_teamleader = !!($(".teamleader").attr("checked"));
-
+          profile.intended_teamleader = $("#teamleader").prop("checked");
           $(".pl-checkbox:checked").each(function () {
             if ($(this).val()) {
               profile.pl.push($(this).val());
@@ -135,7 +134,7 @@
         <div class="login-signup-input">
             <br>
             <p>When developing softwares in team, there has to be a team leader who directs the development.</p>
-            <input type="checkbox" class="teamleader" value="teamleader"> Check this box if you want to be a team leader
+            <input type="checkbox" id="teamleader"> Check this box if you want to be a team leader
             <br>
         </div>
     </form>
