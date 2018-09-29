@@ -6,34 +6,66 @@
     	$(function() {
             $("#submit-button").click(function() {
                 $("#submit-button").attr('disabled', true);
+                var event = {
+                    title:"",
+                    event_time:"",
+                    location:"",
+                    description:"",
+                    creation_time:Date.now(),
+                    image:"http://www.gladessheriff.org/media/images/most%20wanted/No%20image%20available.jpg",
+                    link:"",
+                    type:""
+                }
                 var validInput = true;
                 $("#error-msg").html("");
-                if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '')) {
-                    $("#error-msg").html('Please fill out all the fields');
+                if (($("#title").val() == '') | ($("#event_time").val() == '') | ($("#location").val() == '')
+                    | ($("#description").val() == '') | ($("#type").val() == '')) {
+                    $("#error-msg").html('Please fill out all the required fields');
                     validInput = false;
                 }
-                if (validInput) {
-                    $.ajax({
-                        url: "/events/createEvent",
-                        method: "POST",
-                        dataType: "json",
-                        data: {
-                            title: $("#title").val(),
-                            location: $("#location").val(),
-                            time: $("#time").val(),
-                        },
-                        success: function() {
-                            window.location.href = "/events";
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            $("#error-msg").html(jqXHR.responseJSON);
-                            $("#submit-button").attr('disabled', false);
+                else{
+                    event.title = $("#title").val();
+                    event.event_time = $("#event_time").val();
+                    event.location = $("#location").val();
+                    event.description = $("#description").val();
+                    event.type = $("#type").val();
+                    //not required field
+                    event.link = $("#link").val();
+                    if ($("#image")[0].files.length > 0) {
+                        var file = $("#image")[0].files[0];
+                        var fileType = file["type"];
+                        var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
+                        if ($.inArray(fileType, ValidImageTypes) < 0) {
+                            $("#error-msg").html('Wrong file type, please upload an image');
+                            validInput = false;
                         }
-                    });
-                } else {
-                    $("#submit-button").attr('disabled', false);
-                    return false;
+                        else{
+                            var reader = new FileReader();
+                            reader.readAsDataURL(file);
+                            reader.onload = function () {
+                                event.image = reader.result;
+                            }
+                        }
+                    }
                 }
+                // if (validInput) {
+                //     $.ajax({
+                //         url: "/events/createEvent",
+                //         method: "POST",
+                //         dataType: "json",
+                //         data: event,
+                //         success: function() {
+                //             window.location.href = "/events";
+                //         },
+                //         error: function(jqXHR, textStatus, errorThrown) {
+                //             $("#error-msg").html(jqXHR.responseJSON);
+                //             $("#submit-button").attr('disabled', false);
+                //         }
+                //     });
+                // } else {
+                     $("#submit-button").attr('disabled', false);
+                //     return false;
+                // }
             });
         });
     </script>
@@ -52,14 +84,32 @@
             <input class="form-control" type="text" id="title" placeholder="Event Title">
         </div>
 
-        <div class="input-group new-project-input">
+        <div class="input-group new-project-input row">
             <div class="input-group-addon">&nbsp;Event Time: &nbsp;</div>
-            <input class="form-control" type="text" id="time" placeholder="Event Time">
+            <input class="form-control" type="date" id="event_time" placeholder="Event Time">
+
+            <div class="input-group-addon">&nbsp;Event Type: &nbsp;</div>
+            <select class="form-control" type="text" id="type">
+                <option selected value="">--Please select an event type--</option>
+                <option value="Workshop">Workshop</option>
+            </select>
+
+            <div class="input-group-addon">&nbsp;Event Image: &nbsp;</div>
+            <input class="form-control" type="file" id="image">
         </div>
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Location: &nbsp;</div>
             <input class="form-control" type="text" id="location" placeholder="Event Location">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Event Link: &nbsp;</div>
+            <input class="form-control" type="text" id="link" placeholder="Event Location">
+        </div>
+
+        <div class="new-project-input">
+            <textarea class="form-control" type="text" id="description" placeholder="Event Description" rows="10""></textarea>
         </div>
 
     </div>
