@@ -1,8 +1,5 @@
 .DS_Store
-npm-debug.log
+npm-debug\.log
 node_modules/
 
 .idea/
-package-lock\.json
-
-package\.json
