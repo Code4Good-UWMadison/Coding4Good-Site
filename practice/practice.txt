@@ -1,0 +1,17 @@
+create a file in this folder, change/add something in the file and save it
+push the file on to the branch
+always pull before you push
+resolve merge conflict
+
+create a branch, push a commit
+merge it to the practice branch, resolve merge conflict
+
+pull-request : a safer way to push
+
+Undo, Redo try not use them after you pushed onto remote
+Fetch all : fetch for new update
+Pull : download updates from remote
+Push : push your new commit to remote
+Branch : create a new Branch
+Stash : save not pushed file to some where
+Pop : get back all stashed changes
