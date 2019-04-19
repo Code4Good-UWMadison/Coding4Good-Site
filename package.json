@@ -12,7 +12,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "morgan": "^1.9.0",
+    "morgan": "^1.9.1",
     "pg": "^7.4.3",
     "serve-favicon": "^2.5.0",
     "uuid4": "^1.0.0"
