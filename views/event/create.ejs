@@ -49,19 +49,19 @@
                     }
                 }
                  if (validInput) {
-                //     $.ajax({
-                //         url: "/events/createEvent",
-                //         method: "POST",
-                //         dataType: "json",
-                //         data: event,
-                //         success: function() {
-                //             window.location.href = "/events";
-                //         },
-                //         error: function(jqXHR, textStatus, errorThrown) {
-                //             $("#error-msg").html(jqXHR.responseJSON);
+                    $.ajax({
+                        url: "/event/createEvent",
+                        method: "POST",
+                        dataType: "json",
+                        data: event,
+                        success: function() {
+                            window.location.href = "/events";
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            $("#error-msg").html(jqXHR.responseJSON);
                              $("#submit-button").attr('disabled', false);
-                //         }
-                //     });
+                        }
+                    });
                  } else {
                      $("#submit-button").attr('disabled', false);
                      return false;
