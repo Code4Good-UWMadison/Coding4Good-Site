@@ -34,11 +34,9 @@ exports.getEventById = function (eventId, callback) {
 
 // creat new event
 exports.createEvent = function (event, callback) {
-    console.log("Hello World");
-    var query = `insert into event (title, event_time, location, description, creation_time, image, link, type) values($1,$2,$3,$4,$5,$6,$7,$8)`;
-    event_db.query(query, [event.title, event.event_time, event.location, event.description, event.creation_time, "event.image", event.link, event.type], (err) => {
+    var query = `insert into event (title, event_time, location, description, creation_time, image, link, type) values($1,$2,$3,$4,now(),$5,$6,$7);`
+    db.query(query, [event.title, event.event_time, event.location, event.description, event.image, event.link, event.type], (err) => {
         if (err) {
-            // TODO: fix the 500 bug
             console.log(err);
             callback(err);
         }

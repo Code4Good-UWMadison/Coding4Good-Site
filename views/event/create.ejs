@@ -11,7 +11,6 @@
                     event_time:"",
                     location:"",
                     description:"",
-                    creation_time:Date.now(),
                     image:"http://www.gladessheriff.org/media/images/most%20wanted/No%20image%20available.jpg",
                     link:"",
                     type:""
@@ -86,7 +85,7 @@
 
         <div class="input-group new-project-input row">
             <div class="input-group-addon">&nbsp;Event Time: &nbsp;</div>
-            <input class="form-control" type="date" id="event_time" placeholder="Event Time">
+            <input class="form-control" type="datetime-local" id="event_time" placeholder="Event Time">
 
             <div class="input-group-addon">&nbsp;Event Type: &nbsp;</div>
             <select class="form-control" type="text" id="type">

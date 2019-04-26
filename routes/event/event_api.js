@@ -5,13 +5,11 @@ var router = express.Router();
 //might be createEvents, not quite sure where will this be posted?
 router.post('/createEvent', function (req, res, next) {
     if (req.session.uid != 1) {
-        console.log("Hello 1");
         res.status(400).json({msg: 'Not Authorized'});
         return;
     }
     db.createEvent(req.body, function (err) {
         if (err) {
-            console.log("Hello 2");
             console.log(err);
             res.status(400).json({msg: 'Failed to create'});
             return;
