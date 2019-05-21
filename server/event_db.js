@@ -43,3 +43,12 @@ exports.createEvent = function (event, callback) {
         callback(null);
     });
 };
+
+// TODO: edit and delete
+exports.editEvent = function (event, callback) {
+
+};
+
+exports.deleteEvent = function (event, callback) {
+    
+};
