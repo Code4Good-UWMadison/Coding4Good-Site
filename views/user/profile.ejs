@@ -34,7 +34,6 @@
                 reader.readAsDataURL(file);
                 reader.onload = function () {
                   profile.resume = reader.result;
-                  console.log(profile);
                   $.ajax({
                     url: "/upload_profile",
                     method: "POST",

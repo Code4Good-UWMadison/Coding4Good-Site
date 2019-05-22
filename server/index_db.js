@@ -51,7 +51,6 @@ exports.createUser = function (user, callback) {
 };
 
 exports.verifyUser = function (user, callback) {
-    console.log("aa");
     var query = `select id from users where email=$1 and password=$2;`;
     index_db.query(query, [user.email, user.password], function (err, result) {
         if (err) {
