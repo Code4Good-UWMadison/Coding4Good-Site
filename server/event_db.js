@@ -44,11 +44,23 @@ exports.createEvent = function (event, callback) {
     });
 };
 
-// TODO: edit and delete
+// TODO: edit event
 exports.editEvent = function (event, callback) {
 
 };
 
-exports.deleteEvent = function (event, callback) {
-    
+// TODO: test delete event
+exports.deleteEvent = function (eventId, callback) {
+    var query = `DELETE * FROM event id=$1;`;
+    db.query(query, [eventId], (err, res) => {
+        if (err) {
+            callback(err);
+        } else {
+            if (res.rows.length > 0) {
+                callback(null, res.rows[0]);
+            } else {
+                callback("No matching event id");
+            }
+        }
+    });
 };
