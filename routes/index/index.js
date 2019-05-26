@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var db = require("../../server/index_db");
 
 router.get('/', function (req, res, next) {
     res.render('index', {});
@@ -54,6 +53,5 @@ router.get('/admin', function (req, res) {
   }
   res.render('admin');
 });
-
 
 module.exports = router;

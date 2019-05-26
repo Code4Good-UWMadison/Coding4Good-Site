@@ -4,10 +4,47 @@
     <% include template/head.ejs %>
 
     <script>
-        $("#submit-button").click(function () {
-            $("#submit-button").attr('disabled',true);
-            $("#submit-button").attr('disabled',false);
+        $(function (){
+            $("#submit-button").click(function () {
+                $("#submit-button").attr('disabled',true);
+                var validInput = true;
+                $("#error-msg").html("");
+                var email = $("#email").val();
+                if ((email == '') | ($("#content").val() == '') | ($("#phone").val() == '')) {
+                    $("#error-msg").html('Please fill out all the fields');
+                    validInput = false;
+                }
+                else if(!validateEmail(email)){
+                    $("#error-msg").html('Please input a valid email');
+                    validInput = false;
+                }
+                var data = {
+                    email: email,
+                    phone: $("#phone").val(),
+                    content: $("#content").val(),
+                    date: new Date().toLocaleString()
+                }
+                if(validInput){
+                    $.ajax({
+                        url: "/contact/sendEmail",
+                        method: "POST",
+                        dataType: "json",
+                        data: data,
+                        success: function () {
+                            window.location.href = "/?c=s";
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#error-msg").html(jqXHR.responseJSON);
+                            $("#submit-button").attr('disabled',false);
+                        }
+                    });
+                }
+                else{
+                    $("#submit-button").attr('disabled',false);
+                }
+            });
         });
+
     </script>
 </head>
 
@@ -16,11 +53,12 @@
 <% include template/nav.ejs %>
 
 <div class="container body-layout min-body-layout">
-    <div class="col-sm-8-offset" align="right">
-        <a class="btn primary-button" href="/">Back</a>
+    <div class="col-md-offset-10">
+        <a class="long-btn btn primary-button" href="/">Back</a>
     </div>
+    <p class="error-msg" id="error-msg"></p>
     <div class="input-group login-signup-input">
-        <div class="input-group-addon">Your Email:</div>
+        <div class="input-group-addon" type="email">Your Email:</div>
         <input class="form-control" type="text" id="email" placeholder="Email">
     </div>
     <div class="input-group login-signup-input">
@@ -28,10 +66,10 @@
         <input class="form-control" type="text" id="phone" placeholder="Phone">
     </div>
     <div class="login-signup-input">
-        <p style="font-size:15px;">So tell us what's going on! We'll get back to you as soon as possible!</p>
+        <h5>So tell us what's going on! We'll get back to you as soon as possible!</h5>
         <textarea class="form-control" type="text" id="content" rows="10"></textarea>
     </div>
-    <button onclick="location.href='/';" id="submit-button" class="btn long-btn primary-button">Submit</button>
+    <button id="submit-button" class="btn long-btn primary-button">Submit</button>
 </div>
 
 <% include template/footer.ejs %>

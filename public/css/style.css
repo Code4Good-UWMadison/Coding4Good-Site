@@ -301,5 +301,8 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .min-body-layout{
-  width: 500px;
+  min-height: 63vh;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  width: 40%;
 }
