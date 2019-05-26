@@ -38,7 +38,7 @@
               password: password
             },
             success: function () {
-              window.location.href = "/";
+              window.location.href = "/?status=s";
             },
             error: function (jqXHR, textStatus, errorThrown) {
               msg.html(jqXHR.responseJSON);

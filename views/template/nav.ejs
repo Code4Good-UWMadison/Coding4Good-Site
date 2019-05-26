@@ -1,3 +1,13 @@
+<script>
+    $(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('status');
+        if(myParam == 's'){
+            $('#notification-bar').css("visibility","visible");
+            $('#notification-bar').fadeOut(4000, "swing");
+        }
+    })
+</script>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -11,7 +21,7 @@
                 <li><a href="/about">About</a></li>
                 <li><a href="/project">Projects</a></li>
                 <li><a href="/proposal/create">Proposals</a></li>
-                <!--li><a href="/contact">Contact</a></li-->
+                <li><a href="/contact">Contact</a></li>
             </ul>
             <div class="navbar-right">
                 <ul class="nav navbar-nav">
@@ -21,5 +31,9 @@
                 </ul>
             </div>
         </div>
+
     </div>
 </nav>
+<div id="notification-bar">
+    <p>Your submission has successfully been saved!</p>
+</div>

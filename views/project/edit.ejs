@@ -137,7 +137,7 @@
                             team: teams
                         },
                         success: function () {
-                            window.location.href = "/project/detail?id=<%= projectDetail.id %>";
+                            window.location.href = "/project/detail?status=s&id=<%= projectDetail.id %>";
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);

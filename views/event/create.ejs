@@ -23,7 +23,7 @@
                             time: $("#time").val(),
                         },
                         success: function() {
-                            window.location.href = "/events";
+                            window.location.href = "/events?status=s";
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);

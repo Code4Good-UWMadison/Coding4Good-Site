@@ -38,6 +38,9 @@ const index_api = require('./routes/index/index_api');
 app.use('/', index);
 app.use('/', index_api);
 
+const contact_api = require('./routes/index/contact_api');
+app.use('/contact', contact_api);
+
 const project = require('./routes/project/project');
 const project_api = require('./routes/project/project_api');
 //const project_db = require('./server/project_db');
