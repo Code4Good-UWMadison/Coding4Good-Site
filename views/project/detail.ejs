@@ -21,7 +21,7 @@
                         id: projectDetail.id
                     },
                     success: function () {
-                        window.location.href="/project";
+                        window.location.href="/project?status=s";
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         $("#error-msg").html(jqXHR.responseJSON);

@@ -9,20 +9,28 @@
                 $("#submit-button").attr('disabled',true);
                 var validInput = true;
                 $("#error-msg").html("");
-                var email = $("#email").val();
-                if ((email == '') | ($("#content").val() == '') | ($("#phone").val() == '')) {
-                    $("#error-msg").html('Please fill out all the fields');
+                var data = {
+                    email: $("#email").val(),
+                    phone: $("#phone").val(),
+                    content: $("#content").val(),
+                    date: new Date().toLocaleString(),
+                    name: $("#name").val(),
+                    organization: $('#organization').val()
+                }
+                if ((data.email == '') |
+                    (data.name == '') |
+                    (data.content == '') |
+                    (data.phone == '')) {
+                    $("#error-msg").html('Please fill out all required fields');
                     validInput = false;
                 }
-                else if(!validateEmail(email)){
+                else if(!validateEmail(data.email)){
                     $("#error-msg").html('Please input a valid email');
                     validInput = false;
                 }
-                var data = {
-                    email: email,
-                    phone: $("#phone").val(),
-                    content: $("#content").val(),
-                    date: new Date().toLocaleString()
+                else if(!validatePhone(data.phone)){
+                    $("#error-msg").html('Please input a valid phone');
+                    validInput = false;
                 }
                 if(validInput){
                     $.ajax({
@@ -31,7 +39,7 @@
                         dataType: "json",
                         data: data,
                         success: function () {
-                            window.location.href = "/?c=s";
+                            window.location.href = "/?status=s";
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
@@ -58,12 +66,20 @@
     </div>
     <p class="error-msg" id="error-msg"></p>
     <div class="input-group login-signup-input">
-        <div class="input-group-addon" type="email">Your Email:</div>
-        <input class="form-control" type="text" id="email" placeholder="Email">
+        <div class="input-group-addon">Your Name:</div>
+        <input class="form-control" type="text" id="name" placeholder="Full Name">
+    </div>
+    <div class="input-group login-signup-input">
+        <div class="input-group-addon">Organization(optional):</div>
+        <input class="form-control" type="text" id="organization" placeholder="Company, School, Organization, etc">
+    </div>
+    <div class="input-group login-signup-input">
+        <div class="input-group-addon">Your Email:</div>
+        <input class="form-control" type="email" id="email" placeholder="Email">
     </div>
     <div class="input-group login-signup-input">
         <div class="input-group-addon">Your Phone:</div>
-        <input class="form-control" type="text" id="phone" placeholder="Phone">
+        <input class="form-control" type="tel" id="phone" placeholder="Phone">
     </div>
     <div class="login-signup-input">
         <h5>So tell us what's going on! We'll get back to you as soon as possible!</h5>
