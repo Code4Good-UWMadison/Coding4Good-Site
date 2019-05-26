@@ -4,10 +4,55 @@
     <% include template/head.ejs %>
 
     <script>
-        $("#submit-button").click(function () {
-            $("#submit-button").attr('disabled',true);
-            $("#submit-button").attr('disabled',false);
+        $(function (){
+            $("#submit-button").click(function () {
+                $("#submit-button").attr('disabled',true);
+                var validInput = true;
+                $("#error-msg").html("");
+                var data = {
+                    email: $("#email").val(),
+                    phone: $("#phone").val(),
+                    content: $("#content").val(),
+                    date: new Date().toLocaleString(),
+                    name: $("#name").val(),
+                    organization: $('#organization').val()
+                }
+                if ((data.email == '') |
+                    (data.name == '') |
+                    (data.content == '') |
+                    (data.phone == '')) {
+                    $("#error-msg").html('Please fill out all required fields');
+                    validInput = false;
+                }
+                else if(!validateEmail(data.email)){
+                    $("#error-msg").html('Please input a valid email');
+                    validInput = false;
+                }
+                else if(!validatePhone(data.phone)){
+                    $("#error-msg").html('Please input a valid phone');
+                    validInput = false;
+                }
+                if(validInput){
+                    $.ajax({
+                        url: "/contact/sendEmail",
+                        method: "POST",
+                        dataType: "json",
+                        data: data,
+                        success: function () {
+                            window.location.href = "/?status=s";
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#error-msg").html(jqXHR.responseJSON);
+                            $("#submit-button").attr('disabled',false);
+                        }
+                    });
+                }
+                else{
+                    $("#submit-button").attr('disabled',false);
+                }
+            });
         });
+
     </script>
 </head>
 
@@ -16,22 +61,31 @@
 <% include template/nav.ejs %>
 
 <div class="container body-layout min-body-layout">
-    <div class="col-sm-8-offset" align="right">
-        <a class="btn primary-button" href="/">Back</a>
+    <div class="col-md-offset-10">
+        <a class="long-btn btn primary-button" href="/">Back</a>
+    </div>
+    <p class="error-msg" id="error-msg"></p>
+    <div class="input-group login-signup-input">
+        <div class="input-group-addon">Your Name:</div>
+        <input class="form-control" type="text" id="name" placeholder="Full Name">
+    </div>
+    <div class="input-group login-signup-input">
+        <div class="input-group-addon">Organization(optional):</div>
+        <input class="form-control" type="text" id="organization" placeholder="Company, School, Organization, etc">
     </div>
     <div class="input-group login-signup-input">
         <div class="input-group-addon">Your Email:</div>
-        <input class="form-control" type="text" id="email" placeholder="Email">
+        <input class="form-control" type="email" id="email" placeholder="Email">
     </div>
     <div class="input-group login-signup-input">
         <div class="input-group-addon">Your Phone:</div>
-        <input class="form-control" type="text" id="phone" placeholder="Phone">
+        <input class="form-control" type="tel" id="phone" placeholder="Phone">
     </div>
     <div class="login-signup-input">
-        <p style="font-size:15px;">So tell us what's going on! We'll get back to you as soon as possible!</p>
+        <h5>So tell us what's going on! We'll get back to you as soon as possible!</h5>
         <textarea class="form-control" type="text" id="content" rows="10"></textarea>
     </div>
-    <button onclick="location.href='/';" id="submit-button" class="btn long-btn primary-button">Submit</button>
+    <button id="submit-button" class="btn long-btn primary-button">Submit</button>
 </div>
 
 <% include template/footer.ejs %>
