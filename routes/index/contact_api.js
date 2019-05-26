@@ -31,7 +31,7 @@ router.post('/sendEmail', function (req, res, next) {
     // send mail with defined transport object
     transporter.sendMail(mailOptions, function(error, info) {
         if (error) {
-            console.log(err);
+            console.log(error);
             res.status(500).json({msg: 'Failed to send email'});
             return;
         } else {
