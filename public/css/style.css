@@ -300,12 +300,13 @@ input::-webkit-calendar-picker-indicator {
     width: 70%;
 }
 
-.min-body-layout {
-    min-height: 63vh;
-    margin-top: 100px;
-    margin-bottom: 100px;
-    width: 40%;
-}
+	.body-layout.min-body-layout {
+		width: 30%;
+	}
+	
+	.body-layout.mid-body-layout {
+		width: 55%;
+	}
 
 #notification-bar {
     visibility: hidden;
