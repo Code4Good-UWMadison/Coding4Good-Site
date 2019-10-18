@@ -52,7 +52,7 @@ exports.editProject = function (project, callback){
 
 exports.createProject = function (project, callback) {
     const status = ["Starting", "In Progress", "On Hold", "Succeed", "Failed", "Maintaining"][project.status];
-    var query = `insert into project (title, description, contact, org_name, creation_time,status) values($1,$2,$3,$4,now(),$5) returning id;`;
+    var query = `insert into project (title, description, contact, org_name, creation_time,status) values($1,$2,$3,$4,now() at time zone 'America/Chicago'),$5) returning id;`;
     var link = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`;
     db.query(query, [project.title, project.description, project.contact, project.org_name,status], function (err,projectId) {
         if (err) {
