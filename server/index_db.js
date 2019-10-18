@@ -23,6 +23,9 @@ var index_db = new pg.Pool(config.db);
 //       dev text,
 //       resume text
 //     );
+//
+//     // Add seeded data
+//     insert into users (email, name, password, create_date) values('uwmcfg@wd.owner','Web Owner','UwmC4gWd@Year.1',now() at time zone 'America/Chicago');`;
 //     `; //TODO
 //   index_db.query(query, function (err, result) {
 //     if (err) {
