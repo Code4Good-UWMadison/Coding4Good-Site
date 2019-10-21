@@ -38,6 +38,7 @@ const index_api = require('./routes/index/index_api');
 app.use('/', index);
 app.use('/', index_api);
 
+
 const contact_api = require('./routes/index/contact_api');
 app.use('/contact', contact_api);
 
@@ -79,5 +80,9 @@ if (process.env.INSTALL === 'yes' || args[0] === 'install') {
       console.log(err);
   });
 }
+
+app.listen(3000, function () {
+  console.log("Express server listening on port 3000");
+});
 
 module.exports = app;

@@ -9,6 +9,10 @@ router.get('/index', function (req, res, next) {
     res.render('index', {});
 });
 
+router.get('/sponsor', function (req, res) {
+    res.render('sponsor', {});
+});
+
 router.get('/about', function (req, res, next) {
     res.render('about', {});
 });
