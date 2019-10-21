@@ -145,9 +145,11 @@ section {
     font-size: 12px;
     text-align: center;
     padding: 30px 0;
+    /* position: relative; */
     position: relative;
     margin-top: -3em;
     width: 100%;
+    bottom: 0;
 }
 
 .home-pg-concept {
