@@ -183,6 +183,11 @@ section {
     border-radius: 50%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 0.5em;
+}
+
+.team-member{
+  margin-bottom: 1em;
 }
 
 .partners-img {
@@ -272,8 +277,16 @@ section {
     width: 300px;
 }
 
-.sponsor-container {
+/* .sponsor-container {
     margin-bottom: 50px;
+} */
+
+.calendar-container {
+    margin-bottom: 50px;
+}
+
+.calendar {
+  margin-top: 50px;
 }
 
 .divider-vertical {
@@ -296,14 +309,14 @@ input::-webkit-calendar-picker-indicator {
 .body-layout {
     min-height: 63vh;
     margin-top: 100px;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     width: 70%;
 }
 
 	.body-layout.min-body-layout {
 		width: 30%;
 	}
-	
+
 	.body-layout.mid-body-layout {
 		width: 55%;
 	}
