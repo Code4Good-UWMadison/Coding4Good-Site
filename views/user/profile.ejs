@@ -59,7 +59,7 @@
                   dataType: "json",
                   data: profile,
                   success: function () {
-                    window.location.href = "/upload-complete";
+                    window.location.href = "/upload-complete?status=s";
                   },
                   error: function (jqXHR, textStatus, errorThrown) {
                     $("#error-msg").html(jqXHR.responseJSON);
