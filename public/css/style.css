@@ -240,7 +240,15 @@ section {
 }
 
 .index-sponsor-container {
-    padding-top: 140px;
+    padding-top: 200px;
+}
+
+.index-sponsor-img {
+    width:50px;
+}
+
+.index-sponsor-text {
+    font-size: 20px;
 }
 
 .input {
