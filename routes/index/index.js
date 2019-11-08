@@ -17,6 +17,10 @@ router.get('/contact', function (req, res, next) {
     res.render('contact', {});
 });
 
+router.get('/sponsor', function (req, res) {
+    res.render('sponsor', {});
+});
+
 router.get('/profile', function (req, res) {
   if (req.session.uid == null) {
     res.redirect('/login');

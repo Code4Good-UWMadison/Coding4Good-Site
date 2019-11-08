@@ -23,6 +23,9 @@ var index_db = new pg.Pool(config.db);
 //       dev text,
 //       resume text
 //     );
+//
+//     // Add seeded data
+//     insert into users (email, name, password, create_date) values('uwmcfg@wd.owner','Web Owner','UwmC4gWd@Year.1',now() at time zone 'America/Chicago');`;
 //     `; //TODO
 //   index_db.query(query, function (err, result) {
 //     if (err) {
@@ -38,7 +41,7 @@ var index_db = new pg.Pool(config.db);
 
 exports.createUser = function (user, callback) {
 
-  var query = `insert into users (email, name, password) values($1,$2,$3);`;
+  var query = `insert into users (email, name, password, create_date) values($1,$2,$3,now() at time zone 'America/Chicago');`;
   index_db.query(query, [user.email, user.fullname, user.password], function (err, result) {
     if (err) {
       console.log(err);
@@ -85,7 +88,7 @@ exports.getUserInfo = function (uid, callback) {
 };
 
 exports.updateProfile = function (uid, profile, callback) {
-  var query = `insert into user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time) values($1,$2,$3,$4,$5,$6,$7, now());`;
+  var query = `insert into user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time) values($1,$2,$3,$4,$5,$6,$7, now() at time zone 'America/Chicago');`;
   index_db.query(query, [uid, profile.nickname, profile.year, profile.intended_teamleader, profile.pl, profile.dev, (profile.resume) ? profile.resume : ''], function (err, result) {
     if (err) {
       callback(err);
