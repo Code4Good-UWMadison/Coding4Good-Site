@@ -61,10 +61,8 @@ router.get('/admin', function (req, res) {
 });
 
 router.get('/email-confirmation', function (req, res) {
-    if (!req.session.uid) {
-        res.redirect('/');
-    }
-    res.render('user/email-confirmation');
+    console.log(req.params.status);
+    res.render('user/email-confirmation', {status: req.params.status});
 });
 
 router.get('/confirmation/:token', function (req, res){
@@ -73,35 +71,37 @@ router.get('/confirmation/:token', function (req, res){
             res.status(400).json({msg: err});
             return;
         }
-        var id = decoded.uid;
-        var user = {
-            "email": decoded.email,
-            "password": decoded.password 
-        };
-        db.verifyUser(user, function(err, uid){
-            if (err) {
-                console.log(err);
-                res.status(400).json({msg: err});
-                return;
-            }
-            if(!uid) {
-                res.status(400).json({msg: "Wrong token information, unauthorized!"});
-                return;
-            }
-            else {
-                db.verifyEmailByUserId(uid, function (err){
-                    if (err) {
-                        console.log(err);
-                        res.status(400).json({msg: err});
-                        return;
-                    }
-                    else{
-                        req.session.uid = uid;
-                        res.redirect('/email-confirmation?status=success');
-                    }
-                });
-            }
-        })
+        else{
+            var id = decoded.uid;
+            var user = {
+                "email": decoded.email,
+                "password": decoded.password 
+            };
+            db.verifyUser(user, function(err, uid){
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: err});
+                    return;
+                }
+                else if(!uid) {
+                    res.status(400).json({msg: "Wrong token information, unauthorized!"});
+                    return;
+                }
+                else {
+                    db.verifyEmailByUserId(uid, function (err){
+                        if (err) {
+                            console.log(err);
+                            res.status(400).json({msg: err});
+                            return;
+                        }
+                        else{
+                            req.session.uid = uid;
+                            res.redirect('/email-confirmation?status=success');
+                        }
+                    });
+                }
+            })
+        }
     });
 });
 
