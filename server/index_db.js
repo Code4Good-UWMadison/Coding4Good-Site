@@ -73,19 +73,21 @@ exports.verifyUser = function (user, callback) {
       if (result.rows.length == 0) {
         callback(null, null);
       }
-      bcrypt.compare(user.password, result.rows[0].password, function(err, res) {
-        if(err){
-          console.log(err);
-          callback(err);
-        }
-        // if wrong password
-        if (!res) {
-          callback(null, null);
-        }
-        else{
-          callback(null, result.rows[0].id);
-        }
-      });
+      else {
+        bcrypt.compare(user.password, result.rows[0].password, function(err, res) {
+          if(err){
+            console.log(err);
+            callback(err);
+          }
+          // if wrong password
+          if (!res) {
+            callback(null, null);
+          }
+          else{
+            callback(null, result.rows[0].id);
+          }
+        });
+      }
     }
   });
 }
@@ -148,7 +150,6 @@ exports.getProfile = function (pid, callback) {
 
 exports.verifyEmailByUserId = function (uid, callback){
   var query = `UPDATE users SET email_verified = true WHERE id = $1;`;
-  console.log(uid);
   index_db.query(query, [uid], function (err,result) {
     if (err) {
       callback(err);

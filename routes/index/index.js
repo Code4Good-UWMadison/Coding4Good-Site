@@ -60,15 +60,19 @@ router.get('/admin', function (req, res) {
     res.render('admin');
 });
 
-router.get('/confirmed', function (req, res) {
+router.get('/email-confirmation', function (req, res) {
     if (!req.session.uid) {
         res.redirect('/');
     }
-    res.render('confirmed');
+    res.render('user/email-confirmation');
 });
 
 router.get('/confirmation/:token', function (req, res){
     jwt.verify(req.params.token, EMAIL_SECRET, function(err, decoded) {
+        if(err){
+            res.status(400).json({msg: err});
+            return;
+        }
         var id = decoded.uid;
         var user = {
             "email": decoded.email,
@@ -85,19 +89,20 @@ router.get('/confirmation/:token', function (req, res){
                 return;
             }
             else {
-                req.session.uid = uid;
+                db.verifyEmailByUserId(uid, function (err){
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: err});
+                        return;
+                    }
+                    else{
+                        req.session.uid = uid;
+                        res.redirect('/email-confirmation?status=success');
+                    }
+                });
             }
         })
-        db.verifyEmailByUserId(id, function (err){
-            if (err) {
-                console.log(err);
-                res.status(400).json({msg: err});
-                req.session.uid = null;
-                return;
-            }
-        });
     });
-    res.redirect('/email-confirmation?status=success');
 });
 
 module.exports = router;
