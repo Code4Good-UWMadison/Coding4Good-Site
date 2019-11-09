@@ -2,6 +2,7 @@ var self = this;
 var pg = require('pg');
 var config = require('./dbconfig.js');
 var index_db = new pg.Pool(config.db);
+var bcrypt = require('bcrypt');
 
 // exports.reset = function (callback) {
 //   var query = `drop table if exists user_profile;
@@ -40,35 +41,54 @@ var index_db = new pg.Pool(config.db);
 // };
 
 exports.createUser = function (user, callback) {
-
-  var query = `insert into users (email, name, password, create_date) values($1,$2,$3,now() at time zone 'America/Chicago');`;
-  index_db.query(query, [user.email, user.fullname, user.password], function (err, result) {
-    if (err) {
+  // the higher the saltRound the longer to hash the password
+  var saltRounds = 10;
+  bcrypt.hash(user.password, saltRounds, function(err, hash){
+    if(err){
       console.log(err);
       callback(err);
     }
-    else {
-      exports.verifyUser(user, callback);
-    }
+    var query = `insert into users (email, name, password, create_date, email_verified) values ($1,$2,$3,now() at time zone 'America/Chicago', false);`;
+    index_db.query(query, [user.email, user.fullname, hash], function (err, result) {
+      if (err) {
+        console.log(err);
+        callback(err);
+      }
+      else{
+        exports.verifyUser(user, callback);
+      }
+    });
   });
 };
 
 exports.verifyUser = function (user, callback) {
-    var query = `select id from users where email=$1 and password=$2;`;
-    index_db.query(query, [user.email, user.password], function (err, result) {
-        if (err) {
-            callback(err);
+  var query = `select id, password from users where email = $1`;
+  index_db.query(query, [user.email], function(err, result){
+    if (err) {
+      console.log(err);
+      callback(err);
+    }
+    else{
+      // if user is not found
+      if (result.rows.length == 0) {
+        callback(null, null);
+      }
+      bcrypt.compare(user.password, result.rows[0].password, function(err, res) {
+        if(err){
+          console.log(err);
+          callback(err);
         }
-        else {
-            if (result.rows.length == 0) {
-                callback(null, null);
-            }
-            else {
-                callback(null, result.rows[0].id);
-            }
+        // if wrong password
+        if (!res) {
+          callback(null, null);
         }
-    });
-};
+        else{
+          callback(null, result.rows[0].id);
+        }
+      });
+    }
+  });
+}
 
 exports.getUserInfo = function (uid, callback) {
   var query = `select email,name as fullname from users where id=$1;`;
