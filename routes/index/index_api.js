@@ -1,7 +1,11 @@
 var express = require('express');
 var db = require('../../server/index_db');
 var router = express.Router();
+const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+//const baseUrl = "localhost:3000";
+const baseUrl = "www.coding4good.net";
+const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf';
 
 // delete before push
 // get = get html from the webpage
@@ -37,7 +41,6 @@ router.post('/signup', function (req, res, next) {
             return;
         }
 
-        req.session.uid = uid;
         let transporter = nodemailer.createTransport({
             host: 'smtp.office365.com', // ?
             port: 587,
@@ -48,26 +51,48 @@ router.post('/signup', function (req, res, next) {
             }
         });
     //log res.body to debug
-        // send mail with defined transport object
+        try {
+            const emailToken = jwt.sign({
+                "uid": uid,
+                "email": req.body.email,
+                "password": req.body.password
+            },
+            EMAIL_SECRET,
+            {
+                expiresIn: '1d',
+            },
+        )
+        const url = `http://${baseUrl}/confirmation/${emailToken}`;  
         let info = transporter.sendMail({
             from: 'cliu547@wisc.edu', //'"cfg web" <no-reply@cfg-web.org>', // sender address
             to: req.body.email, // list of receivers 
             subject: 'Verification email from Coding4Good', // Subject line
-            text: 'Hello world?', // plain text body
-            html: '<b>Hello world?</b>' // html body
+            html: `Hello World!\n Please click this email to confirm your email: <a href="${url}">${url}</a>`,
         });
-    
-        console.log('Message sent: %s', info.messageId);
-        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-    
-        // Preview only available when sending through an Ethereal account
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    } catch (e) {
+        console.log(e);
+    }
 
 
-                
+    
+    // // delete later
+    //   //log res.body to debug
+    //     // send mail with defined transport object
+    //     let info = transporter.sendMail({
+    //         from: 'cliu547@wisc.edu', //'"cfg web" <no-reply@cfg-web.org>', // sender address
+    //         to: req.body.email, // list of receivers 
+    //         subject: 'Verification email from Coding4Good', // Subject line
+    //         text: 'Hello world?', // plain text body
+    //         html: '<b>Hello world?</b>' // html body
+    //     });
+    
+    //     console.log('Message sent: %s', info.messageId);
+    //     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+    
+    //     // Preview only available when sending through an Ethereal account
+    //     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    //     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...      
         res.json({});
-
     });
 });
 

@@ -38,7 +38,7 @@
               password: password
             },
             success: function () {
-              window.location.href = "/?status=s";
+              window.location.href = "email-confirmation?status=wait";
             },
             error: function (jqXHR, textStatus, errorThrown) {
               msg.html(jqXHR.responseJSON);

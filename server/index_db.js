@@ -146,3 +146,14 @@ exports.getProfile = function (pid, callback) {
   });
 };
 
+exports.verifyEmailByUserId = function (uid, callback){
+  var query = `UPDATE users SET email_verified = true WHERE id = $1;`;
+  console.log(uid);
+  index_db.query(query, [uid], function (err,result) {
+    if (err) {
+      callback(err);
+    }
+    callback(null);
+  });
+}
+
