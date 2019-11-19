@@ -61,8 +61,7 @@ router.get('/admin', function (req, res) {
 });
 
 router.get('/email-confirmation', function (req, res) {
-    console.log(req.params.status);
-    res.render('user/email-confirmation', {status: req.params.status});
+    res.render('user/email-confirmation');
 });
 
 router.get('/confirmation/:token', function (req, res){

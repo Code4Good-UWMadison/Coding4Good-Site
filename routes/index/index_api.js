@@ -29,37 +29,41 @@ router.post('/signup', function (req, res, next) {
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        let transporter = nodemailer.createTransport({
-            host: HOST,
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
+        else {
+            let transporter = nodemailer.createTransport({
+                host: HOST,
+                port: 587,
+                secure: false, // true for 465, false for other ports
+                auth: {
                 user: process.env.EMAILUSER,
                 pass: process.env.EMAILPASS
-            }
-        });
-        try {
-            const emailToken = jwt.sign({
-                    "uid": uid,
-                    "email": req.body.email,
-                    "password": req.body.password
-                },
-                process.env.EMAIL_SECRET,
-                {
-                    expiresIn: '1d',
-                },
-            )
-            const url = `http://${baseUrl}/confirmation/${emailToken}`;  
-            let info = transporter.sendMail({
-                from: `"Coding for Good Team <"${process.env.EMAILUSER}">" `,
-                to: req.body.email, // list of receivers 
-                subject: "Verification email from Coding4Good",
-                html: `Hello from the Coding for Good team!</br></br>Thank you for registering!</br>Please click this link to confirm your email ` +
-                `address: <a href='${url}'>${url}</a></br></br>Please do not reply to this email.`,
+                }
             });
-        } catch (e) {
-            console.log(e);
-        }   
+            try {
+                const emailToken = jwt.sign({
+                        "uid": uid,
+                        "email": req.body.email,
+                        "password": req.body.password
+                    },
+                    process.env.EMAIL_SECRET,
+                    {
+                        expiresIn: '1d',
+                    },
+                )
+                const url = `http://${baseUrl}/confirmation/${emailToken}`;  
+                let info = transporter.sendMail({
+                    from: `"Coding for Good Team <"${process.env.EMAILUSER}">" `,
+                    to: req.body.email, // list of receivers 
+                    subject: "Verification email from Coding4Good",
+                    html: `Hello from the Coding for Good team!</br></br>Thank you for registering!</br>Please click this link to confirm your email ` +
+                    `address: <a href='${url}'>${url}</a></br></br>Please do not reply to this email.`,
+                });
+            } catch (err) {
+                console.log(err);
+                res.status(500).json({msg: 'Failed to send Email'});
+                return;
+            }   
+        }
         res.json({});
     });
 });
