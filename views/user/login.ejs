@@ -26,12 +26,13 @@
               email: email,
               password: password
             },
-            success: function (valid) {
+            success: function (data) {
               if(valid){
+              if(data.status){
                 window.location.href = "/";
               }
               else{
-                msg.html('Your username or password is wrong, please try again!');
+                msg.html(data.msg);
                 submit.attr('disabled',false);
               }
             },
@@ -44,7 +45,6 @@
         });
       });
     </script>
-
 </head>
 
 <body>

@@ -3,19 +3,9 @@ var db = require('../../server/index_db');
 var router = express.Router();
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-//const baseUrl = "localhost:3000";
 const baseUrl = "www.coding4good.net";
-const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf';
-
-// delete before push
-// get = get html from the webpage
-// post is like user posting things (input with keyboard)
-
-//steps
-// 1 send email after sign up                                                                           done
-// 2 after the user click the  URL in the email, send a post // maybe a get? 
-// 3 the post should update the email_verified field inside the "users" table for that user.  
-// 4 take them to a page notifying them that they're verified
+const HOST = "smtp.office365.com";
+const sender = "no-reply@cfg-web.org"; // TODO
 
 router.get('/account_check', function (req, res, next) {
     if (req.session.uid != null) {
@@ -40,58 +30,37 @@ router.post('/signup', function (req, res, next) {
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-
         let transporter = nodemailer.createTransport({
-            host: 'smtp.office365.com', // ?
+            host: HOST,
             port: 587,
             secure: false, // true for 465, false for other ports
             auth: {
-                user: authorEmail, // generated ethereal user                 //use cliu547@wisc.edu to make sure it work first
-                pass: authorPass // generated ethereal password
+                user: process.env.EMAILUSER,
+                pass: process.env.EMAILPASS
             }
         });
-    //log res.body to debug
         try {
             const emailToken = jwt.sign({
-                "uid": uid,
-                "email": req.body.email,
-                "password": req.body.password
-            },
-            EMAIL_SECRET,
-            {
-                expiresIn: '1d',
-            },
-        )
-        const url = `http://${baseUrl}/confirmation/${emailToken}`;  
-        let info = transporter.sendMail({
-            from: 'cliu547@wisc.edu', //'"cfg web" <no-reply@cfg-web.org>', // sender address
-            to: req.body.email, // list of receivers 
-            subject: 'Verification email from Coding4Good', // Subject line
-            html: `Hello World!\n Please click this email to confirm your email: <a href="${url}">${url}</a>`,
-        });
-    } catch (e) {
-        console.log(e);
-    }
-
-
-    
-    // // delete later
-    //   //log res.body to debug
-    //     // send mail with defined transport object
-    //     let info = transporter.sendMail({
-    //         from: 'cliu547@wisc.edu', //'"cfg web" <no-reply@cfg-web.org>', // sender address
-    //         to: req.body.email, // list of receivers 
-    //         subject: 'Verification email from Coding4Good', // Subject line
-    //         text: 'Hello world?', // plain text body
-    //         html: '<b>Hello world?</b>' // html body
-    //     });
-    
-    //     console.log('Message sent: %s', info.messageId);
-    //     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-    
-    //     // Preview only available when sending through an Ethereal account
-    //     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    //     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...      
+                    "uid": uid,
+                    "email": req.body.email,
+                    "password": req.body.password
+                },
+                process.env.EMAIL_SECRET,
+                {
+                    expiresIn: '1d',
+                },
+            )
+            const url = `http://${baseUrl}/confirmation/${emailToken}`;  
+            let info = transporter.sendMail({
+                from: sender, //'"cfg web" <no-reply@cfg-web.org>', // sender address
+                to: req.body.email, // list of receivers 
+                subject: "Verification email from Coding4Good",
+                html: `Hello from the Coding for Good team!</br></br>Thank you for registering!</br>Please click this link to confirm your email ` +
+                `address: <a href='${url}'>${url}</a></br></br>Please do not reply to this email.`,
+            });
+        } catch (e) {
+            console.log(e);
+        }   
         res.json({});
     });
 });
@@ -103,12 +72,29 @@ router.post('/login', function (req, res, next) {
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        if (uid) {
-            req.session.uid = uid;
-            res.json(true);
+        else if (uid) {
+            db.checkEmailVerificationByUid(uid, function(err, verified){
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
+                }
+                else if (verified === null){
+                    res.json({status: false, msg: "The user is not found."});
+                    return;
+                }
+                else if (!verified){
+                    res.json({status: false, msg: "Please verify your email before login."});
+                    return;
+                }
+                else {
+                    req.session.uid = uid;
+                    res.json({status: true, msg: ""});
+                }
+            });
         }
         else {
-            res.json(false);
+            res.json({status: false, msg: "Your username or password is wrong, please try again!"});
         }
     });
 });
@@ -142,6 +128,5 @@ router.post('/admin/get_profile', function (req, res, next) {
         res.json(profile);
     });
 });
-
 
 module.exports = router;

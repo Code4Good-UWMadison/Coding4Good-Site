@@ -1,9 +1,19 @@
 <!DocType html>
 <html>
     <head>
-        <title>Confirmed!</title>
+        <% include ../template/head.ejs %>
+        <title>Verification required</title>
     </head>
     <body>
-            TEST: status <%=status%>
+        <% include ../template/nav.ejs %>
+
+        <div class="container body-layout ">
+            <div class="img-center-holder margin-dtop">
+                <img class="sponsor-img" src="img/icon.jpg" alt="Corgi">
+                <h2> Please go check your email and verify your account, thank you! </h2>
+            </div>
+        </div>
+
+        <% include ../template/footer.ejs %>
     </body>
 </html>

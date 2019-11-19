@@ -80,7 +80,7 @@ exports.verifyUser = function (user, callback) {
             callback(err);
           }
           // if wrong password
-          if (!res) {
+          else if (!res) {
             callback(null, null);
           }
           else{
@@ -114,7 +114,6 @@ exports.updateProfile = function (uid, profile, callback) {
   index_db.query(query, [uid, profile.nickname, profile.year, profile.intended_teamleader, profile.pl, profile.dev, (profile.resume) ? profile.resume : ''], function (err, result) {
     if (err) {
       callback(err);
-
     }
     else {
       callback(null);
@@ -135,7 +134,6 @@ exports.getProfile = function (pid, callback) {
   index_db.query(query, [pid], function (err, result) {
     if (err) {
       callback(err);
-
     }
     else {
       if (result.rows.length > 0) {
@@ -150,11 +148,30 @@ exports.getProfile = function (pid, callback) {
 
 exports.verifyEmailByUserId = function (uid, callback){
   var query = `UPDATE users SET email_verified = true WHERE id = $1;`;
-  index_db.query(query, [uid], function (err,result) {
+  index_db.query(query, [uid], function (err) {
     if (err) {
       callback(err);
+    }else{
+      callback(null);
     }
-    callback(null);
   });
-}
+};
+
+exports.checkEmailVerificationByUid = function (uid, callback){
+  var query = `SELECT email_verified FROM users WHERE id = $1;`;
+  index_db.query(query, [uid], function(err, result){
+    if (err){
+      callback(err);
+    }
+    else{
+      if (result.rows.length > 0){
+        callback(null, result.rows[0].email_verified);
+      }
+      else{
+        callback(null);
+      }
+    }
+  });
+};
+
 

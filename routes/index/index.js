@@ -96,7 +96,7 @@ router.get('/confirmation/:token', function (req, res){
                         }
                         else{
                             req.session.uid = uid;
-                            res.redirect('/email-confirmation?status=success');
+                            res.redirect('/');                           
                         }
                     });
                 }
