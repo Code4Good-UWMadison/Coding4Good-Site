@@ -3,7 +3,6 @@
 }
 
 h1 {
-    /*font-family: "Roboto-Light";*/
     color: #888;
 }
 
@@ -43,6 +42,18 @@ h1 {
 
 .margin-dtop {
     margin-top: 100px;
+}
+
+.margin-hbot {
+    margin-bottom: 25px;
+}
+
+.margin-bot {
+    margin-bottom: 50px;
+}
+
+.margin-dbot {
+    margin-bottom: 100px;
 }
 
 .padding-top {
@@ -179,6 +190,11 @@ section {
     border-radius: 50%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 0.5em;
+}
+
+.team-member{
+  margin-bottom: 1em;
 }
 
 .partners-img {
@@ -307,7 +323,7 @@ input::-webkit-calendar-picker-indicator {
 	.body-layout.min-body-layout {
 		width: 30%;
 	}
-	
+
 	.body-layout.mid-body-layout {
 		width: 55%;
 	}
