@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const baseUrl = "www.coding4good.net";
 const HOST = "smtp.office365.com";
-const sender = "no-reply@cfg-web.org"; // TODO
 
 router.get('/account_check', function (req, res, next) {
     if (req.session.uid != null) {
@@ -52,7 +51,7 @@ router.post('/signup', function (req, res, next) {
             )
             const url = `http://${baseUrl}/confirmation/${emailToken}`;  
             let info = transporter.sendMail({
-                from: sender, //'"cfg web" <no-reply@cfg-web.org>', // sender address
+                from: `"Coding for Good Team <"${process.env.EMAILUSER}">" `,
                 to: req.body.email, // list of receivers 
                 subject: "Verification email from Coding4Good",
                 html: `Hello from the Coding for Good team!</br></br>Thank you for registering!</br>Please click this link to confirm your email ` +
