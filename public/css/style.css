@@ -44,6 +44,18 @@ h1 {
     margin-top: 100px;
 }
 
+.margin-hbot {
+    margin-bottom: 25px;
+}
+
+.margin-bot {
+    margin-bottom: 50px;
+}
+
+.margin-dbot {
+    margin-bottom: 100px;
+}
+
 .padding-top {
     padding-top: 100px;
 }
@@ -286,14 +298,6 @@ section {
 
 .sponsor-img {
     width: 300px;
-}
-
-.calendar-container {
-    margin-bottom: 50px;
-}
-
-.calendar {
-  margin-top: 50px;
 }
 
 .divider-vertical {
