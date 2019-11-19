@@ -17,8 +17,7 @@
     "nodemailer": "^6.2.1",
     "pg": "^7.9.0",
     "serve-favicon": "^2.5.0",
-    "uuid4": "^1.1.4",
-    "youtube-audio-stream": "^0.3.2"
+    "uuid4": "^1.1.4"
   },
   "description": "CORGi",
   "main": "app.js",
