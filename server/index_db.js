@@ -48,7 +48,7 @@ exports.createUser = function (user, callback) {
       console.log(err);
       callback(err);
     }
-    var query = `insert into users (email, name, password, create_date, email_verified) values ($1,$2,$3,now() at time zone 'America/Chicago', false);`;
+    var query = `INSERT INTO users (email, name, password, create_date, email_verified) VALUES ($1,$2,$3,now() at time zone 'America/Chicago', false);`;
     index_db.query(query, [user.email, user.fullname, hash], function (err, result) {
       if (err) {
         console.log(err);
@@ -61,9 +61,22 @@ exports.createUser = function (user, callback) {
   });
 };
 
+exports.removeUser = function (uid, callback){
+  var query = `DELETE FROM users WHERE id = $1;`;
+  index_db.query(query, [uid], function (err) {
+    if(err) {
+      console.log(err);
+      callback(err);
+    }
+    else {
+      callback(null);
+    }
+  });
+}
+
 exports.verifyUser = function (user, callback) {
-  var query = `select id, password from users where email = $1`;
-  index_db.query(query, [user.email], function(err, result){
+  var query = `SELECT id, password FROM users WHERE email = $1;`;
+  index_db.query(query, [user.email], function(err, result) {
     if (err) {
       console.log(err);
       callback(err);
@@ -93,7 +106,7 @@ exports.verifyUser = function (user, callback) {
 }
 
 exports.getUserInfo = function (uid, callback) {
-  var query = `select email,name as fullname from users where id=$1;`;
+  var query = `SELECT email, name AS fullname FROM users WHERE id=$1;`;
   index_db.query(query, [uid], function (err, result) {
     if (err) {
       callback(err);
@@ -110,7 +123,7 @@ exports.getUserInfo = function (uid, callback) {
 };
 
 exports.updateProfile = function (uid, profile, callback) {
-  var query = `insert into user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time) values($1,$2,$3,$4,$5,$6,$7, now() at time zone 'America/Chicago');`;
+  var query = `INSERT INTO user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time) VALUES ($1,$2,$3,$4,$5,$6,$7, now() at time zone 'America/Chicago');`;
   index_db.query(query, [uid, profile.nickname, profile.year, profile.intended_teamleader, profile.pl, profile.dev, (profile.resume) ? profile.resume : ''], function (err, result) {
     if (err) {
       callback(err);
@@ -122,15 +135,15 @@ exports.updateProfile = function (uid, profile, callback) {
 };
 
 exports.getProfile = function (pid, callback) {
-  var query = `select
-      u.name as name,
-      n.nickname as nickname,
-      n.year as year,
-      n.intended_teamleader as intended_teamleader,
-      n.pl as pl,
-      n.dev as dev,
-      n.resume as resume
-    from user_profile as n, users as u where n.id=$1 and n.uid=u.id;`;
+  var query = `SELECT
+      u.name AS name,
+      n.nickname AS nickname,
+      n.year AS year,
+      n.intended_teamleader AS intended_teamleader,
+      n.pl AS pl,
+      n.dev AS dev,
+      n.resume AS resume
+      FROM user_profile AS n, users AS u WHERE n.id=$1 AND n.uid=u.id;`;
   index_db.query(query, [pid], function (err, result) {
     if (err) {
       callback(err);

@@ -26,13 +26,12 @@
               email: email,
               password: password
             },
-            success: function (data) {
-              if(valid){
-              if(data.status){
+            success: function (result) {
+              if(result.status){
                 window.location.href = "/";
               }
-              else{
-                msg.html(data.msg);
+              else {
+                msg.html(result.msg);
                 submit.attr('disabled',false);
               }
             },

@@ -40,33 +40,44 @@ router.post('/signup', function (req, res, next) {
                     pass: process.env.EMAILPASS
                 }
             });
-            try {
-                const emailToken = jwt.sign({
-                        "uid": uid,
-                        "email": req.body.email,
-                        "password": req.body.password
-                    },
-                    process.env.EMAIL_SECRET,
-                    {
-                        expiresIn: '1d',
-                    },
-                )
-                const url = `http://${baseUrl}/confirmation/${emailToken}`;  
-                let info = transporter.sendMail({
-                    from: `"Coding for Good Team <"${process.env.EMAILUSER}">" `,
-                    to: req.body.email, // list of receivers 
-                    subject: "Verification email from Coding4Good",
-                    html: `Hello from the Coding for Good team!</br></br>Thank you for registering!</br>Please click this link to confirm your email ` +
-                    `address: <a href='${url}'>${url}</a></br></br>Please do not reply to this email.`,
-                });
-            } catch (err) {
-                console.log(err);
-                res.status(500).json({msg: 'Failed to send Email'});
-                //TODO: remove created user
-                return;
-            }   
+            const emailToken = jwt.sign({
+                    "uid": uid,
+                    "email": req.body.email,
+                    "password": req.body.password
+                },
+                process.env.EMAIL_SECRET,
+                {
+                    expiresIn: '1d',
+                },
+            )
+            const url = `http://${baseUrl}/confirmation/${emailToken}`;  
+            transporter.sendMail({
+                from: `"Coding for Good Team <"${process.env.EMAILUSER}">" `,
+                to: req.body.email, // list of receivers 
+                subject: "Verification email from Coding4Good",
+                html: `Hello from the Coding for Good team!</br></br>Thank you for registering!</br>Please click this link to confirm your email ` +
+                `address: <a href='${url}'>${url}</a></br></br>Please do not reply to this email.`,
+            }, function (err, info) {
+                if(err){
+                    console.log(err);
+                    db.removeUser(uid, function (err) {
+                        if(err){
+                            console.log(err);
+                            res.status(400).json({msg: 'Database Error'});
+                            return;
+                        }
+                        else {
+                            res.json({status: false, msg: 'Failed to send Email, please try again later, and contact us if you are having trouble'});
+                            return;
+                        }
+                    });
+                }
+                else{
+                    //console.log(info);
+                    res.json({status: true});
+                }
+            });
         }
-        res.json({});
     });
 });
 

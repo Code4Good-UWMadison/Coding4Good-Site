@@ -37,8 +37,14 @@
               fullname: name,
               password: password
             },
-            success: function () {
-              window.location.href = "email-confirmation?status=wait";
+            success: function (result) {
+              if(result.status){
+                window.location.href = "/email-confirmation";
+              }
+              else {
+                msg.html(result.msg);
+                submit.attr('disabled',false);
+              }
             },
             error: function (jqXHR, textStatus, errorThrown) {
               msg.html(jqXHR.responseJSON);
