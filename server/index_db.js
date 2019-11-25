@@ -51,7 +51,9 @@ exports.createUser = function (user, callback) {
     var query = `INSERT INTO users (email, name, password, create_date, email_verified) VALUES ($1,$2,$3,now() at time zone 'America/Chicago', false);`;
     index_db.query(query, [user.email, user.fullname, hash], function (err, result) {
       if (err) {
-        console.log(err);
+        if (err.code != 23505){
+          console.log(err);
+        }
         callback(err);
       }
       else{
