@@ -25,8 +25,13 @@ router.get('/account_check', function (req, res, next) {
 router.post('/signup', function (req, res, next) {
     db.createUser(req.body, function (err, uid) {
         if (err) {
-            console.log(err);
-            res.status(400).json({msg: 'Database Error'});
+            if(err.code == 23505){
+                res.json({status: false, msg: 'This email account has been registered already, please login or use another email!'});
+            }
+            else{
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+            }
             return;
         }
         else {
@@ -67,8 +72,7 @@ router.post('/signup', function (req, res, next) {
                             return;
                         }
                         else {
-                            res.json({status: false, msg: 'Failed to send Email, please try again later, and contact us if you are having trouble'});
-                            return;
+                            res.json({status: false, msg: 'Failed to send Email, please try again later, and contact us if you are having trouble.'});
                         }
                     });
                 }
