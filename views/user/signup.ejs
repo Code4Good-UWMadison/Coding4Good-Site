@@ -37,8 +37,14 @@
               fullname: name,
               password: password
             },
-            success: function () {
-              window.location.href = "/?status=s";
+            success: function (result) {
+              if(result.status){
+                window.location.href = "/email-confirmation";
+              }
+              else {
+                msg.html(result.msg);
+                submit.attr('disabled',false);
+              }
             },
             error: function (jqXHR, textStatus, errorThrown) {
               msg.html(jqXHR.responseJSON);
@@ -75,7 +81,7 @@
             <input class="form-control" type="password" id="confirm-password" placeholder="Confirm Password">
         </div>
     </form>
-    <p>I already had an account yet, <a href="login">Log me in!</a></p>
+    <p>I already had an account, <a href="/login">Log me in!</a></p>
     <button title="Sign up" id="submit-button" type="submit" form="signup-form" class="btn long-btn primary-button">Sign Up</button>
 </div>
 
