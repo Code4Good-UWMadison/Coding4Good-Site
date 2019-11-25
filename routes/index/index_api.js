@@ -95,11 +95,7 @@ router.post('/login', function (req, res, next) {
                     res.status(400).json({msg: 'Database Error'});
                     return;
                 }
-                else if (verified === null){
-                    res.json({status: false, msg: "The user is not found."});
-                    return;
-                }
-                else if (!verified){
+                else if (verified === false){
                     res.json({status: false, msg: "Please verify your email before login."});
                     return;
                 }
