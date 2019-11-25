@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 const jwt = require('jsonwebtoken');
-const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf';
 const db = require('../../server/index_db');
 
 router.get('/', function (req, res, next) {
@@ -65,7 +64,7 @@ router.get('/email-confirmation', function (req, res) {
 });
 
 router.get('/confirmation/:token', function (req, res){
-    jwt.verify(req.params.token, EMAIL_SECRET, function(err, decoded) {
+    jwt.verify(req.params.token, process.env.EMAIL_SECRET, function(err, decoded) {
         if(err){
             res.status(400).json({msg: err});
             return;

@@ -4,7 +4,7 @@ var router = express.Router();
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const baseUrl = "www.coding4good.net";
-const HOST = "smtp.office365.com";
+const HOST = "smtp-mail.outlook.com";
 
 router.get('/account_check', function (req, res, next) {
     if (req.session.uid != null) {
@@ -32,11 +32,12 @@ router.post('/signup', function (req, res, next) {
         else {
             let transporter = nodemailer.createTransport({
                 host: HOST,
+                secureConnection: false,
                 port: 587,
                 secure: false, // true for 465, false for other ports
                 auth: {
-                user: process.env.EMAILUSER,
-                pass: process.env.EMAILPASS
+                    user: process.env.EMAILUSER,
+                    pass: process.env.EMAILPASS
                 }
             });
             try {
@@ -61,6 +62,7 @@ router.post('/signup', function (req, res, next) {
             } catch (err) {
                 console.log(err);
                 res.status(500).json({msg: 'Failed to send Email'});
+                //TODO: remove created user
                 return;
             }   
         }
