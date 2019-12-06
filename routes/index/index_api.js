@@ -64,7 +64,7 @@ router.post('/signup', function (req, res, next) {
                 `address: <a href='${url}'>${url}</a></br><img style="width:25px;" src="cid:club-icon" alt="Corgi"></br>Please do not reply to this email.`,
                 attachments: [{
                     filename: 'icon-no-bg.jpg',
-                    path: 'img/icon-no-bg.jpg',
+                    path: __dirname + '/img/icon-no-bg.jpg',
                     cid: 'club-icon'
                 }]
             }, function (err, info) {
