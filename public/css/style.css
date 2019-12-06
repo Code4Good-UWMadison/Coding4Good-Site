@@ -3,7 +3,6 @@
 }
 
 h1 {
-    /*font-family: "Roboto-Light";*/
     color: #888;
 }
 
@@ -43,6 +42,18 @@ h1 {
 
 .margin-dtop {
     margin-top: 100px;
+}
+
+.margin-hbot {
+    margin-bottom: 25px;
+}
+
+.margin-bot {
+    margin-bottom: 50px;
+}
+
+.margin-dbot {
+    margin-bottom: 100px;
 }
 
 .padding-top {
@@ -104,17 +115,13 @@ h1 {
     border-radius: 10px;
 }
 
-#homepage {
-    /*background: linear-gradient(-45deg, #FFF8E1 0%, #FFF3E0 49%, #FBE9E7 75%);*/
-    background: #FFF3E0;
-}
-
 .middle {
     vertical-align: middle;
 }
 
 body, html {
     color: #666;
+    background-color: rgb(255, 249, 246);
 }
 
 .main {
@@ -146,7 +153,6 @@ section {
     text-align: center;
     padding: 30px 0;
     position: relative;
-    margin-top: -3em;
     width: 100%;
 }
 
@@ -183,6 +189,11 @@ section {
     border-radius: 50%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 0.5em;
+}
+
+.team-member{
+  margin-bottom: 1em;
 }
 
 .partners-img {
@@ -227,7 +238,7 @@ section {
 
 .main-display {
     width: 30%;
-    margin: -80px auto;
+    margin: -210px auto;
     text-align: center;
 }
 
@@ -237,6 +248,18 @@ section {
     line-height: 24px;
     font-size: 18px;
     background-color: #FF8A65;
+}
+
+.index-sponsor-container {
+    padding-top: 200px;
+}
+
+.index-sponsor-img {
+    width:50px;
+}
+
+.index-sponsor-text {
+    font-size: 20px;
 }
 
 .input {
@@ -272,10 +295,6 @@ section {
     width: 300px;
 }
 
-.sponsor-container {
-    margin-bottom: 50px;
-}
-
 .divider-vertical {
     height: 100%;
     border-right: 1px solid #757575;
@@ -303,7 +322,7 @@ input::-webkit-calendar-picker-indicator {
 	.body-layout.min-body-layout {
 		width: 30%;
 	}
-	
+
 	.body-layout.mid-body-layout {
 		width: 55%;
 	}
