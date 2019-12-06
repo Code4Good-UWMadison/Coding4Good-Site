@@ -61,10 +61,10 @@ router.post('/signup', function (req, res, next) {
                 to: req.body.email, // list of receivers 
                 subject: "Verification email from Coding4Good",
                 html: `Hello from the Coding for Good team!</br></br>Thank you for registering!</br>Please click this link to confirm your email ` +
-                `address: <a href='${url}'>${url}</a></br><img style="width:25px;" src="cid:club-icon" alt="Corgi"></br>Please do not reply to this email.`,
+                `address: <a href='${url}'>${url}</a></br><img style="width:220px;" src="cid:club-icon" alt="Corgi"></br>Please do not reply to this email.`,
                 attachments: [{
-                    filename: 'icon-no-bg.jpg',
-                    path: '~/public/img/icon-no-bg.jpg',
+                    filename: 'icon.jpg',
+                    path: '/app/public/img/icon-no-bg.jpg',
                     cid: 'club-icon'
                 }]
             }, function (err, info) {
