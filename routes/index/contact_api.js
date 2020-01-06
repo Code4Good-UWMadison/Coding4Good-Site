@@ -21,7 +21,7 @@ router.post('/sendEmail', function (req, res, next) {
     emailService.sendEmail(emailDetail, function(error) {
         if (error) {
             console.log(error);
-            res.json({status: false, msg: 'Failed to send Email, please try again later, or email us to "cfg.madison@gmail.com" if you are having trouble.'});
+            res.json({status: false, msg: 'Failed to send Email, please try again later, or email us to <cfg.madison@gmail.com> if you are having trouble.'});
             return;
         } else {
             res.json({status: true});
