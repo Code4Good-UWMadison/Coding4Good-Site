@@ -1,10 +1,9 @@
 var express = require('express');
 var db = require('../../server/index_db');
+var emailService = require('../services/email_service')
 var router = express.Router();
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
 const baseUrl = "www.coding4good.net";
-const HOST = "smtp-mail.outlook.com";
 
 router.get('/account_check', function (req, res, next) {
     if (req.session.uid != null) {
@@ -35,30 +34,22 @@ router.post('/signup', function (req, res, next) {
             return;
         }
         else {
-            let transporter = nodemailer.createTransport({
-                host: HOST,
-                secureConnection: false,
-                port: 587,
-                secure: false, // true for 465, false for other ports
-                auth: {
-                    user: process.env.EMAILUSER,
-                    pass: process.env.EMAILPASS
-                }
-            });
             const emailToken = jwt.sign({
                     "uid": uid,
                     "email": req.body.email,
                     "password": req.body.password
                 },
-                process.env.EMAIL_SECRET,
+                process.env.SECRET,
                 {
                     expiresIn: '1d',
-                },
+                }
             )
-            const url = `http://${baseUrl}/confirmation/${emailToken}`;  
-            transporter.sendMail({
+            const url = `http://${baseUrl}/confirmation/${emailToken}`;
+            var receiverList = req.body.email;
+            
+            var emailDetail = {
                 from: `"Coding for Good Team <"${process.env.EMAILUSER}">" `,
-                to: req.body.email, // list of receivers 
+                to: receiverList, // list of receivers 
                 subject: "Verification email from Coding4Good",
                 html: `Hello from the Coding for Good team!</br></br>Thank you for registering!</br>Please click this link to confirm your email ` +
                 `address: <a href='${url}'>${url}</a></br><img style="width:220px;" src="cid:club-icon" alt="Corgi"></br>Please do not reply to this email.`,
@@ -67,25 +58,23 @@ router.post('/signup', function (req, res, next) {
                     path: '/app/public/img/icon-no-bg.jpg',
                     cid: 'club-icon'
                 }]
-            }, function (err, info) {
-                if(err){
-                    console.log(err);
-                    db.removeUser(uid, function (err) {
-                        if(err){
-                            console.log(err);
-                            res.status(400).json({msg: 'Database Error'});
-                            return;
-                        }
-                        else {
-                            res.json({status: false, msg: 'Failed to send Email, please try again later, and contact us if you are having trouble.'});
-                        }
-                    });
-                }
-                else{
-                    //console.log(info);
-                    res.json({status: true});
-                }
-            });
+            }
+            var isSuccess = emailService.sendEmail(emailDetail);
+            if(isSuccess){
+                res.json({status: true});
+            }
+            else {
+                db.removeUser(uid, function (err) {
+                    if(err){
+                        console.log(err);
+                        res.status(400).json({msg: 'Database Error'});
+                        return;
+                    }
+                    else {
+                        res.json({status: false, msg: 'Failed to send Email, please try again later, and contact us if you are having trouble.'});
+                    }
+                });
+            }
         }
     });
 });
