@@ -59,7 +59,7 @@ router.post('/signup', function (req, res, next) {
                     cid: 'club-icon'
                 }]
             }
-            var isSuccess = emailService.sendEmail(emailDetail);
+            var isSuccess = sendEmail(emailDetail);
             if(isSuccess){
                 res.json({status: true});
             }

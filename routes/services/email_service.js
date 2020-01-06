@@ -9,7 +9,7 @@ const HOST = "smtp-mail.outlook.com";
  *  from, to, subject, html, attachments, etc
  *  https://community.nodemailer.com/
  */
-const sendEmail = function(emailDetail){
+function sendEmail(emailDetail){
     let transporter = nodemailer.createTransport({
         host: HOST,
         secureConnection: false,
