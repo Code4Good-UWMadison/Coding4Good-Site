@@ -18,8 +18,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(session({
-  secret: 'aptgamestempsecret123',
-  cookie: {expires: new Date(253402300000000)},  // cookie never expire
+  secret: process.env.SECRET ? process.env.SECRET : 'aptdevtempsecret',
+  cookie: {maxAge: 7 * 24 * 60 * 60 * 1000}, // expire in 7 day
   resave: true,
   saveUninitialized: true
 }));
