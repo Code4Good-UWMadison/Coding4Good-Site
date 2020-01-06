@@ -55,26 +55,27 @@ router.post('/signup', function (req, res, next) {
                 `address: <a href='${url}'>${url}</a></br><img style="width:220px;" src="cid:club-icon" alt="Corgi"></br>Please do not reply to this email.`,
                 attachments: [{
                     filename: 'icon.jpg',
-                    path: '/app/public/img/icon-no-bg.jpg',
+                    path: '/app/public/img/icon.jpg',
                     cid: 'club-icon'
                 }]
             }
-            var isSuccess = sendEmail(emailDetail);
-            if(isSuccess){
-                res.json({status: true});
-            }
-            else {
-                db.removeUser(uid, function (err) {
-                    if(err){
-                        console.log(err);
-                        res.status(400).json({msg: 'Database Error'});
-                        return;
-                    }
-                    else {
-                        res.json({status: false, msg: 'Failed to send Email, please try again later, and contact us if you are having trouble.'});
-                    }
-                });
-            }
+            emailService.sendEmail(emailDetail, function(err){
+                if(!err){
+                    res.json({status: true});
+                }
+                else {
+                    db.removeUser(uid, function (err) {
+                        if(err){
+                            console.log(err);
+                            res.status(400).json({msg: 'Database Error'});
+                            return;
+                        }
+                        else {
+                            res.json({status: false, msg: 'Failed to send Email, please try again later, and contact us if you are having trouble.'});
+                        }
+                    });
+                }
+            });
         }
     });
 });
