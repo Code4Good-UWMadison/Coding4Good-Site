@@ -1,7 +1,7 @@
-var express = require('express');
-var db = require('../../server/index_db');
-var emailService = require('../services/email_service')
-var router = express.Router();
+const express = require('express');
+const db = require('../../server/index_db');
+const emailService = require('../services/email_service');
+const router = express.Router();
 const jwt = require('jsonwebtoken');
 const baseUrl = "www.coding4good.net";
 
@@ -62,6 +62,7 @@ router.post('/signup', function (req, res, next) {
             emailService.sendEmail(emailDetail, function(err){
                 if(!err){
                     res.json({status: true});
+                    return;
                 }
                 else {
                     db.removeUser(uid, function (err) {
@@ -71,7 +72,7 @@ router.post('/signup', function (req, res, next) {
                             return;
                         }
                         else {
-                            res.json({status: false, msg: 'Failed to send Email, please try again later, and contact us if you are having trouble.'});
+                            res.json({status: false, msg: 'Failed to send Email, please try again later, or contact us if you are having trouble.'});
                         }
                     });
                 }
