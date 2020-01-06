@@ -64,7 +64,7 @@ router.get('/email-confirmation', function (req, res) {
 });
 
 router.get('/confirmation/:token', function (req, res){
-    jwt.verify(req.params.token, process.env.EMAIL_SECRET, function(err, decoded) {
+    jwt.verify(req.params.token, process.env.SECRET, function(err, decoded) {
         if(err){
             res.status(400).json({msg: err});
             return;
