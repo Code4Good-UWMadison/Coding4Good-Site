@@ -25,7 +25,7 @@ function sendEmail(emailDetail){
         emailDetail, 
         function (err, info) {
             if(err){
-                //console.log(err);
+                console.log(err);
                 return false;
             }
             else{
