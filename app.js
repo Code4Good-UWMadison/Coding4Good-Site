@@ -18,7 +18,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(session({
-  secret: process.env.SECRET,
+  secret: process.env.SECRET ? process.env.SECRET : 'aptdevtempsecret',
   cookie: {expires: new Date(Date.now() + 86400000)}, // expire in 1 day
   resave: true,
   saveUninitialized: true
