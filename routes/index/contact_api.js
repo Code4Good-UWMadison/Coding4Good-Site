@@ -6,8 +6,6 @@ router.post('/contactEmail', function (req, res, next) {
     var data = req.body;
     data.userid = req.session.uid;
     var emailDetail = {
-        from: `"Coding for Good Team <"${process.env.EMAILUSER}">" `,
-        to: process.env.EMAILORG,
         subject: 'Contact from the website',
         html: '<h4> Name: ' + data.name + '<br>'
         + 'Organization: ' + data.organization + '<br>'

@@ -13,8 +13,6 @@ router.post('/createProposal', function (req, res, next) {
         }
         else {
             var emailDetail = {
-                from: `"Coding for Good Team <"${process.env.EMAILUSER}">" `,
-                to: process.env.EMAILORG,
                 subject: 'Proposal from the website',
                 html: '<h4>Org Info: <br> <hr>'
                 + 'Org Name: ' + proposal.org_name + '<br>'
