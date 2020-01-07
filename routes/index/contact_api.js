@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const emailService = require('../services/email_service');
 
-router.post('/sendEmail', function (req, res, next) {
+router.post('/contactEmail', function (req, res, next) {
     var data = req.body;
     data.userid = req.session.uid;
     var emailDetail = {

@@ -58,7 +58,7 @@ router.post('/signup', function (req, res, next) {
                     path: '/app/public/img/icon.jpg',
                     cid: 'club-icon'
                 }]
-            }
+            };
             emailService.sendEmail(emailDetail, function(err){
                 if(!err){
                     res.json({status: true});
