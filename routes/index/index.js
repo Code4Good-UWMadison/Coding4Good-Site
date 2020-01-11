@@ -94,7 +94,7 @@ router.get('/confirmation/:token', function (req, res){
                         }
                         else{
                             req.session.uid = uid;
-                            res.redirect('/');                           
+                            res.redirect('/?status=s');                           
                         }
                     });
                 }
