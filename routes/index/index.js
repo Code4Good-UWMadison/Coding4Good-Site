@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const jwt = require('jsonwebtoken');
-const db = require('../../server/index_db');
+const db = require('../../server/user_db');
 
 router.get('/', function (req, res, next) {
     res.render('index', {});

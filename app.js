@@ -34,7 +34,7 @@ app.use('/event', event_api);
 
 const index = require('./routes/index/index');
 const index_api = require('./routes/index/index_api');
-//const index_db = require("./server/index_db");
+//const user_db = require("./server/user_db");
 app.use('/', index);
 app.use('/', index_api);
 
