@@ -3,6 +3,8 @@ var router = express.Router();
 const jwt = require('jsonwebtoken');
 const db = require('../../server/user_db');
 
+const authService = require('../services/authorization_service');
+
 router.get('/', function (req, res, next) {
     res.render('index', {});
 });
@@ -24,19 +26,35 @@ router.get('/sponsor', function (req, res) {
 });
 
 router.get('/profile', function (req, res) {
-    if (req.session.uid == null) {
-        res.redirect('/login');
-        return;
-    }
-  res.render('user/profile');
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.redirect('/login');
+            return;
+        }
+        else{
+            res.render('user/profile');
+        }
+    });
 });
 
 router.get('/upload-complete', function (req, res) {
-    if (req.session.uid === null) {
-        res.redirect('/login');
-        return;
-    }
-    res.render('user/upload-complete');
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.redirect('/login');
+            return;
+        }
+        else{
+            res.render('user/upload-complete');
+        }
+    });
 });
 
 router.get('/login', function (req, res, next) {
@@ -53,10 +71,22 @@ router.get('/logout', function (req, res, next) {
 });
 
 router.get('/admin', function (req, res) {
-    if (req.session.uid !== 1) {
-        res.redirect('/');
-    }
-    res.render('admin');
+    let roles = [authService.UserRole.Root, 
+        authService.UserRole.Admin,
+        authService.UserRole.ProjectManager];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.redirect('/');
+            return;
+        }
+        else{
+            res.render('admin');
+        }
+    });
 });
 
 router.get('/email-confirmation', function (req, res) {
