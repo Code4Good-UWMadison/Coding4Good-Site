@@ -1,14 +1,13 @@
-
 var StatusEnum = Object.freeze({
     Starting:0, InProgress:1, OnHold:2, Succeed:3, Failed:4, Maintaining:5
 });
 
-var UserRoleEnum = Object.freeze({
-    Root:0, Admin:1, EventExecutive:2, ProjectManager:3, Finance:4, Outreach:5
-});
+var UserRole = {
+    Root:"Root", Admin:"Admin", EventExecutive:"Event Executive", ProjectManager:"Project Manager", Finance:"Finance", Outreach:"Outreach"
+};
 
 var TypeEnum = Object.freeze({
-    statusEnum:0, userRoleEnum:1
+    statusEnum:0
 });
 
 function statusEnumExchange(statusType){
@@ -33,34 +32,9 @@ function statusEnumExchange(statusType){
     return null;
 }
 
-function userRoleEnumExchange(statusType){
-    if(statusType=="Root"){
-        return UserRoleEnum.Root;
-    }
-    else if(statusType=="Admin"){
-        return UserRoleEnum.Admin;
-    }
-    else if(statusType=="Event Executive"){
-        return UserRoleEnum.EventExecutive;
-    }
-    else if(statusType=="Project Manager"){
-        return UserRoleEnum.ProjectManager;
-    }
-    else if(statusType=="Finance"){
-        return UserRoleEnum.Finance;
-    }
-    else if(statusType=="Outreach"){
-        return UserRoleEnum.Outreach;
-    }
-    return null;
-}
-
 function enumExchange(enumType, dbEnum){
     if(enumType==TypeEnum.statusEnum){
         return statusEnumExchange(dbEnum);
-    }
-    else if(enumType==TypeEnum.userRoleEnum){
-        return userRoleEnumExchange(dbEnum);
     }
     return null;
 }
