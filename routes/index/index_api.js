@@ -1,9 +1,12 @@
 const express = require('express');
 const db = require('../../server/user_db');
-const emailService = require('../services/email_service');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+
 const baseUrl = "www.coding4good.net";
+
+const emailService = require('../services/email_service');
+const authService = require('../services/authorization_service');
 
 router.get('/account_check', function (req, res, next) {
     if (req.session.uid != null) {
@@ -125,17 +128,22 @@ router.post('/upload_profile', function (req, res, next) {
 });
 
 router.post('/admin/get_profile', function (req, res, next) {
-    if (req.session.uid != 1) {
-        res.status(400).json({msg: 'Not Authorized'});
-        return;
-    }
-    db.getProfile(req.body.pid, function (err, profile) {
-        if (err) {
-            console.log(err);
-            res.status(400).json({msg: 'Database Error'});
+    let roles = [authService.UserRole.Root, 
+                authService.UserRole.Admin,
+                authService.UserRole.ProjectManager];
+    authService.authorizationCheck(roles, req.session.uid, function(authorized){
+        if(!authorized){
+            res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        res.json(profile);
+        db.getProfile(req.body.pid, function (err, profile) {
+            if (err) {
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            res.json(profile);
+        });
     });
 });
 
