@@ -107,7 +107,8 @@
                                         }
                                     });
                                     if (!duplicate) {
-                                        if (people.name === name) {
+                                        let nameWithEmail = people.name + " (" + people.email + ")";
+                                        if (nameWithEmail === name) {
                                             teams.push({id: id, memberTitle: title});
                                         }
                                     }
