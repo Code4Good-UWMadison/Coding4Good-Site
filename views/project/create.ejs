@@ -127,6 +127,8 @@
                             contact: $("#contact").val(),
                             org_name: $("#org_name").val(),
                             status: $("#status").val(),
+                            link: $("#link").val(),
+                            video_link: $("#video_link").val(),
                             team: teams
                         },
                         success: function () {
@@ -189,6 +191,16 @@
         <div class="input-group new-project-input">
             <div class="input-group-addon">Organization Name:</div>
             <input class="form-control" type="text" id="org_name" placeholder="Organization Name">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Project Link:</div>
+            <input class="form-control" type="text" id="link" placeholder="Project Link">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Project Video Link:</div>
+            <input class="form-control" type="text" id="video_link" placeholder="Project Video Link">
         </div>
 
         <div class="new-project-input">
