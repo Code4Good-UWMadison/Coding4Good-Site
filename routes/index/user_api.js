@@ -151,4 +151,27 @@ router.post('/admin/get_profile', function (req, res, next) {
     });
 });
 
+router.post('/update_user', function (req, res, next) {
+    let roles = [authService.UserRole.Root, 
+        authService.UserRole.Admin];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        if(!authorized){
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+        db.updateUser(req.body.pid, function (err, profile) {
+            if (err) {
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            res.json({});
+        });
+    });
+});
+
 module.exports = router;

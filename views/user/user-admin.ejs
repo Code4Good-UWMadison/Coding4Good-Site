@@ -3,25 +3,54 @@
     <head>
         <% include ../template/head.ejs %>
         <script>
+            $(function () {
+                $('.user-list').editableSelect({effects: 'slide'});
+                $("#submit-button").click(function () {
+                    $("#submit-button").attr('disabled',true);
+                    $.ajax({
+                        url: "/update_user",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            user_id: $("#name").val(),
+                            user_role: $("#role").val()
+                        },
+                        success: function () {
+                            window.location.href = "/user-admin?status=s";
+                        },
+                        error: function () {
+                            $("#error-msg").html("Error: Please contact Web team!");
+                            $("#submit-button").attr('disabled',false);
+                        }
+                    });
+                });
+            });
         </script>
     </head>
     <body>
         <% include ../template/nav.ejs %>
-        <div>
-            <div class="input-group new-project-input row">n"
+        <div class="container body-layout">
+            <p class="error-msg" id="error-msg"></p>
+            <div class="input-group new-project-input row">
                 <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User :&nbsp;&nbsp;&nbsp;</div>
-                <select placeholder="Member Name" id="name" class="form-control member-list">
-                    <% allUserNameAndId.forEach(function(user){ %>
-                    <option id="<%= user.id %>" value="<%= user.id %>"><%= user.name %>(<%= user.email %>)</option>
+                <select placeholder="User Name" id="name" class="form-control user-list">
+                    <% allUser.forEach(function(user){ %>
+                        <% if(user.id != 1){ %>
+                        <option id="<%= user.id %>" value="<%= user.id %>"><%= user.name %>(<%= user.email %>)</option>
+                        <% } %>
                     <% }) %>
                 </select>
                 <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Role :&nbsp;&nbsp;&nbsp;</div>
-                <select placeholder="Member Name" id="name" class="form-control member-list">
-                    <% for(var role in UserRole){ %>
-                    <option value="<%= role %>"><%= role %></option>
+                <select placeholder="User Role" id="role" class="form-control user-list">
+                    <option>None</option>
+                    <% for(var role in userRole){ %>
+                        <% if(role != "Root"){ %>
+                        <option value="<%= role %>"><%= role %></option>
+                        <% } %>
                     <% } %>
                 </select>
             </div>
+            <button id="submit-button" type="button" class="btn long-btn primary-button">Save</button>
         </div>
     </body>
 </html>
