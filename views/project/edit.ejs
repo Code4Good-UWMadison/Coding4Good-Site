@@ -3,7 +3,7 @@
 <head>
     <% include ../template/head.ejs %>
     <script>
-        var data =<%-JSON.stringify(allUserNameAndId)%>;
+        var data =<%-JSON.stringify(allUser)%>;
         var projectDetail = <%- JSON.stringify(projectDetail)%>;
 
         function selectListFocus(){
@@ -23,7 +23,7 @@
             var html=" <div class=\"input-group new-project-input row\">\n" +
                 "       <div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member "+currentRow+":&nbsp;&nbsp;&nbsp;</div>\n" +
                 "       <select placeholder=\"Member Name\" id=\"name"+currentRow+"\" class=\"form-control member-list\">\n" +
-                "           <% allUserNameAndId.forEach(function(user){ %>\n" +
+                "           <% allUser.forEach(function(user){ %>\n" +
                 "           <option id=\"<%= user.id %>\" value=\"<%= user.id %>\"><%= user.name %></option>\n" +
                 "           <% }) %>\n" +
                 "       </select>\n" +
@@ -182,7 +182,7 @@
             <div class="input-group new-project-input row">
                    <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member <%=currentRow%>:&nbsp;&nbsp;&nbsp;</div>
                    <select placeholder="Member Name" data-value="<%=user.uid%>" value="<%=user.uid%>" id="<%="name"+currentRow%>" class="form-control member-list">
-                       <% allUserNameAndId.forEach(function(userChoice){ %>
+                       <% allUser.forEach(function(userChoice){ %>
                        <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"<% if(userChoice.id==user.uid){ %> selected="selected"<% }%>><%= userChoice.name %></option>
                        <% }) %>
                    </select>

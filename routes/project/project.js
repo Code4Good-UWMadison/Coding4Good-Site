@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var db = require("../../server/project_db");
-
+var project_db = require("../../server/project_db");
+var user_db = require("../../server/user_db");
 const authService = require('../services/authorization_service');
 
 router.get('/', function (req, res, next) {
-    db.getProjectSet(function (err, projectSet) {
+    project_db.getProjectSet(function (err, projectSet) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
@@ -26,7 +26,7 @@ router.get('/my', function (req, res, next) {
             return;
         }
         else{
-            db.getAssociatedProjectsByUserId(req.session.uid, function (err, projectSet) {
+            project_db.getAssociatedProjectsByUserId(req.session.uid, function (err, projectSet) {
                 if (err) {
                     console.log(err);
                     res.status(400).json({msg: 'Database Error'});
@@ -39,13 +39,13 @@ router.get('/my', function (req, res, next) {
 });
 
 router.get('/detail', function (req, res, next) {
-    db.getProjectById(req.query.id, function (err, project) {
+    project_db.getProjectById(req.query.id, function (err, project) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        db.getAssociatedUsersByProjectId(project.id, function (err, users) {
+        project_db.getAssociatedUsersByProjectId(project.id, function (err, users) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
@@ -74,13 +74,13 @@ router.get('/create', function (req, res, next) {
             return;
         }
         else{
-            db.getAllUserNameAndId(function (err, allUserNameAndId) {
+            user_db.getAllUser(function (err, allUser) {
                 if (err) {
                     console.log(err);
                     res.status(400).json({msg: 'Database Error'});
                     return;
                 }
-                res.render('project/create', {allUserNameAndId: allUserNameAndId});
+                res.render('project/create', {allUser: allUser});
             })
         }
     });
@@ -105,25 +105,25 @@ router.get('/edit', function (req, res, next) {
             res.redirect('../project/detail?id='+projectId);
             return;
         }
-        db.getProjectById(projectId, function (err, project) {
+        project_db.getProjectById(projectId, function (err, project) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            db.getAssociatedUsersByProjectId(project.id, function (err, users) {
+            project_db.getAssociatedUsersByProjectId(project.id, function (err, users) {
                 if (err) {
                     console.log(err);
                     res.status(400).json({msg: 'Database Error'});
                     return;
                 }
-                db.getAllUserNameAndId(function (err, allUserNameAndId) {
+                user_db.getAllUser(function (err, allUser) {
                     if (err) {
                         console.log(err);
                         res.status(400).json({msg: 'Database Error'});
                         return;
                     }
-                    res.render('project/edit', {projectDetail: project, users: users, allUserNameAndId: allUserNameAndId});
+                    res.render('project/edit', {projectDetail: project, users: users, allUser: allUser});
                 });
             });
         });

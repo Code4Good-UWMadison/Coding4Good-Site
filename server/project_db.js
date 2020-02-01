@@ -3,18 +3,6 @@ var pg = require('pg');
 var config = require('./dbconfig.js');
 var db = new pg.Pool(config.db);
 
-exports.getAllUserNameAndId = function(callback){
-    var query = `select name,id from users;`;
-    db.query(query,function(err, result){
-        if(err){
-            callback(err);
-        }
-        else{
-            callback(null,result.rows);
-        }
-    });
-};
-
 exports.editProject = function (project, callback){
     const query = `update project set title=$2, description=$3, contact=$4, org_name=$5, status=$6 where project.id = $1;`;
     const oldLink = `DELETE FROM project_relation WHERE project_relation.pid = $1`;
@@ -102,7 +90,7 @@ exports.getAssociatedProjectsByUserId = function (uid, callback) {
 };
 
 exports.getAssociatedUsersByProjectId = function (projectId, callback) {
-    var query = `SELECT u.name AS name, r.relation AS relation, u.id AS uid 
+    var query = `SELECT u.name AS name, r.relation AS relation, u.id AS uid, u.email AS email 
                 FROM project_relation r, users u, project p 
                 WHERE u.id = r.uid AND p.id = $1 AND p.id = r.pid`;
     db.query(query, [projectId], function (err, result) {

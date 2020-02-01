@@ -89,6 +89,31 @@ router.get('/admin', function (req, res) {
     });
 });
 
+router.get('/user-admin', function (req, res) {
+    let roles = [authService.UserRole.Root, 
+        authService.UserRole.Admin];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.redirect('/');
+            return;
+        }
+        else{
+            db.getAllUser(function (err, allUser) {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
+                }
+                res.render('user/user-admin',{allUser: allUser, userRole: authService.UserRole});
+            });
+        }
+    });
+})
+
 router.get('/email-confirmation', function (req, res) {
     res.render('user/email-confirmation');
 });
