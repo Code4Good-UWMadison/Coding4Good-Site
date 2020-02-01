@@ -132,7 +132,7 @@
                             contact: $("#contact").val(),
                             org_name: $("#org_name").val(),
                             status: $("#status").val(),
-                            link: $("#link").val(),
+                            project_link: $("#project_link").val(),
                             video_link: $("#video_link").val(),
                             team: teams
                         },
@@ -217,12 +217,12 @@
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">Project Link:</div>
-            <input class="form-control" type="text" id="link" placeholder="Project Link" value="<% projectDetail.link %>">
+            <input class="form-control" type="text" id="project_link" placeholder="Project Link" value="<%= projectDetail.project_link %>">
         </div>
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">Project Video Link:</div>
-            <input class="form-control" type="text" id="video_link" placeholder="Project Video Link" value="<% projectDetail.video_link %>">
+            <input class="form-control" type="text" id="video_link" placeholder="Project Video Link" value="<%= projectDetail.video_link %>">
         </div>
 
         <div class="new-project-input">

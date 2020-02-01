@@ -99,17 +99,19 @@
         <div class="form-control" type="text" id="org_name"><%= projectDetail.org_name %></div>
     </div>
 
-    <div class="input-group new-project-input">
-        <div class="input-group-addon">Project Link:</div>
-        <div class="form-control" type="text" id="link"><a href="<%= projectDetail.link %>"><%= projectDetail.link %></a></div>
-    </div>
+    <% if (projectDetail.project_link) { %>
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Project Link:</div>
+            <div class="form-control" type="text" id="link"><a href="<%= projectDetail.project_link %>"><%= projectDetail.project_link %></a></div>
+        </div>
+    <% } %>
 
     <div class="new-project-input">
         <textarea readonly class="form-control" type="text" id="description" rows="10"><%= projectDetail.description %></textarea>
     </div>
 
     <% if (projectDetail.video_link) { %>
-        <iframe width="560" height="315" src="<% projectDetail.video_link %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe style="width: 100%; height: 700px" src="<%= projectDetail.video_link %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <% } %>
 </div>
 
