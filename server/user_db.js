@@ -205,3 +205,17 @@ exports.getUserRoleByUid = function(uid, callback){
     }
   });
 };
+
+exports.getAllUser = function(callback){
+  var query = `select * from users;`;
+  db.query(query,function(err, result){
+      if(err){
+          callback(err);
+      }
+      else{
+          callback(null,result.rows);
+      }
+  });
+};
+
+//insert into user_role (user_id, user_role) values (1, 'Project Manager');

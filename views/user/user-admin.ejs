@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../template/head.ejs %>
+        <script>
+        </script>
+    </head>
+    <body>
+        <% include ../template/nav.ejs %>
+        <div>
+            <div class="input-group new-project-input row">n"
+                <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User :&nbsp;&nbsp;&nbsp;</div>
+                <select placeholder="Member Name" id="name" class="form-control member-list">
+                    <% allUserNameAndId.forEach(function(user){ %>
+                    <option id="<%= user.id %>" value="<%= user.id %>"><%= user.name %>(<%= user.email %>)</option>
+                    <% }) %>
+                </select>
+                <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Role :&nbsp;&nbsp;&nbsp;</div>
+                <select placeholder="Member Name" id="name" class="form-control member-list">
+                    <% for(var role in UserRole){ %>
+                    <option value="<%= role %>"><%= role %></option>
+                    <% } %>
+                </select>
+            </div>
+        </div>
+    </body>
+</html>

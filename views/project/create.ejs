@@ -3,7 +3,7 @@
 <head>
     <% include ../template/head.ejs %>
     <script>
-		var data =<%-JSON.stringify(allUserNameAndId)%>;
+		var data =<%-JSON.stringify(allUser)%>;
 
         function selectListFocus(){
             var list = $(".member-list").toArray();
@@ -19,7 +19,7 @@
             var html=" <div class=\"input-group new-project-input row\">\n" +
                 "       <div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member "+currentRow+":&nbsp;&nbsp;&nbsp;</div>\n" +
                 "       <select placeholder=\"Member Name\" id=\"name"+currentRow+"\" class=\"form-control member-list\">\n" +
-                "           <% allUserNameAndId.forEach(function(user){ %>\n" +
+                "           <% allUser.forEach(function(user){ %>\n" +
                 "           <option id=\"<%= user.id %>\" value=\"<%= user.id %>\"><%= user.name %> (<%= user.email %>)</option>\n" +
                 "           <% }) %>\n" +
                 "       </select>\n" +
