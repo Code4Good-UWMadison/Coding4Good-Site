@@ -16,11 +16,10 @@ exports.getAllUserNameAndId = function(callback){
 };
 
 exports.editProject = function (project, callback){
-    const status = ["Starting", "In Progress", "On Hold", "Succeed", "Failed", "Maintaining"][project.status];
     const query = `update project set title=$2, description=$3, contact=$4, org_name=$5, status=$6 where project.id = $1;`;
     const oldLink = `DELETE FROM project_relation WHERE project_relation.pid = $1`;
     const newLink = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`;
-    db.query(query, [project.id, project.title, project.description, project.contact, project.org_name,status], function (err) {
+    db.query(query, [project.id, project.title, project.description, project.contact, project.org_name, project.status], function (err) {
         db.query(oldLink,[project.id],function (err) {
             if(err){
                 console.log(err);
@@ -51,10 +50,9 @@ exports.editProject = function (project, callback){
 };
 
 exports.createProject = function (project, callback) {
-    const status = ["Starting", "In Progress", "On Hold", "Succeed", "Failed", "Maintaining"][project.status];
-    var query = `insert into project (title, description, contact, org_name, creation_time,status) values($1,$2,$3,$4,(now() at time zone 'America/Chicago'),$5) returning id;`;
+    var query = `insert into project (title, description, contact, org_name, creation_time, status) values($1,$2,$3,$4,(now() at time zone 'America/Chicago'),$5) returning id;`;
     var link = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`;
-    db.query(query, [project.title, project.description, project.contact, project.org_name,status], function (err,projectId) {
+    db.query(query, [project.title, project.description, project.contact, project.org_name, project.status], function (err,projectId) {
         if (err) {
             console.log(err);
             callback(err);
@@ -92,7 +90,7 @@ exports.getProjectSet = function (callback) {
 };
 
 exports.getAssociatedProjectsByUserId = function (uid, callback) {
-    var query = `SELECT * FROM project_relation r, users u, project p where u.id = r.uid and u.id = $1 and p.id = r.pid`;
+    var query = `SELECT * FROM project_relation r, users u, project p WHERE u.id = r.uid AND u.id = $1 AND p.id = r.pid`;
     db.query(query, [uid], function (err, result) {
         if (err) {
             callback(err);
@@ -104,7 +102,9 @@ exports.getAssociatedProjectsByUserId = function (uid, callback) {
 };
 
 exports.getAssociatedUsersByProjectId = function (projectId, callback) {
-    var query = `SELECT u.name as name, r.relation as relation, u.id as uid FROM project_relation r, users u, project p where u.id = r.uid and p.id = $1 and p.id = r.pid`;
+    var query = `SELECT u.name AS name, r.relation AS relation, u.id AS uid 
+                FROM project_relation r, users u, project p 
+                WHERE u.id = r.uid AND p.id = $1 AND p.id = r.pid`;
     db.query(query, [projectId], function (err, result) {
         if (err) {
             callback(err);
@@ -133,24 +133,16 @@ exports.getProjectById = function (projectId, callback) {
 };
 
 exports.removeProjectById = function(projectId, callback){
-    var queryRelation = `DELETE FROM project_relation WHERE pid=$1;`;
     var queryProject = `DELETE FROM project WHERE id=$1;`;
-    db.query(queryRelation,[projectId],function(err){
+    db.query(queryProject,[projectId],function(err,result){
         if(err){
             callback(err);
         }
-        else{
-            db.query(queryProject,[projectId],function(err,result){
-                if(err){
-                    callback(err);
-                }
-                console.log(result.rowCount);
-                if(result.rowCount>0){
-                    callback(null);
-                }else{
-                    callback('No matching project id');
-                }
-            });
+        console.log(result.rowCount);
+        if(result.rowCount>0){
+            callback(null);
+        }else{
+            callback('No matching project id');
         }
     });
 };

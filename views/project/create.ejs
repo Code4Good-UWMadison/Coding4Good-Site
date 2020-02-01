@@ -41,10 +41,8 @@
                 addMemberRow();
             });
             var statusHtml = ""
-            for (var status in StatusEnum) {
-                if (isNaN(Number(status))) {
-                    statusHtml += "<option value=\"" + StatusEnum[status] + "\">" + status + "</option>";
-                }
+            for (var status in ProjectStatus) {
+                statusHtml += "<option value=\"" + ProjectStatus[status] + "\">" + ProjectStatus[status] + "</option>";
             }
             $('#status').html(statusHtml);
             $("#submit-button").click(function () {

@@ -1,9 +1,12 @@
-var express = require('express');
-var db = require('../../server/index_db');
-var emailService = require('../services/email_service')
-var router = express.Router();
+const express = require('express');
+const db = require('../../server/user_db');
+const router = express.Router();
 const jwt = require('jsonwebtoken');
+
 const baseUrl = "www.coding4good.net";
+
+const emailService = require('../services/email_service');
+const authService = require('../services/authorization_service');
 
 router.get('/account_check', function (req, res, next) {
     if (req.session.uid != null) {
@@ -45,11 +48,9 @@ router.post('/signup', function (req, res, next) {
                 }
             )
             const url = `http://${baseUrl}/confirmation/${emailToken}`;
-            var receiverList = req.body.email;
             
             var emailDetail = {
-                from: `"Coding for Good Team <"${process.env.EMAILUSER}">" `,
-                to: receiverList, // list of receivers 
+                to: req.body.email, // list of receivers 
                 subject: "Verification email from Coding4Good",
                 html: `Hello from the Coding for Good team!</br></br>Thank you for registering!</br>Please click this link to confirm your email ` +
                 `address: <a href='${url}'>${url}</a></br><img style="width:220px;" src="cid:club-icon" alt="Corgi"></br>Please do not reply to this email.`,
@@ -58,10 +59,11 @@ router.post('/signup', function (req, res, next) {
                     path: '/app/public/img/icon.jpg',
                     cid: 'club-icon'
                 }]
-            }
+            };
             emailService.sendEmail(emailDetail, function(err){
                 if(!err){
                     res.json({status: true});
+                    return;
                 }
                 else {
                     db.removeUser(uid, function (err) {
@@ -71,7 +73,7 @@ router.post('/signup', function (req, res, next) {
                             return;
                         }
                         else {
-                            res.json({status: false, msg: 'Failed to send Email, please try again later, and contact us if you are having trouble.'});
+                            res.json({status: false, msg: 'Failed to send Email, please try again later, or contact us if you are having trouble.'});
                         }
                     });
                 }
@@ -126,17 +128,26 @@ router.post('/upload_profile', function (req, res, next) {
 });
 
 router.post('/admin/get_profile', function (req, res, next) {
-    if (req.session.uid != 1) {
-        res.status(400).json({msg: 'Not Authorized'});
-        return;
-    }
-    db.getProfile(req.body.pid, function (err, profile) {
+    let roles = [authService.UserRole.Root, 
+                authService.UserRole.Admin,
+                authService.UserRole.ProjectManager];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
-            console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        res.json(profile);
+        if(!authorized){
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+        db.getProfile(req.body.pid, function (err, profile) {
+            if (err) {
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            res.json(profile);
+        });
     });
 });
 

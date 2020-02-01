@@ -5,10 +5,12 @@
 
     <script>
         $(function (){
-            $("#submit-button").click(function () {
-                $("#submit-button").attr('disabled',true);
+            const submit = $("#submit-button");
+            const msg = $("#error-msg");
+            submit.click(function () {
+                submit.attr('disabled',true);
                 var validInput = true;
-                $("#error-msg").html("");
+                msg.html("");
                 var data = {
                     email: $("#email").val(),
                     phone: $("#phone").val(),
@@ -21,34 +23,40 @@
                     (data.name == '') |
                     (data.content == '') |
                     (data.phone == '')) {
-                    $("#error-msg").html('Please fill out all required fields');
+                    msg.html('Please fill out all required fields');
                     validInput = false;
                 }
                 else if(!validateEmail(data.email)){
-                    $("#error-msg").html('Please input a valid email');
+                    msg.html('Please input a valid email');
                     validInput = false;
                 }
                 else if(!validatePhone(data.phone)){
-                    $("#error-msg").html('Please input a valid phone');
+                    msg.html('Please input a valid phone');
                     validInput = false;
                 }
                 if(validInput){
                     $.ajax({
-                        url: "/contact/sendEmail",
+                        url: "/contact/contactEmail",
                         method: "POST",
                         dataType: "json",
                         data: data,
-                        success: function () {
-                            window.location.href = "/?status=s";
+                        success: function (result) {
+                            if(result.status){
+                                window.location.href = "/?status=s";
+                            }
+                            else{
+                                msg.html(result.msg);
+                                submit.attr('disabled',false);
+                            }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            $("#error-msg").html(jqXHR.responseJSON);
-                            $("#submit-button").attr('disabled',false);
+                            msg.html(jqXHR.responseJSON);
+                            submit.attr('disabled',false);
                         }
                     });
                 }
                 else{
-                    $("#submit-button").attr('disabled',false);
+                    submit.attr('disabled',false);
                 }
             });
         });

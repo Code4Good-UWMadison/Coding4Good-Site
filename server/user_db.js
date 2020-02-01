@@ -1,7 +1,7 @@
 var self = this;
 var pg = require('pg');
 var config = require('./dbconfig.js');
-var index_db = new pg.Pool(config.db);
+var db = new pg.Pool(config.db);
 var bcrypt = require('bcrypt');
 
 // exports.reset = function (callback) {
@@ -28,7 +28,7 @@ var bcrypt = require('bcrypt');
 //     // Add seeded data
 //     insert into users (email, name, password, create_date) values('uwmcfg@wd.owner','Web Owner','UwmC4gWd@Year.1',now() at time zone 'America/Chicago');`;
 //     `; //TODO
-//   index_db.query(query, function (err, result) {
+//   db.query(query, function (err, result) {
 //     if (err) {
 //       console.log(err);
 //       callback(err);
@@ -49,7 +49,7 @@ exports.createUser = function (user, callback) {
       callback(err);
     }
     var query = `INSERT INTO users (email, name, password, create_date, email_verified) VALUES ($1,$2,$3,now() at time zone 'America/Chicago', false);`;
-    index_db.query(query, [user.email, user.fullname, hash], function (err, result) {
+    db.query(query, [user.email, user.fullname, hash], function (err, result) {
       if (err) {
         if (err.code != 23505){
           console.log(err);
@@ -65,7 +65,7 @@ exports.createUser = function (user, callback) {
 
 exports.removeUser = function (uid, callback){
   var query = `DELETE FROM users WHERE id = $1;`;
-  index_db.query(query, [uid], function (err) {
+  db.query(query, [uid], function (err) {
     if(err) {
       console.log(err);
       callback(err);
@@ -78,7 +78,7 @@ exports.removeUser = function (uid, callback){
 
 exports.verifyUser = function (user, callback) {
   var query = `SELECT id, password FROM users WHERE email = $1;`;
-  index_db.query(query, [user.email], function(err, result) {
+  db.query(query, [user.email], function(err, result) {
     if (err) {
       console.log(err);
       callback(err);
@@ -109,7 +109,7 @@ exports.verifyUser = function (user, callback) {
 
 exports.getUserInfo = function (uid, callback) {
   var query = `SELECT email, name AS fullname FROM users WHERE id=$1;`;
-  index_db.query(query, [uid], function (err, result) {
+  db.query(query, [uid], function (err, result) {
     if (err) {
       callback(err);
     }
@@ -126,7 +126,7 @@ exports.getUserInfo = function (uid, callback) {
 
 exports.updateProfile = function (uid, profile, callback) {
   var query = `INSERT INTO user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time) VALUES ($1,$2,$3,$4,$5,$6,$7, now() at time zone 'America/Chicago');`;
-  index_db.query(query, [uid, profile.nickname, profile.year, profile.intended_teamleader, profile.pl, profile.dev, (profile.resume) ? profile.resume : ''], function (err, result) {
+  db.query(query, [uid, profile.nickname, profile.year, profile.intended_teamleader, profile.pl, profile.dev, (profile.resume) ? profile.resume : ''], function (err, result) {
     if (err) {
       callback(err);
     }
@@ -146,7 +146,7 @@ exports.getProfile = function (pid, callback) {
       n.dev AS dev,
       n.resume AS resume
       FROM user_profile AS n, users AS u WHERE n.id=$1 AND n.uid=u.id;`;
-  index_db.query(query, [pid], function (err, result) {
+  db.query(query, [pid], function (err, result) {
     if (err) {
       callback(err);
     }
@@ -163,7 +163,7 @@ exports.getProfile = function (pid, callback) {
 
 exports.verifyEmailByUserId = function (uid, callback){
   var query = `UPDATE users SET email_verified = true WHERE id = $1;`;
-  index_db.query(query, [uid], function (err) {
+  db.query(query, [uid], function (err) {
     if (err) {
       callback(err);
     }else{
@@ -174,7 +174,7 @@ exports.verifyEmailByUserId = function (uid, callback){
 
 exports.checkEmailVerificationByUid = function (uid, callback){
   var query = `SELECT email_verified FROM users WHERE id = $1;`;
-  index_db.query(query, [uid], function(err, result){
+  db.query(query, [uid], function(err, result){
     if (err){
       callback(err);
     }
@@ -189,4 +189,19 @@ exports.checkEmailVerificationByUid = function (uid, callback){
   });
 };
 
-
+exports.getUserRoleByUid = function(uid, callback){
+  var query = `SELECT user_role FROM user_role WHERE user_id = $1;`;
+  db.query(query, [uid], function(err, result){
+    if(err){
+      callback(err);
+    }
+    else{
+      if(result.rows.length > 0){
+        callback(null, result.rows);
+      }
+      else{
+        callback("User does not have a role!");
+      }
+    }
+  });
+};
