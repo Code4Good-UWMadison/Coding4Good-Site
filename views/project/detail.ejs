@@ -56,18 +56,18 @@
     <div class="input-group new-project-input row">
         <div class="input-group-addon">Leaders:</div>
         <div class="form-control" type="text">
-            <%= users.filter(e => e.relation=="Leader").map(e=>e.name).join(", ")%>
+            <%= users.filter(e => e.relation=="Leader").map(e=>(e.name + " (" + e.email) + ")").join(", ")%>
         </div>
         <div class="input-group-addon">Manager:</div>
         <div class="form-control" type="text">
-            <%= users.filter(e => e.relation=="Manager").map(e=>e.name).join(", ")%>
+            <%= users.filter(e => e.relation=="Manager").map(e=>(e.name + " (" + e.email) + ")").join(", ")%>
         </div>
     </div>
 
     <div class="input-group new-project-input row">
         <div class="input-group-addon">Members:</div>
         <div class="form-control" type="text">
-            <%= users.filter(e => e.relation=="Member").map(e=>e.name).join(", ")%>
+            <%= users.filter(e => e.relation=="Member").map(e=>(e.name + " (" + e.email) + ")").join(", ")%>
         </div>
     </div>
 
@@ -99,10 +99,20 @@
         <div class="form-control" type="text" id="org_name"><%= projectDetail.org_name %></div>
     </div>
 
+    <% if (projectDetail.project_link) { %>
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Project Link:</div>
+            <div class="form-control" type="text" id="link"><a href="<%= projectDetail.project_link %>"><%= projectDetail.project_link %></a></div>
+        </div>
+    <% } %>
+
     <div class="new-project-input">
-        <textarea readonly class="form-control" type="text" id="description"
-             rows="10"><%= projectDetail.description %></textarea>
+        <textarea readonly class="form-control" type="text" id="description" rows="10"><%= projectDetail.description %></textarea>
     </div>
+
+    <% if (projectDetail.video_link) { %>
+        <iframe style="width: 100%; height: 700px" src="<%= projectDetail.video_link %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <% } %>
 </div>
 
 <div id="remove-confirmation-box" class="modal fade confirmation-box">

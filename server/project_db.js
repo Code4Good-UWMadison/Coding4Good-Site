@@ -4,10 +4,11 @@ var config = require('./dbconfig.js');
 var db = new pg.Pool(config.db);
 
 exports.editProject = function (project, callback){
-    const query = `update project set title=$2, description=$3, contact=$4, org_name=$5, status=$6 where project.id = $1;`;
+    const query = `update project set title=$2, description=$3, contact=$4, org_name=$5, status=$6, project_link=$7, video_link=$8 where project.id = $1;`;
     const oldLink = `DELETE FROM project_relation WHERE project_relation.pid = $1`;
     const newLink = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`;
-    db.query(query, [project.id, project.title, project.description, project.contact, project.org_name, project.status], function (err) {
+    console.log(project.team);
+    db.query(query, [project.id, project.title, project.description, project.contact, project.org_name, project.status, project.project_link, project.video_link], function (err) {
         db.query(oldLink,[project.id],function (err) {
             if(err){
                 console.log(err);
@@ -38,9 +39,9 @@ exports.editProject = function (project, callback){
 };
 
 exports.createProject = function (project, callback) {
-    var query = `insert into project (title, description, contact, org_name, creation_time, status) values($1,$2,$3,$4,(now() at time zone 'America/Chicago'),$5) returning id;`;
+    var query = `insert into project (title, description, contact, org_name, creation_time, status, project_link, video_link) values($1,$2,$3,$4,(now() at time zone 'America/Chicago'),$5, $6, $7) returning id;`;
     var link = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`;
-    db.query(query, [project.title, project.description, project.contact, project.org_name, project.status], function (err,projectId) {
+    db.query(query, [project.title, project.description, project.contact, project.org_name, project.status, project.project_link, project.video_link], function (err,projectId) {
         if (err) {
             console.log(err);
             callback(err);

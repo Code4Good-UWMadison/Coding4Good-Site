@@ -20,7 +20,7 @@
                 "       <div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member "+currentRow+":&nbsp;&nbsp;&nbsp;</div>\n" +
                 "       <select placeholder=\"Member Name\" id=\"name"+currentRow+"\" class=\"form-control member-list\">\n" +
                 "           <% allUser.forEach(function(user){ %>\n" +
-                "           <option id=\"<%= user.id %>\" value=\"<%= user.id %>\"><%= user.name %></option>\n" +
+                "           <option id=\"<%= user.id %>\" value=\"<%= user.id %>\"><%= user.name %> (<%= user.email %>)</option>\n" +
                 "           <% }) %>\n" +
                 "       </select>\n" +
                 "       <div class=\"input-group-addon\">Member Title:</div>\n" +
@@ -101,7 +101,8 @@
                                         }
                                     });
                                     if (!duplicate) {
-                                        if (people.name === name) {
+                                        let nameWithEmail = people.name + " (" + people.email + ")";
+                                        if (nameWithEmail === name) {
                                             teams.push({id: id, memberTitle: title});
                                         }
                                     }
@@ -125,6 +126,8 @@
                             contact: $("#contact").val(),
                             org_name: $("#org_name").val(),
                             status: $("#status").val(),
+                            project_link: $("#project_link").val(),
+                            video_link: $("#video_link").val(),
                             team: teams
                         },
                         success: function () {
@@ -187,6 +190,16 @@
         <div class="input-group new-project-input">
             <div class="input-group-addon">Organization Name:</div>
             <input class="form-control" type="text" id="org_name" placeholder="Organization Name">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Project Link:</div>
+            <input class="form-control" type="text" id="project_link" placeholder="Project Link">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Project Video Link:</div>
+            <input class="form-control" type="text" id="video_link" placeholder="Project Video Link">
         </div>
 
         <div class="new-project-input">

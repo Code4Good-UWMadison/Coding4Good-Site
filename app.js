@@ -36,7 +36,7 @@ const index = require('./routes/index/index');
 const user_api = require('./routes/index/user_api');
 //const user_db = require("./server/user_db");
 app.use('/', index);
-app.use('/user', user_api);
+app.use('/', user_api);
 
 const contact_api = require('./routes/index/contact_api');
 app.use('/contact', contact_api);
