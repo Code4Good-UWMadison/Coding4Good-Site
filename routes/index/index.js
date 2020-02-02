@@ -41,7 +41,9 @@ router.get('/profile', function (req, res) {
                 return;
             }
             else{
-                console.log(profile)
+                if(!profile){
+                    profile = {};
+                }
                 res.render('user/profile', {profile: profile});
             }
         });

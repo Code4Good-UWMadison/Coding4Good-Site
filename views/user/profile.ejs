@@ -16,15 +16,15 @@
 
           profile.nickname = $("#nickname").val();
           profile.year = $("#year").val();
-          profile.intended_teamleader = $("#teamleader").prop("checked");
+          profile.intended_teamleader = $("#teamleader").prop('checked');
           $(".pl-checkbox:checked").each(function () {
-            if ($(this).val()) {
+          $(".pl-checkbox").each(function () {
+            if ($(this).val() && this.checked) {
               profile.pl.push($(this).val());
             }
           }).promise().done(function () {
-
-            $(".dev-checkbox:checked").each(function () {
-              if ($(this).val()) {
+            $(".dev-checkbox").each(function () {
+              if ($(this).val() && this.checked) {
                 profile.dev.push($(this).val());
               }
             }).promise().done(function () {
@@ -67,11 +67,8 @@
                   }
                 });
               }
-
-
             });
           });
-          // return false;
         });
       });
 
@@ -88,61 +85,63 @@
     <form id="profile-form">
         <div class="input-group login-signup-input">
             <div class="input-group-addon">Nickname:</div>
-            <input class="form-control" type="text" id="nickname" placeholder="Nickname" value=<%=profile.name%>>
+            <input class="form-control" type="text" id="nickname" placeholder="Nickname" value="<%=profile.nickname%>">
         </div>
         <div class="input-group login-signup-input">
             <div class="input-group-addon">Years:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            <select class="form-control" id="year" selected=<%=profile.year%>>
-                <option value="1">Freshman</option>
-                <option value="2">Sophomore</option>
-                <option value="3">Junior</option>
-                <option value="4">Senior</option>
-                <option value="5">Super-senior (5th year)</option>
-                <option value="6">Graduate or Above</option>
+            <select class="form-control" id="year">
+                <option value="1" <%=(profile.year==1)?'selected':''%>>Freshman</option>
+                <option value="2" <%=(profile.year==2)?'selected':''%>>Sophomore</option>
+                <option value="3" <%=(profile.year==3)?'selected':''%>>Junior</option>
+                <option value="4" <%=(profile.year==4)?'selected':''%>>Senior</option>
+                <option value="5" <%=(profile.year==5)?'selected':''%>>Super-senior (5th year)</option>
+                <option value="6" <%=(profile.year==6)?'selected':''%>>Graduate or Above</option>
             </select>
         </div>
         <div class="login-signup-input">
             <p style="font-size:15px;">What programming languages are you familiar with?</p>
-            <input type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java"> Java <br>
-            <input type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript"> Javascript <br>
-            <input type="checkbox" class="pl-checkbox" id="pl-c" value="pl-c"> C <br>
-            <input type="checkbox" class="pl-checkbox" value="pl-cpp"> C++ <br>
-            <input type="checkbox" class="pl-checkbox" value="pl-csharp"> C# <br>
-            <input type="checkbox" class="pl-checkbox" value="pl-objectivec"> Objective-C <br>
-            <input type="checkbox" class="pl-checkbox" value="pl-swift"> Swift <br>
-            <input type="checkbox" class="pl-checkbox" value="pl-python"> Python <br>
-            <input type="checkbox" class="pl-checkbox" value="pl-matlab"> Matlab <br>
-            <input type="checkbox" class="pl-checkbox" value="pl-assembly"> Assembly <br>
-            <input type="checkbox" class="pl-checkbox" value="pl-lisp"> LISP <br>
+            <% var pl = profile.pl ? profile.pl : [] %>
+            <input type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> Java <br>
+            <input type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript" <%=pl.includes('\"pl-javascript\"') ? 'checked' : ''%>> Javascript <br>
+            <input type="checkbox" class="pl-checkbox" id="pl-c" value="pl-c" <%=pl.includes('\"pl-c\"') ? 'checked' : ''%>> C <br>
+            <input type="checkbox" class="pl-checkbox" value="pl-cpp" <%=pl.includes('\"pl-cpp\"') ? 'checked' : ''%>> C++ <br>
+            <input type="checkbox" class="pl-checkbox" value="pl-csharp" <%=pl.includes('\"pl-csharp\"') ? 'checked' : ''%>> C# <br>
+            <input type="checkbox" class="pl-checkbox" value="pl-objectivec" <%=pl.includes('\"pl-objectivec\"') ? 'checked' : ''%>> Objective-C <br>
+            <input type="checkbox" class="pl-checkbox" value="pl-swift" <%=pl.includes('\"pl-swift\"') ? 'checked' : ''%>> Swift <br>
+            <input type="checkbox" class="pl-checkbox" value="pl-python" <%=pl.includes('\"pl-python\"') ? 'checked' : ''%>> Python <br>
+            <input type="checkbox" class="pl-checkbox" value="pl-matlab" <%=pl.includes('\"pl-matlab\"') ? 'checked' : ''%>> Matlab <br>
+            <input type="checkbox" class="pl-checkbox" value="pl-assembly" <%=pl.includes('\"pl-assembly\"') ? 'checked' : ''%>> Assembly <br>
+            <input type="checkbox" class="pl-checkbox" value="pl-lisp" <%=pl.includes('\"pl-lisp\"') ? 'checked' : ''%>> LISP <br>
         </div>
         <div class="login-signup-input">
+            <% var dev = profile.dev ? profile.dev : [] %>
             <p style="font-size:15px;">What kinds of development are you familiar with?</p>
-            <input type="checkbox" class="dev-checkbox" value="dev-frontend"> Front End (Web) <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-backend"> Back End (Web) <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-ios"> IOS <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-android"> Android <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-windows"> Windows Desktop Application <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-mac"> Mac OS X Desktop Application <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-linux"> Linux software <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-algorithm"> Algorithm <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-network"> Networking <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-ml"> Machine Learning <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-ds"> Data Science <br>
-            <input type="checkbox" class="dev-checkbox" value="dev-communication"> Communicate with people :) <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-frontend" <%=dev.includes('\"dev-frontend\"') ? 'checked' : ''%>> Front End (Web) <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-backend" <%=dev.includes('\"dev-backend\"') ? 'checked' : ''%>> Back End (Web) <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-ios" <%=dev.includes('\"dev-ios\"') ? 'checked' : ''%>> IOS <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-android" <%=dev.includes('\"dev-android\"') ? 'checked' : ''%>> Android <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-windows" <%=dev.includes('\"dev-windows\"') ? 'checked' : ''%>> Windows Desktop Application <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-mac" <%=dev.includes('\"dev-mac\"') ? 'checked' : ''%>> Mac OS X Desktop Application <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-linux" <%=dev.includes('\"dev-linux\"') ? 'checked' : ''%>> Linux software <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-algorithm" <%=dev.includes('\"dev-algorithm\"') ? 'checked' : ''%>> Algorithm <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-network" <%=dev.includes('\"dev-network\"') ? 'checked' : ''%>> Networking <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-ml" <%=dev.includes('\"dev-ml\"') ? 'checked' : ''%>> Machine Learning <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-ds" <%=dev.includes('\"dev-ds\"') ? 'checked' : ''%>> Data Science <br>
+            <input type="checkbox" class="dev-checkbox" value="dev-communication" <%=dev.includes('\"dev-communication\"') ? 'checked' : ''%>> Communicate with people :) <br>
         </div>
         <div class="login-signup-input">
             <br>
             <p>When developing softwares in team, there has to be a team leader who directs the development.</p>
-            <input type="checkbox" id="teamleader"> Check this box if you want to be a team leader
+            <input type="checkbox" id="teamleader" <%=profile.intended_teamleader ? 'checked' : ''%>> Check this box if you want to be a team leader
             <br>
         </div>
     </form>
-    <div class="login-signup-input">
+    <div class="login-signup-input" hidden>
         <br>
         <p>(Optional) Resume</p>
         <input type="file" id="resume">
     </div>
-    <button id="submit-button" class="btn long-btn primary-button">Upload Profile</button>
+    <button id="submit-button" class="btn long-btn primary-button">Update Profile</button>
 </div>
 
 <% include ../template/footer.ejs %>

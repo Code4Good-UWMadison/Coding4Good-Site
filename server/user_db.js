@@ -149,7 +149,7 @@ exports.getProfileByUserId = function (user_id, callback) {
         callback(null, result.rows[0]);
       }
       else {
-        callback('No matching profile id');
+        callback(null, null);
       }
     }
   });
