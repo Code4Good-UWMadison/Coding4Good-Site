@@ -5,6 +5,26 @@
         <script>
             $(function () {
                 $('.user-list').editableSelect({effects: 'slide'});
+                
+                $("#select-user-button").click(function () {
+                    $("#select-user-button").attr('disabled',true);
+                    $.ajax({
+                        url: "/get_user_info",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            user_id: $("#name").val()
+                        },
+                        success: function (result) {
+                            console.log(result);
+                        },
+                        error: function () {
+                            $("#error-msg").html("Error: Please contact Web team!");
+                            $("#select-user-button").attr('disabled',false);
+                        }
+                    });
+                });
+                
                 $("#submit-button").click(function () {
                     $("#submit-button").attr('disabled',true);
                     $.ajax({
@@ -31,15 +51,25 @@
         <% include ../template/nav.ejs %>
         <div class="container body-layout">
             <p class="error-msg" id="error-msg"></p>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="input-group new-project-input">
+                        <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User :&nbsp;&nbsp;&nbsp;</div>
+                        <select placeholder="User Name" id="name" class="form-control user-list">
+                            <% allUser.forEach(function(user){ %>
+                                <% if(user.id != 1){ %>
+                                <option id="<%= user.id %>" value="<%= user.id %>"><%= user.name %>(<%= user.email %>)</option>
+                                <% } %>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+                <button id="select-user-button" type="button" class="btn primary-button col-md-3 new-project-input">Load</button>
+            </div>
+
+
+
             <div class="input-group new-project-input row">
-                <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User :&nbsp;&nbsp;&nbsp;</div>
-                <select placeholder="User Name" id="name" class="form-control user-list">
-                    <% allUser.forEach(function(user){ %>
-                        <% if(user.id != 1){ %>
-                        <option id="<%= user.id %>" value="<%= user.id %>"><%= user.name %>(<%= user.email %>)</option>
-                        <% } %>
-                    <% }) %>
-                </select>
                 <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Role :&nbsp;&nbsp;&nbsp;</div>
                 <select placeholder="User Role" id="role" class="form-control user-list">
                     <option>None</option>

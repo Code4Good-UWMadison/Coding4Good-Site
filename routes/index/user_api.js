@@ -1,5 +1,6 @@
 const express = require('express');
-const db = require('../../server/user_db');
+const user_db = require('../../server/user_db');
+const project_db = require('../../server/project_db');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
@@ -10,7 +11,7 @@ const authService = require('../services/authorization_service');
 
 router.get('/account_check', function (req, res, next) {
     if (req.session.uid != null) {
-        db.getUserInfo(req.session.uid, function (err, user) {
+        user_db.getUserInfo(req.session.uid, function (err, user) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
@@ -25,7 +26,7 @@ router.get('/account_check', function (req, res, next) {
 });
 
 router.post('/signup', function (req, res, next) {
-    db.createUser(req.body, function (err, uid) {
+    user_db.createUser(req.body, function (err, uid) {
         if (err) {
             if(err.code == 23505){
                 res.json({status: false, msg: 'This email account has been registered already, please login or use another email!'});
@@ -66,7 +67,7 @@ router.post('/signup', function (req, res, next) {
                     return;
                 }
                 else {
-                    db.removeUser(uid, function (err) {
+                    user_db.removeUser(uid, function (err) {
                         if(err){
                             console.log(err);
                             res.status(400).json({msg: 'Database Error'});
@@ -83,14 +84,14 @@ router.post('/signup', function (req, res, next) {
 });
 
 router.post('/login', function (req, res, next) {
-    db.verifyUser(req.body, function (err, uid) {
+    user_db.verifyUser(req.body, function (err, uid) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
         else if (uid) {
-            db.checkEmailVerificationByUid(uid, function(err, verified){
+            user_db.checkEmailVerificationByUid(uid, function(err, verified){
                 if (err) {
                     console.log(err);
                     res.status(400).json({msg: 'Database Error'});
@@ -117,7 +118,7 @@ router.post('/upload_profile', function (req, res, next) {
         res.status(400).json({msg: 'Please login first'});
         return;
     }
-    db.updateProfile(req.session.uid, req.body, function (err) {
+    user_db.updateProfile(req.session.uid, req.body, function (err) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
@@ -140,7 +141,7 @@ router.post('/admin/get_profile', function (req, res, next) {
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        db.getProfile(req.body.pid, function (err, profile) {
+        user_db.getProfile(req.body.pid, function (err, profile) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
@@ -163,7 +164,7 @@ router.post('/update_user', function (req, res, next) {
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        db.updateUser(req.body.pid, function (err, profile) {
+        user_db.updateUser(req.body.pid, function (err, profile) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
@@ -174,4 +175,56 @@ router.post('/update_user', function (req, res, next) {
     });
 });
 
+router.post('/get_user_info', function (req, res, next) {
+    let roles = [authService.UserRole.Root, 
+        authService.UserRole.Admin];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        if(!authorized){
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+        user_db.getUserById(req.body.user_id, function (err, user) {
+            if (err) {
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            else {
+                user_db.getProfileByUserId(user.id, function (err, profile) {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: 'Database Error'});
+                        return;
+                    }
+                    else {
+                        user_db.getUserRoleByUid(user.id, function (err, roles) {
+                            if (err) {
+                                console.log(err);
+                                res.status(400).json({msg: 'Database Error'});
+                                return;
+                            }
+                            else {
+                                project_db.getAssociatedProjectsByUserId(user.id, function (err, projects) {
+                                    if (err) {
+                                        console.log(err);
+                                        res.status(400).json({msg: 'Database Error'});
+                                        return;
+                                    }
+                                    else {
+                                        res.json({user: user, profile: profile, roles: roles, projects: projects});
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+});
 module.exports = router;
