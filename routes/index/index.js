@@ -35,27 +35,34 @@ router.get('/profile', function (req, res) {
             res.redirect('/login');
             return;
         }
-        else{
-            res.render('user/profile');
-        }
+        db.getProfileByUserId(req.session.uid, function (err, profile) {
+            if(err){
+                res.status(400).json({msg: err});
+                return;
+            }
+            else{
+                console.log(profile)
+                res.render('user/profile', {profile: profile});
+            }
+        });
     });
 });
 
-router.get('/upload-complete', function (req, res) {
-    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
-        if (err) {
-            res.status(400).json({msg: 'Database Error'});
-            return;
-        }
-        else if(!authorized){
-            res.redirect('/login');
-            return;
-        }
-        else{
-            res.render('user/upload-complete');
-        }
-    });
-});
+// router.get('/upload-complete', function (req, res) {
+//     authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+//         if (err) {
+//             res.status(400).json({msg: 'Database Error'});
+//             return;
+//         }
+//         else if(!authorized){
+//             res.redirect('/login');
+//             return;
+//         }
+//         else{
+//             res.render('user/upload-complete');
+//         }
+//     });
+// });
 
 router.get('/login', function (req, res, next) {
     res.render('user/login', {});

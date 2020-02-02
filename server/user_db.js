@@ -125,7 +125,9 @@ exports.getUserInfo = function (uid, callback) {
 };
 
 exports.updateProfile = function (uid, profile, callback) {
-  var query = `INSERT INTO user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time) VALUES ($1,$2,$3,$4,$5,$6,$7, now() at time zone 'America/Chicago');`;
+  let insert = "INSERT INTO user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time) VALUES ($1,$2,$3,$4,$5,$6,$7, now() at time zone 'America/Chicago')";
+  let update = "DO UPDATE SET nickname=$2, year=$3, intended_teamleader=$4, pl=$5, dev=$6, resume=$7, submission_time=now() at time zone 'America/Chicago';";
+  let query = insert + " ON CONFLICT (uid)" + update;
   db.query(query, [uid, profile.nickname, profile.year, profile.intended_teamleader, profile.pl, profile.dev, (profile.resume) ? profile.resume : ''], function (err, result) {
     if (err) {
       callback(err);
@@ -136,17 +138,9 @@ exports.updateProfile = function (uid, profile, callback) {
   });
 };
 
-exports.getProfile = function (pid, callback) {
-  var query = `SELECT
-      u.name AS name,
-      n.nickname AS nickname,
-      n.year AS year,
-      n.intended_teamleader AS intended_teamleader,
-      n.pl AS pl,
-      n.dev AS dev,
-      n.resume AS resume
-      FROM user_profile AS n, users AS u WHERE n.id=$1 AND n.uid=u.id;`;
-  db.query(query, [pid], function (err, result) {
+exports.getProfileByUserId = function (user_id, callback) {
+  var query = `SELECT * FROM user_profile WHERE user_profile.uid = $1;`;
+  db.query(query, [user_id], function (err, result) {
     if (err) {
       callback(err);
     }

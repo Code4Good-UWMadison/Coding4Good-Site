@@ -40,7 +40,7 @@
                     dataType: "json",
                     data: profile,
                     success: function () {
-                      window.location.href = "/upload-complete?status=s";
+                      window.location.href = "/profile?status=s";
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                       $("#error-msg").html(jqXHR.responseJSON);
@@ -59,7 +59,7 @@
                   dataType: "json",
                   data: profile,
                   success: function () {
-                    window.location.href = "/upload-complete?status=s";
+                    window.location.href = "/profile?status=s";
                   },
                   error: function (jqXHR, textStatus, errorThrown) {
                     $("#error-msg").html(jqXHR.responseJSON);
@@ -88,11 +88,11 @@
     <form id="profile-form">
         <div class="input-group login-signup-input">
             <div class="input-group-addon">Nickname:</div>
-            <input class="form-control" type="text" id="nickname" placeholder="Nickname">
+            <input class="form-control" type="text" id="nickname" placeholder="Nickname" value=<%=profile.name%>>
         </div>
         <div class="input-group login-signup-input">
             <div class="input-group-addon">Years:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            <select class="form-control" id="year">
+            <select class="form-control" id="year" selected=<%=profile.year%>>
                 <option value="1">Freshman</option>
                 <option value="2">Sophomore</option>
                 <option value="3">Junior</option>
