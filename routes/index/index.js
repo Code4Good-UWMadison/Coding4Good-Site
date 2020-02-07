@@ -43,6 +43,10 @@ router.get('/login', function (req, res, next) {
     res.render('user/login', {});
 });
 
+router.get('/resetPassword', function (req, res, next) {
+    res.render('user/resetPassword', {});
+});
+
 router.get('/signup', function (req, res, next) {
     res.render('user/signup', {});
 });
