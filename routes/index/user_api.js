@@ -129,9 +129,9 @@ router.post('/upload_profile', function (req, res, next) {
 });
 
 router.post('/admin/get_profile', function (req, res, next) {
-    let roles = [authService.UserRole.Root, 
-                authService.UserRole.Admin,
-                authService.UserRole.ProjectManager];
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.ProjectManager,
+                authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -153,8 +153,8 @@ router.post('/admin/get_profile', function (req, res, next) {
 });
 
 router.post('/update_user', function (req, res, next) {
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin];
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -176,8 +176,8 @@ router.post('/update_user', function (req, res, next) {
 });
 
 router.post('/get_user_info', function (req, res, next) {
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin];
+    let roles = [authService.UserRole.Developer,
+                authService.UserRole.Admin];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             console.log(err);

@@ -1,13 +1,14 @@
-var express = require('express');
-var db = require('../../server/project_db');
-var router = express.Router();
+const express = require('express');
+const db = require('../../server/project_db');
+
+const router = express.Router();
 
 const authService = require('../services/authorization_service');
 
 router.post('/createProject', function (req, res, next) {
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin,
-        authService.UserRole.ProjectManager];
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.ProjectManager,
+                authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -29,10 +30,10 @@ router.post('/createProject', function (req, res, next) {
 });
 
 router.post('/saveProject', function (req, res, next) {
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin,
-        authService.UserRole.ProjectManager,
-        authService.UserRole.ProjectLeader];
+    let roles = [authService.UserRole.Developer, 
+                authService.UserRole.Admin,
+                authService.UserRole.ProjectManager,
+                authService.UserRole.ProjectLeader];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -54,9 +55,9 @@ router.post('/saveProject', function (req, res, next) {
 });
 
 router.post('/removeProject', function(req, res, next){
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin,
-        authService.UserRole.ProjectManager];
+    let roles = [authService.UserRole.Developer, 
+                authService.UserRole.Admin,
+                authService.UserRole.ProjectManager];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
