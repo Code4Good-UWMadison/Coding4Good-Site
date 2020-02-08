@@ -18,7 +18,7 @@
                     method: "POST",
                     dataType: "json",
                     data: {
-                        id: projectDetail.id
+                        pid: projectDetail.id,
                     },
                     success: function () {
                         window.location.href="/project?status=s";
@@ -27,6 +27,24 @@
                         $("#error-msg").html(jqXHR.responseJSON);
                         $("#remove-confirmation-box").modal('hide');
                         $("#remove-confirmed").attr('disabled', false);
+                    }
+                });
+            });
+            $("#apply-button").click(function () {
+                $("#apply-button").attr('disabled', true);
+                $.ajax({
+                    url: "/project/applyProject",
+                    method: "POST",
+                    dataType: "json",
+                    data: {
+                        pid: projectDetail.id,
+                    },
+                    success: function () {
+                        window.location.href = "/project?status=s";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $("#error-msg").html(jqXHR.responseJSON);
+                        $("#apply-button").attr('disabled',false);
                     }
                 });
             });
@@ -113,6 +131,9 @@
     <% if (projectDetail.video_link) { %>
         <iframe style="width: 100%; height: 700px" src="<%= projectDetail.video_link %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <% } %>
+
+    <button id="apply-button" type="button" class="btn long-btn primary-button">Apply!</button>
+
 </div>
 
 <div id="remove-confirmation-box" class="modal fade confirmation-box">
