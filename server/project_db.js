@@ -205,3 +205,21 @@ exports.rejectApp = function(pid, uid, callback) {
     callback(null);
   });
 };
+
+// the manager can see all the applicants
+exports.allApp = function(pid, callback) {
+  // select all applicants of this project
+  var query = `select * from project_relation where pid == $1`;
+  db.query(query, [pid], function(err) {
+    if (err) {
+      console.log(err);
+      callback(err);
+    } else {
+      if (result.rows.length > 0) {
+        callback(null, result);
+      } else {
+        callback("No matching project id");
+      }
+    }
+  });
+};
