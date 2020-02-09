@@ -4,9 +4,9 @@ var config = require("./dbconfig.js");
 var db = new pg.Pool(config.db);
 
 exports.editProject = function(project, callback) {
-  const query = `update project set title=$2, description=$3, contact=$4, org_name=$5, status=$6, project_link=$7, video_link=$8 where project.id = $1;`;
+  const query = `update project set title=$2, description=$3, contact=$4, org_name=$5, status=$6, project_link=$7, video_link=$8, applyable=$9 where project.id = $1;`;
   const oldLink = `DELETE FROM project_relation WHERE project_relation.pid = $1`;
-  const newLink = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`;
+  const newLink = `INSERT INTO project_relation(pid, uid, relation) values($1,$2,$3);`;
   db.query(
     query,
     [
@@ -17,7 +17,8 @@ exports.editProject = function(project, callback) {
       project.org_name,
       project.status,
       project.project_link,
-      project.video_link
+      project.video_link,
+      project.applyable
     ],
     function(err) {
       db.query(oldLink, [project.id], function(err) {
@@ -50,8 +51,8 @@ exports.editProject = function(project, callback) {
 };
 
 exports.createProject = function(project, callback) {
-  var query = `insert into project (title, description, contact, org_name, creation_time, status, project_link, video_link) values($1,$2,$3,$4,(now() at time zone 'America/Chicago'),$5, $6, $7) returning id;`;
-  var link = `insert into project_relation(pid, uid, relation) values($1,$2,$3);`;
+  var query = `INSERT INTO project (title, description, contact, org_name, creation_time, status, project_link, video_link) values($1,$2,$3,$4,(now() at time zone 'America/Chicago'),$5, $6, $7, $8) returning id;`;
+  var link = `INSERT INTO project_relation(pid, uid, relation) values($1,$2,$3);`;
   db.query(
     query,
     [
@@ -61,7 +62,8 @@ exports.createProject = function(project, callback) {
       project.org_name,
       project.status,
       project.project_link,
-      project.video_link
+      project.video_link,
+      project.applyable
     ],
     function(err, projectId) {
       if (err) {
@@ -172,8 +174,8 @@ exports.applyProject = function(pid, uid, callback) {
 exports.approveApp = function(pid, uid, callback) {
   // when manager approves the application
   // add relation to project relation
-  var query = `insert into project_relation (pid, uid, relation) values($1,$2,$3);`;
-  var deletee = `delete from project_application_relation where project_id == $1 and user_id == $2`;
+  var query = `INSERT INTO project_relation (pid, uid, relation) values($1,$2,$3);`;
+  var deletee = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
   db.query(query, [pid, uid, "Member"], function(err, pid, uid) {
     if (err) {
       console.log(err);
@@ -196,7 +198,7 @@ exports.approveApp = function(pid, uid, callback) {
 exports.rejectApp = function(pid, uid, callback) {
   // the manager rejects the member's application
   // delete the applicaiton request
-  var deletee = `delete from project_application_relation where project_id == $1 and user_id == $2`;
+  var deletee = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
   db.query(deletee, [pid, uid], function(err, pid, uid) {
     if (err) {
       console.log(err);
@@ -209,7 +211,7 @@ exports.rejectApp = function(pid, uid, callback) {
 // the manager can see all the applicants
 exports.allApp = function(pid, callback) {
   // select all applicants of this project
-  var query = `select * from project_relation where pid == $1`;
+  var query = `SELECT * FROM project_relation WHERE pid = $1`;
   db.query(query, [pid], function(err) {
     if (err) {
       console.log(err);
