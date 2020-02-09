@@ -1,8 +1,7 @@
 const express = require('express');
-const db = require('../../server/project_db');
-
+const project_db = require('../../server/project_db');
 const router = express.Router();
-
+const user_db = require('../../server/user_db');
 const authService = require('../services/authorization_service');
 
 router.post('/createProject', function (req, res, next) {
@@ -18,7 +17,7 @@ router.post('/createProject', function (req, res, next) {
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        db.createProject(req.body, function (err) {
+        project_db.createProject(req.body, function (err) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Failed to create'});
@@ -43,7 +42,7 @@ router.post('/saveProject', function (req, res, next) {
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        db.editProject(req.body, function (err) {
+        project_db.editProject(req.body, function (err) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Failed to save'});
@@ -67,7 +66,7 @@ router.post('/removeProject', function(req, res, next){
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        db.removeProjectById(req.body.id,function (err) {
+        project_db.removeProjectById(req.body.id,function (err) {
             if(err){
                 console.log(err);
                 res.status(400).json({msg: 'Failed to remove'});
@@ -80,6 +79,7 @@ router.post('/removeProject', function(req, res, next){
 
 router.post('/applyProject', function(req, res, next){
     let roles = null;
+    console.log("here4444");
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -89,21 +89,26 @@ router.post('/applyProject', function(req, res, next){
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        db.getProfileByUserId(req.session.uid, function(err, hasProfile){
+        console.log("here55555");
+        user_db.getProfileByUserId(req.session.uid, function(err, hasProfile){
+            console.log("here666");
             if (err){
                 res.status(400).json({msg: "Database Error"});
             }else{
                 if (hasProfile){
-                    db.applyProject(req.body.project_id, req.session.uid, function(err){
+                    project_db.applyProject(req.body.project_id, req.session.uid, function(err){    
+                        console.log("here33333");
                         if(err){
                             console.log(err);
                             res.status(400).json({msg: 'Failed to apply'});
                             return;
                         }
+                        console.log("here11");
                         res.json({});
                     });
                 }
                 else{
+                    console.log("here222222");
                     res.json({msg: "Please finish your Profile before applying for a project."});
                 }
             }

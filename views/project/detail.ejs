@@ -43,10 +43,12 @@
                         if (result.msg) {
                             $("#error-msg").html(result.msg);
                             $("#apply-button").attr('disabled', false);
+                            console.log("hahahaha12112");
                         }
                         else {
+                            console.log("hahahaha");
                             window.location.reload();
-                        }
+                        }  
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         $("#error-msg").html(jqXHR.responseJSON);

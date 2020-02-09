@@ -143,8 +143,23 @@ router.get('/edit', function (req, res, next) {
 });
 
 router.get('/applicants', function (req, res, next) {
-    const project_id = req.query.project_id;
-    res.render("project/applicants", {project_id: project_id});
+    // project_db.getProjectById(req.query.id, function (err, project) {
+    //     if (err) {
+    //         console.log(err);
+    //         res.status(400).json({msg: 'Database Error'});
+    //         return;
+    //     }
+    //     project_db.getAssociatedUsersByProjectId(project.id, function (err, users) {
+    //         if (err) {
+    //             console.log(err);
+    //             res.status(400).json({msg: 'Database Error'});
+    //             return;
+    //         }
+    //         res.render('project/detail', {projectDetail: project, users: users, uid: req.session.uid});
+    //     })
+    // });
+
+    //project_db.getAllApplicantByProjectId(req.query.pid, )
 });
 
 module.exports = router;
