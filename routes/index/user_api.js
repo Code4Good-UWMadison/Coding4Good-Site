@@ -129,9 +129,9 @@ router.post('/upload_profile', function (req, res, next) {
 });
 
 router.post('/admin/get_profile', function (req, res, next) {
-    let roles = [authService.UserRole.Root, 
-                authService.UserRole.Admin,
-                authService.UserRole.ProjectManager];
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.ProjectManager,
+                authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -153,8 +153,8 @@ router.post('/admin/get_profile', function (req, res, next) {
 });
 
 router.post('/update_user', function (req, res, next) {
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin];
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -176,8 +176,7 @@ router.post('/update_user', function (req, res, next) {
 });
 
 router.post('/get_user_info', function (req, res, next) {
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin];
+    let roles = [authService.UserRole.Admin];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             console.log(err);
@@ -189,42 +188,52 @@ router.post('/get_user_info', function (req, res, next) {
             return;
         }
         user_db.getUserById(req.body.user_id, function (err, user) {
-            if (err) {
+            if(err) {
+                console.log(err);
+            }
+            user_db.getProfileByUserId(user.id, function (err, profile) {
+                if(err) {
+                    console.log(err);
+                }
+                user_db.getUserRoleByUid(user.id, function (err, roles) {
+                    if(err) {
+                        console.log(err);
+                    }
+                    project_db.getAssociatedProjectsByUserId(user.id, function (err, projects) {
+                        if(err) {
+                            console.log(err);
+                        }
+                        res.json({user: user, profile: profile, roles: roles, projects: projects});
+                    });
+                });
+            });
+        });
+    });
+});
+
+router.post('/set_user_role', function (req, res, next) {
+    let roles = [authService.UserRole.Admin];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        if(!authorized) {
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+        user_db.setUserRoleByUid(req.body.user_id, req.body.roles, function(err, result){
+            if(err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            else {
-                user_db.getProfileByUserId(user.id, function (err, profile) {
-                    if (err) {
-                        console.log(err);
-                        res.status(400).json({msg: 'Database Error'});
-                        return;
-                    }
-                    else {
-                        user_db.getUserRoleByUid(user.id, function (err, roles) {
-                            if (err) {
-                                console.log(err);
-                                res.status(400).json({msg: 'Database Error'});
-                                return;
-                            }
-                            else {
-                                project_db.getAssociatedProjectsByUserId(user.id, function (err, projects) {
-                                    if (err) {
-                                        console.log(err);
-                                        res.status(400).json({msg: 'Database Error'});
-                                        return;
-                                    }
-                                    else {
-                                        res.json({user: user, profile: profile, roles: roles, projects: projects});
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+            if(result) {
+                res.json({});
             }
-        });
+        })
     });
 });
+
 module.exports = router;

@@ -80,9 +80,9 @@ router.get('/logout', function (req, res, next) {
 });
 
 router.get('/admin', function (req, res) {
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin,
-        authService.UserRole.ProjectManager];
+    let roles = [authService.UserRole.Developer, 
+                authService.UserRole.Admin,
+                authService.UserRole.ProjectManager];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -99,8 +99,8 @@ router.get('/admin', function (req, res) {
 });
 
 router.get('/user-admin', function (req, res) {
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin];
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});

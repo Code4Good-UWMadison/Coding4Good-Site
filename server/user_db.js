@@ -120,6 +120,23 @@ exports.getUserInfo = function(uid, callback) {
   });
 };
 
+exports.getUserById = function (uid, callback) {
+  var query = `SELECT * FROM users WHERE id=$1;`;
+  db.query(query, [uid], function (err, result) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      if (result.rows.length == 0) {
+        callback(null, null);
+      }
+      else {
+        callback(null, result.rows[0]);
+      }
+    }
+  });
+}
+
 exports.updateProfile = function(uid, profile, callback) {
   let insert =
     "INSERT INTO user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time) VALUES ($1,$2,$3,$4,$5,$6,$7, now() at time zone 'America/Chicago')";
@@ -197,7 +214,7 @@ exports.getUserRoleByUid = function(uid, callback) {
       if (result.rows.length > 0) {
         callback(null, result.rows);
       } else {
-        callback("User does not have a role!");
+        callback("User does not have a role!", null);
       }
     }
   });

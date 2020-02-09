@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var project_db = require("../../server/project_db");
-var user_db = require("../../server/user_db");
+const express = require('express');
+const router = express.Router();
+const project_db = require("../../server/project_db");
+const user_db = require("../../server/user_db");
+
 const authService = require('../services/authorization_service');
 
 router.get('/', function (req, res, next) {
@@ -61,9 +62,9 @@ router.get('/create', function (req, res, next) {
         res.redirect('../login');
         return;
     }
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin,
-        authService.UserRole.ProjectManager];
+    let roles = [authService.UserRole.Developer,
+                authService.UserRole.Admin,
+                authService.UserRole.ProjectManager];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -92,10 +93,10 @@ router.get('/edit', function (req, res, next) {
         res.redirect('../login');
         return;
     }
-    let roles = [authService.UserRole.Root, 
-        authService.UserRole.Admin,
-        authService.UserRole.ProjectManager,
-        authService.UserRole.ProjectLeader];
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.Developer,
+                authService.UserRole.ProjectManager,
+                authService.UserRole.ProjectLeader];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
