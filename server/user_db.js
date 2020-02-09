@@ -230,25 +230,3 @@ exports.getAllUser = function(callback) {
     }
   });
 };
-
-//insert into user_role (user_id, user_role) values (1, 'Project Manager');
-
-// first to check whether this member has entered his/her profile information
-// if not, return false and let them to register first
-exports.checkProfile = function(uid, callback) {
-  // check whether this member has finished their profile
-  var check = `Select * from user_profile as user where user.uid == $1;`;
-  db.query(check, [uid], function(err, result) {
-    if (err) {
-      console.log(err);
-      callback(err);
-    } else {
-      if (result.rows.length == 0) {
-        // there is no user profile in database
-        callback(null, false);
-      }
-    }
-    // user has registered profile
-    callback(null, true);
-  });
-};
