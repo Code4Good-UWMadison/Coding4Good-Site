@@ -37,7 +37,7 @@
                     method: "POST",
                     dataType: "json",
                     data: {
-                        pid: projectDetail.id,
+                        project_id: projectDetail.id
                     },
                     success: function () {
                         window.location.href = "/project?status=s";
@@ -48,6 +48,26 @@
                     }
                 });
             });
+
+            $("#applicants-button").click(function () {
+                $("#applicants-button").attr('disabled', true);
+                $.ajax({
+                    url: "/project/applicants",
+                    method: "GET",
+                    dataType: "json",
+                    data: {
+                        project_id: projectDetail.id,
+                    },
+                    success: function () {
+                        window.location.href = "/project?status=s";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $("#error-msg").html(jqXHR.responseJSON);
+                        $("#applicants-button").attr('disabled',false);
+                    }
+                });
+            });
+
         });
     </script>
 </head>
@@ -132,7 +152,25 @@
         <iframe style="width: 100%; height: 700px" src="<%= projectDetail.video_link %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <% } %>
 
-    <button id="apply-button" type="button" class="btn long-btn primary-button">Apply!</button>
+    <% var hasApplied = false %>
+    <% var canSeeApplicants = false %>
+    <%if (uid) { %>
+        <% for (var i = 0; i < users.length; i++) {%>
+            <% if (users[i].uid == uid) { %>
+                <% hasApplied = true %>
+                <% if (users[i].relation == "Leader" || users[i].relation == "Manager") { %>
+                    <% canSeeApplicants = true %>
+                <% } %>
+                <% break %>
+            <% } %>
+        <% } %>
+    <% } %>
+
+    <%if (canSeeApplicants) { %>
+        <button id="applicants-button" type="button" class="btn long-btn primary-button">See Applicants</button>
+    <% } else if (!hasApplied) { %>
+        <button id="apply-button" type="button" class="btn long-btn primary-button">Apply!</button>
+    <% } %>
 
 </div>
 
