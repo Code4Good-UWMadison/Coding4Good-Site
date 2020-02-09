@@ -225,3 +225,14 @@ exports.allApp = function(pid, callback) {
     }
   });
 };
+
+exports.getUserAppliedProjectByUserId = function (uid, callback) {
+  const query = "SELECT * FROM project_application_relation WHERE user_id = $1;"
+  db.query(query, [uid], function(err, result) {
+    if (err) {
+      console.log(err);
+      callback(err);
+    }
+    callback(null, result.rows);
+  });
+}

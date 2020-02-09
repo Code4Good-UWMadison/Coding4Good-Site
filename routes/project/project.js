@@ -52,7 +52,18 @@ router.get('/detail', function (req, res, next) {
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            res.render('project/detail', {projectDetail: project, users: users, uid: req.session.uid});
+
+            project_db.getUserAppliedProjectByUserId(req.session.uid, function (err, applied_project_id) {
+                if (err) {
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
+                }
+                var hasApplied = false;
+                if (applied_project_id) {
+
+                }
+                res.render('project/detail', {projectDetail: project, users: users, uid: req.session.uid, hasApplied: hasApplied});
+            })
         })
     });
 });
@@ -129,6 +140,11 @@ router.get('/edit', function (req, res, next) {
             });
         });
     });
+});
+
+router.get('/applicants', function (req, res, next) {
+    const project_id = req.query.project_id;
+    res.render("project/applicants", {project_id: project_id});
 });
 
 module.exports = router;
