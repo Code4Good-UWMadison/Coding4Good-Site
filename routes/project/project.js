@@ -59,8 +59,12 @@ router.get('/detail', function (req, res, next) {
                     return;
                 }
                 var hasApplied = false;
-                if (applied_project_id) {
-
+                for (var i = 0; i < applied_project_id.length; i++) {
+                    var project_id = applied_project_id[i].project_id;
+                    if (project_id == project.id) {
+                        hasApplied = true;
+                        break;
+                    }
                 }
                 res.render('project/detail', {projectDetail: project, users: users, uid: req.session.uid, hasApplied: hasApplied});
             })
