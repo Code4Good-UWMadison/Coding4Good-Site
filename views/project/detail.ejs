@@ -39,8 +39,13 @@
                     data: {
                         project_id: projectDetail.id
                     },
-                    success: function () {
-                        window.location.href = "/project?status=s";
+                    success: function (result) {
+                        if (result.msg) {
+                            $("#error-msg").html(result.msg);
+                            $("#apply-button").attr('disabled', false);
+                        }
+                        else
+                            window.location.reload();
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         $("#error-msg").html(jqXHR.responseJSON);
