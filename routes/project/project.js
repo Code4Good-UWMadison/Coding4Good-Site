@@ -53,7 +53,7 @@ router.get('/detail', function (req, res, next) {
                 return;
             }
 
-            project_db.getUserAppliedProjectByUserId(req.session.uid, function (err, applied_project_id) {
+            project_db.getAppliedProjectByUserId(req.session.uid, function (err, applied_project_id) {
                 if (err) {
                     res.status(400).json({msg: 'Database Error'});
                     return;
@@ -173,18 +173,16 @@ router.get('/applicants', function (req, res, next) {
 });
 
 router.get('/profile', function (req, res) {
-
     const user_id = req.query.user_id;
-
-    // authService.authorizationCheck(null, req.session.uid, function(err, authorized){
-    //     if (err) {
-    //         res.status(400).json({msg: 'Database Error'});
-    //         return;
-    //     }
-    //     else if(!authorized){
-    //         res.redirect('/login');
-    //         return;
-    //     }
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.redirect('/login');
+            return;
+        }
         user_db.getProfileByUserId(user_id, function (err, profile) {
             if(err){
                 res.status(400).json({msg: err});
@@ -197,7 +195,7 @@ router.get('/profile', function (req, res) {
                 res.render('user/profile', {profile: profile, others: true});
             }
         });
-    // });
+    });
 });
 
 module.exports = router;

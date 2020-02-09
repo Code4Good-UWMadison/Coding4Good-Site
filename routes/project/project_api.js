@@ -78,8 +78,7 @@ router.post('/removeProject', function(req, res, next){
 });
 
 router.post('/applyProject', function(req, res, next){
-    let roles = null;
-    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
             return;
@@ -103,7 +102,7 @@ router.post('/applyProject', function(req, res, next){
                     });
                 }
                 else{
-                    res.json({msg: "Please finish your Profile before applying for a project."});
+                    res.json({msg: "Please complete your Profile before applying for a project."});
                 }
             }
         });

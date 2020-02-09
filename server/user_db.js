@@ -74,6 +74,7 @@ exports.removeUser = function(uid, callback) {
   });
 };
 
+// verify if user's credential is valid
 exports.verifyUser = function(user, callback) {
   var query = `SELECT id, password FROM users WHERE email = $1;`;
   db.query(query, [user.email], function(err, result) {
@@ -147,7 +148,7 @@ exports.updateProfile = function(uid, profile, callback) {
     query,
     [
       uid,
-      profile.nickname,
+      profile.nickname ? profile.nickname : "",
       profile.year,
       profile.intended_teamleader,
       profile.pl,

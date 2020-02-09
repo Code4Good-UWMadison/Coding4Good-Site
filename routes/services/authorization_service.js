@@ -4,6 +4,9 @@ exports.UserRole = {
     Root:"Root", Developer: "Developer", Admin:"Admin", EventExecutive:"Event Executive", ProjectManager:"Project Manager", ProjectLeader:"Project Leader", ProjectMember:"Project Member", Finance:"Finance", Outreach:"Outreach"
 };
 
+// check if user has role in authrizedRole
+// authorizedRole: Array of role that is authorized to access this page, null means check login
+// uid: user id to check access
 exports.authorizationCheck = function(authorizedRole, uid, callback){
     if(!uid){
         callback(null, false);
