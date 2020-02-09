@@ -157,11 +157,11 @@ exports.removeProjectById = function(projectId, callback) {
 };
 
 // if user has registered profile, put this application info into database
-exports.applyProject = function(pid, uid, callback) {
+exports.applyProject = function(project_id, uid, callback) {
   // add member's application interest into project_application_relation table
   // the database has already checked uniqueness
-  var query = `insert into project_application_relation (project_id, user_id) values($1,$2);`;
-  db.query(query, [pid, uid], function(err, pid, uid) {
+  var query = `INSERT INTO project_application_relation (project_id, user_id) VALUES($1,$2);`;
+  db.query(query, [project_id, uid], function(err, project_id, uid) {
     if (err) {
       console.log(err);
       callback(err);
@@ -171,18 +171,18 @@ exports.applyProject = function(pid, uid, callback) {
 };
 
 // the project manager approves the application request
-exports.approveApp = function(pid, uid, callback) {
+exports.approveApplicant = function(project_id, uid, callback) {
   // when manager approves the application
   // add relation to project relation
-  var query = `INSERT INTO project_relation (pid, uid, relation) values($1,$2,$3);`;
+  var query = `INSERT INTO project_relation (pid, uid, relation) VALUES($1,$2,$3);`;
   var deletee = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
-  db.query(query, [pid, uid, "Member"], function(err, pid, uid) {
+  db.query(query, [project_id, uid, "Member"], function(err) {
     if (err) {
       console.log(err);
       callback(err);
     }
     // if insertion has no error, delete the relationship in application table
-    db.query(deletee, [pid, uid], function(err) {
+    db.query(deletee, [project_id, uid], function(err) {
       if (err) {
         console.log(err);
         callback(err);
@@ -195,11 +195,11 @@ exports.approveApp = function(pid, uid, callback) {
 };
 
 // the project manager rejects the application request
-exports.rejectApp = function(pid, uid, callback) {
+exports.rejectApplicant = function(project_id, uid, callback) {
   // the manager rejects the member's application
   // delete the applicaiton request
   var deletee = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
-  db.query(deletee, [pid, uid], function(err, pid, uid) {
+  db.query(deletee, [project_id, uid], function(err, project_id, uid) {
     if (err) {
       console.log(err);
       callback(err);
@@ -209,10 +209,10 @@ exports.rejectApp = function(pid, uid, callback) {
 };
 
 // the manager can see all the applicants
-exports.allApp = function(pid, callback) {
+exports.getAllApplicantByProjectId = function(project_id, callback) {
   // select all applicants of this project
-  var query = `SELECT * FROM project_relation WHERE pid = $1`;
-  db.query(query, [pid], function(err) {
+  var query = `SELECT * FROM project_application_relation WHERE project_id = $1`;
+  db.query(query, [project_id], function(err) {
     if (err) {
       console.log(err);
       callback(err);
