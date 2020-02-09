@@ -132,23 +132,29 @@ router.get('/edit', function (req, res, next) {
 });
 
 router.get('/applicants', function (req, res, next) {
-    // project_db.getProjectById(req.query.id, function (err, project) {
-    //     if (err) {
-    //         console.log(err);
-    //         res.status(400).json({msg: 'Database Error'});
-    //         return;
-    //     }
-    //     project_db.getAssociatedUsersByProjectId(project.id, function (err, users) {
-    //         if (err) {
-    //             console.log(err);
-    //             res.status(400).json({msg: 'Database Error'});
-    //             return;
-    //         }
-    //         res.render('project/detail', {projectDetail: project, users: users, uid: req.session.uid});
-    //     })
-    // });
-
-    //project_db.getAllApplicantByProjectId(req.query.pid, )
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.Developer,
+                authService.UserRole.ProjectManager,
+                authService.UserRole.ProjectLeader];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.redirect('../project/detail?id='+projectId);
+            return;
+        }
+        project_db.getAllApplicantByProjectId(req.query.pid, function(err){
+            if (err){
+                console.log(err);
+                res.status(400).json({msg: 'Database error'});
+                return;
+            }else{
+                res.render('project/applicants', {users: users}); 
+            }
+        });
+    });
 });
 
 module.exports = router;
