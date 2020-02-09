@@ -164,12 +164,11 @@
                 <% break %>
             <% } %>
         <% } %>
-    <% } %>
-
-    <%if (canSeeApplicants) { %>
-        <button id="applicants-button" type="button" class="btn long-btn primary-button">See Applicants</button>
-    <% } else if (!hasApplied) { %>
-        <button id="apply-button" type="button" class="btn long-btn primary-button">Apply!</button>
+            <%if (canSeeApplicants) { %>
+                <button id="applicants-button" type="button" class="btn long-btn primary-button">See Applicants</button>
+            <% } else if (!hasApplied) { %>
+                <button id="apply-button" type="button" class="btn long-btn primary-button">Apply!</button>
+            <% } %>
     <% } %>
 
 </div>
