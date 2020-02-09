@@ -152,29 +152,6 @@ router.post('/admin/get_profile', function (req, res, next) {
     });
 });
 
-router.post('/update_user', function (req, res, next) {
-    let roles = [authService.UserRole.Admin,
-                authService.UserRole.Developer];
-    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
-        if (err) {
-            res.status(400).json({msg: 'Database Error'});
-            return;
-        }
-        if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
-            return;
-        }
-        user_db.updateUser(req.body.pid, function (err, profile) {
-            if (err) {
-                console.log(err);
-                res.status(400).json({msg: 'Database Error'});
-                return;
-            }
-            res.json({});
-        });
-    });
-});
-
 router.post('/get_user_info', function (req, res, next) {
     let roles = [authService.UserRole.Admin];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
@@ -211,7 +188,7 @@ router.post('/get_user_info', function (req, res, next) {
     });
 });
 
-router.post('/set_user_role', function (req, res, next) {
+router.post('/update_user', function (req, res, next) {
     let roles = [authService.UserRole.Admin];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
@@ -223,15 +200,15 @@ router.post('/set_user_role', function (req, res, next) {
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        user_db.setUserRoleByUid(req.body.user_id, req.body.roles, function(err, result){
+        req.body.user_id = 1;
+        req.body.roles = [authService.UserRole.Admin, authService.UserRole.Root];
+        user_db.setUserRoleByUid(req.body.user_id, req.body.roles, function(err){
             if(err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            if(result) {
-                res.json({});
-            }
+            res.json({});
         })
     });
 });

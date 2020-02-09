@@ -18,22 +18,41 @@
           profile.year = $("#year").val();
           profile.intended_teamleader = $("#teamleader").prop('checked');
           $(".pl-checkbox:checked").each(function () {
-          $(".pl-checkbox").each(function () {
-            if ($(this).val() && this.checked) {
-              profile.pl.push($(this).val());
-            }
-          }).promise().done(function () {
-            $(".dev-checkbox").each(function () {
+            $(".pl-checkbox").each(function () {
               if ($(this).val() && this.checked) {
-                profile.dev.push($(this).val());
+                profile.pl.push($(this).val());
               }
             }).promise().done(function () {
-              if ($("#resume")[0].files.length > 0) {
-                var file = $("#resume")[0].files[0];
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function () {
-                  profile.resume = reader.result;
+              $(".dev-checkbox").each(function () {
+                if ($(this).val() && this.checked) {
+                  profile.dev.push($(this).val());
+                }
+              }).promise().done(function () {
+                if ($("#resume")[0].files.length > 0) {
+                  var file = $("#resume")[0].files[0];
+                  var reader = new FileReader();
+                  reader.readAsDataURL(file);
+                  reader.onload = function () {
+                    profile.resume = reader.result;
+                    $.ajax({
+                      url: "/upload_profile",
+                      method: "POST",
+                      dataType: "json",
+                      data: profile,
+                      success: function () {
+                        window.location.href = "/profile?status=s";
+                      },
+                      error: function (jqXHR, textStatus, errorThrown) {
+                        $("#error-msg").html(jqXHR.responseJSON);
+                        $("#submit-button").attr('disabled',false);
+                      }
+                    });
+                  };
+                  reader.onerror = function (error) {
+                    console.log('Error: ', error);
+                  };
+                }
+                else {
                   $.ajax({
                     url: "/upload_profile",
                     method: "POST",
@@ -47,26 +66,7 @@
                       $("#submit-button").attr('disabled',false);
                     }
                   });
-                };
-                reader.onerror = function (error) {
-                  console.log('Error: ', error);
-                };
-              }
-              else {
-                $.ajax({
-                  url: "/upload_profile",
-                  method: "POST",
-                  dataType: "json",
-                  data: profile,
-                  success: function () {
-                    window.location.href = "/profile?status=s";
-                  },
-                  error: function (jqXHR, textStatus, errorThrown) {
-                    $("#error-msg").html(jqXHR.responseJSON);
-                    $("#submit-button").attr('disabled',false);
-                  }
-                });
-              }
+                }
               });
             });
           });

@@ -18,9 +18,14 @@ exports.authorizationCheck = function(authorizedRole, uid, callback){
                 console.log(err);
                 callback(err);
             }
-            let intersection = userRole.filter(x => authorizedRole.includes(x.user_role));
-            let authorized = intersection.length > 0;
-            callback(null, authorized);
+            else if(!userRole){
+                callback(null, false);
+            }
+            else{
+                let intersection = userRole.filter(x => authorizedRole.includes(x.user_role));
+                let authorized = intersection.length > 0;
+                callback(null, authorized);
+            }
         });
     }
 };
