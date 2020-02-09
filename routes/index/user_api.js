@@ -210,4 +210,30 @@ router.post('/get_user_info', function (req, res, next) {
         });
     });
 });
+
+router.post('/set_user_role', function (req, res, next) {
+    let roles = [authService.UserRole.Admin];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        if(!authorized) {
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+        user_db.setUserRoleByUid(req.body.user_id, req.body.roles, function(err, result){
+            if(err) {
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            if(result) {
+                res.json({});
+            }
+        })
+    });
+});
+
 module.exports = router;
