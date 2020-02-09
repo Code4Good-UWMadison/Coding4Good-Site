@@ -214,7 +214,7 @@ exports.getUserRoleByUid = function(uid, callback) {
       if (result.rows.length > 0) {
         callback(null, result.rows);
       } else {
-        callback("User does not have a role!");
+        callback("User does not have a role!", null);
       }
     }
   });
