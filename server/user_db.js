@@ -205,9 +205,9 @@ exports.checkEmailVerificationByUid = function(uid, callback) {
   });
 };
 
-exports.getUserRoleByUid = function(uid, callback) {
+exports.getUserRoleByUid = function(user_id, callback) {
   var query = `SELECT user_role FROM user_role WHERE user_id = $1;`;
-  db.query(query, [uid], function(err, result) {
+  db.query(query, [user_id], function(err, result) {
     if (err) {
       callback(err);
     } else {
@@ -220,8 +220,33 @@ exports.getUserRoleByUid = function(uid, callback) {
   });
 };
 
+exports.setUserRoleByUid = function(user_id, roles, callback){
+    let query = 
+    `BEGIN TRANSACTION
+      DELETE FROM user_role WHERE user_id = $1
+      FOR i IN $2
+      LOOP
+        INSERT INTO user_role (user_id, user_role)
+        VALUES ($1, $2[i])
+      END LOOP
+      COMMIT
+  END TRY
+  BEGIN CATCH
+    ROLLBACK
+  END CATCH`;
+  console.log(user_id);
+  console.log(roles);
+  db.query(query, [user_id, roles],function(err) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null)
+    }
+  })
+}
+
 exports.getAllUser = function(callback) {
-  var query = `select * from users;`;
+  var query = `SELECT * FROM users;`;
   db.query(query, function(err, result) {
     if (err) {
       callback(err);
