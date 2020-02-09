@@ -3,7 +3,6 @@ var db = require('../../server/project_db');
 var router = express.Router();
 
 const authService = require('../services/authorization_service');
-const msg = $("#error-msg");
 
 router.post('/createProject', function (req, res, next) {
     let roles = [authService.UserRole.Root, 
