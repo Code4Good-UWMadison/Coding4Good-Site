@@ -66,7 +66,7 @@ router.post('/removeProject', function(req, res, next){
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        project_db.removeProjectById(req.body.id,function (err) {
+        project_db.removeProjectById(req.body.pid,function (err) {
             if(err){
                 console.log(err);
                 res.status(400).json({msg: 'Failed to remove'});
@@ -79,7 +79,6 @@ router.post('/removeProject', function(req, res, next){
 
 router.post('/applyProject', function(req, res, next){
     let roles = null;
-    console.log("here4444");
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});

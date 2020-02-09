@@ -166,7 +166,6 @@ router.get('/applicants', function (req, res, next) {
                 res.status(400).json({msg: 'Database error'});
                 return;
             } else {
-                console.log(users);
                 res.render('project/applicants', {users: users});
             }
         });

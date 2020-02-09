@@ -214,36 +214,44 @@ exports.getUserRoleByUid = function(user_id, callback) {
       if (result.rows.length > 0) {
         callback(null, result.rows);
       } else {
-        callback("User does not have a role!", null);
+        callback(null, null);
       }
     }
   });
 };
 
 exports.setUserRoleByUid = function(user_id, roles, callback){
-    let query = 
-    `BEGIN TRANSACTION
-      DELETE FROM user_role WHERE user_id = $1
-      FOR i IN $2
-      LOOP
-        INSERT INTO user_role (user_id, user_role)
-        VALUES ($1, $2[i])
-      END LOOP
-      COMMIT
-  END TRY
-  BEGIN CATCH
-    ROLLBACK
-  END CATCH`;
-  console.log(user_id);
-  console.log(roles);
-  db.query(query, [user_id, roles],function(err) {
-    if (err) {
+  if(!roles){
+    roles = [];
+  }
+  const remove = `DELETE FROM user_role WHERE user_id = $1;`;
+  const insert = `INSERT INTO user_role (user_id, user_role) VALUES ($1, $2)`;
+  user_id = 1;
+  db.query(remove, [user_id], function(err) {
+    if(err){
+      console.log(err);
       callback(err);
-    } else {
-      callback(null)
     }
-  })
-}
+    else{
+      // make sure callback is only called after loop finish
+      Promise.all(roles.map(function(role) {
+        return new Promise(function(resolve, reject){
+          db.query(insert, [user_id, role], function(err) {
+            if(err){
+              return reject(err);
+            }
+            resolve();
+          });
+        });
+      })).then(function(){
+        callback();
+      }, function(err){
+        console.log(err);
+        callback(err);
+      });
+    }
+  });
+};
 
 exports.getAllUser = function(callback) {
   var query = `SELECT * FROM users;`;

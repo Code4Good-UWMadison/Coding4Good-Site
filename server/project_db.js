@@ -30,29 +30,34 @@ exports.editProject = function(project, callback) {
       if (err) {
         console.log(err);
         callback(err);
-      } else if (project.team != null) {
-        if (project.team.length > 0) {
-          var team = project.team;
-          team.forEach(function(person) {
-            var uid = parseInt(person.id);
-            var memberTitle = person.memberTitle;
-            db.query(newLink, [project.id, uid, memberTitle], function(err) {
+      } else if (project.team != null && project.team.length > 0) {
+        // make sure callback is only called after loop finish
+        Promise.all(project.team.map(function(member) {
+          return new Promise(function(resolve, reject){
+            db.query(newLink, [project.id, parseInt(member.id), member.memberTitle], function(err) {
               if (err) {
-                console.log(err);
-                callback(err);
+                return reject(err);
               }
+              resolve();
             });
           });
-        }
+        })).then(function(){
+          callback();
+        }, function(err){
+          console.log(err);
+          callback(err);
+        });
+      } else {
+        callback();
       }
-      callback(null);
     }
   );
 };
 
 exports.createProject = function(project, callback) {
-  var query = `INSERT INTO project (title, description, contact, org_name, creation_time, status, project_link, video_link) values($1,$2,$3,$4,(now() at time zone 'America/Chicago'),$5, $6, $7, $8) returning id;`;
-  var link = `INSERT INTO project_relation(pid, uid, relation) values($1,$2,$3);`;
+  var query = `INSERT INTO project (title, description, contact, org_name, creation_time, status, project_link, video_link, applyable) 
+              VALUES ($1,$2,$3,$4,(now() at time zone 'America/Chicago'),$5, $6, $7, $8) returning id;`;
+  var link = `INSERT INTO project_relation(pid, uid, relation) VALUES ($1,$2,$3);`;
   db.query(
     query,
     [
@@ -69,24 +74,26 @@ exports.createProject = function(project, callback) {
       if (err) {
         console.log(err);
         callback(err);
-      } else if (project.team != null) {
-        if (project.team.length > 0) {
-          var team = project.team;
-          team.forEach(function(person) {
-            var uid = parseInt(person.id);
-            var memberTitle = person.memberTitle;
-            db.query(link, [projectId.rows[0].id, uid, memberTitle], function(
-              err
-            ) {
+      } else if (project.team != null && project.team.length > 0) {
+        // make sure callback is only called after loop finish
+        Promise.all(project.team.map(function(member) {
+          return new Promise(function(resolve, reject){
+            db.query(link, [projectId.rows[0].id, parseInt(member.id), member.memberTitle], function(err) {
               if (err) {
-                console.log(err);
-                callback(err);
+                return reject(err);
               }
+              resolve();
             });
           });
-        }
+        })).then(function(){
+          callback();
+        }, function(err){
+          console.log(err);
+          callback(err);
+        });
+      } else {
+        callback();
       }
-      callback(null);
     }
   );
 };
@@ -142,12 +149,11 @@ exports.getProjectById = function(projectId, callback) {
 };
 
 exports.removeProjectById = function(projectId, callback) {
-  var queryProject = `DELETE FROM project WHERE id=$1;`;
+  const queryProject = `DELETE FROM project WHERE id=$1;`;
   db.query(queryProject, [projectId], function(err, result) {
     if (err) {
       callback(err);
     }
-    console.log(result.rowCount);
     if (result.rowCount > 0) {
       callback(null);
     } else {
