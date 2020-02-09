@@ -89,26 +89,21 @@ router.post('/applyProject', function(req, res, next){
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        console.log("here55555");
         user_db.getProfileByUserId(req.session.uid, function(err, hasProfile){
-            console.log("here666");
             if (err){
                 res.status(400).json({msg: "Database Error"});
             }else{
                 if (hasProfile){
                     project_db.applyProject(req.body.project_id, req.session.uid, function(err){    
-                        console.log("here33333");
                         if(err){
                             console.log(err);
                             res.status(400).json({msg: 'Failed to apply'});
                             return;
                         }
-                        console.log("here11");
                         res.json({});
                     });
                 }
                 else{
-                    console.log("here222222");
                     res.json({msg: "Please finish your Profile before applying for a project."});
                 }
             }

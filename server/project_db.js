@@ -211,23 +211,23 @@ exports.rejectApplicant = function(project_id, uid, callback) {
 // the manager can see all the applicants
 exports.getAllApplicantByProjectId = function(project_id, callback) {
   // select all applicants of this project
-  var query = `SELECT * FROM project_application_relation WHERE project_id = $1`;
-  db.query(query, [project_id], function(err) {
+  var query = "SELECT * FROM project_application_relation r, users u WHERE u.id = r.user_id AND r.project_id = $1;";
+  db.query(query, [project_id], function(err, result) {
     if (err) {
       console.log(err);
       callback(err);
     } else {
       if (result.rows.length > 0) {
-        callback(null, result);
+        callback(null, result.rows);
       } else {
-        callback("No matching project id");
+        callback(null, null);
       }
     }
   });
 };
 
 exports.getUserAppliedProjectByUserId = function (uid, callback) {
-  const query = "SELECT * FROM project_application_relation WHERE user_id = $1;"
+  const query = "SELECT * FROM project_application_relation WHERE user_id = $1;";
   db.query(query, [uid], function(err, result) {
     if (err) {
       console.log(err);

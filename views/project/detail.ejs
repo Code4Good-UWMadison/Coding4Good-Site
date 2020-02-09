@@ -43,10 +43,8 @@
                         if (result.msg) {
                             $("#error-msg").html(result.msg);
                             $("#apply-button").attr('disabled', false);
-                            console.log("hahahaha12112");
                         }
                         else {
-                            console.log("hahahaha");
                             window.location.reload();
                         }  
                     },
@@ -58,22 +56,7 @@
             });
 
             $("#applicants-button").click(function () {
-                $("#applicants-button").attr('disabled', true);
-                $.ajax({
-                    url: "/project/applicants",
-                    method: "GET",
-                    dataType: "json",
-                    data: {
-                        project_id: projectDetail.id,
-                    },
-                    success: function () {
-                        window.location.href = "/project?status=s";
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        $("#error-msg").html(jqXHR.responseJSON);
-                        $("#applicants-button").attr('disabled',false);
-                    }
-                });
+                window.location.href = "/project/applicants?project_id=" + projectDetail.id;
             });
 
         });

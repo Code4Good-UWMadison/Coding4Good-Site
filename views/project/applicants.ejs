@@ -2,38 +2,29 @@
 <html>
 <head>
     <% include ../template/head.ejs %>
-    <script src="/js/SearchScript.js"></script>
-    <script src="/js/SortScript.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            addLink();
-        });
-        function addLink(){
-            $(".projectRow").click(function () {
-                var projectId = this.id;
-                $(location).attr('href', '/project/detail?id=' + projectId);
+        <script src="/js/SearchScript.js"></script>
+        <script src="/js/SortScript.js"></script>x
+        <script type="text/javascript">
+            $(function () {
+                addLink();
             });
-        }
-        //this is used by sortscript for sorting purpose
-        function afterSort(){
-            addLink();
-        }
-    </script>
+            function addLink(){
+                $(".projectRow").click(function () {
+                    var user_id = this.id;
+                    $(location).attr('href', '/project/profile?user_id=' + user_id);
+                });
+            }
+            //this is used by sortscript for sorting purpose
+            function afterSort(){
+                addLink();
+            }
+        </script>
 </head>
 
 <body>
 
 <% include ../template/nav.ejs %>
-<h1> This is the page showing applicants in a list</h1>
-
 <div class="container body-layout">
-    <div class="row img-center-holder">
-        <% if(isMy){ %>
-            <h2>My Projects</h2>
-        <% } else{ %>
-            <h2>Projects</h2>
-        <% } %>
-    </div>
     <div class="row margin-htop">
         <div class="col-sm-1">
             <h4>Search: </h4>
@@ -42,40 +33,27 @@
             <input type="text" class="input searchable"
                    placeholder="keyword, key words, key words"/>
         </div>
-        <div class="col-sm-8-offset" align="right">
-            <% if (uid != null){ %>
-                <% if (uid == 1) { %>
-                    <a class="btn primary-button" href="/project/create">New Project</a>
-                <% } %>
-                <a class="btn primary-button" href="/project/my">My Project</a>
-            <% } else if(isMy) { %>
-                <a class="btn primary-button" href="/project">Back</a>
-            <% } %>
-        </div>
     </div>
     <table class="table margin-htop sortable searchable" align="center">
         <thead class="row margin-top">
         <tr class="tr clickable">
-            <th>Project Name</th>
-            <th>Organization Name</th>
-            <th>Project Status</th>
+            <th>Applicant Name</th>
+            <th>E-mail</th>
         </tr>
         </thead>
         <tbody id="projectTbody">
-        <% if(projectSet.length == 0){ %>
+        <% if(users){ %>
+            <% for (var i = 0; i < users.length; i++) { %>
+                <tr class="tr clickable projectRow" id=<%= users[i].id %>>
+                    <td class="td"><%= users[i].name %></td>
+                    <td class="td"><%= users[i].email %></td>
+                </tr>
+            <% } %>
+        <% } else { %>
             <tr>
-                <td class="error-msg">Sorry! Currently, there are no project available</td>
+                <td class="error-msg">No applicants yet!</td>
             </tr>
         <% } %>
-
-        <% projectSet.forEach(function(row){ %>
-            <tr class="tr clickable projectRow" id=<%= row.id %>>
-                <td class="td"><%= row.title %></td>
-                <td class="td"><%= row.org_name %></td>
-                <td class="td"><%= row.status %></td>
-            </tr>
-        <% }); %>
-
         </tbody>
     </table>
 </div>

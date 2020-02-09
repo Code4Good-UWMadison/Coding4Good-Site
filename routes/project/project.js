@@ -157,19 +157,48 @@ router.get('/applicants', function (req, res, next) {
             return;
         }
         else if(!authorized){
-            res.redirect('../project/detail?id='+projectId);
+            res.redirect('../project/detail?id=' + projectId);
             return;
         }
-        project_db.getAllApplicantByProjectId(req.query.pid, function(err){
+        project_db.getAllApplicantByProjectId(req.query.project_id, function(err, users) {
             if (err){
                 console.log(err);
                 res.status(400).json({msg: 'Database error'});
                 return;
-            }else{
-                res.render('project/applicants', {users: users}); 
+            } else {
+                console.log(users);
+                res.render('project/applicants', {users: users});
             }
         });
     });
+});
+
+router.get('/profile', function (req, res) {
+
+    const user_id = req.query.user_id;
+
+    // authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+    //     if (err) {
+    //         res.status(400).json({msg: 'Database Error'});
+    //         return;
+    //     }
+    //     else if(!authorized){
+    //         res.redirect('/login');
+    //         return;
+    //     }
+        user_db.getProfileByUserId(user_id, function (err, profile) {
+            if(err){
+                res.status(400).json({msg: err});
+                return;
+            }
+            else{
+                if(!profile){
+                    profile = {};
+                }
+                res.render('user/profile', {profile: profile, others: true});
+            }
+        });
+    // });
 });
 
 module.exports = router;
