@@ -1,7 +1,7 @@
 const db = require('../../server/user_db');
 
 exports.UserRole = {
-    Root:"Root", Developer: "Developer", Admin:"Admin", EventExecutive:"Event Executive", ProjectManager:"Project Manager", ProjectLeader:"Project Leader", ProjectMember:"Project Member", Finance:"Finance", Outreach:"Outreach"
+    Root:"Root", Developer: "Developer", Admin:"Admin", EventExecutive:"Event Executive", ProjectManager:"Project Manager", ProjectLeader:"Project Leader", ProjectMember:"Project Member", Treasury:"Treasury", Outreach:"Outreach", Partner:"Partner"
 };
 
 // check if user has role in authrizedRole
