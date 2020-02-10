@@ -59,7 +59,21 @@ router.get('/detail', function (req, res, next) {
                             res.status(400).json({msg: 'Database Error'});
                             return;
                         }
-                        res.render('project/detail', {projectDetail: project, users: users, uid: req.session.uid, hasApplied: hasApplied});
+                        user_db.getUserRoleByUid(req.session.uid, function (err, user_role) {
+                            if (err) {
+                                res.status(400).json({msg: 'Database Error'});
+                                return;
+                            }
+
+                            res.render('project/detail', {
+                                projectDetail: project,
+                                users: users,
+                                uid: req.session.uid,
+                                hasApplied: hasApplied,
+                                all_user_role: authService.UserRole,
+                                user_role: user_role,
+                            });
+                        });
                     });
                 }
             });
