@@ -24,8 +24,11 @@
 <script src="/js/formatchecker.js"></script>
 
 <%
-auth = function(auth_roles, user_role, all_user_roles) {
-    let intersection = user_role.filter(x => auth_roles.includes(x.user_role));
-    return intersection.length > 0;
+auth = function(auth_roles, user_role) {
+    if (user_role) {
+        let intersection = user_role.filter(x => auth_roles.includes(x.user_role));
+        return intersection.length > 0;
+    }
+    return false;
 }
 %>
