@@ -22,3 +22,10 @@
 <script src="/js/account.js"></script>
 <script src="/js/enum.js"></script>
 <script src="/js/formatchecker.js"></script>
+
+<%
+auth = function(auth_roles, user_role, all_user_roles) {
+    let intersection = user_role.filter(x => auth_roles.includes(x.user_role));
+    return intersection.length > 0;
+}
+%>
