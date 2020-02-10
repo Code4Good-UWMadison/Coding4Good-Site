@@ -135,7 +135,7 @@
                             status: $("#status").val(),
                             project_link: $("#project_link").val(),
                             video_link: $("#video_link").val(),
-                            applyable: $("#applyable").attr("checked"),
+                            applyable: $("#applyable").val(),
                             team: teams
                         },
                         success: function () {
@@ -207,6 +207,14 @@
             </select>
         </div>
 
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Open to Apply: &nbsp;</div>
+            <select class="form-control" id="applyable">
+                <option <%= projectDetail.applyable ? '' : 'selected' %> value="false">No</option>
+                <option <%= projectDetail.applyable ? 'selected' : '' %> value="true">Yes</option>
+            </select>
+        </div>
+        
         <div class="input-group new-project-input">
             <div class="input-group-addon">Contact Information:</div>
             <input class="form-control" type="text" id="contact" placeholder="Contact Information" value="<%=projectDetail.contact%>">

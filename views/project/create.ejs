@@ -128,7 +128,7 @@
                             status: $("#status").val(),
                             project_link: $("#project_link").val(),
                             video_link: $("#video_link").val(),
-                            applyable: $("#applyable").attr("checked"),
+                            applyable: $("#applyable").val(),
                             team: teams
                         },
                         success: function () {
@@ -180,6 +180,14 @@
             <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
             <select class="form-control" id="status">
                 <!--status option goes here-->
+            </select>
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Open to Apply: &nbsp;</div>
+            <select class="form-control" id="applyable">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
             </select>
         </div>
 
