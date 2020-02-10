@@ -57,7 +57,8 @@
         <tr class="tr clickable">
             <th>Project Name</th>
             <th>Organization Name</th>
-            <th>Project Status</th>
+            <th class="img-center-holder">Project Status</th>
+            <th class="img-center-holder">Open to Apply</th>
         </tr>
         </thead>
         <tbody id="projectTbody">
@@ -71,7 +72,8 @@
         <tr class="tr clickable projectRow" id=<%= row.id %>>
             <td class="td"><%= row.title %></td>
             <td class="td"><%= row.org_name %></td>
-            <td class="td"><%= row.status %></td>
+            <td class="td img-center-holder"><%= row.status %></td>
+            <td class="td img-center-holder"><%= (row.applyable ? "Yes" : "No") %></td>
         </tr>
         <% }); %>
 

@@ -163,25 +163,41 @@ exports.removeProjectById = function(projectId, callback) {
 };
 
 // if user has registered profile, put this application info into database
-exports.applyProject = function(project_id, uid, callback) {
+exports.applyProject = function(project_id, user_id, callback) {
   // add member's application interest into project_application_relation table
   // the database has already checked uniqueness
-  var query = `INSERT INTO project_application_relation (project_id, user_id) VALUES($1,$2);`;
-  db.query(query, [project_id, uid], function(err) {
+  const query = `INSERT INTO project_application_relation (project_id, user_id) VALUES ($1,$2);`;
+  db.query(query, [project_id, user_id], function(err) {
     if (err) {
       console.log(err);
       callback(err);
     }
-    callback(null);
+    else{
+      callback(null);
+    }
   });
 };
+
+// check if a user has applied to the project
+exports.checkApplied = function(project_id, user_id, callback){
+  const query = `SELECT * FROM project_application_relation WHERE project_id = $1 AND user_id = $2;`;
+  db.query(query, [project_id, user_id], function(err, result){
+    if(err){
+      console.log(err);
+      callback(err);
+    }
+    else{
+      callback(null, result.rowCount > 0);
+    }
+  })
+}
 
 // the project manager approves the application request
 exports.approveApplicant = function(project_id, uid, callback) {
   // when manager approves the application
   // add relation to project relation
-  var query = `INSERT INTO project_relation (pid, uid, relation) VALUES($1,$2,$3);`;
-  var remove = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
+  const query = `INSERT INTO project_relation (pid, uid, relation) VALUES($1,$2,$3);`;
+  const remove = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
   db.query(query, [project_id, uid, "Member"], function(err) {
     if (err) {
       console.log(err);
@@ -206,20 +222,22 @@ exports.approveApplicant = function(project_id, uid, callback) {
 exports.rejectApplicant = function(project_id, uid, callback) {
   // the manager rejects the member's application
   // delete the applicaiton request
-  var remove = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
+  const remove = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
   db.query(remove, [project_id, uid], function(err, project_id, uid) {
     if (err) {
       console.log(err);
       callback(err);
     }
-    callback(null);
+    else{
+      callback(null);
+    }
   });
 };
 
 // the manager can see all the applicants
 exports.getAllApplicantByProjectId = function(project_id, callback) {
   // select all applicants of this project
-  var query = "SELECT * FROM project_application_relation r, users u WHERE u.id = r.user_id AND r.project_id = $1;";
+  const query = "SELECT * FROM project_application_relation r, users u WHERE u.id = r.user_id AND r.project_id = $1;";
   db.query(query, [project_id], function(err, result) {
     if (err) {
       console.log(err);

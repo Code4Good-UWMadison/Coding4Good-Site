@@ -46,29 +46,24 @@ router.get('/detail', function (req, res, next) {
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        project_db.getAssociatedUsersByProjectId(project.id, function (err, users) {
-            if (err) {
-                console.log(err);
-                res.status(400).json({msg: 'Database Error'});
-                return;
-            }
-
-            project_db.getAppliedProjectByUserId(req.session.uid, function (err, applied_project_id) {
+        else{
+            project_db.getAssociatedUsersByProjectId(project.id, function (err, users) {
                 if (err) {
+                    console.log(err);
                     res.status(400).json({msg: 'Database Error'});
                     return;
                 }
-                var hasApplied = false;
-                for (var i = 0; i < applied_project_id.length; i++) {
-                    var project_id = applied_project_id[i].project_id;
-                    if (project_id == project.id) {
-                        hasApplied = true;
-                        break;
-                    }
+                else{
+                    project_db.checkApplied(project.id, req.session.uid, function (err, hasApplied) {
+                        if (err) {
+                            res.status(400).json({msg: 'Database Error'});
+                            return;
+                        }
+                        res.render('project/detail', {projectDetail: project, users: users, uid: req.session.uid, hasApplied: hasApplied});
+                    });
                 }
-                res.render('project/detail', {projectDetail: project, users: users, uid: req.session.uid, hasApplied: hasApplied});
-            })
-        })
+            });
+        }
     });
 });
 
