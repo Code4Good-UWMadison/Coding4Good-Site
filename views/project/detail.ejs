@@ -67,16 +67,14 @@
 <% include ../template/nav.ejs %>
 
 <div class="container body-layout">
-    <p class="error-msg" id="error-msg"></p>
-    <div class="col-sm-8-offset" align="right">
+    <div align="right">
         <%if (uid==1) { %>
-        <button id="remove-confirmation" class="btn primary-button">Remove</button>
-        <a class="btn primary-button" href="/project/edit?id=<%= projectDetail.id%>">Edit</a>
+            <button id="remove-confirmation" class="btn primary-button">Remove</button>
+            <a class="btn primary-button" href="/project/edit?id=<%= projectDetail.id%>">Edit</a>
         <% } %>
         <a class="btn primary-button" href="/project">Back</a>
     </div>
-
-
+    <p class="error-msg" id="error-msg"></p>
     <div class="input-group new-project-input">
         <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
         <div class="form-control" type="text" id="title"><%= projectDetail.title %></div>
@@ -157,7 +155,7 @@
         <% } %>
             <%if (canSeeApplicants) { %>
                 <button id="applicants-button" type="button" class="btn long-btn primary-button">See Applicants</button>
-            <% } else if (!isIn) { %>
+            <% } else if (!isIn && projectDetail.applyable) { %>
                 <%if (hasApplied) { %>
                     <button id="apply-button" type="button" class="btn long-btn primary-button" disabled="true">Applied!</button>
                 <% } else { %>
