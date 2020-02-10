@@ -108,4 +108,45 @@ router.post('/applyProject', function(req, res, next){
         });
     });
 });
+
+router.post('/approveApplicant', function(req, res, next){
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+    });
+    project_db.approveApplicant(req.body.project_id, req.session.uid, function(err){
+        if (err){
+            res.status(400).json({msg: "Database error"});             
+        }else{
+            res.json({});
+        }            
+     });
+});
+
+router.post('/rejectApplicant', function(req, res, next){
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+    });
+    project_db.rejectApplicant(req.body.project_id, req.session.uid, function(err){
+        if (err){
+            res.status(400).json({msg: "Database error"});             
+        }else{
+            res.json({});
+        }
+    });
+});
+
 module.exports = router;
