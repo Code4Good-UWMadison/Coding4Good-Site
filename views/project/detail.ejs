@@ -71,14 +71,12 @@
     <%if (uid) { %>
         <% if (user_role) { %>
             <% if (user_role.filter(x => x.user_role === all_user_role.ProjectLeader)) { %>
-            <p>ROLE IS LEADER</p>
                 <% if (users.filter(x => (x.relation === "Leader" && x.uid === uid)).length >= 1) { %>
                     <% leader_authorized = true; %>
                 <% } %>
             <% } %>
         <% } %>
     <% } %>
-        <%= leader_authorized%>
     <div align="right">
         <%if (auth([all_user_role.Developer, all_user_role.ProjectManager, all_user_role.Admin], user_role, uid, all_user_role)) { %>
             <button id="remove-confirmation" class="btn primary-button">Remove</button>
