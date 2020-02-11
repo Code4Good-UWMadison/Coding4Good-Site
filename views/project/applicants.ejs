@@ -11,7 +11,7 @@
             function addLink(){
                 $(".projectRow").click(function () {
                     var user_id = this.id;
-                    $(location).attr('href', '/profile?fromApply=true&user_id=' + user_id);
+                    $(location).attr('href', '/profile?fromApply=true&project_id='+projectDetail.id+'&user_id='+user_id);
                 });
             }
             //this is used by sortscript for sorting purpose
