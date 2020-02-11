@@ -3,6 +3,7 @@
 <head>
     <% include ../template/head.ejs %>
     <script>
+     
       $(function () {
         $("#submit-button").click(function () {
           $("#submit-button").attr('disabled',true);
@@ -71,8 +72,18 @@
             });
           });
         });
+        var url;
         $("#confirmation").click(function () {
-                $("#confirmation-box").modal('show');
+            url = "/approveApplicant";
+            $("#box-info-text").text("approve");
+            $("#box-info-title").text("Approve");
+            $("#confirmation-box").modal('show'); 
+        });
+        $("#rejectConfirmation").click(function () {
+            url = "/rejectApplicant";
+            $("#box-info-text").text("reject");
+            $("#box-info-title").text("Reject");
+            $("#confirmation-box").modal('show');
         });
         $("#canceled").click(function(){
             $("#confirmation-box").modal('hide');
@@ -80,14 +91,15 @@
         $("#confirmed").click(function () {
             $("#confirmed").attr('disabled', true);
             $.ajax({
-                url: "/project/removeProject",
+                url: url,
                 method: "POST",
                 dataType: "json",
                 data: {
-                    pid: projectDetail.id,
+                    user: user,
+                    project_id: project_id
                 },
                 success: function () {
-                    window.location.href="/project?status=s";
+                    msg.html("Operation success");
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $("#error-msg").html(jqXHR.responseJSON);
@@ -112,6 +124,14 @@
 <!--            <div class="input-group-addon">Nickname:</div>-->
 <!--            <input class="form-control" type="text" id="nickname" placeholder="Nickname" value="<%=profile.nickname%>">-->
 <!--        </div>-->
+    <div class="input-group login-signup-input">
+      <div class="input-group-addon">Name:</div>
+      <input class="form-control" type="text" id="name" value=<%=user.name%> disabled>
+    </div>
+    <div class="input-group login-signup-input">
+      <div class="input-group-addon">Email:</div>
+      <input class="form-control" type="text" id="email" value=<%=user.email%> disabled>
+    </div>
         <div class="input-group login-signup-input" >
             <div class="input-group-addon">Years:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <select class="form-control" id="year" <%= others ? 'disabled' : '' %>>
@@ -172,26 +192,27 @@
     <% } %>
 
     <% if (fromApply) { %>
-      <button id="confirmation" class="btn large-button primary-button">Approve</button>
-      <button id="confirmation" class="btn large-button primary-button">Reject</button>
-      <div id="confirmation-box" class="modal fade confirmation-box">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <p class="modal-title">Approve</p>
-            </div>
-            <div class="modal-body">
-                <h4>Are you sure you want to <span></span>?</h4>
-            </div>
-            <div class="modal-footer">
-                <button id="confirmed" class="btn highPriority-button">Yes</button>
-                <button id="canceled" class="btn primary-button">No</button>
-            </div>
+      <button id="confirmation" class="btn mid-btn primary-button">Approve</button>
+      <button id="rejectConfirmation" class="btn mid-btn primary-button">Reject</button>
+      
+    <% } %>
+    <div id="confirmation-box" class="modal fade confirmation-box">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <p class="modal-title"><span id="box-info-title"></span>&nbsp;Confirmation</p>
+          </div>
+          <div class="modal-body">
+              <h4>Are you sure you want to <span id="box-info-text"></span>?</h4>
+          </div>
+          <div class="modal-footer">
+              <button id="confirmed" class="btn highPriority-button">Yes</button>
+              <button id="canceled" class="btn primary-button">No</button>
           </div>
         </div>
       </div>
-    <% } %>
+    </div>
 </div>
 
 <% include ../template/footer.ejs %>
