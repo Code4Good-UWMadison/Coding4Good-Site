@@ -3,15 +3,15 @@
 <head>
     <% include ../template/head.ejs %>
         <script src="/js/SearchScript.js"></script>
-        <script src="/js/SortScript.js"></script>x
+        <script src="/js/SortScript.js"></script>
         <script type="text/javascript">
+            var project_id =<%-JSON.stringify(project_id)%>;
             $(function () {
                 addLink();
             });
             function addLink(){
                 $(".projectRow").click(function () {
-                    var user_id = this.id;
-                    $(location).attr('href', '/profile?fromApply=true&project_id='+projectDetail.id+'&user_id='+user_id);
+                    $(location).attr('href', '/profile?fromApply=true&project_id='+project_id+'&user_id='+this.id);
                 });
             }
             //this is used by sortscript for sorting purpose

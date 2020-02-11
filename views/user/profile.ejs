@@ -3,7 +3,8 @@
 <head>
     <% include ../template/head.ejs %>
     <script>
-     
+      var user =<%-JSON.stringify(user)%>;
+      var project_id = <%- JSON.stringify(project_id)%>;
       $(function () {
         $("#submit-button").click(function () {
           $("#submit-button").attr('disabled',true);
@@ -72,15 +73,15 @@
             });
           });
         });
-        var url;
+        var url = "/project";
         $("#confirmation").click(function () {
-            url = "/approveApplicant";
+            url += "/approveApplicant";
             $("#box-info-text").text("approve");
             $("#box-info-title").text("Approve");
             $("#confirmation-box").modal('show'); 
         });
         $("#rejectConfirmation").click(function () {
-            url = "/rejectApplicant";
+            url += "/rejectApplicant";
             $("#box-info-text").text("reject");
             $("#box-info-title").text("Reject");
             $("#confirmation-box").modal('show');
@@ -99,7 +100,7 @@
                     project_id: project_id
                 },
                 success: function () {
-                    msg.html("Operation success");
+                    window.location.href = "/project/applicants?project_id="+project_id+"&status=s";
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $("#error-msg").html(jqXHR.responseJSON);
