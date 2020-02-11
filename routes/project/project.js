@@ -12,7 +12,21 @@ router.get('/', function (req, res, next) {
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        res.render('project/index', {projectSet: projectSet, isMy: false, uid: req.session.uid});
+        user_db.getUserRoleByUid(req.session.uid, function (err, user_role) {
+            if (err) {
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+
+            res.render('project/index', {
+                projectSet: projectSet,
+                isMy: false,
+                uid: req.session.uid,
+                all_user_role: authService.UserRole,
+                user_role: user_role
+            });
+
+        });
     });
 });
 

@@ -68,8 +68,10 @@
 
 <div class="container body-layout">
     <div align="right">
-        <%if (auth([all_user_role.Admin], user_role)) { %>
+        <%if (auth([all_user_role.Developer, all_user_role.ProjectManager, all_user_role.Admin], user_role, uid, all_user_role)) { %>
             <button id="remove-confirmation" class="btn primary-button">Remove</button>
+        <% } %>
+        <%if (auth([all_user_role.Developer, all_user_role.ProjectLeader, all_user_role.ProjectManager, all_user_role.Admin], user_role, uid, all_user_role)) { %>
             <a class="btn primary-button" href="/project/edit?id=<%= projectDetail.id%>">Edit</a>
         <% } %>
         <a class="btn primary-button" href="/project">Back</a>
@@ -144,14 +146,17 @@
 
     <% if (uid) { %>
         <% var authorized = false; %>
-        <% if (user_role.filter(x => x.user_role === all_user_role.ProjectLeader)) { %>
-            <% if (users.filter(x => x.relation === "Leader").filter(x => x.uid === uid)) { %>
-                <% authorized = true; %>
+        <% user %>
+        <% if (user_role) { %>
+            <% if (user_role.filter(x => x.user_role === all_user_role.ProjectLeader)) { %>
+                <% if (users.filter(x => x.relation === "Leader").filter(x => x.uid === uid)) { %>
+                    <% authorized = true; %>
+                <% } %>
             <% } %>
         <% } %>
 
-        <% let auth_roles = [all_user_role.Admin, all_user_role.Root, all_user_role.ProjectManager, all_user_role.Developer]; %>
-        <%if (auth(auth_roles, user_role) || authorized) { %>
+        <% let auth_roles = [all_user_role.ProjectManager, all_user_role.Developer]; %>
+        <% if (auth(auth_roles, user_role, uid, all_user_role) || authorized) { %>
             <button id="applicants-button" type="button" class="btn long-btn primary-button">See Applicants</button>
         <% } else if (hasApplied) { %>
             <button id="apply-button" type="button" class="btn long-btn primary-button" disabled="true">Applied!</button>
