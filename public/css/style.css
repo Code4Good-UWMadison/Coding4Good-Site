@@ -219,6 +219,10 @@ section {
     width: 100%;
 }
 
+.mid-btn {
+    width: 45%;
+}
+
 .login-signup-input {
     margin: 10px auto;
     width: 100%;
