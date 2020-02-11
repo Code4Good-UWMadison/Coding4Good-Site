@@ -180,7 +180,7 @@ router.get('/applicants', function (req, res, next) {
             return;
         }
         else if(!authorized){
-            res.redirect('../project/detail?id=' + projectId);
+            res.redirect('../project/detail?id=' + req.query.project_id);
             return;
         }
         project_db.getAllApplicantByProjectId(req.query.project_id, function(err, users) {
@@ -189,7 +189,7 @@ router.get('/applicants', function (req, res, next) {
                 res.status(400).json({msg: 'Database error'});
                 return;
             } else {
-                res.render('project/applicants', {users: users});
+                res.render('project/applicants', {users: users, project_id: req.query.project_id});
             }
         });
     });
