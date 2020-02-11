@@ -122,7 +122,7 @@ exports.getUserInfo = function(uid, callback) {
 };
 
 exports.getUserById = function (uid, callback) {
-  var query = `SELECT * FROM users WHERE id=$1;`;
+  var query = `SELECT id, email, name, create_date FROM users WHERE id=$1;`;
   db.query(query, [uid], function (err, result) {
     if (err) {
       callback(err);
@@ -255,7 +255,7 @@ exports.setUserRoleByUid = function(user_id, roles, callback){
 };
 
 exports.getAllUser = function(callback) {
-  var query = `SELECT * FROM users;`;
+  var query = `SELECT id, email, name, create_date FROM users;`;
   db.query(query, function(err, result) {
     if (err) {
       callback(err);

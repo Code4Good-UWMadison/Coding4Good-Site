@@ -164,10 +164,10 @@ router.post('/get_user_info', function (req, res, next) {
             if(err) {
                 console.log(err);
             }
-            user_db.getProfileByUserId(user.id, function (err, profile) {
-                if(err) {
-                    console.log(err);
-                }
+            // user_db.getProfileByUserId(user.id, function (err, profile) {
+            //     if(err) {
+            //         console.log(err);
+            //     }
                 user_db.getUserRoleByUid(user.id, function (err, roles) {
                     if(err) {
                         console.log(err);
@@ -176,10 +176,10 @@ router.post('/get_user_info', function (req, res, next) {
                         if(err) {
                             console.log(err);
                         }
-                        res.json({user: user, profile: profile, roles: roles, projects: projects});
+                        res.json({user: user, roles: roles, projects: projects});
                     });
                 });
-            });
+            // });
         });
     });
 });

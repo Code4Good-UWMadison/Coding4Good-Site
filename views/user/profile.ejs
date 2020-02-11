@@ -127,11 +127,11 @@
 <!--        </div>-->
     <div class="input-group login-signup-input">
       <div class="input-group-addon">Name:</div>
-      <input class="form-control" type="text" id="name" value=<%=user.name%> disabled>
+      <input class="form-control" type="text" id="name" value="<%=user ? user.name : ''%>" disabled>
     </div>
     <div class="input-group login-signup-input">
       <div class="input-group-addon">Email:</div>
-      <input class="form-control" type="text" id="email" value=<%=user.email%> disabled>
+      <input class="form-control" type="text" id="email" value="<%=user ? user.email : ''%>" disabled>
     </div>
         <div class="input-group login-signup-input" >
             <div class="input-group-addon">Years:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>

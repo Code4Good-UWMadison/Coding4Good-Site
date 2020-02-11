@@ -17,6 +17,17 @@
                         },
                         success: function (result) {
                             console.log(result);
+                            var profile_link = "/profile?user_id="+result.user.id;
+                            $("#profile_link").attr("href", profile_link);
+                            $("#profile_link").html(profile_link);
+                            var project_list = "";
+                            result.projects.push({id: 255, title: "fdas", relation: "USP"});
+                            result.projects.forEach(function(project){
+                                console.log(result.projects);
+                                project_list += "<a href='/project/detail?id='"+project.id+">"+project.title+" "+project.relation+"</a></br>";
+                            });
+                            $("#project_list").html(project_list);
+                            $("#select-user-button").attr('disabled',false);
                         },
                         error: function () {
                             $("#error-msg").html("Error: Please contact Web team!");
@@ -52,7 +63,7 @@
         <div class="container body-layout">
             <p class="error-msg" id="error-msg"></p>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-sm-9">
                     <div class="input-group new-project-input">
                         <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User :&nbsp;&nbsp;&nbsp;</div>
                         <select placeholder="User Name" id="name" class="form-control user-list">
@@ -64,10 +75,18 @@
                         </select>
                     </div>
                 </div>
-                <button id="select-user-button" type="button" class="btn primary-button col-md-3 new-project-input">Load</button>
+                <button id="select-user-button" type="button" class="btn primary-button col-sm-3 new-project-input">Load</button>
             </div>
 
+            <div class="input-group new-project-input row">
+                <div class="input-group-addon">&nbsp;&nbsp;Profile Link :&nbsp;</div>
+                <div class="form-control"><a id="profile_link" href=""></a></div>
+            </div>
 
+            <div class="input-group new-project-input row">
+                <div class="input-group-addon">&nbsp;&nbsp;Project list :&nbsp;</div>
+                <div readonly class="form-control" type="text" id="project_list" style="height:300px"></div>
+            </div>
 
             <div class="input-group new-project-input row">
                 <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Role :&nbsp;&nbsp;&nbsp;</div>
