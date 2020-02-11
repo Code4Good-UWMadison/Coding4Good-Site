@@ -21,6 +21,18 @@ exports.sendEmail = function(emailDetail, callback){
     emailDetail.from = emailDetail.from ? emailDetail.from : `"Coding for Good Team <"${process.env.EMAILUSER}">" `;
     emailDetail.to = emailDetail.to ? emailDetail.to : process.env.EMAILORG;
     
+    emailDetail.html = `Hello from the Coding for Good team! &nbsp;</br></br>` 
+                        + emailDetail.html
+                        + `</br><img style="width:220px;" src="cid:club-icon" alt="Corgi"></br>
+                        Please do not reply to this email.`;
+    if(!emailDetail.attachemnts)
+        emailDetail.attachemnts = [];
+    emailDetail.attachemnts.push({
+        filename: 'icon.jpg',
+        path: '/app/public/img/icon.jpg',
+        cid: 'club-icon'
+    });
+    console.log(emailDetail);
     let transporter = nodemailer.createTransport({
         host: HOST,
         secureConnection: false,

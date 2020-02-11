@@ -48,18 +48,14 @@ router.post('/signup', function (req, res, next) {
                     expiresIn: '1d',
                 }
             )
-            const url = `http://${baseUrl}/confirmation/${emailToken}`;
+            const url = `https://${baseUrl}/confirmation/${emailToken}`;
             
-            var emailDetail = {
+            const emailDetail = {
                 to: req.body.email, // list of receivers 
                 subject: "Verification email from Coding4Good",
-                html: `Hello from the Coding for Good team!</br></br>Thank you for registering!</br>Please click this link to confirm your email ` +
-                `address: <a href='${url}'>${url}</a></br><img style="width:220px;" src="cid:club-icon" alt="Corgi"></br>Please do not reply to this email.`,
-                attachments: [{
-                    filename: 'icon.jpg',
-                    path: '/app/public/img/icon.jpg',
-                    cid: 'club-icon'
-                }]
+                html: `Thank you for registering! &nbsp;</br>
+                        Please click this link to confirm your email
+                        address: <a href='${url}'>${url}</a>`
             };
             emailService.sendEmail(emailDetail, function(err){
                 if(!err){
