@@ -26,28 +26,45 @@ router.get('/sponsor', function (req, res) {
 });
 
 router.get('/profile', function (req, res) {
-    var user_id = req.query.user_id ? req.query.user_id : req.session.uid;
+    var profile_uid = req.query.user_id ? req.query.user_id : req.session.uid;
+    var project_id = req.query.project_id;
     authService.authorizationCheck(null, req.session.uid, function(err, authorized){
         if (err) {
+            console.log(err);
             res.status(400).json({msg: 'Database Error'});
-            return;
         }
         else if(!authorized){
             res.redirect('/login');
-            return;
         }
-        db.getProfileByUserId(user_id, function (err, profile) {
-            if(err){
-                res.status(400).json({msg: err});
-                return;
-            }
-            else{
-                if(!profile){
-                    profile = {};
+        else{
+            db.getProfileByUserId(profile_uid, function (err, profile) {
+                if(err){
+                    console.log(err);
+                    res.status(400).json({msg: err});
+                    return;
                 }
-                res.render('user/profile', {profile: profile, others: user_id != req.session.uid, fromApply: req.query.fromApply ? true : false});
-            }
-        });
+                else{
+                    if(!profile){
+                        profile = {};
+                    }
+                    db.getUserById(profile_uid, function (err, user){
+                        if(err){
+                            console.log(err);
+                            res.status(400).json({msg: err});
+                        }
+                        else{
+                            res.render('user/profile', 
+                            {
+                                profile: profile, 
+                                others: profile_uid != req.session.uid, 
+                                fromApply: req.query.fromApply ? true : false, 
+                                user: user, 
+                                project_id: project_id});
+                        }
+                    })
+                }
+            });
+        }
     });
 });
 
