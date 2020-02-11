@@ -114,6 +114,9 @@ router.post('/applyProject', function(req, res, next){
 });
 
 router.post('/approveApplicant', function(req, res, next){
+    let roles = [authService.UserRole.Developer, 
+                authService.UserRole.Admin,
+                authService.UserRole.ProjectManager];
     authService.authorizationCheck(null, req.session.uid, function(err, authorized){
         if (err) {
             console.log(err);
@@ -125,7 +128,7 @@ router.post('/approveApplicant', function(req, res, next){
             return;
         }
         else{
-            project_db.approveApplicant(req.body.project_id, req.session.uid, function(err){
+            project_db.approveApplicant(req.body.project_id, req.body.user.id, function(err){
                 if (err){
                     console.log(err);
                     res.status(400).json({msg: "Database error"});
@@ -171,7 +174,7 @@ router.post('/rejectApplicant', function(req, res, next){
             return;
         }
         else{
-            project_db.rejectApplicant(req.body.project_id, req.session.uid, function(err){
+            project_db.rejectApplicant(req.body.project_id, req.body.user.id, function(err){
                 if (err){
                     console.log(err);
                     res.status(400).json({msg: "Database error"});
