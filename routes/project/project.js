@@ -195,30 +195,30 @@ router.get('/applicants', function (req, res, next) {
     });
 });
 
-router.get('/profile', function (req, res) {
-    const user_id = req.query.user_id;
-    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
-        if (err) {
-            res.status(400).json({msg: 'Database Error'});
-            return;
-        }
-        else if(!authorized){
-            res.redirect('/login');
-            return;
-        }
-        user_db.getProfileByUserId(user_id, function (err, profile) {
-            if(err){
-                res.status(400).json({msg: err});
-                return;
-            }
-            else{
-                if(!profile){
-                    profile = {};
-                }
-                res.render('user/profile', {profile: profile, others: true});
-            }
-        });
-    });
-});
+// router.get('/profile', function (req, res) {
+//     const user_id = req.query.user_id;
+//     authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+//         if (err) {
+//             res.status(400).json({msg: 'Database Error'});
+//             return;
+//         }
+//         else if(!authorized){
+//             res.redirect('/login');
+//             return;
+//         }
+//         user_db.getProfileByUserId(user_id, function (err, profile) {
+//             if(err){
+//                 res.status(400).json({msg: err});
+//                 return;
+//             }
+//             else{
+//                 if(!profile){
+//                     profile = {};
+//                 }
+//                 res.render('user/profile', {profile: profile, others: true});
+//             }
+//         });
+//     });
+// });
 
 module.exports = router;

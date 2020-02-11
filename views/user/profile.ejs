@@ -71,8 +71,32 @@
             });
           });
         });
+        $("#confirmation").click(function () {
+                $("#confirmation-box").modal('show');
+        });
+        $("#canceled").click(function(){
+            $("#confirmation-box").modal('hide');
+        });
+        $("#confirmed").click(function () {
+            $("#confirmed").attr('disabled', true);
+            $.ajax({
+                url: "/project/removeProject",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    pid: projectDetail.id,
+                },
+                success: function () {
+                    window.location.href="/project?status=s";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#error-msg").html(jqXHR.responseJSON);
+                    $("#confirmation-box").modal('hide');
+                    $("#confirmed").attr('disabled', false);
+                }
+            });
+        });
       });
-
     </script>
 
 </head>
@@ -147,6 +171,27 @@
         <button id="submit-button" class="btn long-btn primary-button">Update Profile</button>
     <% } %>
 
+    <% if (fromApply) { %>
+      <button id="confirmation" class="btn large-button primary-button">Approve</button>
+      <button id="confirmation" class="btn large-button primary-button">Reject</button>
+      <div id="confirmation-box" class="modal fade confirmation-box">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <p class="modal-title">Approve</p>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to <span></span>?</h4>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmed" class="btn highPriority-button">Yes</button>
+                <button id="canceled" class="btn primary-button">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
 </div>
 
 <% include ../template/footer.ejs %>
