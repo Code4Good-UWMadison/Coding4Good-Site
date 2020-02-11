@@ -146,7 +146,6 @@
 
     <% if (uid) { %>
         <% var authorized = false; %>
-        <% user %>
         <% if (user_role) { %>
             <% if (user_role.filter(x => x.user_role === all_user_role.ProjectLeader)) { %>
                 <% if (users.filter(x => x.relation === "Leader").filter(x => x.uid === uid)) { %>
