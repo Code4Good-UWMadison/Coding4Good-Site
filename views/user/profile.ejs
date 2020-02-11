@@ -4,7 +4,7 @@
     <% include ../template/head.ejs %>
     <script>
       var user =<%-JSON.stringify(user)%>;
-      var project_id = <%- JSON.stringify(project_id)%>;
+      var project_id = '<%- JSON.stringify(project_id)%>';
       $(function () {
         $("#submit-button").click(function () {
           $("#submit-button").attr('disabled',true);
