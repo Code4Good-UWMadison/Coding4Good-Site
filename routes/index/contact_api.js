@@ -1,23 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const nodemailer = require("nodemailer");
+const emailService = require('../services/email_service');
 
-var transporter = nodemailer.createTransport({
-    service: "gmail",
-    port: 465,
-    secure: true, // true for 465, false for other ports
-    auth: {
-        user: process.env.EMAILUSER,
-        pass: process.env.EMAILPASS
-    }
-});
-
-router.post('/sendEmail', function (req, res, next) {
+router.post('/contactEmail', function (req, res, next) {
     var data = req.body;
     data.userid = req.session.uid;
-    var mailOptions = {
-        from: '"cfg web" <no-reply@cfg-web.org>',//from: 'no-reply@cfg-web.org',
-        to: process.env.EMAILUSER,
+    var emailDetail = {
         subject: 'Contact from the website',
         html: '<h4> Name: ' + data.name + '<br>'
         + 'Organization: ' + data.organization + '<br>'
@@ -28,15 +16,14 @@ router.post('/sendEmail', function (req, res, next) {
         + '<p>Content: ' + data.content + '</p></h4>',
         text: data
     };
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, function(error, info) {
-        if (error) {
-            console.log(error);
-            res.status(500).json({msg: 'Failed to send email'});
+    emailService.sendEmail(emailDetail, function(err) {
+        if (err) {
+            console.log(err);
+            res.json({status: false, msg: 'Failed to send Email, please try again later, or email us to <cfg.madison@gmail.com> if you are having trouble.'});
             return;
         } else {
-            console.log('Message sent: ' + info.response);
-            res.json({});
+            res.json({status: true});
+            return;
         }
     });
 });

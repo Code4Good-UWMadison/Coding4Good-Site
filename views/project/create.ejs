@@ -3,7 +3,7 @@
 <head>
     <% include ../template/head.ejs %>
     <script>
-		var data =<%-JSON.stringify(allUserNameAndId)%>;
+		var data = <%-JSON.stringify(allUser)%>;
 
         function selectListFocus(){
             var list = $(".member-list").toArray();
@@ -19,8 +19,8 @@
             var html=" <div class=\"input-group new-project-input row\">\n" +
                 "       <div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member "+currentRow+":&nbsp;&nbsp;&nbsp;</div>\n" +
                 "       <select placeholder=\"Member Name\" id=\"name"+currentRow+"\" class=\"form-control member-list\">\n" +
-                "           <% allUserNameAndId.forEach(function(user){ %>\n" +
-                "           <option id=\"<%= user.id %>\" value=\"<%= user.id %>\"><%= user.name %></option>\n" +
+                "           <% allUser.forEach(function(user){ %>\n" +
+                "           <option id=\"<%= user.id %>\" value=\"<%= user.id %>\"><%= user.name %> (<%= user.email %>)</option>\n" +
                 "           <% }) %>\n" +
                 "       </select>\n" +
                 "       <div class=\"input-group-addon\">Member Title:</div>\n" +
@@ -41,10 +41,8 @@
                 addMemberRow();
             });
             var statusHtml = ""
-            for (var status in StatusEnum) {
-                if (isNaN(Number(status))) {
-                    statusHtml += "<option value=\"" + StatusEnum[status] + "\">" + status + "</option>";
-                }
+            for (var status in ProjectStatus) {
+                statusHtml += "<option value=\"" + ProjectStatus[status] + "\">" + ProjectStatus[status] + "</option>";
             }
             $('#status').html(statusHtml);
             $("#submit-button").click(function () {
@@ -103,7 +101,8 @@
                                         }
                                     });
                                     if (!duplicate) {
-                                        if (people.name === name) {
+                                        let nameWithEmail = people.name + " (" + people.email + ")";
+                                        if (nameWithEmail === name) {
                                             teams.push({id: id, memberTitle: title});
                                         }
                                     }
@@ -127,6 +126,9 @@
                             contact: $("#contact").val(),
                             org_name: $("#org_name").val(),
                             status: $("#status").val(),
+                            project_link: $("#project_link").val(),
+                            video_link: $("#video_link").val(),
+                            applyable: $("#applyable").val(),
                             team: teams
                         },
                         success: function () {
@@ -182,6 +184,14 @@
         </div>
 
         <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Open to Apply: &nbsp;</div>
+            <select class="form-control" id="applyable">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
+        </div>
+
+        <div class="input-group new-project-input">
             <div class="input-group-addon">Contact Information:</div>
             <input class="form-control" type="text" id="contact" placeholder="Contact Information">
         </div>
@@ -189,6 +199,16 @@
         <div class="input-group new-project-input">
             <div class="input-group-addon">Organization Name:</div>
             <input class="form-control" type="text" id="org_name" placeholder="Organization Name">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Project Link:</div>
+            <input class="form-control" type="text" id="project_link" placeholder="Project Link">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Project Video Link:</div>
+            <input class="form-control" type="text" id="video_link" placeholder="Project Video Link">
         </div>
 
         <div class="new-project-input">
