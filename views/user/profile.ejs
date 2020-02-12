@@ -19,8 +19,8 @@
           profile.nickname = $("#nickname").val();
           profile.year = $("#year").val();
           profile.intended_teamleader = $("#teamleader").prop('checked');
-          $(".pl-checkbox:checked").each(function () {
-            $(".pl-checkbox").each(function () {
+
+          $(".pl-checkbox").each(function () {
               if ($(this).val() && this.checked) {
                 profile.pl.push($(this).val());
               }
@@ -45,7 +45,7 @@
                         window.location.href = "/profile?status=s";
                       },
                       error: function (jqXHR, textStatus, errorThrown) {
-                        $("#error-msg").html(jqXHR.responseJSON);
+                        $(".error-msg").html(jqXHR.responseJSON);
                         $("#submit-button").attr('disabled',false);
                       }
                     });
@@ -64,13 +64,12 @@
                       window.location.href = "/profile?status=s";
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                      $("#error-msg").html(jqXHR.responseJSON);
+                      $(".error-msg").html(jqXHR.responseJSON);
                       $("#submit-button").attr('disabled',false);
                     }
                   });
                 }
               });
-            });
           });
         });
         var url = "/project";
@@ -119,6 +118,7 @@
 <% include ../template/nav.ejs %>
 
 <div class="container body-layout min-body-layout">
+    <p class="error-msg" id="error-msg"></p>
     <h3>So tell us a bit about yourself!</h3>
     <form id="profile-form">
 <!--        <div class="input-group login-signup-input">-->
@@ -188,6 +188,7 @@
         <input type="file" id="resume">
     </div>
 
+    <p class="error-msg" id="error-msg"></p>
     <% if (!others) { %>
         <button id="submit-button" class="btn long-btn primary-button">Update Profile</button>
     <% } %>
