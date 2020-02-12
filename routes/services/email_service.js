@@ -17,43 +17,42 @@ exports.sendEmail = function(emailDetail, callback){
         console.log("SendEmail -- Wrong usage, subject and html must not be empty!")
         callback("Error: info is not sent! Please contact admin!");
     }
-    //Default
-    emailDetail.from = emailDetail.from ? emailDetail.from : `"Coding for Good Team <"${process.env.EMAILUSER}">" `;
-    emailDetail.to = emailDetail.to ? emailDetail.to : process.env.EMAILORG;
-    
-    emailDetail.html = `Hello from the Coding for Good team! &nbsp;</br></br>` 
-                        + emailDetail.html
-                        + `</br><img style="width:220px;" src="cid:club-icon" alt="Corgi"></br>
-                        Please do not reply to this email.`;
-    if(!emailDetail.attachemnts)
-        emailDetail.attachemnts = [];
-    emailDetail.attachemnts.push({
-        filename: 'icon.jpg',
-        path: '/app/public/img/icon.jpg',
-        cid: 'club-icon'
-    });
-    console.log(emailDetail);
-    let transporter = nodemailer.createTransport({
-        host: HOST,
-        secureConnection: false,
-        port: 587,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: process.env.EMAILUSER,
-            pass: process.env.EMAILPASS
+    else{
+        //Default
+        const email = {
+            from: emailDetail.from ? emailDetail.from : `Coding for Good Team <${process.env.EMAILUSER}>`,
+            to: emailDetail.to ? emailDetail.to : process.env.EMAILORG,
+            subject: emailDetail.subject,
+            html: `Hello from the Coding for Good team!&nbsp;<br><br> 
+                    ${emailDetail.html}
+                    <br><img style="width:220px;" src="cid:club-icon" alt="Corgi"><br>
+                    Please do not reply to this email.`,
+            attachments: [{
+                filename: 'icon.jpg',
+                path: '/app/public/img/icon.jpg',
+                cid: 'club-icon'
+            }]
         }
-    });
-
-    transporter.sendMail(
-        emailDetail, 
-        function (err, info) {
-            if(err){
-                //console.log(err);
-                callback(err);
+        let transporter = nodemailer.createTransport({
+            host: HOST,
+            secureConnection: false,
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: process.env.EMAILUSER,
+                pass: process.env.EMAILPASS
             }
-            else{
-                //console.log(info);
-                callback(null);
-            }
-    });
+        });
+    
+        transporter.sendMail(email, function (err, info) {
+                if(err){
+                    //console.log(err);
+                    callback(err);
+                }
+                else{
+                    //console.log(info);
+                    callback(null);
+                }
+        });
+    }
 };

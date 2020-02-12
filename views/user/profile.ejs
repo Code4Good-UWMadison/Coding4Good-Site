@@ -4,7 +4,7 @@
     <% include ../template/head.ejs %>
     <script>
       var user =<%-JSON.stringify(user)%>;
-      var project_id = '<%- JSON.stringify(project_id)%>';
+      var project_id = Number(<%- JSON.stringify(project_id)%>);
       $(function () {
         $("#submit-button").click(function () {
           $("#submit-button").attr('disabled',true);
@@ -73,15 +73,15 @@
             $("#submit-button").attr('disabled',false);
           }
         });
-        var url = "/project";
+        var url;
         $("#confirmation").click(function () {
-            url += "/approveApplicant";
+            url = "/project/approveApplicant";
             $("#box-info-text").text("approve");
             $("#box-info-title").text("Approve");
             $("#confirmation-box").modal('show'); 
         });
         $("#rejectConfirmation").click(function () {
-            url += "/rejectApplicant";
+            url = "/project/rejectApplicant";
             $("#box-info-text").text("reject");
             $("#box-info-title").text("Reject");
             $("#confirmation-box").modal('show');

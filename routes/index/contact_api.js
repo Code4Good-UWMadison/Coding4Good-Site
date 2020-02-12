@@ -20,10 +20,8 @@ router.post('/contactEmail', function (req, res, next) {
         if (err) {
             console.log(err);
             res.json({status: false, msg: 'Failed to send Email, please try again later, or email us to <cfg.madison@gmail.com> if you are having trouble.'});
-            return;
         } else {
             res.json({status: true});
-            return;
         }
     });
 });
