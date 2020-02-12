@@ -22,7 +22,7 @@
                             $("#profile_link").html(profile_link);
                             var project_list = "";
                             result.projects.forEach(function(project){
-                                project_list += "<a href='/project/detail?id="+project.id+"'>"+project.title+" "+project.relation+"</a></br>";
+                                project_list += "<a href='/project/detail?id="+project.id+"'>"+project.title+" "+project.relation+"</a><br>";
                             });
                             $("#project_list").html(project_list);
                             $("#select-user-button").attr('disabled',false);

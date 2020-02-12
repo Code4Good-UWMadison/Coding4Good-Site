@@ -5,13 +5,13 @@
         <script src="/js/SearchScript.js"></script>
         <script src="/js/SortScript.js"></script>
         <script type="text/javascript">
-            var project_id =<%-JSON.stringify(project_id)%>;
+            var project_id =Number(<%-JSON.stringify(project_id)%>);
             $(function () {
                 addLink();
             });
             function addLink(){
                 $(".projectRow").click(function () {
-                    $(location).attr('href', '/profile?fromApply=true&project_id='+project_id+'&user_id='+this.id);
+                    $(location).attr('href', `/profile?fromApply=true&project_id=${project_id}&user_id=${this.id}`);
                 });
             }
             //this is used by sortscript for sorting purpose
@@ -32,6 +32,9 @@
         <div class="col-sm-5">
             <input type="text" class="input searchable"
                    placeholder="keyword, key words, key words"/>
+        </div>
+        <div class="col-sm-offset-4 col-sm-2">
+            <a class="btn long-btn primary-button" href="/project/detail?id=<%=project_id%>">Back</a>
         </div>
     </div>
     <table class="table margin-htop sortable searchable" align="center">

@@ -110,7 +110,7 @@ exports.getProjectSet = function(callback) {
 };
 
 exports.getAssociatedProjectsByUserId = function(user_id, callback) {
-  var query = `SELECT p.id, p.title, r.relation FROM project_relation r, users u, project p WHERE u.id = r.uid AND u.id = $1 AND p.id = r.pid`;
+  var query = `SELECT p.id, p.title, p.org_name, p.status, r.relation FROM project_relation r, users u, project p WHERE u.id = r.uid AND u.id = $1 AND p.id = r.pid`;
   db.query(query, [user_id], function(err, result) {
     if (err) {
       callback(err);

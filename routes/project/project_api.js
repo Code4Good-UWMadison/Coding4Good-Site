@@ -128,31 +128,33 @@ router.post('/approveApplicant', function(req, res, next){
             return;
         }
         else{
-            project_db.approveApplicant(req.body.project_id, req.body.user.id, function(err){
+            var project_id = req.body.project_id;
+            var user_id = req.body.user.id;
+            project_db.approveApplicant(project_id, user_id, function(err){
                 if (err){
                     console.log(err);
                     res.status(400).json({msg: "Database error"});
                 }else{
-                    project_db.getProjectById(req.body.project_id, function(err){
+                    project_db.getProjectById(project_id, function(err, project){
                         if(err){
                             console.log(err);
                             res.status(400).json({msg: "Database error"});
                         }
                         else{
-                            const url = `https://${baseUrl}/project/detail?id=${req.body.project_id}`;
+                            const url = `https://${baseUrl}/project/detail?id=${project_id}`;
                             const emailDetail = {
                                 to: req.body.user.email,
                                 subject: "Project application result from Coding4Good",
-                                html: `Congradulations! You application to team ${req.body.project.title} have been accepted! &nbsp;</br>
-                                        Please follow the link to checkout your Project Manager, Project Leader, and Other Members &nbsp;</br>
+                                html: `Congradulations! You application to team ${project.title} have been accepted! &nbsp;<br>
+                                        Please follow the link to checkout your Project Manager, Project Leader, and Other Members &nbsp;<br>
                                         <a href='${url}'>${url}</a>`
                             };
                             emailService.sendEmail(emailDetail, function(err){
                                 if(err){
                                     console.log(err);
-                                    res.status(400).json({msg: 'Database Error'});
+                                    res.status(400).json({msg: 'Failed to send email'});
                                 }else{
-                                    res.json({msg: 'Failed to send Email, please try again later, or contact us if you are having trouble.'});
+                                    res.json({});
                                 }
                             });
                         }
@@ -174,31 +176,34 @@ router.post('/rejectApplicant', function(req, res, next){
             return;
         }
         else{
-            project_db.rejectApplicant(req.body.project_id, req.body.user.id, function(err){
+            var project_id = req.body.project_id;
+            var user_id = req.body.user.id;
+            console.log(parseInt(project_id) + "  " + user_id)
+            project_db.rejectApplicant(project_id, user_id, function(err){
                 if (err){
                     console.log(err);
                     res.status(400).json({msg: "Database error"});
                 }else{
-                    project_db.getProjectById(req.body.project_id, function(err){
+                    project_db.getProjectById(project_id, function(err, project){
                         if(err){
                             console.log(err);
                             res.status(400).json({msg: "Database error"});
                         }
                         else{
-                            const url = `https://${baseUrl}/project/detail?id=${req.body.project.id}`;
+                            const url = `https://${baseUrl}/project/detail?id=${project_id}`;
                             const emailDetail = {
                                 to: req.body.user.email,
                                 subject: "Project application result from Coding4Good",
-                                html: `Unfortunately, the team ${req.body.project.title} will not move on with your application. &nbsp;</br>
-                                        Please follow the link to contact your Project Leader for any questions! &nbsp;</br>
+                                html: `Unfortunately, the team ${project.title} will not move on with your application.&nbsp;<br>
+                                        Please follow the link to contact your Project Leader for any questions!&nbsp;<br>
                                         <a href='${url}'>${url}</a>`
                             };
                             emailService.sendEmail(emailDetail, function(err){
                                 if(err){
                                     console.log(err);
-                                    res.status(400).json({msg: 'Database Error'});
+                                    res.status(400).json({msg: 'Failed to send email'});
                                 }else{
-                                    res.json({msg: 'Failed to send Email, please try again later, or contact us if you are having trouble.'});
+                                    res.json({});
                                 }
                             });
                         }

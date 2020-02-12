@@ -53,21 +53,20 @@ router.post('/signup', function (req, res, next) {
             const emailDetail = {
                 to: req.body.email, // list of receivers 
                 subject: "Verification email from Coding4Good",
-                html: `Thank you for registering! &nbsp;</br>
+                html: `Thank you for registering!&nbsp;<br>
                         Please click this link to confirm your email
                         address: <a href='${url}'>${url}</a>`
             };
             emailService.sendEmail(emailDetail, function(err){
                 if(!err){
                     res.json({status: true});
-                    return;
                 }
                 else {
+                    console.log(err);
                     user_db.removeUser(uid, function (err) {
                         if(err){
                             console.log(err);
                             res.status(400).json({msg: 'Database Error'});
-                            return;
                         }
                         else {
                             res.json({status: false, msg: 'Failed to send Email, please try again later, or contact us if you are having trouble.'});

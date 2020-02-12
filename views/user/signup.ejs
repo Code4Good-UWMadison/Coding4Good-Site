@@ -4,7 +4,7 @@
     <% include ../template/head.ejs %>
     <script>
       $(function () {
-        $("#signup-form").submit(() => {
+        $("#submit-button").click(() => {
           const submit = $("#submit-button");
           const msg = $("#error-msg");
 
@@ -81,7 +81,7 @@
         </div>
     </form>
     <p>I already had an account, <a href="/login">Log me in!</a></p>
-    <button title="Sign up" id="submit-button" type="submit" form="signup-form" class="btn long-btn primary-button">Sign Up</button>
+    <button title="Sign up" id="submit-button" class="btn long-btn primary-button">Sign Up</button>
 </div>
 
 <% include ../template/footer.ejs %>
