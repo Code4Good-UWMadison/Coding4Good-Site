@@ -48,7 +48,7 @@ exports.removeEventById = function(eventId, callback){
                 if(err){
                     callback(err);
                 }
-                console.log(result.rowCount);
+                //console.log(result.rowCount);
                 if(result.rowCount>0){
                     callback(null);
                 }else{

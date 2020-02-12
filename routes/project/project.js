@@ -1,48 +1,97 @@
-var express = require('express');
-var router = express.Router();
-var db = require("../../server/project_db");
+const express = require('express');
+const router = express.Router();
+const project_db = require("../../server/project_db");
+const user_db = require("../../server/user_db");
+
+const authService = require('../services/authorization_service');
 
 router.get('/', function (req, res, next) {
-    db.getProjectSet(function (err, projectSet) {
+    project_db.getProjectSet(function (err, projectSet) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        res.render('project/index', {projectSet: projectSet, isMy: false, uid: req.session.uid});
+        user_db.getUserRoleByUid(req.session.uid, function (err, user_role) {
+            if (err) {
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+
+            res.render('project/index', {
+                projectSet: projectSet,
+                isMy: false,
+                uid: req.session.uid,
+                all_user_role: authService.UserRole,
+                user_role: user_role
+            });
+
+        });
     });
 });
 
 router.get('/my', function (req, res, next) {
-    if (req.session.uid === null) {
-        res.redirect('../login');
-        return;
-    }
-    db.getAssociatedProjectsByUserId(req.session.uid, function (err, projectSet) {
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
         if (err) {
-            console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        res.render('project/index', {projectSet: projectSet, isMy: true, uid: null});
+        else if(!authorized){
+            res.redirect('../login');
+            return;
+        }
+        else{
+            project_db.getAssociatedProjectsByUserId(req.session.uid, function (err, projectSet) {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
+                }
+                res.render('project/index', {projectSet: projectSet, isMy: true, uid: null});
+            });
+        }
     });
 });
 
 router.get('/detail', function (req, res, next) {
-    db.getProjectById(req.query.id, function (err, project) {
+    project_db.getProjectById(req.query.id, function (err, project) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        db.getAssociatedUsersByProjectId(project.id, function (err, users) {
-            if (err) {
-                console.log(err);
-                res.status(400).json({msg: 'Database Error'});
-                return;
-            }
-            res.render('project/detail', {projectDetail: project, users: users, uid: req.session.uid});
-        })
+        else{
+            project_db.getAssociatedUsersByProjectId(project.id, function (err, users) {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
+                }
+                else{
+                    project_db.checkApplied(project.id, req.session.uid, function (err, hasApplied) {
+                        if (err) {
+                            res.status(400).json({msg: 'Database Error'});
+                            return;
+                        }
+                        user_db.getUserRoleByUid(req.session.uid, function (err, user_role) {
+                            if (err) {
+                                res.status(400).json({msg: 'Database Error'});
+                                return;
+                            }
+
+                            res.render('project/detail', {
+                                projectDetail: project,
+                                users: users,
+                                uid: req.session.uid,
+                                hasApplied: hasApplied,
+                                all_user_role: authService.UserRole,
+                                user_role: user_role,
+                            });
+                        });
+                    });
+                }
+            });
+        }
     });
 });
 
@@ -51,18 +100,29 @@ router.get('/create', function (req, res, next) {
         res.redirect('../login');
         return;
     }
-    if (req.session.uid !== 1) {
-        res.redirect('../');
-        return;
-    }
-    db.getAllUserNameAndId(function (err, allUserNameAndId) {
+    let roles = [authService.UserRole.Developer,
+                authService.UserRole.Admin,
+                authService.UserRole.ProjectManager];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
-            console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        res.render('project/create', {allUserNameAndId: allUserNameAndId});
-    })
+        else if(!authorized){
+            res.redirect('../');
+            return;
+        }
+        else{
+            user_db.getAllUser(function (err, allUser) {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
+                }
+                res.render('project/create', {allUser: allUser});
+            })
+        }
+    });
 });
 
 router.get('/edit', function (req, res, next) {
@@ -71,30 +131,66 @@ router.get('/edit', function (req, res, next) {
         res.redirect('../login');
         return;
     }
-    if (req.session.uid !== 1) {
-        res.redirect('../project/detail?id='+projectId);
-        return;
-    }
-    db.getProjectById(projectId, function (err, project) {
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.Developer,
+                authService.UserRole.ProjectManager,
+                authService.UserRole.ProjectLeader];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
-            console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        db.getAssociatedUsersByProjectId(project.id, function (err, users) {
+        else if(!authorized){
+            res.redirect('../project/detail?id='+projectId);
+            return;
+        }
+        project_db.getProjectById(projectId, function (err, project) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            db.getAllUserNameAndId(function (err, allUserNameAndId) {
+            project_db.getAssociatedUsersByProjectId(project.id, function (err, users) {
                 if (err) {
                     console.log(err);
                     res.status(400).json({msg: 'Database Error'});
                     return;
                 }
-                res.render('project/edit', {projectDetail: project, users: users, allUserNameAndId: allUserNameAndId});
+                user_db.getAllUser(function (err, allUser) {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: 'Database Error'});
+                        return;
+                    }
+                    res.render('project/edit', {projectDetail: project, users: users, allUser: allUser});
+                });
             });
+        });
+    });
+});
+
+router.get('/applicants', function (req, res, next) {
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.Developer,
+                authService.UserRole.ProjectManager,
+                authService.UserRole.ProjectLeader];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.redirect('../project/detail?id=' + req.query.project_id);
+            return;
+        }
+        project_db.getAllApplicantByProjectId(req.query.project_id, function(err, users) {
+            if (err){
+                console.log(err);
+                res.status(400).json({msg: 'Database error'});
+                return;
+            } else {
+                res.render('project/applicants', {users: users, project_id: req.query.project_id});
+            }
         });
     });
 });

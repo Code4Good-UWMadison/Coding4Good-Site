@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <% include ../template/head.ejs %>
+        <script src="/js/SearchScript.js"></script>
+        <script src="/js/SortScript.js"></script>
+        <script type="text/javascript">
+            var project_id =<%-JSON.stringify(project_id)%>;
+            $(function () {
+                addLink();
+            });
+            function addLink(){
+                $(".projectRow").click(function () {
+                    $(location).attr('href', '/profile?fromApply=true&project_id='+project_id+'&user_id='+this.id);
+                });
+            }
+            //this is used by sortscript for sorting purpose
+            function afterSort(){
+                addLink();
+            }
+        </script>
+</head>
+
+<body>
+
+<% include ../template/nav.ejs %>
+<div class="container body-layout">
+    <div class="row margin-htop">
+        <div class="col-sm-1">
+            <h4>Search: </h4>
+        </div>
+        <div class="col-sm-5">
+            <input type="text" class="input searchable"
+                   placeholder="keyword, key words, key words"/>
+        </div>
+    </div>
+    <table class="table margin-htop sortable searchable" align="center">
+        <thead class="row margin-top">
+        <tr class="tr clickable">
+            <th>Applicant Name</th>
+            <th>E-mail</th>
+        </tr>
+        </thead>
+        <tbody id="projectTbody">
+        <% if(users){ %>
+            <% for (var i = 0; i < users.length; i++) { %>
+                <tr class="tr clickable projectRow" id=<%= users[i].id %>>
+                    <td class="td"><%= users[i].name %></td>
+                    <td class="td"><%= users[i].email %></td>
+                </tr>
+            <% } %>
+        <% } else { %>
+            <tr>
+                <td class="error-msg">No applicants yet!</td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+
+<% include ../template/footer.ejs %>
+</body>
+</html>

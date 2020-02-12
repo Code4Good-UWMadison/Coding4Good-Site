@@ -28,9 +28,9 @@ router.post('/createProposal', function (req, res, next) {
                 + 'proposal description: <p>' + proposal.description + '</p></h4>',
                 text: proposal
             };
-            emailService.sendEmail(emailDetail, function(error) {
-                if (error) {
-                    console.log(error);
+            emailService.sendEmail(emailDetail, function(err) {
+                if (err) {
+                    console.log(err);
                 }
                 res.json({});
             });
