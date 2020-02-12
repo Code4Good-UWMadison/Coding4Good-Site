@@ -124,29 +124,29 @@ router.post('/upload_profile', function (req, res, next) {
     });
 });
 
-router.post('/admin/get_profile', function (req, res, next) {
-    let roles = [authService.UserRole.Admin,
-                authService.UserRole.ProjectManager,
-                authService.UserRole.Developer];
-    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
-        if (err) {
-            res.status(400).json({msg: 'Database Error'});
-            return;
-        }
-        if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
-            return;
-        }
-        user_db.getProfile(req.body.pid, function (err, profile) {
-            if (err) {
-                console.log(err);
-                res.status(400).json({msg: 'Database Error'});
-                return;
-            }
-            res.json(profile);
-        });
-    });
-});
+// router.post('/admin/get_profile', function (req, res, next) {
+//     let roles = [authService.UserRole.Admin,
+//                 authService.UserRole.ProjectManager,
+//                 authService.UserRole.Developer];
+//     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+//         if (err) {
+//             res.status(400).json({msg: 'Database Error'});
+//             return;
+//         }
+//         if(!authorized){
+//             res.status(400).json({msg: 'Not Authorized'});
+//             return;
+//         }
+//         user_db.getProfile(req.body.pid, function (err, profile) {
+//             if (err) {
+//                 console.log(err);
+//                 res.status(400).json({msg: 'Database Error'});
+//                 return;
+//             }
+//             res.json(profile);
+//         });
+//     });
+// });
 
 router.post('/get_user_info', function (req, res, next) {
     let roles = [authService.UserRole.Admin];
@@ -185,7 +185,8 @@ router.post('/get_user_info', function (req, res, next) {
 });
 
 router.post('/update_user', function (req, res, next) {
-    let roles = [authService.UserRole.Admin];
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             console.log(err);

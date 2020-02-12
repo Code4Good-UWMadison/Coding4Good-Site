@@ -97,24 +97,24 @@ router.get('/logout', function (req, res, next) {
     res.redirect('/');
 });
 
-router.get('/admin', function (req, res) {
-    let roles = [authService.UserRole.Developer, 
-                authService.UserRole.Admin,
-                authService.UserRole.ProjectManager];
-    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
-        if (err) {
-            res.status(400).json({msg: 'Database Error'});
-            return;
-        }
-        else if(!authorized){
-            res.redirect('/');
-            return;
-        }
-        else{
-            res.render('admin');
-        }
-    });
-});
+// router.get('/admin', function (req, res) {
+//     let roles = [authService.UserRole.Developer, 
+//                 authService.UserRole.Admin,
+//                 authService.UserRole.ProjectManager];
+//     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+//         if (err) {
+//             res.status(400).json({msg: 'Database Error'});
+//             return;
+//         }
+//         else if(!authorized){
+//             res.redirect('/');
+//             return;
+//         }
+//         else{
+//             res.render('admin');
+//         }
+//     });
+// });
 
 router.get('/user-admin', function (req, res) {
     let roles = [authService.UserRole.Admin,
