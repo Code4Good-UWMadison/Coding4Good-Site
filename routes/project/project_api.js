@@ -145,7 +145,8 @@ router.post('/approveApplicant', function(req, res, next){
                             const emailDetail = {
                                 to: req.body.user.email,
                                 subject: "Project application result from Coding4Good",
-                                html: `Congradulations! You application to team ${project.title} have been accepted! &nbsp;<br>
+                                html: `Thank you for your interest in project ${project.title}.&nbsp;<br>
+                                        Congradulations! You application to team ${project.title} have been accepted! &nbsp;<br>
                                         Please follow the link to checkout your Project Manager, Project Leader, and Other Members &nbsp;<br>
                                         <a href='${url}'>${url}</a>`
                             };
@@ -194,8 +195,10 @@ router.post('/rejectApplicant', function(req, res, next){
                             const emailDetail = {
                                 to: req.body.user.email,
                                 subject: "Project application result from Coding4Good",
-                                html: `Unfortunately, the team ${project.title} will not move on with your application.&nbsp;<br>
-                                        Please follow the link to contact your Project Leader for any questions!&nbsp;<br>
+                                html: `Thank you for your interest in project ${project.title}.&nbsp;<br>
+                                        Unfortunately, the team ${project.title} will not move on with your application.&nbsp;<br>
+                                        Please wait for responses from other teams.&nbsp;<br>
+                                        Also, please follow the link to contact your Project Leader for any questions!&nbsp;<br>
                                         <a href='${url}'>${url}</a>`
                             };
                             emailService.sendEmail(emailDetail, function(err){
