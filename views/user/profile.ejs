@@ -19,16 +19,12 @@
           profile.nickname = $("#nickname").val();
           profile.year = $("#year").val();
           profile.intended_teamleader = $("#teamleader").prop('checked');
-
-          $(".pl-checkbox").each(function () {
-              if ($(this).val() && this.checked) {
-                profile.pl.push($(this).val());
-              }
+          if($(".pl-checkbox:checked").length > 0){
+            $(".pl-checkbox:checked").each(function () {
+              profile.pl.push($(this).val());
             }).promise().done(function () {
-              $(".dev-checkbox").each(function () {
-                if ($(this).val() && this.checked) {
-                  profile.dev.push($(this).val());
-                }
+              $(".dev-checkbox:checked").each(function () {
+                profile.dev.push($(this).val());
               }).promise().done(function () {
                 if ($("#resume")[0].files.length > 0) {
                   var file = $("#resume")[0].files[0];
@@ -70,7 +66,12 @@
                   });
                 }
               });
-          });
+            });
+          }
+          else{
+            $(".error-msg").html("Please fill in at least one programming language!");
+            $("#submit-button").attr('disabled',false);
+          }
         });
         var url = "/project";
         $("#confirmation").click(function () {
@@ -134,7 +135,7 @@
       <input class="form-control" type="text" id="email" value="<%=user ? user.email : ''%>" disabled>
     </div>
         <div class="input-group login-signup-input" >
-            <div class="input-group-addon">Years:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group-addon">Years:</div>
             <select class="form-control" id="year" <%= others ? 'disabled' : '' %>>
                 <option value="1" <%=(profile.year==1)?'selected':''%>>Freshman</option>
                 <option value="2" <%=(profile.year==2)?'selected':''%>>Sophomore</option>
