@@ -41,7 +41,7 @@
                     },
                     success: function (result) {
                         if (result.msg) {
-                            $("#error-msg").html(result.msg);
+                            $(".error-msg").html(result.msg);
                             $("#apply-button").attr('disabled', false);
                         }
                         else {
@@ -151,7 +151,7 @@
         <iframe style="width: 100%; height: 700px" src="<%= projectDetail.video_link %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <% } %>
 
-
+    <p class="error-msg" id="error-msg"></p>
     <% if (uid) { %>
         <% let auth_roles = [all_user_role.ProjectManager, all_user_role.Developer]; %>
         <% if (auth(auth_roles, user_role) || leader_authorized) { %>
