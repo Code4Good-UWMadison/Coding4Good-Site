@@ -70,7 +70,7 @@
     <% var isAuthorized = auth([role_list.Developer, role_list.ProjectManager, role_list.Admin], user_role); %>
     <% var isLeader = false; %>
     <% if (user_role) { %>
-        <% if (user_role.filter(x => x.user_role === role_list.ProjectLeader).filter(x => x.associated_project_id === projectDetail.id)) { %>
+        <% if (user_role.filter(x => x.user_role === role_list.ProjectLeader).filter(x => x.associated_project_id === projectDetail.id).length > 0) { %>
                 <% isLeader = true;%>
         <% } %>
     <% } %>
