@@ -67,19 +67,18 @@
 <% include ../template/nav.ejs %>
 
 <div class="container body-layout">
-    <% var leader_authorized = false; %>
+    <% var isAuthorized = auth([role_list.Developer, role_list.ProjectManager, role_list.Admin], user_role); %>
+    <% var isLeader = false; %>
     <% if (user_role) { %>
-        <% if (user_role.filter(x => x.user_role === all_user_role.ProjectLeader)) { %>
-            <% if (users.filter(x => (x.relation === "Leader" && x.uid === uid)).length > 0) { %>
-                <% leader_authorized = true; %>
-            <% } %>
+        <% if (user_role.filter(x => x.user_role === role_list.ProjectLeader).filter(x => x.associated_project_id === projectDetail.id)) { %>
+                <% isLeader = true;%>
         <% } %>
     <% } %>
     <div align="right">
-        <%if (auth([all_user_role.Developer, all_user_role.ProjectManager, all_user_role.Admin], user_role)) { %>
+        <%if (isAuthorized) { %>
             <button id="remove-confirmation" class="btn primary-button">Remove</button>
         <% } %>
-        <%if (auth([all_user_role.Developer, all_user_role.ProjectManager, all_user_role.Admin], user_role) || leader_authorized) { %>
+        <%if (isAuthorized || isLeader) { %>
             <a class="btn primary-button" href="/project/edit?id=<%= projectDetail.id%>">Edit</a>
         <% } %>
         <a class="btn primary-button" href="/project">Back</a>
@@ -93,30 +92,18 @@
     <div class="input-group new-project-input row">
         <div class="input-group-addon">Leaders:</div>
         <div class="form-control" type="text">
-            <%= users.filter(e => e.relation=="Leader").map(e=>(e.name + " (" + e.email) + ")").join(", ")%>
-        </div>
-        <div class="input-group-addon">Manager:</div>
-        <div class="form-control" type="text">
-            <%= users.filter(e => e.relation=="Manager").map(e=>(e.name + " (" + e.email) + ")").join(", ")%>
+            <%= members.filter(e => e.user_role===role_list.ProjectLeader).map(e=>(e.name + " (" + e.email) + ")").join(", ")%>
         </div>
     </div>
 
+    <% members.filter(e => e.user_role===role_list.ProjectMember).forEach(member => { %>
     <div class="input-group new-project-input row">
         <div class="input-group-addon">Members:</div>
         <div class="form-control" type="text">
-            <%= users.filter(e => e.relation=="Member").map(e=>(e.name + " (" + e.email) + ")").join(", ")%>
+            <%=member.name + " (" + member.email + ")"%>
         </div>
     </div>
-
-    <% const others = users.filter(e => e.relation!="Member" && e.relation!="Manager" && e.relation!="Leader")%>
-    <% if(others.length>0){ %>
-    <div class="input-group new-project-input row">
-        <div class="input-group-addon">Others:</div>
-        <div class="form-control" type="text">
-           <%= others.map(e=>e.name).join(", ")%>
-        </div>
-    </div>
-    <%}%>
+    <%});%>
 
     <div class="input-group new-project-input row">
         <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
@@ -153,8 +140,8 @@
 
     <p class="error-msg" id="error-msg"></p>
     <% if (uid) { %>
-        <% let auth_roles = [all_user_role.ProjectManager, all_user_role.Developer]; %>
-        <% if (auth(auth_roles, user_role) || leader_authorized) { %>
+        <% let auth_roles = [role_list.ProjectManager, role_list.Developer]; %>
+        <% if (auth(auth_roles, user_role) || isLeader) { %>
             <button id="applicants-button" type="button" class="btn long-btn primary-button">See Applicants</button>
         <% } else if (projectDetail.applyable) { %>
             <% if (hasApplied) { %>

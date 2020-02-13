@@ -8,30 +8,6 @@ const baseUrl = "www.coding4good.net";
 const emailService = require('../services/email_service');
 const authService = require('../services/authorization_service');
 
-router.post('/createProject', function (req, res, next) {
-    let roles = [authService.UserRole.Admin,
-                authService.UserRole.ProjectManager,
-                authService.UserRole.Developer];
-    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
-        if (err) {
-            res.status(400).json({msg: 'Database Error'});
-            return;
-        }
-        else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
-            return;
-        }
-        project_db.createProject(req.body, function (err) {
-            if (err) {
-                console.log(err);
-                res.status(400).json({msg: 'Failed to create'});
-                return;
-            }
-            res.json({});
-        });
-    });
-});
-
 router.post('/saveProject', function (req, res, next) {
     let roles = [authService.UserRole.Developer, 
                 authService.UserRole.Admin,
@@ -46,14 +22,25 @@ router.post('/saveProject', function (req, res, next) {
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        project_db.editProject(req.body, function (err) {
-            if (err) {
-                console.log(err);
-                res.status(400).json({msg: 'Failed to save'});
-                return;
-            }
-            res.json({});
-        });
+        if(req.body.id){
+            project_db.editProject(req.body, function (err) {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Failed to save'});
+                    return;
+                }
+                res.json({});
+            });
+        }else{
+            project_db.createProject(req.body, function (err, pid) {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Failed to create'});
+                    return;
+                }
+                res.json({pid: pid});
+            });
+        }
     });
 });
 
@@ -130,7 +117,7 @@ router.post('/approveApplicant', function(req, res, next){
         else{
             var project_id = req.body.project_id;
             var user_id = req.body.user.id;
-            project_db.approveApplicant(project_id, user_id, function(err){
+            project_db.approveApplicant(project_id, user_id, authService.UserRole.ProjectMember, function(err){
                 if (err){
                     console.log(err);
                     res.status(400).json({msg: "Database error"});
@@ -139,6 +126,9 @@ router.post('/approveApplicant', function(req, res, next){
                         if(err){
                             console.log(err);
                             res.status(400).json({msg: "Database error"});
+                        }
+                        else if(!project){
+                            res.status(404).json({msg: "Not found"});
                         }
                         else{
                             const url = `https://${baseUrl}/project/detail?id=${project_id}`;
@@ -189,6 +179,9 @@ router.post('/rejectApplicant', function(req, res, next){
                         if(err){
                             console.log(err);
                             res.status(400).json({msg: "Database error"});
+                        }
+                        else if(!project){
+                            res.status(404).json({msg: "Not found"});
                         }
                         else{
                             const url = `https://${baseUrl}/project/detail?id=${project_id}`;
