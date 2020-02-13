@@ -26,7 +26,7 @@
 <% include ../template/nav.ejs %>
 
 <div class="container body-layout">
-    <div class="row img-center-holder">
+    <div class="row center">
         <% if(isMy){ %>
         <h2>My Projects</h2>
         <% } else{ %>
@@ -57,8 +57,8 @@
         <tr class="tr clickable">
             <th>Project Name</th>
             <th>Organization Name</th>
-            <th class="img-center-holder">Project Status</th>
-            <th class="img-center-holder">Open to Apply</th>
+            <th class="center">Project Status</th>
+            <th class="center">Open to Apply</th>
         </tr>
         </thead>
         <tbody id="projectTbody">
@@ -72,8 +72,8 @@
         <tr class="tr clickable projectRow" id=<%= row.id %>>
             <td class="td"><%= row.title %></td>
             <td class="td"><%= row.org_name %></td>
-            <td class="td img-center-holder"><%= row.status %></td>
-            <td class="td img-center-holder"><%= (row.applyable ? "Yes" : "No") %></td>
+            <td class="td center"><%= row.status %></td>
+            <td class="td center"><%= (row.applyable ? "Yes" : "No") %></td>
         </tr>
         <% }); %>
 

@@ -37,11 +37,12 @@
             <a class="btn long-btn primary-button" href="/project/detail?id=<%=project_id%>">Back</a>
         </div>
     </div>
-    <table class="table margin-htop sortable searchable" align="center">
+    <table class="table margin-htop sortable searchable">
         <thead class="row margin-top">
         <tr class="tr clickable">
             <th>Applicant Name</th>
             <th>E-mail</th>
+            <th class="center">Has Project</th>
         </tr>
         </thead>
         <tbody id="projectTbody">
@@ -50,6 +51,7 @@
                 <tr class="tr clickable projectRow" id=<%= users[i].id %>>
                     <td class="td"><%= users[i].name %></td>
                     <td class="td"><%= users[i].email %></td>
+                    <td class="td center"><%= users[i].has_project ? 'Yes' : 'No'%></td>
                 </tr>
             <% } %>
         <% } else { %>
