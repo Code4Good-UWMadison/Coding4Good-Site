@@ -239,7 +239,13 @@ exports.rejectApplicant = function (project_id, user_id, callback) {
 // the manager can see all the applicants
 exports.getAllApplicantByProjectId = function (project_id, callback) {
     // select all applicants of this project
-    const query = "SELECT * FROM project_application_relation r, users u WHERE u.id = r.user_id AND r.project_id = $1;";
+    const query = `SELECT u.id AS user_id, u.name, u.email,
+                    (CASE WHEN u.id IN 
+                        (SELECT DISTINCT user_id FROM user_role
+                        WHERE associated_project_id IS NOT NULL) 
+                    THEN True ELSE False END) AS has_project
+                    FROM project_application_relation r, users u
+                    WHERE u.id = r.user_id AND r.project_id = $1`;
     db.query(query, [project_id], function (err, result) {
         if (err) {
             console.log(err);
