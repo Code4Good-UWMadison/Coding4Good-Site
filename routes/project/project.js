@@ -60,8 +60,11 @@ router.get('/detail', function (req, res, next) {
             res.status(400).json({msg: 'Database Error'});
             return;
         }
+        else if(!project){
+            res.status(404).json({msg: "Not found"});
+        }
         else{
-            project_db.getAssociatedUsersByProjectId(project.id, function (err, users) {
+            project_db.getAssociatedUsersByProjectId(project.id, function (err, members) {
                 if (err) {
                     console.log(err);
                     res.status(400).json({msg: 'Database Error'});
@@ -81,46 +84,16 @@ router.get('/detail', function (req, res, next) {
 
                             res.render('project/detail', {
                                 projectDetail: project,
-                                users: users,
+                                members: members,
                                 uid: req.session.uid,
                                 hasApplied: hasApplied,
-                                all_user_role: authService.UserRole,
+                                role_list: authService.UserRole,
                                 user_role: user_role,
                             });
                         });
                     });
                 }
             });
-        }
-    });
-});
-
-router.get('/create', function (req, res, next) {
-    if (req.session.uid === null) {
-        res.redirect('../login');
-        return;
-    }
-    let roles = [authService.UserRole.Developer,
-                authService.UserRole.Admin,
-                authService.UserRole.ProjectManager];
-    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
-        if (err) {
-            res.status(400).json({msg: 'Database Error'});
-            return;
-        }
-        else if(!authorized){
-            res.redirect('../');
-            return;
-        }
-        else{
-            user_db.getAllUser(function (err, allUser) {
-                if (err) {
-                    console.log(err);
-                    res.status(400).json({msg: 'Database Error'});
-                    return;
-                }
-                res.render('project/create', {allUser: allUser});
-            })
         }
     });
 });
@@ -141,30 +114,45 @@ router.get('/edit', function (req, res, next) {
             return;
         }
         else if(!authorized){
-            res.redirect('../project/detail?id='+projectId);
+            if(projectId){
+                res.redirect('../project/detail?id='+projectId);
+            }
+            else{
+                res.redirect('../project');    
+            }
             return;
         }
-        project_db.getProjectById(projectId, function (err, project) {
+        user_db.getAllUser(function (err, allUser) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            project_db.getAssociatedUsersByProjectId(project.id, function (err, users) {
-                if (err) {
-                    console.log(err);
-                    res.status(400).json({msg: 'Database Error'});
-                    return;
-                }
-                user_db.getAllUser(function (err, allUser) {
+            else if(projectId){
+                project_db.getProjectById(projectId, function (err, project) {
                     if (err) {
                         console.log(err);
                         res.status(400).json({msg: 'Database Error'});
                         return;
                     }
-                    res.render('project/edit', {projectDetail: project, users: users, allUser: allUser});
+                    else if(!project){
+                        res.status(404).json({msg: "Not found"});
+                    }
+                    project_db.getAssociatedUsersByProjectId(project.id, function (err, members) {
+                        if (err) {
+                            console.log(err);
+                            res.status(400).json({msg: 'Database Error'});
+                            return;
+                        }
+                        else{
+                            res.render('project/edit', {projectDetail: project, members: members, allUser: allUser, role_list: authService.UserRole});
+                        }
+                    });
                 });
-            });
+            }
+            else{
+                res.render('project/edit', {projectDetail: {}, members: [], allUser: allUser, role_list: authService.UserRole});
+            }
         });
     });
 });

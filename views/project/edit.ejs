@@ -4,8 +4,8 @@
     <% include ../template/head.ejs %>
     <script>
         var data =<%-JSON.stringify(allUser)%>;
-        var projectDetail = <%- JSON.stringify(projectDetail)%>;
-
+        var projectDetail = <%-JSON.stringify(projectDetail)%>;
+        var roleList = <%-JSON.stringify(role_list)%>;
         function selectListFocus(){
             var list = $(".member-list").toArray();
             list.forEach(function (input) {
@@ -17,36 +17,36 @@
                 });
             });
         }
-        //TODO: $( ".hello" ).remove();
+        //TODO: $(  ).remove();
         function addMemberRow() {
             var currentRow = $('.member-list').length/2+1;
-            var html=" <div class=\"input-group new-project-input row\">\n" +
-                "       <div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member "+currentRow+":&nbsp;&nbsp;&nbsp;</div>\n" +
-                "       <select placeholder=\"Member Name\" id=\"name"+currentRow+"\" class=\"form-control member-list\">\n" +
-                "           <% allUser.forEach(function(user){ %>\n" +
-                "           <option id=\"<%= user.id %>\" value=\"<%= user.id %>\"><%= user.name %> (<%= user.email %>)</option>\n" +
-                "           <% }) %>\n" +
-                "       </select>\n" +
-                "       <div class=\"input-group-addon\">Member Title:</div>\n" +
-                "       <select  placeholder=\"Member Title\" id=\"title"+currentRow+"\" class=\"form-control member-list\">\n" +
-                "           <option>Manager</option>\n" +
-                "           <option>Leader</option>\n" +
-                "           <option>Member</option>\n" +
-                "       </select>\n" +
-                "   </div>";
+            var html = `<div class="input-group new-project-input row">
+                            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member ${currentRow}:&nbsp;&nbsp;&nbsp;</div>
+                            <select placeholder="Member Name" id="name${currentRow}" class="form-control member-list">
+                                <% allUser.forEach(function(userChoice){ %>
+                                <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"><%= userChoice.name %> (<%= userChoice.email %>)</option>
+                                <% }) %>
+                            </select>
+                            <div class="input-group-addon">Member Role:</div>
+                            <select placeholder="Member Role" id="role${currentRow}" data-value="" class="form-control member-list">
+                                <option value=<%=role_list.ProjectMember%>>Member</option>
+                                <option value=<%=role_list.ProjectLeader%>>Leader</option>
+                            </select>
+                        </div>`;
             $('#member-input-space').append(html);
             $(".member-list").editableSelect({effects: 'slide'});
             $('#member-input-space').removeClass('hide');
             selectListFocus();
         }
         $(function () {
+            addMemberRow();
             $('.member-list').editableSelect({effects: 'slide'});
             $('#member-input-space').removeClass('hide');
             selectListFocus();
             $('#add-member-button').click(function(){
                 addMemberRow();
             });
-            var statusHtml = ""
+            var statusHtml = "";
             for (var status in ProjectStatus) {
                 statusHtml += "<option value=\"" + ProjectStatus[status] + "\">" + ProjectStatus[status] + "</option>";
             }
@@ -74,18 +74,19 @@
                     //data
                     var name = teamMembers[i].value;
                     var id = $(teamMembers[i]).attr("data-value");
-                    var title = teamMembers[i+1].value;
+                    var role = $(teamMembers[i+1]).attr("data-value");
                     //error checking variable
                     var duplicate = false;
-                    var hasTitle = title!=="";
+                    var hasRole = role!=="";
                     var hasName = name!=="";
                     var hasId = id!=="";
-                    var allEmpty = name==="" && title==="";
-                    var hasAll = name!=="" && title!=="" && id!=="";
+                    var allEmpty = name==="" && role==="";
+                    var hasAll = name!=="" && role!=="" && id!=="";
                     var badId = true;
+                    var badRole = true;
                     if(!allEmpty) {
-                        if (!hasTitle) {
-                            $("#error-msg").html('Please input a title for member ' + (i / 2 + 1));
+                        if (!hasRole) {
+                            $("#error-msg").html('Please input a role for member ' + (i / 2 + 1));
                             validInput = false;
                         }
                         else if (!hasName) {
@@ -109,13 +110,22 @@
                                     if (!duplicate) {
                                         let nameWithEmail = people.name + " (" + people.email + ")";
                                         if (nameWithEmail === name) {
-                                            teams.push({id: id, memberTitle: title});
+                                            teams.push({id: id, user_role: role});
                                         }
                                     }
                                 }
                             });
+                            for(var key in roleList){
+                                if(roleList[key] === role){
+                                    badRole = false;
+                                }
+                            }
                             if (badId) {
-                                $("#error-msg").html("Member " + (i / 2 + 1) + " is not a valid member, please check your spelling");
+                                $("#error-msg").html("Member " + (i / 2 + 1) + " is not a valid member, please double check");
+                                validInput = false;
+                            }
+                            if(badRole){
+                                $("#error-msg").html('Please select a valid role for member ' + (i / 2 + 1));
                                 validInput = false;
                             }
                         }
@@ -138,8 +148,13 @@
                             applyable: $("#applyable").val(),
                             team: teams
                         },
-                        success: function () {
-                            window.location.href = "/project/detail?status=s&id=<%= projectDetail.id %>";
+                        success: function (result) {
+                            if(result.pid){
+                                window.location.href = "/project/detail?status=s&id="+result.pid;
+                            }
+                            else{
+                                window.location.href = "/project/detail?status=s&id=<%= projectDetail.id %>";
+                            }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
@@ -152,7 +167,8 @@
                     return false;
                 }
             });
-            $("#status").val(projectDetail.status);
+            if(projectDetail.status)
+                $("#status").val(projectDetail.status);
         });
     </script>
 </head>
@@ -161,7 +177,11 @@
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
     <div class="col-sm-8-offset" align="right">
-        <a class="btn primary-button" href="/project/detail?id=<%=projectDetail.id%>">Back</a>
+        <%if(projectDetail.id){%>
+            <a class="btn primary-button" href="/project/detail?id=<%=projectDetail.id%>">Back</a>
+        <%}else{%>
+            <a class="btn primary-button" href="/project">Back</a>
+        <%}%>
     </div>
     <p class="error-msg" id="error-msg"></p>
     <div>
@@ -173,7 +193,7 @@
             <div class="input-group-addon">Team Members: </div>
             <div class="form-control ">
                 <div class="col-sm-6 img-center-holder divider-vertical">Name</div>
-                <div class="col-sm-6 img-center-holder">Member Title</div>
+                <div class="col-sm-6 img-center-holder">Member Role</div>
             </div>
             <div class="input-group-btn">
                 <button type="button" id="add-member-button" class="btn primary-button">Add Members</button>
@@ -182,21 +202,20 @@
         <div id="member-input-space" class="hide">
             <!--member row goes here-->
             <% currentRow = 1; %>
-            <% users.forEach(function(user){ %>
+            <% members.forEach(function(member){ %>
             <div class="input-group new-project-input row">
-                   <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member <%=currentRow%>:&nbsp;&nbsp;&nbsp;</div>
-                   <select placeholder="Member Name" data-value="<%=user.uid%>" value="<%=user.uid%>" id="<%="name"+currentRow%>" class="form-control member-list">
-                       <% allUser.forEach(function(userChoice){ %>
-                       <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"<% if(userChoice.id==user.uid){ %> selected="selected"<% }%>><%= userChoice.name %> (<%= user.email %>)</option>
-                       <% }) %>
-                   </select>
-                   <div class="input-group-addon">Member Title:</div>
-                   <select placeholder="Member Title" value="<%=user.relation%>" id="<%="title"+currentRow%>" class="form-control member-list">
-                       <option value="Manager">Manager</option>
-                       <option value="Leader">Leader</option>
-                       <option value="Member">Member</option>
-                   </select>
-               </div>
+                <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member <%=currentRow%>:&nbsp;&nbsp;&nbsp;</div>
+                <select placeholder="Member Name" data-value="<%=member.uid%>" id="name<%=currentRow%>" class="form-control member-list">
+                    <% allUser.forEach(function(userChoice){ %>
+                    <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"<% if(userChoice.id==member.uid){ %> selected="selected"<% }%>><%= userChoice.name %> (<%= userChoice.email %>)</option>
+                    <% }) %>
+                </select>
+                <div class="input-group-addon">Member Role:</div>
+                <select placeholder="Member Role" id="role<%=currentRow%>" data-value="<%=member.user_role%>" class="form-control member-list">
+                    <option <%=(member.user_role==role_list.ProjectMember)?'selected':''%> value="<%=role_list.ProjectMember%>">Member</option>
+                    <option <%=(member.user_role==role_list.ProjectLeader)?'selected':''%> value="<%=role_list.ProjectLeader%>">Leader</option>
+                </select>
+            </div>
             <% currentRow++; %>
             <% }) %>
         </div>
