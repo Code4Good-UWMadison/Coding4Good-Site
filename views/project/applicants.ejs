@@ -48,7 +48,7 @@
         <tbody id="projectTbody">
         <% if(users){ %>
             <% for (var i = 0; i < users.length; i++) { %>
-                <tr class="tr clickable projectRow" id=<%= users[i].id %>>
+                <tr class="tr clickable projectRow" id=<%= users[i].user_id %>>
                     <td class="td"><%= users[i].name %></td>
                     <td class="td"><%= users[i].email %></td>
                     <td class="td center"><%= users[i].has_project ? 'Yes' : 'No'%></td>
