@@ -81,7 +81,6 @@ router.get('/detail', function (req, res, next) {
                                 res.status(400).json({msg: 'Database Error'});
                                 return;
                             }
-
                             res.render('project/detail', {
                                 projectDetail: project,
                                 members: members,
