@@ -207,7 +207,7 @@ exports.checkEmailVerificationByUid = function(uid, callback) {
 };
 
 exports.getUserRoleByUid = function(user_id, callback) {
-  var query = `SELECT user_role FROM user_role WHERE user_id = $1;`;
+  var query = `SELECT user_role, associated_project_id FROM user_role WHERE user_id = $1;`;
   db.query(query, [user_id], function(err, result) {
     if (err) {
       callback(err);
