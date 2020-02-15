@@ -135,8 +135,8 @@ router.post('/approveApplicant', function(req, res, next){
                             const emailDetail = {
                                 to: req.body.user.email,
                                 subject: "Project application result from Coding4Good",
-                                html: `Thank you for your interest in project ${project.title}.&nbsp;<br>
-                                        Congradulations! You application to team ${project.title} have been accepted! &nbsp;<br>
+                                html: `Thank you for your interest in the project ${project.title}.&nbsp;<br>
+                                        Congratulations! Your application to team ${project.title} has been accepted! &nbsp;<br>
                                         Please follow the link to checkout your Project Leader, and Other Members &nbsp;<br>
                                         <a href='${url}'>${url}</a>`
                             };
