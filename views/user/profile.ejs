@@ -120,7 +120,14 @@
 
 <div class="container body-layout min-body-layout">
     <p class="error-msg" id="error-msg"></p>
-    <h3>So tell us a bit about yourself!</h3>
+    <div class="row">
+      <h3 class="col-md-10">So tell us a bit about yourself!</h3>
+      <% if (fromApply) { %>
+        <div class="col-md-2">
+          <a class="btn primary-button margin-15top" href="/project/applicants?project_id=<%=project_id%>">Back</a>
+        </div>
+      <% } %>
+    </div>
     <form id="profile-form">
 <!--        <div class="input-group login-signup-input">-->
 <!--            <div class="input-group-addon">Nickname:</div>-->
@@ -197,8 +204,8 @@
     <% if (fromApply) { %>
       <button id="confirmation" class="btn mid-btn primary-button">Approve</button>
       <button id="rejectConfirmation" class="btn mid-btn primary-button">Reject</button>
-      
     <% } %>
+
     <div id="confirmation-box" class="modal fade confirmation-box">
       <div class="modal-dialog">
         <div class="modal-content">
