@@ -124,7 +124,7 @@ router.post('/upload_profile', function (req, res, next) {
 });
 
 router.post('/get_user_info', function (req, res, next) {
-    let roles = [authService.UserRole.Admin];
+    let roles = [authService.UserRole.Admin, authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             console.log(err);
