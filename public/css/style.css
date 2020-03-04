@@ -32,6 +32,10 @@ h1 {
 
 }
 
+.margin-15top{
+    margin-top: 15px;
+}
+
 .margin-htop {
     margin-top: 25px;
 }
@@ -162,7 +166,7 @@ section {
     margin-right: auto;
 }
 
-.img-center-holder {
+.center {
     text-align: center;
 }
 
@@ -217,6 +221,10 @@ section {
 
 .long-btn {
     width: 100%;
+}
+
+.mid-btn {
+    width: 49%;
 }
 
 .login-signup-input {
@@ -320,7 +328,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 	.body-layout.min-body-layout {
-		width: 30%;
+		width: 35%;
 	}
 
 	.body-layout.mid-body-layout {

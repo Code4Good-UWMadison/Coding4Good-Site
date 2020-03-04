@@ -26,7 +26,7 @@
 <% include ../template/nav.ejs %>
 
 <div class="container body-layout">
-    <div class="row img-center-holder">
+    <div class="row center">
         <% if(isMy){ %>
         <h2>My Projects</h2>
         <% } else{ %>
@@ -43,8 +43,8 @@
         </div>
         <div class="col-sm-8-offset" align="right">
             <% if (uid != null){ %>
-            <% if (uid == 1) { %>
-            <a class="btn primary-button" href="/project/create">New Project</a>
+            <%if (auth([all_user_role.Developer, all_user_role.ProjectManager, all_user_role.Admin], user_role)) { %>
+            <a class="btn primary-button" href="/project/edit">New Project</a>
             <% } %>
             <a class="btn primary-button" href="/project/my">My Project</a>
             <% } else if(isMy) { %>
@@ -57,7 +57,8 @@
         <tr class="tr clickable">
             <th>Project Name</th>
             <th>Organization Name</th>
-            <th>Project Status</th>
+            <th class="center">Project Status</th>
+            <th class="center">Open to Apply</th>
         </tr>
         </thead>
         <tbody id="projectTbody">
@@ -71,7 +72,8 @@
         <tr class="tr clickable projectRow" id=<%= row.id %>>
             <td class="td"><%= row.title %></td>
             <td class="td"><%= row.org_name %></td>
-            <td class="td"><%= row.status %></td>
+            <td class="td center"><%= row.status %></td>
+            <td class="td center"><%= (row.applyable ? "Yes" : "No") %></td>
         </tr>
         <% }); %>
 

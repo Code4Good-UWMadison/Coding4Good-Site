@@ -18,7 +18,7 @@
                     method: "POST",
                     dataType: "json",
                     data: {
-                        id: projectDetail.id
+                        pid: projectDetail.id,
                     },
                     success: function () {
                         window.location.href="/project?status=s";
@@ -30,6 +30,35 @@
                     }
                 });
             });
+            $("#apply-button").click(function () {
+                $("#apply-button").attr('disabled', true);
+                $.ajax({
+                    url: "/project/applyProject",
+                    method: "POST",
+                    dataType: "json",
+                    data: {
+                        project_id: projectDetail.id
+                    },
+                    success: function (result) {
+                        if (result.msg) {
+                            $(".error-msg").html(result.msg);
+                            $("#apply-button").attr('disabled', false);
+                        }
+                        else {
+                            window.location.reload();
+                        }  
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $("#error-msg").html(jqXHR.responseJSON);
+                        $("#apply-button").attr('disabled',false);
+                    }
+                });
+            });
+
+            $("#applicants-button").click(function () {
+                window.location.href = "/project/applicants?project_id=" + projectDetail.id;
+            });
+
         });
     </script>
 </head>
@@ -38,16 +67,23 @@
 <% include ../template/nav.ejs %>
 
 <div class="container body-layout">
-    <p class="error-msg" id="error-msg"></p>
-    <div class="col-sm-8-offset" align="right">
-        <%if (uid==1) { %>
-        <button id="remove-confirmation" class="btn primary-button">Remove</button>
-        <a class="btn primary-button" href="/project/edit?id=<%= projectDetail.id%>">Edit</a>
+    <% var isAuthorized = auth([role_list.Developer, role_list.ProjectManager, role_list.Admin], user_role); %>
+    <% var isLeader = false; %>
+    <% if (user_role) { %>
+        <% if (user_role.filter(x => x.user_role === role_list.ProjectLeader).filter(x => x.associated_project_id === projectDetail.id).length > 0) { %>
+                <% isLeader = true;%>
+        <% } %>
+    <% } %>
+    <div align="right">
+        <%if (isAuthorized) { %>
+            <button id="remove-confirmation" class="btn primary-button">Remove</button>
+        <% } %>
+        <%if (isAuthorized || isLeader) { %>
+            <a class="btn primary-button" href="/project/edit?id=<%= projectDetail.id%>">Edit</a>
         <% } %>
         <a class="btn primary-button" href="/project">Back</a>
     </div>
-
-
+    <p class="error-msg" id="error-msg"></p>
     <div class="input-group new-project-input">
         <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
         <div class="form-control" type="text" id="title"><%= projectDetail.title %></div>
@@ -56,30 +92,18 @@
     <div class="input-group new-project-input row">
         <div class="input-group-addon">Leaders:</div>
         <div class="form-control" type="text">
-            <%= users.filter(e => e.relation=="Leader").map(e=>e.name).join(", ")%>
-        </div>
-        <div class="input-group-addon">Manager:</div>
-        <div class="form-control" type="text">
-            <%= users.filter(e => e.relation=="Manager").map(e=>e.name).join(", ")%>
+            <%= members.filter(e => e.user_role===role_list.ProjectLeader).map(e=>(e.name + " (" + e.email) + ")").join(", ")%>
         </div>
     </div>
 
+    <% members.filter(e => e.user_role===role_list.ProjectMember).forEach(member => { %>
     <div class="input-group new-project-input row">
         <div class="input-group-addon">Members:</div>
         <div class="form-control" type="text">
-            <%= users.filter(e => e.relation=="Member").map(e=>e.name).join(", ")%>
+            <%=member.name + " (" + member.email + ")"%>
         </div>
     </div>
-
-    <% const others = users.filter(e => e.relation!="Member" && e.relation!="Manager" && e.relation!="Leader")%>
-    <% if(others.length>0){ %>
-    <div class="input-group new-project-input row">
-        <div class="input-group-addon">Others:</div>
-        <div class="form-control" type="text">
-           <%= others.map(e=>e.name).join(", ")%>
-        </div>
-    </div>
-    <%}%>
+    <%});%>
 
     <div class="input-group new-project-input row">
         <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
@@ -99,10 +123,35 @@
         <div class="form-control" type="text" id="org_name"><%= projectDetail.org_name %></div>
     </div>
 
+    <% if (projectDetail.project_link) { %>
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">Project Link:</div>
+            <div class="form-control" type="text" id="link"><a href="<%= projectDetail.project_link %>"><%= projectDetail.project_link %></a></div>
+        </div>
+    <% } %>
+
     <div class="new-project-input">
-        <textarea readonly class="form-control" type="text" id="description"
-             rows="10"><%= projectDetail.description %></textarea>
+        <textarea readonly class="form-control" type="text" id="description" rows="10"><%= projectDetail.description %></textarea>
     </div>
+
+    <% if (projectDetail.video_link) { %>
+        <iframe style="width: 100%; height: 700px" src="<%= projectDetail.video_link %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <% } %>
+
+    <p class="error-msg" id="error-msg"></p>
+    <% if (uid) { %>
+        <% let auth_roles = [role_list.Admin, role_list.ProjectManager, role_list.Developer]; %>
+        <% if (auth(auth_roles, user_role) || isLeader) { %>
+            <button id="applicants-button" type="button" class="btn long-btn primary-button">See Applicants</button>
+        <% } else if (projectDetail.applyable) { %>
+            <% if (hasApplied) { %>
+                <button id="apply-button" type="button" class="btn long-btn primary-button" disabled="true">Applied!</button>
+            <% } else { %>
+                <button id="apply-button" type="button" class="btn long-btn primary-button">Apply!</button>
+            <% } %>
+        <% } %>
+    <% } %>
+
 </div>
 
 <div id="remove-confirmation-box" class="modal fade confirmation-box">

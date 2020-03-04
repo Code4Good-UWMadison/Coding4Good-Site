@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const jwt = require('jsonwebtoken');
-const db = require('../../server/index_db');
+const db = require('../../server/user_db');
+
+const authService = require('../services/authorization_service');
 
 router.get('/', function (req, res, next) {
     res.render('index', {});
@@ -24,20 +26,63 @@ router.get('/sponsor', function (req, res) {
 });
 
 router.get('/profile', function (req, res) {
-    if (req.session.uid == null) {
-        res.redirect('/login');
-        return;
-    }
-  res.render('user/profile');
+    var profile_uid = req.query.user_id ? req.query.user_id : req.session.uid;
+    var project_id = req.query.project_id;
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+        }
+        else if(!authorized){
+            res.redirect('/login');
+        }
+        else{
+            db.getProfileByUserId(profile_uid, function (err, profile) {
+                if(err){
+                    console.log(err);
+                    res.status(400).json({msg: err});
+                    return;
+                }
+                else{
+                    if(!profile){
+                        profile = {};
+                    }
+                    db.getUserById(profile_uid, function (err, user){
+                        if(err){
+                            console.log(err);
+                            res.status(400).json({msg: err});
+                        }
+                        else{
+                            res.render('user/profile', 
+                            {
+                                profile: profile, 
+                                others: profile_uid != req.session.uid, 
+                                fromApply: req.query.fromApply ? true : false, 
+                                user: user, 
+                                project_id: project_id});
+                        }
+                    })
+                }
+            });
+        }
+    });
 });
 
-router.get('/upload-complete', function (req, res) {
-    if (req.session.uid === null) {
-        res.redirect('/login');
-        return;
-    }
-    res.render('user/upload-complete');
-});
+// router.get('/upload-complete', function (req, res) {
+//     authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+//         if (err) {
+//             res.status(400).json({msg: 'Database Error'});
+//             return;
+//         }
+//         else if(!authorized){
+//             res.redirect('/login');
+//             return;
+//         }
+//         else{
+//             res.render('user/upload-complete');
+//         }
+//     });
+// });
 
 router.get('/login', function (req, res, next) {
     res.render('user/login', {});
@@ -56,12 +101,30 @@ router.get('/logout', function (req, res, next) {
     res.redirect('/');
 });
 
-router.get('/admin', function (req, res) {
-    if (req.session.uid !== 1) {
-        res.redirect('/');
-    }
-    res.render('admin');
-});
+router.get('/user-admin', function (req, res) {
+    let roles = [authService.UserRole.Admin,
+                authService.UserRole.Developer];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.redirect('/');
+            return;
+        }
+        else{
+            db.getAllUser(function (err, allUser) {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
+                }
+                res.render('user/user-admin',{allUser: allUser, userRole: authService.UserRole});
+            });
+        }
+    });
+})
 
 router.get('/email-confirmation', function (req, res) {
     res.render('user/email-confirmation');

@@ -1,8 +1,8 @@
 <script>
     $(function () {
         const urlParams = new URLSearchParams(window.location.search);
-        const myParam = urlParams.get('status');
-        if(myParam == 's'){
+        const status = urlParams.get('status');
+        if(status == 's'){
             $('#notification-bar').css("visibility","visible");
             $('#notification-bar').fadeOut(4000, "swing");
         }
@@ -22,7 +22,7 @@
                 <li><a href="/project">Projects</a></li>
                 <li><a href="/proposal/create">Proposals</a></li>
                 <li><a href="/sponsor">Sponsor</a></li>
-                <!--li><a href="/contact">Contact</a></li-->
+                <li><a href="/contact">Contact</a></li>
             </ul>
             <div class="navbar-right">
                 <ul class="nav navbar-nav">
