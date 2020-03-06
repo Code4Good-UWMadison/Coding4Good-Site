@@ -140,7 +140,7 @@
 
     <p class="error-msg" id="error-msg"></p>
     <% if (uid) { %>
-        <% let auth_roles = [role_list.ProjectManager, role_list.Developer]; %>
+        <% let auth_roles = [role_list.Admin, role_list.ProjectManager, role_list.Developer]; %>
         <% if (auth(auth_roles, user_role) || isLeader) { %>
             <button id="applicants-button" type="button" class="btn long-btn primary-button">See Applicants</button>
         <% } else if (projectDetail.applyable) { %>

@@ -135,8 +135,8 @@ router.post('/approveApplicant', function(req, res, next){
                             const emailDetail = {
                                 to: req.body.user.email,
                                 subject: "Project application result from Coding4Good",
-                                html: `Thank you for your interest in project ${project.title}.&nbsp;<br>
-                                        Congradulations! You application to team ${project.title} have been accepted! &nbsp;<br>
+                                html: `Thank you for your interest in the project ${project.title}.&nbsp;<br>
+                                        Congratulations! Your application to team ${project.title} has been accepted! &nbsp;<br>
                                         Please follow the link to checkout your Project Leader, and Other Members &nbsp;<br>
                                         <a href='${url}'>${url}</a>`
                             };
@@ -184,24 +184,25 @@ router.post('/rejectApplicant', function(req, res, next){
                             res.status(404).json({msg: "Not found"});
                         }
                         else{
-                            const url = `https://${baseUrl}/project/detail?id=${project_id}`;
-                            const emailDetail = {
-                                to: req.body.user.email,
-                                subject: "Project application result from Coding4Good",
-                                html: `Thank you for your interest in project ${project.title}.&nbsp;<br>
-                                        Unfortunately, the team ${project.title} will not move on with your application.&nbsp;<br>
-                                        Please wait for responses from other teams.&nbsp;<br>
-                                        Also, please follow the link to contact your Project Leader for any questions!&nbsp;<br>
-                                        <a href='${url}'>${url}</a>`
-                            };
-                            emailService.sendEmail(emailDetail, function(err){
-                                if(err){
-                                    console.log(err);
-                                    res.status(400).json({msg: 'Failed to send email'});
-                                }else{
-                                    res.json({});
-                                }
-                            });
+                            // const url = `https://${baseUrl}/project/detail?id=${project_id}`;
+                            // const emailDetail = {
+                            //     to: req.body.user.email,
+                            //     subject: "Project application result from Coding4Good",
+                            //     html: `Thank you for your interest in project ${project.title}.&nbsp;<br>
+                            //             Unfortunately, the team ${project.title} will not move on with your application.&nbsp;<br>
+                            //             Please wait for responses from other teams.&nbsp;<br>
+                            //             Also, please follow the link to contact your Project Leader for any questions!&nbsp;<br>
+                            //             <a href='${url}'>${url}</a>`
+                            // };
+                            // emailService.sendEmail(emailDetail, function(err){
+                            //     if(err){
+                            //         console.log(err);
+                            //         res.status(400).json({msg: 'Failed to send email'});
+                            //     }else{
+                            //         res.json({});
+                            //     }
+                            // });
+                            res.json({});
                         }
                     });
                 }

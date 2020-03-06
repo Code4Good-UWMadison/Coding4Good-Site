@@ -32,6 +32,10 @@ h1 {
 
 }
 
+.margin-15top{
+    margin-top: 15px;
+}
+
 .margin-htop {
     margin-top: 25px;
 }
@@ -324,7 +328,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 	.body-layout.min-body-layout {
-		width: 30%;
+		width: 35%;
 	}
 
 	.body-layout.mid-body-layout {
