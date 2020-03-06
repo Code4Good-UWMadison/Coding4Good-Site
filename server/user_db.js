@@ -136,7 +136,7 @@ exports.getUserById = function (uid, callback) {
       }
     }
   });
-}
+};
 
 exports.updateProfile = function(uid, profile, callback) {
   let insert =
@@ -261,6 +261,34 @@ exports.getAllUser = function(callback) {
       callback(err);
     } else {
       callback(null, result.rows);
+    }
+  });
+};
+
+exports.getUserByEmail = function(email, callback){
+  var query = `SELECT id FROM users WHERE email=$1;`;
+  db.query(query, [email], function (err, result) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      if (result.rows.length == 0) {
+        callback(null, null);
+      }
+      else {
+        callback(null, result.rows[0]);
+      }
+    }
+  });
+};
+
+exports.resetPassword = function(user, callback) {
+  var query = `UPDATE users SET password = DON"TKNOW WHERE  = $1;`; // TODO: DON"TKNOW should be input from the new page
+  db.query(query, [uid], function(err) {
+    if (err) {
+      callback(err); 
+    } else {
+      callback(null);
     }
   });
 };

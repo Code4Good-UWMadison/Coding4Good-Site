@@ -88,8 +88,22 @@ router.get('/login', function (req, res, next) {
     res.render('user/login', {});
 });
 
-router.get('/resetPassword', function (req, res, next) {
-    res.render('user/resetPassword', {});
+router.get('/forget-password', function (req, res, next) {
+    res.render('user/forget-password', {});
+});
+
+router.get('/reset-password/:token', function (req, res){ // Undone
+    console.log(req.params.token);
+    jwt.verify(req.params.token, process.env.SECRET, function(err, decoded) {
+        if(err){
+            console.log(err);
+            res.status(400).json({msg: err});
+            return;
+        }
+        else{
+            res.render('user/reset-password', {token:req.params.token});
+        }
+    });
 });
 
 router.get('/signup', function (req, res, next) {
