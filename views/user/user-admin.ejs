@@ -90,8 +90,7 @@
 
             <div class="input-group new-project-input row">
                 <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Role :&nbsp;&nbsp;&nbsp;</div>
-                <select placeholder="User Role" id="role" class="form-control user-list">
-                    <option>None</option>
+                <select placeholder="User Role" id="role" class="form-control">
                     <% for(var role in userRole){ %>
                         <% if(role != "Root"){ %>
                         <option value="<%= role %>"><%= role %></option>
