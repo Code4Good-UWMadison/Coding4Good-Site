@@ -282,13 +282,20 @@ exports.getUserByEmail = function(email, callback){
   });
 };
 
-exports.resetPassword = function(user, callback) {
-  var query = `UPDATE users SET password = DON"TKNOW WHERE  = $1;`; // TODO: DON"TKNOW should be input from the new page
-  db.query(query, [uid], function(err) {
+exports.resetPassword = function(password, email, user_id, callback) {
+  var saltRounds = 10;
+  bcrypt.hash(password, saltRounds, function(err, hash) {
     if (err) {
-      callback(err); 
-    } else {
-      callback(null);
+      callback(err);
     }
+    var query = `UPDATE users SET password = $1 WHERE email = $2 AND id = $3;`;
+    console.log(hash);
+    db.query(query, [hash, email, user_id], function(err) {
+      if (err) {
+        callback(err); 
+      } else {
+        callback(null);
+      }
+    });
   });
 };

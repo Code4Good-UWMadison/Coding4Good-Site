@@ -225,4 +225,24 @@ router.post('/forget_password', function (req, res, next) {
     });
 });
 
+router.post('/reset_password', function (req, res, next) {
+    jwt.verify(req.body.token, process.env.SECRET, function(err, decoded) {
+        if(err){
+            console.log(err);
+            res.status(400).json({msg: err});
+        }
+        else{
+            user_db.resetPassword(req.body.password, decoded.email, decoded.uid, function (err){ // TODO: Double check if email matches uid
+                if (err){
+                    console.log(err);
+                    res.status(400).json({msg: err});
+                }else{
+                    req.session.uid = decoded.uid;
+                    res.json({});
+                }
+            });
+        }
+    });
+});
+
 module.exports = router;

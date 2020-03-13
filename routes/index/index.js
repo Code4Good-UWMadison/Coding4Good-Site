@@ -92,8 +92,7 @@ router.get('/forget-password', function (req, res, next) {
     res.render('user/forget-password', {});
 });
 
-router.get('/reset-password/:token', function (req, res){ // Undone
-    console.log(req.params.token);
+router.get('/reset-password/:token', function (req, res){
     jwt.verify(req.params.token, process.env.SECRET, function(err, decoded) {
         if(err){
             console.log(err);
