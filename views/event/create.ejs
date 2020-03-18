@@ -17,7 +17,7 @@
                 var validInput = true;
                 $("#error-msg").html("");
                 if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '') |
-                    ($("#link").val() == '') | ($("#type").val() == '') | ($("#description").val() == '')) {
+                    ($("#link").val() == '') | ($("#type").val() == '') | ($("#description").val() == '') | ($("#image").val() == '')) {
                     $("#error-msg").html('Please fill out all the fields');
                     validInput = false;
                 }
@@ -30,7 +30,7 @@
                             event_time: $("#time").val(),
                             title: $("#title").val(),
                             location: $("#location").val(),
-                            image: "TODO",
+                            image: $("#image").val(),
                             description: $("#description").val(),
                             link: $("#link").val(),
                             type: $("#type").val()
@@ -73,6 +73,11 @@
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Location: &nbsp;</div>
             <input class="form-control" type="text" id="location" placeholder="Event Location">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Event Image Url: &nbsp;</div>
+            <input class="form-control" type="text" id="image" placeholder="Event Image Url">
         </div>
 
         <div class="input-group new-project-input">

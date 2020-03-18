@@ -18,7 +18,6 @@ router.get('/create', function (req, res, next) {
         res.redirect('../login');
         return;
     }
-    //Not quite sure what is the part inside render
     res.render('event/create', {uid: req.session.uid});
 });
 
