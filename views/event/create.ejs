@@ -3,27 +3,40 @@
 <head>
     <% include ../template/head.ejs %>
     <script>
+        // default date
+        window.onload= function() {
+            let now = new Date();
+            let day = ("0" + now.getDate()).slice(-2);
+            let month = ("0" + (now.getMonth() + 1)).slice(-2);
+            let today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+            $("#time").val(today);
+        }
     	$(function() {
             $("#submit-button").click(function() {
                 $("#submit-button").attr('disabled', true);
                 var validInput = true;
                 $("#error-msg").html("");
-                if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '')) {
+                if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '') |
+                    ($("#link").val() == '') | ($("#type").val() == '') | ($("#description").val() == '')) {
                     $("#error-msg").html('Please fill out all the fields');
                     validInput = false;
                 }
                 if (validInput) {
                     $.ajax({
-                        url: "/events/createEvent",
+                        url: "/event/createEvent",
                         method: "POST",
                         dataType: "json",
                         data: {
+                            event_time: $("#time").val(),
                             title: $("#title").val(),
                             location: $("#location").val(),
-                            time: $("#time").val(),
+                            image: "TODO",
+                            description: $("#description").val(),
+                            link: $("#link").val(),
+                            type: $("#type").val()
                         },
                         success: function() {
-                            window.location.href = "/events?status=s";
+                            window.location.href = "/event?status=s";
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
@@ -54,12 +67,27 @@
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Time: &nbsp;</div>
-            <input class="form-control" type="text" id="time" placeholder="Event Time">
+            <input class="form-control" type="date" id="time" placeholder="Event Time">
         </div>
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Location: &nbsp;</div>
             <input class="form-control" type="text" id="location" placeholder="Event Location">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Event Description: &nbsp;</div>
+            <input class="form-control" type="text" id="description" placeholder="Event Description">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Event Link: &nbsp;</div>
+            <input class="form-control" type="text" id="link" placeholder="Event Link">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Event Type: &nbsp;</div>
+            <input class="form-control" type="text" id="type" placeholder="Event Type">
         </div>
 
     </div>

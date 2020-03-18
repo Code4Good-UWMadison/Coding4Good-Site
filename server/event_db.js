@@ -5,7 +5,7 @@ var db = new pg.Pool(config.db);
 
 exports.getEventSet = function (callback) {
     //not quite sure from event or events
-    var query = `SELECT * FROM event;`;
+    let query = `SELECT * FROM event;`;
     db.query(query, function (err, result) {
         if (err) {
             callback(err);
@@ -14,6 +14,31 @@ exports.getEventSet = function (callback) {
             callback(null, result.rows);
         }
     });
+};
+
+exports.createEvent = function (event, callback) {
+    let query = `INSERT INTO event (title, event_time, location, description, creation_time, link, type, image) 
+                              VALUES ($1, $2, $3, $4, (now() at time zone 'America/Chicago'), $5, $6, $7) returning id;`;
+    db.query(
+        query,
+        [
+            event.title,
+            event.event_time,
+            event.location,
+            event.description,
+            event.link,
+            event.type,
+            event.image
+        ],
+        function (err, eventId) {
+            if (err) {
+                console.log(err);
+                callback(err, eventId);
+            }  else {
+                callback(null, eventId);
+            }
+        }
+    );
 };
 
 exports.getEventById = function (eventId, callback) {

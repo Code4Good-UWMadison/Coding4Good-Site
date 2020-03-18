@@ -18,12 +18,8 @@ router.get('/create', function (req, res, next) {
         res.redirect('../login');
         return;
     }
-    if (req.session.uid != 1) {
-        res.redirect('../');
-        return;
-    }
     //Not quite sure what is the part inside render
-    res.render('event/create', {});
+    res.render('event/create', {uid: req.session.uid});
 });
 
 router.get('/edit', function (req, res, next) {
