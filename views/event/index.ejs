@@ -9,13 +9,17 @@
 <body>
     <div class="container body-layout">
         <div class="row center">
-            <h2>Events</h2>
+            <h1>Events</h1>
         </div>
+
         <% if (eventsSet.length == 0){  %>
             <p class="error-msg">Sorry! Currently, there are no project available</p>
         <% } else { %>
             <!-- Slideshow container -->
             <div class="slideshow-container">
+                <div class="col-sm-8-offset" align="right">
+                    <a class="btn primary-button" href="/event/create">Create Event</a>
+                </div>
                 <% var counter = 0; %>
                 <% eventsSet.forEach(function(row) { %>
                     <% counter += 1; %>
