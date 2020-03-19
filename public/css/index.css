@@ -7,14 +7,13 @@
 }
 
 body {
-  transition: background-color 2s linear;
-  background-color: rgb(255, 166, 118);
-  width: 100vw;
-  height: 100vh;
+  transition: background-color 2s linear; /*changes background color from that orange to pale orange*/
+  background-color: rgb(255, 166, 118); /*starting background color*/
+  background-size: cover;  /*changed viewport settings to cover*/
 }
 
   body.animated {
-    background-color: rgb(255, 240, 232);
+    background-color: rgb(255, 240, 232); /*destination color*/
   }
 
 .text {
@@ -36,6 +35,7 @@ body {
   transition: all 1.5s ease;
 }
 
+/*letter animations*/
 .text.hidding li:nth-child(1) {
   opacity: 0;
   transform: translateY(100%) translateX(-150%);
