@@ -21,14 +21,6 @@ router.post('/createEvent', function (req, res, next) {
             return;
         }
 
-        let file = req.body.image;
-        let img_name = file.name;
-        console.log("-----START PRINT-----");
-        console.log(req.files);
-        console.log(file);
-        console.log(img_name);
-        console.log("-----END PRINT-----");
-
         db.createEvent(req.body,function (err, event_id) {
             if (err) {
                 console.log(err);
