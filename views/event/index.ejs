@@ -18,9 +18,17 @@
         <% } else { %>
             <!-- Slideshow container -->
             <div class="slideshow-container">
-                <div class="col-sm-8-offset" align="right">
-                    <a class="btn primary-button" href="/event/create">Create Event</a>
-                </div>
+
+                <% if (auth([all_user_role.Developer,
+                    all_user_role.ProjectManager,
+                    all_user_role.Admin,
+                    all_user_role.EventExecutive,
+                    all_user_role.ProjectLeader], user_role)) { %>
+                    <div class="col-sm-8-offset" align="right">
+                        <a class="btn primary-button" href="/event/create">Create Event</a>
+                    </div>
+                <% } %>
+
                 <% var counter = 0; %>
                 <% eventsSet.forEach(function(row) { %>
                     <% counter += 1; %>
