@@ -7,8 +7,6 @@ const authService = require('../services/authorization_service');
 router.post('/createEvent', function (req, res, next) {
     let roles = [authService.UserRole.Developer,
         authService.UserRole.Admin,
-        authService.UserRole.ProjectManager,
-        authService.UserRole.ProjectLeader,
         authService.UserRole.EventExecutive]; // event executive can create event
 
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
