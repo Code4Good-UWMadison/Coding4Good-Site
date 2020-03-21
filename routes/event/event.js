@@ -26,7 +26,21 @@ router.get('/create', function (req, res, next) {
         res.redirect('../login');
         return;
     }
-    res.render('event/create', {uid: req.session.uid});
+    let roles = [authService.UserRole.Developer,
+        authService.UserRole.Admin,
+        authService.UserRole.EventExecutive];
+
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+        res.render('event/create', {uid: req.session.uid});
+    });
 });
 
 router.get('/edit', function (req, res, next) {
@@ -34,18 +48,28 @@ router.get('/edit', function (req, res, next) {
         res.redirect('/login');
         return;
     }
-    if (req.session.uid != 1) {
-        res.redirect('/events');
-        return;
-    }
-    db.getEventById(req.query.id, function (err, event) {
+    let roles = [authService.UserRole.Developer,
+        authService.UserRole.Admin,
+        authService.UserRole.EventExecutive];
+
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
-            console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        //Not quite sure what is the part inside render
-        res.render('event/edit', {});
+        else if(!authorized){
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+        db.getEventById(req.query.id, function (err, event) {
+            if (err) {
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            //Not quite sure what is the part inside render
+            res.render('event/edit', {});
+        });
     });
 });
 
