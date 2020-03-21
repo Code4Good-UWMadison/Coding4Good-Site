@@ -35,7 +35,10 @@
                     <!-- Full-width images with number and caption text -->
                     <div class="mySlides">
                         <div class="numbertext"> <%= counter %> / <%= eventsSet.length %> </div>
-                        <a href="<%= row.link %>">
+                        <% var link = row.link%>
+                        <!-- Add https:// if link does not have it-->
+                        <% if (link.substring(0, 8) != "https://") { link = "https://" + link } %>
+                        <a href="<%= link %>">
                             <img class="slide-img" src="<%= row.image %>" alt="<%= row.description %>" onerror="this.src='/img/brand.png'">
                         </a>
                         <div class="text">
