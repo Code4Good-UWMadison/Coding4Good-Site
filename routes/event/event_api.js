@@ -31,33 +31,55 @@ router.post('/createEvent', function (req, res, next) {
 });
 
 router.post('/saveEvent', function (req, res, next) {
-    if (req.session.uid != 1) {
-        res.status(400).json({msg: 'Not Authorized'});
-        return;
-    }
-    db.editEvent(req.body, function (err) {
+    let roles = [authService.UserRole.Developer,
+        authService.UserRole.Admin,
+        authService.UserRole.EventExecutive]; // event executive can create event
+
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
-            console.log(err);
-            res.status(400).json({msg: 'Failed to save'});
+            res.status(400).json({msg: 'Database Error'});
             return;
         }
-        res.json({});
+        else if(!authorized){
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+
+        db.editEvent(req.body, function (err) {
+            if (err) {
+                console.log(err);
+                res.status(400).json({msg: 'Failed to save'});
+                return;
+            }
+            res.json({});
+        });
     });
 });
 
 router.post('/removeEvent', function(req, res, next){
-    if(req.session.uid!=1){
-        res.status(400).json({msg: 'Not Authorized'});
-        return;
-    }
-    db.removeEventById(req.body.id,function (err) {
-        if(err){
-            console.log(err);
-            res.status(400).json({msg: 'Failed to remove'});
+    let roles = [authService.UserRole.Developer,
+        authService.UserRole.Admin,
+        authService.UserRole.EventExecutive]; // event executive can create event
+
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
             return;
         }
-        res.json({});
+        else if(!authorized){
+            res.status(400).json({msg: 'Not Authorized'});
+            return;
+        }
+
+        db.removeEventById(req.body.id,function (err) {
+            if(err){
+                console.log(err);
+                res.status(400).json({msg: 'Failed to remove'});
+                return;
+            }
+            res.json({});
+        });
     });
-})
+});
 
 module.exports = router;
