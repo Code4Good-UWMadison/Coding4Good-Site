@@ -11,6 +11,16 @@
             let today = now.getFullYear()+"-"+(month)+"-"+(day) ;
             $("#time").val(today);
         }
+        // validate URL
+        function validURL(str) {
+            var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+            return !!pattern.test(str);
+        }
     	$(function() {
             $("#submit-button").click(function() {
                 $("#submit-button").attr('disabled', true);
@@ -19,6 +29,10 @@
                 if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '') |
                     ($("#link").val() == '') | ($("#type").val() == '') | ($("#description").val() == '') | ($("#image").val() == '')) {
                     $("#error-msg").html('Please fill out all the fields');
+                    validInput = false;
+                }
+                if (!validURL($("#link").val()) || !validURL($("#image").val())) {
+                    $("#error-msg").html('Invalid link or URL');
                     validInput = false;
                 }
                 if (validInput) {
