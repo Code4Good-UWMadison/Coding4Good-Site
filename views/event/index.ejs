@@ -14,7 +14,7 @@
         </div>
 
         <% if (eventsSet.length == 0){  %>
-            <p class="error-msg">Sorry! Currently, there are no project available</p>
+            <p class="error-msg">Sorry! Currently, there are no events available</p>
         <% } else { %>
             <!-- Slideshow container -->
             <div class="slideshow-container">
@@ -36,7 +36,7 @@
                     <div class="mySlides">
                         <div class="numbertext"> <%= counter %> / <%= eventsSet.length %> </div>
                         <a href="<%= row.link %>">
-                            <img class="slide-img" src="<%= row.image %>" alt="<%= row.description %>">
+                            <img class="slide-img" src="<%= row.image %>" alt="<%= row.description %>" onerror="this.src='/img/brand.png'">
                         </a>
                         <div class="text">
                             <strong><%= row.title %>&nbsp;</strong>
