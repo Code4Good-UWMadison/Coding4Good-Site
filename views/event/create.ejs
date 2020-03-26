@@ -25,6 +25,7 @@
                 $("#error-msg").html("");
                 if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '') | ($("#event_type").val() == '') | ($("#description").val() == '')) {
                     $("#error-msg").html('Please fill out all required fields (*)');
+                    $(".required-star").removeAttr('hidden');
                     validInput = false;
                 }
                 if (($("#image").val() != '') && !validateURL($("#image").val())) {
@@ -75,17 +76,17 @@
     <p class="error-msg" id="error-msg"></p>
     <div>
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Event Title&nbsp;<strong>*</strong></div>
+            <div class="input-group-addon">&nbsp;Event Title&nbsp;<span class="required-star" hidden>*</span></div>
             <input class="form-control" type="text" id="title" placeholder="Event Title">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Time&nbsp;<strong>*</strong></div>
+            <div class="input-group-addon">&nbsp;Event Time&nbsp;<span class="required-star" hidden>*</span></div>
             <input class="form-control" type="date" id="time" placeholder="Event Time">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Location&nbsp;<strong>*</strong></div>
+            <div class="input-group-addon">&nbsp;Event Location&nbsp;<span class="required-star" hidden>*</span></div>
             <input class="form-control" type="text" id="location" placeholder="Event Location">
         </div>
 
@@ -95,7 +96,7 @@
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Description&nbsp;<strong>*</strong></div>
+            <div class="input-group-addon">&nbsp;Event Description&nbsp;<span class="required-star" hidden>*</span></div>
             <input class="form-control" type="text" id="description" placeholder="Event Description">
         </div>
 
@@ -105,7 +106,7 @@
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Type&nbsp;<strong>*</strong></div>
+            <div class="input-group-addon">&nbsp;Event Type&nbsp;<span class="required-star" hidden>*</span></div>
             <select class="form-control" id="event_type" placeholder="Input For Other Types">
                 <option>Workshop</option>
                 <option>Kickoff</option>
