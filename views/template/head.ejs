@@ -39,7 +39,7 @@ auth = function(auth_roles, user_role) {
 <!-- Add https:// if link does not have it-->
 <%
 url_with_https = function (old_url) {
-    if (old_url === "") {
+    if (old_url.trim() === "") {
         return "#";
     }
     if (!old_url.trim().match(/^[a-zA-Z]+:\/\//)) {
