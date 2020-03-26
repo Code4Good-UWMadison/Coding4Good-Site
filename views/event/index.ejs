@@ -35,9 +35,7 @@
                     <!-- Full-width images with number and caption text -->
                     <div class="mySlides">
                         <div class="numbertext"> <%= counter %> / <%= eventsSet.length %> </div>
-                        <% var link = row.link%>
-                        <!-- Add https:// if link does not have it-->
-                        <% if (link.substring(0, 8) != "https://") { link = "https://" + link } %>
+                        <% let link = url_with_https(row.link) %>
                         <a href="<%= link %>">
                             <img class="slide-img" src="<%= row.image %>" alt="<%= row.description %>" onerror="this.src='/img/brand.png'">
                         </a>
@@ -53,7 +51,7 @@
                 <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
                 <a class="next" onclick="plusSlides(1)">&#10095;</a>
                 <div style="text-align:center">
-                <% for (var i = 0; i < counter; i++) { %>
+                <% for (var i = 1; i <= counter; i++) { %>
                     <!-- The dots/circles -->
                     <span class="dot" onclick="currentSlide(<%= i %>)"></span>
                 <% } %>
