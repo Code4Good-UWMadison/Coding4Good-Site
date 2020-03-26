@@ -240,6 +240,11 @@ section {
     color: red;
 }
 
+.required-star {
+    color: red;
+    font-weight: bold;
+}
+
 .starting-display {
     height: 70vh;
 }
