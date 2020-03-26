@@ -4,7 +4,6 @@ var config = require('./dbconfig.js');
 var db = new pg.Pool(config.db);
 
 exports.getEventSet = function (callback) {
-    //not quite sure from event or events
     let query = `SELECT * FROM event;`;
     db.query(query, function (err, result) {
         if (err) {
