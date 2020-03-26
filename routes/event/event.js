@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const db = require("../../server/event_db");
+const event_db = require("../../server/event_db");
 const user_db = require("../../server/user_db");
 const authService = require('../services/authorization_service');
 
 router.get('/', function (req, res, next) {
-    db.getEventSet(function (err, eventsSet) {
+    event_db.getEventSet(function (err, eventsSet) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
@@ -61,7 +61,7 @@ router.get('/edit', function (req, res, next) {
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        db.getEventById(req.query.id, function (err, event) {
+        event_db.getEventById(req.query.id, function (err, event) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
