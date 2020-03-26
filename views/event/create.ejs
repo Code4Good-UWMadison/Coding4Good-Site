@@ -8,31 +8,31 @@
             let now = new Date();
             let day = ("0" + now.getDate()).slice(-2);
             let month = ("0" + (now.getMonth() + 1)).slice(-2);
-            let today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+            let today = now.getFullYear() + "-" + (month) + "-" + (day);
             $("#time").val(today);
+            // editable selecte event type
+            $("#event_type").editableSelect({effects: 'slide'});
+            $("#event_type").click(function(){
+                $("#event_type").val("");
+                $("#event_type").trigger("change");
+            });
         }
         // validate URL
-        function validURL(str) {
-            var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-                '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-                '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-                '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-            return !!pattern.test(str);
-        }
     	$(function() {
             $("#submit-button").click(function() {
                 $("#submit-button").attr('disabled', true);
                 var validInput = true;
                 $("#error-msg").html("");
-                if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '') |
-                    ($("#link").val() == '') | ($("#type").val() == '') | ($("#description").val() == '') | ($("#image").val() == '')) {
-                    $("#error-msg").html('Please fill out all the fields');
+                if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '') | ($("#event_type").val() == '') | ($("#description").val() == '')) {
+                    $("#error-msg").html('Please fill out all required fields (*)');
                     validInput = false;
                 }
-                if (!validURL($("#link").val()) || !validURL($("#image").val())) {
-                    $("#error-msg").html('Invalid link or URL');
+                if (($("#image").val() != '') && !validateURL($("#image").val())) {
+                    $("#error-msg").html('Invalid Image URL');
+                    validInput = false;
+                }
+                if (($("#link").val() != '') && !validateURL($("#link").val())) {
+                    $("#error-msg").html('Invalid Link');
                     validInput = false;
                 }
                 if (validInput) {
@@ -47,7 +47,7 @@
                             image: $("#image").val(),
                             description: $("#description").val(),
                             link: $("#link").val(),
-                            type: $("#type").val()
+                            type: $("#event_type").val()
                         },
                         success: function() {
                             window.location.href = "/event?status=s";
@@ -75,17 +75,17 @@
     <p class="error-msg" id="error-msg"></p>
     <div>
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Event Title:&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Event Title<strong>*</strong>:&nbsp;&nbsp;&nbsp;</div>
             <input class="form-control" type="text" id="title" placeholder="Event Title">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Time: &nbsp;</div>
+            <div class="input-group-addon">&nbsp;Event Time<strong>*</strong>: &nbsp;</div>
             <input class="form-control" type="date" id="time" placeholder="Event Time">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Location: &nbsp;</div>
+            <div class="input-group-addon">&nbsp;Event Location<strong>*</strong>: &nbsp;</div>
             <input class="form-control" type="text" id="location" placeholder="Event Location">
         </div>
 
@@ -95,7 +95,7 @@
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Description: &nbsp;</div>
+            <div class="input-group-addon">&nbsp;Event Description<strong>*</strong>: &nbsp;</div>
             <input class="form-control" type="text" id="description" placeholder="Event Description">
         </div>
 
@@ -105,8 +105,12 @@
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Type: &nbsp;</div>
-            <input class="form-control" type="text" id="type" placeholder="Event Type">
+            <div class="input-group-addon">&nbsp;Event Type<strong>*</strong>: &nbsp;</div>
+            <select class="form-control" id="event_type" placeholder="Input For Other Types">
+                <option>Workshop</option>
+                <option>Kickoff</option>
+                <option>Group meeting</option>
+            </select>
         </div>
 
     </div>
