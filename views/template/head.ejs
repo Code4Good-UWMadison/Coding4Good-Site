@@ -36,3 +36,15 @@ auth = function(auth_roles, user_role) {
     return false;
 }
 %>
+<!-- Add https:// if link does not have it-->
+<%
+url_with_https = function (old_url) {
+    if (old_url === "") {
+        return "#";
+    }
+    if (!old_url.trim().match(/^[a-zA-Z]+:\/\//)) {
+        return "https://" + old_url;
+    }
+    return old_url;
+}
+%>
