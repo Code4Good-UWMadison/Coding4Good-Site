@@ -287,17 +287,17 @@ exports.resetPassword = function(password, email, user_id, callback) {
   bcrypt.hash(password, saltRounds, function(err, hash) {
     if (err) {
       callback(err);
-    } else {
-      callback(null);
+    } 
+    else {
+      var query = `UPDATE users SET password = $1 WHERE email = $2 AND id = $3;`;
+      console.log(hash);
+      db.query(query, [hash, email, user_id], function(err) {
+        if (err) {
+          callback(err); 
+        } else {
+          callback(null);
+        }
+      });
     }
-    var query = `UPDATE users SET password = $1 WHERE email = $2 AND id = $3;`;
-    console.log(hash);
-    db.query(query, [hash, email, user_id], function(err) {
-      if (err) {
-        callback(err); 
-      } else {
-        callback(null);
-      }
-    });
   });
 };
