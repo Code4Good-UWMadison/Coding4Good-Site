@@ -4,6 +4,7 @@
 
 h1 {
     color: #888;
+    font-size: 60px;
 }
 
 h2, h3, h4, h5, h6 {
@@ -20,8 +21,8 @@ td {
     font-size: 1em;
 }
 
-h1 {
-    font-size: 60px;
+li {
+    font-size: 1.18em;
 }
 
 .home-nav {

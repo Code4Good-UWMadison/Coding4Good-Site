@@ -9,12 +9,18 @@
     })
 </script>
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
+    <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <a href="/"><img src="/img/brand.png" style="height: 50px"/></a>
-        </div>
-
+        <!-- Create button -->
+        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class = "navbar-toggler-icon"></span>
+          <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+          </button>
+              <a class="navbar-brand" href="/"><img src="/img/brand.png" style="height: 50px; margin-top: -15px; padding-left:15px"/></a>
+              </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
@@ -25,15 +31,13 @@
                 <li><a href="/sponsor">Sponsor</a></li>
                 <li><a href="/contact">Contact</a></li>
             </ul>
-            <div class="navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="/login">Login</a></li>
-                    <li><a>|</a></li>
+                <ul class="nav navbar-nav navbar-right" style="padding-right: 50px">
+                    <li><a href="/login" style="padding-right:30px">Login</a></li>
+                    <!-- class description: hidden-xs hides an element when window reaches xs size -->
+                    <li style="padding-top:11px; padding-right: 10px; font-size:1.5em" class="hidden-xs">|</li>
                     <li><a href="/signup">Signup</a></li>
                 </ul>
-            </div>
         </div>
-
     </div>
 </nav>
 <div id="notification-bar">
