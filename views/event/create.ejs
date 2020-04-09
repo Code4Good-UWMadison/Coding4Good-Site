@@ -3,27 +3,55 @@
 <head>
     <% include ../template/head.ejs %>
     <script>
+        // default date
+        window.onload= function() {
+            let now = new Date();
+            let day = ("0" + now.getDate()).slice(-2);
+            let month = ("0" + (now.getMonth() + 1)).slice(-2);
+            let today = now.getFullYear() + "-" + (month) + "-" + (day);
+            $("#time").val(today);
+            // editable selecte event type
+            $("#event_type").editableSelect({effects: 'slide'});
+            $("#event_type").click(function(){
+                $("#event_type").val("");
+                $("#event_type").trigger("change");
+            });
+        }
+        // validate URL
     	$(function() {
             $("#submit-button").click(function() {
                 $("#submit-button").attr('disabled', true);
                 var validInput = true;
                 $("#error-msg").html("");
-                if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '')) {
-                    $("#error-msg").html('Please fill out all the fields');
+                if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '') | ($("#event_type").val() == '') | ($("#description").val() == '')) {
+                    $("#error-msg").html('Please fill out all required fields (*)');
+                    $(".required-star").removeAttr('hidden');
+                    validInput = false;
+                }
+                if (($("#image").val() != '') && !validateURL($("#image").val())) {
+                    $("#error-msg").html('Invalid Image URL');
+                    validInput = false;
+                }
+                if (($("#link").val() != '') && !validateURL($("#link").val())) {
+                    $("#error-msg").html('Invalid Link');
                     validInput = false;
                 }
                 if (validInput) {
                     $.ajax({
-                        url: "/events/createEvent",
+                        url: "/event/createEvent",
                         method: "POST",
                         dataType: "json",
                         data: {
+                            event_time: $("#time").val(),
                             title: $("#title").val(),
                             location: $("#location").val(),
-                            time: $("#time").val(),
+                            image: $("#image").val(),
+                            description: $("#description").val(),
+                            link: $("#link").val(),
+                            type: $("#event_type").val()
                         },
                         success: function() {
-                            window.location.href = "/events?status=s";
+                            window.location.href = "/event?status=s";
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
@@ -48,18 +76,42 @@
     <p class="error-msg" id="error-msg"></p>
     <div>
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Event Title:&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group-addon">&nbsp;Event Title&nbsp;<span class="required-star" hidden>*</span></div>
             <input class="form-control" type="text" id="title" placeholder="Event Title">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Time: &nbsp;</div>
-            <input class="form-control" type="text" id="time" placeholder="Event Time">
+            <div class="input-group-addon">&nbsp;Event Time&nbsp;<span class="required-star" hidden>*</span></div>
+            <input class="form-control" type="date" id="time" placeholder="Event Time">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Location: &nbsp;</div>
+            <div class="input-group-addon">&nbsp;Event Location&nbsp;<span class="required-star" hidden>*</span></div>
             <input class="form-control" type="text" id="location" placeholder="Event Location">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Event Image Url: &nbsp;</div>
+            <input class="form-control" type="text" id="image" placeholder="Event Image Url">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Event Description&nbsp;<span class="required-star" hidden>*</span></div>
+            <input class="form-control" type="text" id="description" placeholder="Event Description">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Event Link: &nbsp;</div>
+            <input class="form-control" type="text" id="link" placeholder="Event Link">
+        </div>
+
+        <div class="input-group new-project-input">
+            <div class="input-group-addon">&nbsp;Event Type&nbsp;<span class="required-star" hidden>*</span></div>
+            <select class="form-control" id="event_type" placeholder="Input For Other Types">
+                <option>Workshop</option>
+                <option>Kickoff</option>
+                <option>Group meeting</option>
+            </select>
         </div>
 
     </div>

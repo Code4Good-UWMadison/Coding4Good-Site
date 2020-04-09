@@ -240,11 +240,21 @@ section {
     color: red;
 }
 
+.required-star {
+    color: red;
+    font-weight: bold;
+}
+
 .starting-display {
     height: 70vh;
 }
 
 .main-display {
+  opacity: 0;
+  animation-name:fadeIn;
+  animation-duration:2s;
+  animation-delay: 2s;
+  animation-fill-mode: forwards;
     width: 30%;
     margin: -210px auto;
     text-align: center;
@@ -259,7 +269,8 @@ section {
 }
 
 .index-sponsor-container {
-    padding-top: 200px;
+    padding-top: 155px;
+    padding-bottom:18px;
 }
 
 .index-sponsor-img {
@@ -352,4 +363,9 @@ input::-webkit-calendar-picker-indicator {
     text-shadow: 0 1px 2px #a9a9a9;
     opacity: 0.8;
     box-shadow: 0 5px 5px #999999;
+}
+/* JS animations are SO 2013*/
+@keyframes fadeIn {
+  0% {opacity: 0}
+  100% {opacity: 1}
 }

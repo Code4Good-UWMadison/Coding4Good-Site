@@ -184,4 +184,65 @@ router.post('/update_user', function (req, res, next) {
     });
 });
 
+router.post('/forget_password', function (req, res, next) {
+    user_db.getUserByEmail(req.body.email, function (err, user) {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});            
+            return;
+        }
+        else {
+            if (!user.id){
+                res.json({status: false});                
+            }
+            else{
+                const emailToken = jwt.sign({
+                    "email": req.body.email,
+                    "uid": user.id,
+                    "date": Date.now()
+                },
+                process.env.SECRET,
+                {
+                    expiresIn: "1d",
+                });
+                const url = `https://${baseUrl}/reset-password/${emailToken}`;
+            
+                const emailDetail = {
+                    to: req.body.email, // list of receivers 
+                    subject: "Reset password for Coding4Good account",
+                    html: `Please click this link to reset your password: <a href='${url}'>${url}</a>`
+                };
+                emailService.sendEmail(emailDetail, function(err){
+                    if(!err){
+                        res.json({status: true});
+                    }
+                    else {
+                        console.log(err);
+                    }
+                });
+            } 
+        }
+    });
+});
+
+router.post('/reset_password', function (req, res, next) {
+    jwt.verify(req.body.token, process.env.SECRET, function(err, decoded) {
+        if(err){
+            console.log(err);
+            res.status(400).json({msg: err});
+        }
+        else{
+            user_db.resetPassword(req.body.password, decoded.email, decoded.uid, function (err){ // TODO: Double check if email matches uid
+                if (err){
+                    console.log(err);
+                    res.status(400).json({msg: err});
+                }else{
+                    req.session.uid = decoded.uid;
+                    res.json({});
+                }
+            });
+        }
+    });
+});
+
 module.exports = router;
