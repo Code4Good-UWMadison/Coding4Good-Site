@@ -16,6 +16,9 @@ router.get('/', function (req, res, next) {
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
+            eventsSet = eventsSet.sort(function (a, b) {
+                return a.event_time - b.event_time
+            })
             res.render('event/index', {eventsSet: eventsSet, uid: req.session.uid, all_user_role: authService.UserRole, user_role: user_role});
         });
     });
@@ -61,6 +64,7 @@ router.get('/edit', function (req, res, next) {
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
+        console.log(req.query.id);
         event_db.getEventById(req.query.id, function (err, event) {
             if (err) {
                 console.log(err);
@@ -68,7 +72,7 @@ router.get('/edit', function (req, res, next) {
                 return;
             }
             //Not quite sure what is the part inside render
-            res.render('event/edit', {});
+            res.render('event/edit', {eventDetail: event});
         });
     });
 });

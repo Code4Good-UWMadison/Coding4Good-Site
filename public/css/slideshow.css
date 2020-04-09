@@ -1,103 +1,67 @@
-* {box-sizing:border-box}
-
-/* Slideshow container */
-.slideshow-container {
-    max-width: 1000px;
+.top-stack {
     position: relative;
-    margin: auto;
+    height: 30%;
+    width: 80%;
+    margin-left: 10%;
 }
 
-.slide-img {
-    display: block;
-    width: 100%;
-    height: 600px;
-    object-fit: contain;
-}
-
-/* Hide the images by default */
-.mySlides {
-    display: none;
-}
-
-/* Next & previous buttons */
-.prev, .next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    margin-top: -22px;
-    padding: 16px;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
-    background-color: rgba(0,0,0,0.8);
-}
-
-/* Position the "next button" to the right */
-.next {
-    right: 0;
-    border-radius: 3px 0 0 3px;
-}
-
-/* On hover, add a black background color with a little bit see-through */
-.prev:hover, .next:hover {
-    background-color: #f2f2f2;
-}
-
-/* Caption text */
-.text {
-    background-color: #333333;
-    color: #f2f2f2;
-    font-size: 15px;
-    padding: 8px 12px;
-    position: absolute;
-    bottom: 32px;
-    width: 100%;
-    text-align: center;
-}
-
-/* Number text (1/3 etc) */
-.numbertext {
-    color: #f2f2f2;
-    font-size: 12px;
-    padding: 8px 12px;
+.sl-img {
+    object-fit: cover;
     position: absolute;
     top: 0;
+    left: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(254, 249, 247);
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-/* The dots/bullets/indicators */
-.dot {
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 2px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6s ease;
+.center-stack {
+    position: relative;
+    z-index: 99999;
+    height: 40%;
 }
 
-.active, .dot:hover {
-    background-color: #717171;
+.bot-stack {
+    position: relative;
+    height: 30%;
+    width: 80%;
+    margin-left: 10%;
 }
 
-/* Fading animation */
-.fade {
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 1.5s;
-    animation-name: fade;
-    animation-duration: 1.5s;
+.change-sl:hover {
+    color: rgb(227, 151, 90);
+    text-decoration: none;
 }
 
-@-webkit-keyframes fade {
-    from {opacity: .4}
-    to {opacity: 1}
+.change-sl {
+    cursor:pointer;
+    text-align: right;
+    outline: none;
+    display: block;
+    color: rgb(227, 151, 90);
+    font-size: x-large;
+    margin-left: auto;
+    margin-right: 0;
 }
 
-@keyframes fade {
-    from {opacity: .4}
-    to {opacity: 1}
+.curr-info {
+    text-align: right;
+    padding-top: 5%;
+    height: 90%;
+}
+
+.cover-flow {
+    width: 60%;
+    height: 80vh;
+    float: left;
+}
+
+.info-box {
+    width: 40%;
+    padding-left: 16px;
+    margin-top: 5vh;
+    height: 70vh;
+    float: right;
 }

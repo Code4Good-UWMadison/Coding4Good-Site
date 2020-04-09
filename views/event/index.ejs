@@ -7,59 +7,127 @@
 </head>
 
 <body>
-    <% include ../template/nav.ejs %>
-    <div class="container body-layout">
-        <div class="row center">
-            <h2>Events</h2>
+<% include ../template/nav.ejs %>
+<div class="container body-layout">
+    <% if (auth([all_user_role.Developer,
+        all_user_role.ProjectManager,
+        all_user_role.Admin,
+        all_user_role.EventExecutive,
+        all_user_role.ProjectLeader], user_role)) { %>
+        <div class="col-sm-8-offset" align="right">
+            <a class="btn primary-button" href="/event/create">Create Event</a>
         </div>
+    <% } %>
 
-        <% if (eventsSet.length == 0){  %>
-            <p class="error-msg">Sorry! Currently, there are no events available</p>
-        <% } else { %>
-            <!-- Slideshow container -->
-            <div class="slideshow-container">
-
-                <% if (auth([all_user_role.Developer,
-                    all_user_role.ProjectManager,
-                    all_user_role.Admin,
-                    all_user_role.EventExecutive,
-                    all_user_role.ProjectLeader], user_role)) { %>
-                    <div class="col-sm-8-offset" align="right">
-                        <a class="btn primary-button" href="/event/create">Create Event</a>
-                    </div>
-                <% } %>
-
-                <% var counter = 0; %>
-                <% eventsSet.forEach(function(row) { %>
-                    <% counter += 1; %>
-                    <!-- Full-width images with number and caption text -->
-                    <div class="mySlides">
-                        <div class="numbertext"> <%= counter %> / <%= eventsSet.length %> </div>
-                        <% let link = url_with_https(row.link) %>
-                        <a href="<%= link %>">
-                            <img class="slide-img" src="<%= row.image %>" alt="<%= row.description %>" onerror="this.src='/img/brand.png'">
-                        </a>
-                        <div class="text">
-                            <strong><%= row.title %>&nbsp;</strong>
-                            <em><%= row.description %>&nbsp;</em>
-                            <span>Location: <%= row.location %>&nbsp;</span>
-                            <span>Event Time: <%= row.event_time.toDateString() %>&nbsp;</span>
-                        </div>
-                    </div>
-                <% }); %>
-                <!-- Next and previous buttons -->
-                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                <a class="next" onclick="plusSlides(1)">&#10095;</a>
-                <div style="text-align:center">
-                <% for (var i = 1; i <= counter; i++) { %>
-                    <!-- The dots/circles -->
-                    <span class="dot" onclick="currentSlide(<%= i %>)"></span>
-                <% } %>
+    <% if (eventsSet.length == 0){ %>
+        <p class="error-msg">Sorry! Currently, there are no events available</p>
+    <% } else { %>
+        <div class="cover-flow">
+            <% if (eventsSet.length >= 3) { %>
+                <div class="top-stack">
+                    <% for (var i = 0; i < Math.floor(eventsSet.length / 2) - 1; i++) { %>
+                        <img class="top-img sl-img" onclick="clickUp(<%=i%>)" id="event<%= i %>" src="<%= eventsSet[i].image %>" alt="<%=
+                            eventsSet[i]
+                                    .description
+                        %>"
+                             onerror="this.src='/img/brand.png'">
+                    <% } %>
                 </div>
-            </div>
+                <div class="center-stack">
+                    <img class="curr-img sl-img" id="event<%= Math.floor(eventsSet.length / 2) - 1 %>"
+                         src="<%= eventsSet[Math.floor(eventsSet.length /
+                                 2) - 1]
+                                 .image %>"
+                         alt="<%= eventsSet[Math.floor(eventsSet.length / 2) - 1].description %>"
+                         onerror="this.src='/img/brand.png'">
+                </div>
+                <div class="bot-stack">
+                    <% for (var i = eventsSet.length - 1; i >= Math.floor(eventsSet.length / 2); i--) { %>
+                        <img class="bot-img sl-img" onclick="clickDown(<%=i%>)" id="event<%= i %>" src="<%= eventsSet[i].image %>"
+                             alt="<%= eventsSet[i].description %>"
+                             onerror="this.src='/img/brand.png'">
+                    <% } %>
+                </div>
+            <% } else { %>
+                <div class="top-stack">
+                </div>
+                <div class="center-stack">
+                    <img class="curr-img sl-img" id="event0" src="<%= eventsSet[0].image %>" alt="<%= eventsSet[0].description %>"
+                         onerror="this.src='/img/brand.png'">
+                </div>
+                <div class="bot-stack">
+                    <% if (eventsSet.length === 2) { %>
+                        <img class="bot-img sl-img" id="event1" onclick="clickDown(<%=1%>)" src="<%= eventsSet[1].image %>" alt="<%= eventsSet[1].description %>"
+                             onerror="this.src='/img/brand.png'">
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+        <% if (eventsSet.length >= 3) { %>
+            <% for (var i = 0; i < eventsSet.length; i++) { %>
+                <div class="info-box" id="info<%= i %>"
+                     <% if (i !== Math.floor(eventsSet.length / 2) - 1) { %>hidden
+                        <% } %>
+                >
+                    <% if (i > 0) { %>
+                        <a class="change-sl" onclick="clickUp(<%= i - 1 %>)"><%= eventsSet[i - 1].title
+                            %></a>
+                    <% } %>
+                    <div class="curr-info">
+                        <h1><%= eventsSet[i].title %></h1>
+                        <h2><%= eventsSet[i].event_time.toDateString() %></h2>
+                        <h2><%= eventsSet[i].location %></h2>
+                        <p><%= eventsSet[i].description %></p>
+                        <% if (auth([all_user_role.Developer,
+                            all_user_role.ProjectManager,
+                            all_user_role.Admin,
+                            all_user_role.EventExecutive,
+                            all_user_role.ProjectLeader], user_role)) { %>
+                            <div class="col-sm-8-offset" align="right">
+                                <a class="btn primary-button" href="/event/edit?id=<%= eventsSet[i].id%>">Edit Event</a>
+                            </div>
+                        <% } %>
+                    </div>
+                    <% if (i < eventsSet.length - 1) { %>
+                        <a class="change-sl"
+                           onclick="clickDown(<%= i + 1 %>)"><%= eventsSet[i + 1].title %></a>
+                    <% } %>
+                </div>
+            <% } %>
+        <% } else { %>
+            <% for (var i = 0; i < eventsSet.length; i++) { %>
+                <div class="info-box" id="info<%= i %>"
+                <% if (i !== 0) { %> hidden
+                        <% } %>
+                >
+                    <% if (i > 0) { %>
+                        <a class="change-sl" onclick="clickUp(<%= i - 1 %>)"><%= eventsSet[i - 1].title
+                            %></a>
+                    <% } %>
+                    <div class="curr-info">
+                        <h1><%= eventsSet[i].title %></h1>
+                        <h2><%= eventsSet[i].event_time.toDateString() %></h2>
+                        <h2><%= eventsSet[i].location %></h2>
+                        <p><%= eventsSet[i].description %></p>
+                        <% if (auth([all_user_role.Developer,
+                            all_user_role.ProjectManager,
+                            all_user_role.Admin,
+                            all_user_role.EventExecutive,
+                            all_user_role.ProjectLeader], user_role)) { %>
+                            <div class="col-sm-8-offset" align="right">
+                                <a class="btn primary-button" href="/event/edit?id=<%= eventsSet[i].id%>">Edit Event</a>
+                            </div>
+                        <% } %>
+                    </div>
+                    <% if (i < eventsSet.length - 1) { %>
+                        <a class="change-sl"
+                           onclick="clickDown(<%= i + 1 %>)"><%= eventsSet[i + 1].title %></a>
+                    <% } %>
+                </div>
+            <% } %>
         <% } %>
-
-        <script src="/js/slideshow.js"></script>
+    <% } %>
+    <script src="/js/slideshow.js"></script>
 </body>
 
 </html>

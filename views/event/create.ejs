@@ -17,7 +17,6 @@
                 $("#event_type").trigger("change");
             });
         }
-        // validate URL
     	$(function() {
             $("#submit-button").click(function() {
                 $("#submit-button").attr('disabled', true);
@@ -71,7 +70,7 @@
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
     <div class="col-sm-8-offset" align="right">
-        <a class="btn primary-button" href="/events">Back</a>
+        <a class="btn primary-button" href="/event">Back</a>
     </div>
     <p class="error-msg" id="error-msg"></p>
     <div>
@@ -96,11 +95,6 @@
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Description&nbsp;<span class="required-star" hidden>*</span></div>
-            <input class="form-control" type="text" id="description" placeholder="Event Description">
-        </div>
-
-        <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Link: &nbsp;</div>
             <input class="form-control" type="text" id="link" placeholder="Event Link">
         </div>
@@ -112,6 +106,10 @@
                 <option>Kickoff</option>
                 <option>Group meeting</option>
             </select>
+        </div>
+
+        <div class="new-project-input">
+            <textarea class="form-control" type="text" id="description" placeholder="Event Description" rows="5" maxlength="300" style="resize: none;"></textarea>
         </div>
 
     </div>
