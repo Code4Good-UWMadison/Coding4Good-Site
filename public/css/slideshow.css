@@ -1,3 +1,5 @@
+html, body {margin: 0; height: 100%; overflow: hidden}
+
 .top-stack {
     position: relative;
     height: 30%;
@@ -54,14 +56,14 @@
 
 .cover-flow {
     width: 60%;
-    height: 80vh;
+    height: 85vh;
     float: left;
+    margin-top: -2vh;
 }
 
 .info-box {
     width: 40%;
     padding-left: 16px;
-    margin-top: 5vh;
-    height: 70vh;
+    height: 80vh;
     float: right;
 }

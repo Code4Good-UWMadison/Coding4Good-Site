@@ -30,7 +30,7 @@
                             eventsSet[i]
                                     .description
                         %>"
-                             onerror="this.src='/img/brand.png'">
+                             onerror="this.src='/img/icon.jpg'">
                     <% } %>
                 </div>
                 <div class="center-stack">
@@ -39,13 +39,13 @@
                                  2)]
                                  .image %>"
                          alt="<%= eventsSet[Math.floor(eventsSet.length / 2)].description %>"
-                         onerror="this.src='/img/brand.png'">
+                         onerror="this.src='/img/icon.jpg'">
                 </div>
                 <div class="bot-stack">
                     <% for (var i = eventsSet.length - 1; i > Math.floor(eventsSet.length / 2); i--) { %>
                         <img class="bot-img sl-img" onclick="clickDown(<%= i %>)" id="event<%= i %>" src="<%= eventsSet[i].image %>"
                              alt="<%= eventsSet[i].description %>"
-                             onerror="this.src='/img/brand.png'">
+                             onerror="this.src='/img/icon.jpg'">
                     <% } %>
                 </div>
             <% } else { %>
@@ -53,13 +53,13 @@
                 </div>
                 <div class="center-stack">
                     <img class="curr-img sl-img" id="event0" src="<%= eventsSet[0].image %>" alt="<%= eventsSet[0].description %>"
-                         onerror="this.src='/img/brand.png'">
+                         onerror="this.src='/img/icon.jpg'">
                 </div>
                 <div class="bot-stack">
                     <% if (eventsSet.length === 2) { %>
                         <img class="bot-img sl-img" id="event1" onclick="clickDown(<%= 1 %>)" src="<%= eventsSet[1].image %>"
                              alt="<%= eventsSet[1].description %>"
-                             onerror="this.src='/img/brand.png'">
+                             onerror="this.src='/img/icon.jpg'">
                     <% } %>
                 </div>
             <% } %>
