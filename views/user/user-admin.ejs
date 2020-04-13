@@ -1,104 +1,162 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <% include ../template/head.ejs %>
-        <script>
-            $(function () {
-                $('.user-list').editableSelect({effects: 'slide'});
-                
-                $("#select-user-button").click(function () {
-                    $("#select-user-button").attr('disabled',true);
-                    $.ajax({
-                        url: "/get_user_info",
-                        method: "POST",
-                        dataType: "json",
-                        data: {
-                            user_id: $("#name").attr("data-value")
-                        },
-                        success: function (result) {
-                            console.log(result);
-                            var profile_link = "/profile?user_id="+result.user.id;
-                            $("#profile_link").attr("href", profile_link);
-                            $("#profile_link").html(profile_link);
-                            var project_list = "";
-                            result.projects.forEach(function(project){
-                                project_list += "<a href='/project/detail?id="+project.id+"'>"+project.title+" "+project.relation+"</a><br>";
+
+<head>
+    <% include ../template/head.ejs %>
+    <script>
+        var userResult;
+        $(function () {
+            $('.user-list').editableSelect({ effects: 'slide' });
+
+            $("#select-user-button").click(function () {
+                $("#select-user-button").attr('disabled', true);
+                $.ajax({
+                    url: "/get_user_info",
+                    method: "POST",
+                    dataType: "json",
+                    data: {
+                        user_id: $("#name").attr("data-value")
+                    },
+                    success: function (result) {
+                        console.log(result);
+                        userResult = result;
+                        var profile_link = "/profile?user_id=" + result.user.id;
+                        $("#profile_link").attr("href", profile_link);
+                        $("#profile_link").html(profile_link);
+                        // present current roles of the user
+                        var current_role = result.roles;
+                        if (current_role != null && current_role.length != 0) {
+                            var rolesDiv = "";
+                            var counter = 0;
+                            current_role.forEach(function (role) {
+                                rolesDiv += "<div id=role_and_delete style=\"display: flex;\">";
+                                rolesDiv += "<div id=\"all_roles\" style=\"flex-basis : 145%;\">";
+                                rolesDiv += "<div class=\"input-group new-project-input row\">";
+                                rolesDiv += "<div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Role :&nbsp;&nbsp;&nbsp;</div>";
+                                rolesDiv += "<div class=\"form-control\"><span>";
+                                rolesDiv += role.user_role;
+                                rolesDiv += "</span></div></div></div>";
+                                rolesDiv += "<div style=\"flex-basis : 10%;margin-top: 10px;margin-left: 5px;\">";
+                                rolesDiv += "<button onclick=\"del_btn("+counter+")\" id=\"delete-button-"+ counter + "\" class=\"table-delete-link\" title=\"Delete\" style=\"height: 34px;border: 1px solid #ccc;border-radius: 4px;\">";
+                                rolesDiv += "<span class=\"ui-icon ui-icon-trash\"></span><span class=\"ui-button-text\">Delete</span></button></div>";
+                                rolesDiv += "</div></div>";
+                                counter ++;
                             });
-                            $("#project_list").html(project_list);
-                            $("#select-user-button").attr('disabled',false);
-                        },
-                        error: function () {
-                            $("#error-msg").html("Error: Please contact Web team!");
-                            $("#select-user-button").attr('disabled',false);
+                            $("#all_roles").html(rolesDiv);
+                        } else {
+                            $("#current_role").html("None");
                         }
-                    });
+
+                        var project_list = "";
+                        result.projects.forEach(function (project) {
+                            project_list += "<a href='/project/detail?id=" + project.id + "'>" + project.title + " " + project.relation + "</a><br>";
+                        });
+                        $("#project_list").html(project_list);
+                        $("#select-user-button").attr('disabled', false);
+                    },
+                    error: function () {
+                        $("#error-msg").html("Error: Please contact Web team!");
+                        $("#select-user-button").attr('disabled', false);
+                    }
                 });
-                
-                $("#submit-button").click(function () {
-                    $("#submit-button").attr('disabled',true);
+            });
+
+            
+            $("#submit-button").click(function () {
+                $("#submit-button").attr('disabled', true);
+                var validInput = true;
+                for (var i = 0; i < userResult.roles.length; i++) {
+                    if (($("#role").val() === userResult.roles[i]) | ($("#role").val() === "None")) {
+                        validInput = false;
+                    }
+                }
+                if (validInput) {
                     $.ajax({
                         url: "/update_user",
                         method: "POST",
                         dataType: "json",
                         data: {
                             user_id: $("#name").val(),
-                            user_role: $("#role").val()
+                            user_role: $("#role").val(),
                         },
                         success: function () {
                             window.location.href = "/user-admin?status=s";
                         },
                         error: function () {
                             $("#error-msg").html("Error: Please contact Web team!");
-                            $("#submit-button").attr('disabled',false);
+                            $("#submit-button").attr('disabled', false);
                         }
                     });
-                });
+                }
             });
-        </script>
-    </head>
-    <body>
-        <% include ../template/nav.ejs %>
-        <div class="container body-layout">
-            <p class="error-msg" id="error-msg"></p>
-            <div class="row">
-                <div class="col-sm-9">
-                    <div class="input-group new-project-input">
-                        <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User :&nbsp;&nbsp;&nbsp;</div>
-                        <select placeholder="User Name" id="name" class="form-control user-list">
-                            <% allUser.forEach(function(user){ %>
-                                <% if(user.id != 1){ %>
-                                <option id="<%= user.id %>" value="<%= user.id %>"><%= user.name %>(<%= user.email %>)</option>
-                                <% } %>
-                            <% }) %>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <button id="select-user-button" type="button" class="btn long-btn primary-button new-project-input">Load</button>
-                </div>
-            </div>
+        
+        });
+        // delete icon
+        function del_btn(counter){
+                console.log("Hello, my name is delete-button-",counter);
+                
+            }
+    </script>
+</head>
 
-            <div class="input-group new-project-input row">
-                <div class="input-group-addon">&nbsp;&nbsp;Profile Link :&nbsp;</div>
-                <div class="form-control"><a id="profile_link" href=""></a></div>
-            </div>
-
-            <div class="input-group new-project-input row">
-                <div class="input-group-addon">&nbsp;&nbsp;Project list :&nbsp;</div>
-                <div class="form-control" type="text" id="project_list" style="height:300px"></div>
-            </div>
-
-            <div class="input-group new-project-input row">
-                <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Role :&nbsp;&nbsp;&nbsp;</div>
-                <select placeholder="User Role" id="role" class="form-control">
-                    <% for(var role in userRole){ %>
-                        <% if(role != "Root"){ %>
-                        <option value="<%= role %>"><%= role %></option>
+<body>
+    <% include ../template/nav.ejs %>
+    <div class="container body-layout">
+        <p class="error-msg" id="error-msg"></p>
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="input-group new-project-input">
+                    <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User :&nbsp;&nbsp;&nbsp;</div>
+                    <select placeholder="User Name" id="name" class="form-control user-list">
+                        <% allUser.forEach(function(user){ %>
+                        <% if(user.id != 1){ %>
+                        <option id="<%= user.id %>" value="<%= user.id %>"><%= user.name %>(<%= user.email %>)</option>
                         <% } %>
-                    <% } %>
-                </select>
+                        <% }) %>
+                    </select>
+                </div>
             </div>
-            <button id="submit-button" type="button" class="btn long-btn primary-button">Save</button>
+            <div class="col-sm-3">
+                <button id="select-user-button" type="button"
+                    class="btn long-btn primary-button new-project-input">Load</button>
+            </div>
         </div>
-    </body>
+
+        <div class="input-group new-project-input row">
+            <div class="input-group-addon">&nbsp;&nbsp;Profile Link :&nbsp;</div>
+            <div class="form-control"><a id="profile_link" href=""></a></div>
+        </div>
+
+        <div class="input-group new-project-input row">
+            <div class="input-group-addon">&nbsp;&nbsp;Project list :&nbsp;</div>
+            <div class="form-control" type="text" id="project_list" style="height:300px"></div>
+        </div>
+
+        <div id=role_and_delete style="display: flex;">
+            <div id="all_roles" style="flex-basis : 145%;">
+                <div class="input-group new-project-input row">
+                    <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Role :&nbsp;&nbsp;&nbsp;</div>
+                    <div class="form-control"><span id="current_role"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group new-project-input row">
+            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assign New Role :&nbsp;&nbsp;&nbsp;</div>
+            <select placeholder="User Role" id="role" class="form-control user-list">
+                <option>None</option>
+                <% for(var role in userRole){ %>
+                <% if(role != "Root"){ %>
+                <option value="<%= role %>"><%= role %></option>
+                <% } %>
+                <% } %>
+            </select>
+
+        </div>
+
+
+        <button id="submit-button" type="button" class="btn long-btn primary-button">Save</button>
+    </div>
+</body>
+
 </html>

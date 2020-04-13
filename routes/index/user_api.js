@@ -160,6 +160,7 @@ router.post('/get_user_info', function (req, res, next) {
 });
 
 router.post('/update_user', function (req, res, next) {
+    console.log("AAAAAAAH")
     let roles = [authService.UserRole.Admin,
                 authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
