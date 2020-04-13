@@ -29,17 +29,22 @@
                             var rolesDiv = "";
                             var counter = 0;
                             current_role.forEach(function (role) {
-                                rolesDiv += "<div id=role_and_delete style=\"display: flex;\">";
-                                rolesDiv += "<div id=\"all_roles\" style=\"flex-basis : 145%;\">";
-                                rolesDiv += "<div class=\"input-group new-project-input row\">";
-                                rolesDiv += "<div class=\"input-group-addon\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Role :&nbsp;&nbsp;&nbsp;</div>";
-                                rolesDiv += "<div class=\"form-control\"><span>";
-                                rolesDiv += role.user_role;
-                                rolesDiv += "</span></div></div></div>";
-                                rolesDiv += "<div style=\"flex-basis : 10%;margin-top: 10px;margin-left: 5px;\">";
-                                rolesDiv += "<button onclick=\"del_btn("+counter+")\" id=\"delete-button-"+ counter + "\" class=\"table-delete-link\" title=\"Delete\" style=\"height: 34px;border: 1px solid #ccc;border-radius: 4px;\">";
-                                rolesDiv += "<span class=\"ui-icon ui-icon-trash\"></span><span class=\"ui-button-text\">Delete</span></button></div>";
-                                rolesDiv += "</div></div>";
+                                rolesDiv += `
+                                <div id=role_and_delete style="display: flex;">
+                                    <div class="input-group new-project-input row">
+                                        <div id="all_roles" style="flex-basis : 145%;">
+                                            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Role :&nbsp;&nbsp;&nbsp;</div>
+                                                <input value = "${role.user_role}"} class="form-control role">
+                                            </div>
+                                        </div>
+                                        <div style="flex-basis : 10%;margin-top: 10px;margin-left: 5px;">
+                                            <button onclick="del_btn(${counter})" id="delete-button-${counter} class="table-delete-link" title="Delete" style="height: 34px;border: 1px solid #ccc;border-radius: 4px;">
+                                                <span class="ui-icon ui-icon-trash"></span>
+                                                <span class="ui-button-text">Delete</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>`;
                                 counter ++;
                             });
                             $("#all_roles").html(rolesDiv);
@@ -77,7 +82,7 @@
                         dataType: "json",
                         data: {
                             user_id: $("#name").val(),
-                            user_roles: $("#role").val(),
+                            user_roles: $(".role").val(),
                         },
                         success: function () {
                             window.location.href = "/user-admin?status=s";
