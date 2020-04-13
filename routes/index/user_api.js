@@ -132,7 +132,7 @@ router.post('/get_user_info', function (req, res, next) {
             return;
         }
         if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
         user_db.getUserById(req.body.user_id, function (err, user) {
@@ -160,7 +160,6 @@ router.post('/get_user_info', function (req, res, next) {
 });
 
 router.post('/update_user', function (req, res, next) {
-    console.log("AAAAAAAH")
     let roles = [authService.UserRole.Admin,
                 authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
@@ -169,8 +168,10 @@ router.post('/update_user', function (req, res, next) {
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        if(!authorized) {
-            res.status(400).json({msg: 'Not Authorized'});
+        // make sure root is not changed
+        if(!authorized || req.body.user_id == 1 
+            || (req.body.user_roles && req.body.user_roles.includes("Root"))) {
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
         user_db.setUserRoleByUid(req.body.user_id, req.body.user_roles, function(err){
