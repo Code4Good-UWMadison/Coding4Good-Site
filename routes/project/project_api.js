@@ -169,7 +169,6 @@ router.post('/rejectApplicant', function(req, res, next){
         else{
             var project_id = req.body.project_id;
             var user_id = req.body.user.id;
-            console.log(parseInt(project_id) + "  " + user_id)
             project_db.rejectApplicant(project_id, user_id, function(err){
                 if (err){
                     console.log(err);

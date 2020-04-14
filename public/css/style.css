@@ -227,6 +227,14 @@ section {
     width: 49%;
 }
 
+    .mid-btn.left{
+        float: left;
+    }
+
+    .mid-btn.right{
+        float: right;
+    }
+    
 .login-signup-input {
     margin: 10px auto;
     width: 100%;
