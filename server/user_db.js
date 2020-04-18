@@ -136,7 +136,7 @@ exports.getUserById = function (uid, callback) {
       }
     }
   });
-}
+};
 
 exports.updateProfile = function(uid, profile, callback) {
   let insert =
@@ -263,6 +263,43 @@ exports.getAllUser = function(callback) {
       callback(err);
     } else {
       callback(null, result.rows);
+    }
+  });
+};
+
+exports.getUserByEmail = function(email, callback){
+  var query = `SELECT id FROM users WHERE email=$1;`;
+  db.query(query, [email], function (err, result) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      if (result.rows.length == 0) {
+        callback(null, null);
+      }
+      else {
+        callback(null, result.rows[0]);
+      }
+    }
+  });
+};
+
+exports.resetPassword = function(password, email, user_id, callback) {
+  var saltRounds = 10;
+  bcrypt.hash(password, saltRounds, function(err, hash) {
+    if (err) {
+      callback(err);
+    } 
+    else {
+      var query = `UPDATE users SET password = $1 WHERE email = $2 AND id = $3;`;
+      console.log(hash);
+      db.query(query, [hash, email, user_id], function(err) {
+        if (err) {
+          callback(err); 
+        } else {
+          callback(null);
+        }
+      });
     }
   });
 };
