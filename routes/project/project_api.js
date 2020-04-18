@@ -19,7 +19,7 @@ router.post('/saveProject', function (req, res, next) {
             return;
         }
         else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
         if(req.body.id){
@@ -54,7 +54,7 @@ router.post('/removeProject', function(req, res, next){
             return;
         }
         else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
         project_db.removeProjectById(req.body.pid,function (err) {
@@ -75,7 +75,7 @@ router.post('/applyProject', function(req, res, next){
             return;
         }
         else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
         user_db.getProfileByUserId(req.session.uid, function(err, hasProfile){
@@ -111,7 +111,7 @@ router.post('/approveApplicant', function(req, res, next){
             return;
         }
         else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
         else{
@@ -163,13 +163,12 @@ router.post('/rejectApplicant', function(req, res, next){
             return;
         }
         else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
         else{
             var project_id = req.body.project_id;
             var user_id = req.body.user.id;
-            console.log(parseInt(project_id) + "  " + user_id)
             project_db.rejectApplicant(project_id, user_id, function(err){
                 if (err){
                     console.log(err);

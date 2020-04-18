@@ -221,13 +221,15 @@ exports.getUserRoleByUid = function(user_id, callback) {
   });
 };
 
+// replace all roles (that are not associated with a project) by new roles of a user of given id
+// input: user_id int
+// input: roles string[]
 exports.setUserRoleByUid = function(user_id, roles, callback){
   if(!roles){
     roles = [];
   }
-  const remove = `DELETE FROM user_role WHERE user_id = $1;`;
+  const remove = `DELETE FROM user_role WHERE user_id = $1 AND associated_project_id IS NULL;`;
   const insert = `INSERT INTO user_role (user_id, user_role) VALUES ($1, $2)`;
-  user_id = 1;
   db.query(remove, [user_id], function(err) {
     if(err){
       console.log(err);
