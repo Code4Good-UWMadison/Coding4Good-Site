@@ -19,7 +19,18 @@ router.get('/', function (req, res, next) {
             eventsSet = eventsSet.sort(function (a, b) {
                 return a.event_time - b.event_time
             })
-            res.render('event/index', {eventsSet: eventsSet, uid: req.session.uid, all_user_role: authService.UserRole, user_role: user_role});
+            let now = new Date();
+            var centerIdx = eventsSet.length - 1;
+            for (var i = 1; i < eventsSet.length; i++) {
+                let diff = eventsSet[i].event_time - now;
+                if (diff < 0)
+                    continue;
+                if (diff >= 0) {
+                    centerIdx = i;
+                    break;
+                }
+            }
+            res.render('event/index', {eventsSet: eventsSet, uid: req.session.uid, all_user_role: authService.UserRole, user_role: user_role, centerIdx: centerIdx});
         });
     });
 });

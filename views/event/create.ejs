@@ -8,7 +8,9 @@
             let now = new Date();
             let day = ("0" + now.getDate()).slice(-2);
             let month = ("0" + (now.getMonth() + 1)).slice(-2);
-            let today = now.getFullYear() + "-" + (month) + "-" + (day);
+            let hour = ("0" + now.getHours().toString()).slice(-2);
+            let minute = ("0" + now.getMinutes().toString()).slice(-2);
+            let today = now.getFullYear() + "-" + (month) + "-" + (day) + "T" + hour + ":" + minute;
             $("#time").val(today);
             // editable selecte event type
             $("#event_type").editableSelect({effects: 'slide'});
@@ -80,7 +82,7 @@
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Time&nbsp;<span class="required-star" hidden>*</span></div>
-            <input class="form-control" type="date" id="time" placeholder="Event Time">
+            <input class="form-control" type="datetime-local" id="time" placeholder="Event Time">
         </div>
 
         <div class="input-group new-project-input">
