@@ -64,14 +64,12 @@ router.get('/edit', function (req, res, next) {
             res.status(400).json({msg: 'Not Authorized'});
             return;
         }
-        console.log(req.query.id);
         event_db.getEventById(req.query.id, function (err, event) {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            //Not quite sure what is the part inside render
             res.render('event/edit', {eventDetail: event});
         });
     });

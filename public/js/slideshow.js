@@ -18,7 +18,6 @@ function clickDown(new_event_id) {
 
 function updateInfo(direction, curr_event_id) {
     let $old_info = $("#info" + (curr_event_id - direction));
-    console.log($old_info.attr('id'));
     let $curr_info = $("#info" + curr_event_id);
     $old_info.fadeOut(function () {
         $curr_info.fadeIn();

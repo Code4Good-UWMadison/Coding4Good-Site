@@ -6,6 +6,13 @@
         <script>
             var eventDetail = <%-JSON.stringify(eventDetail)%>;
             $(function() {
+                // editable selecte event type
+                $("#event_type").editableSelect({effects: 'slide'});
+                $("#event_type").click(function(){
+                    $("#event_type").val("");
+                    $("#event_type").trigger("change");
+                });
+                // set up handlers
                 $("#remove-confirmation").click(function () {
                     $("#remove-confirmation-box").modal('show');
                 });

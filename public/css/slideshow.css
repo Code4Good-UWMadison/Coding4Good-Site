@@ -1,10 +1,17 @@
 html, body {margin: 0; height: 100%; overflow: hidden}
 
-.top-stack {
+.top-stack, .bot-stack {
     position: relative;
-    height: 30%;
-    width: 80%;
+    height: 10%;
+    width: 70%;
     margin-left: 10%;
+}
+
+.center-stack {
+    position: relative;
+    z-index: 99999;
+    height: 80%;
+    width: 90%;
 }
 
 .sl-img {
@@ -17,19 +24,6 @@ html, body {margin: 0; height: 100%; overflow: hidden}
     height: 100%;
     background-color: rgb(254, 249, 247);
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.center-stack {
-    position: relative;
-    z-index: 99999;
-    height: 40%;
-}
-
-.bot-stack {
-    position: relative;
-    height: 30%;
-    width: 80%;
-    margin-left: 10%;
 }
 
 .change-sl:hover {
@@ -51,7 +45,7 @@ html, body {margin: 0; height: 100%; overflow: hidden}
 .curr-info {
     text-align: right;
     padding-top: 5%;
-    height: 90%;
+    height: 80%;
 }
 
 .cover-flow {

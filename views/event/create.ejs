@@ -3,8 +3,8 @@
 <head>
     <% include ../template/head.ejs %>
     <script>
-        // default date
-        window.onload= function() {
+        $(function() {
+            // default date
             let now = new Date();
             let day = ("0" + now.getDate()).slice(-2);
             let month = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -16,8 +16,7 @@
                 $("#event_type").val("");
                 $("#event_type").trigger("change");
             });
-        }
-    	$(function() {
+            // set up handlers
             $("#submit-button").click(function() {
                 $("#submit-button").attr('disabled', true);
                 var validInput = true;
@@ -109,7 +108,7 @@
         </div>
 
         <div class="new-project-input">
-            <textarea class="form-control" type="text" id="description" placeholder="Event Description" rows="5" maxlength="300" style="resize: none;"></textarea>
+            <textarea class="form-control" type="text" id="description" placeholder="Event Description *" rows="5" maxlength="300" style="resize: none;"></textarea>
         </div>
 
     </div>

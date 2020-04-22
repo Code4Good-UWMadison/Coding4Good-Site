@@ -10,10 +10,8 @@
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
     <% if (auth([all_user_role.Developer,
-        all_user_role.ProjectManager,
         all_user_role.Admin,
-        all_user_role.EventExecutive,
-        all_user_role.ProjectLeader], user_role)) { %>
+        all_user_role.EventExecutive], user_role)) { %>
         <div class="col-sm-8-offset" align="right">
             <a class="btn primary-button" href="/event/create">Create Event</a>
         </div>
@@ -75,15 +73,13 @@
                             %></a>
                     <% } %>
                     <div class="curr-info">
-                        <h1><%= eventsSet[i].title %></h1>
-                        <h2><%= eventsSet[i].event_time.toDateString() %></h2>
-                        <h2><%= eventsSet[i].location %></h2>
+                        <h2><%= eventsSet[i].title %></h1>
+                        <h3><%= eventsSet[i].event_time.toDateString() %></h2>
+                        <h3><%= eventsSet[i].location %></h2>
                         <p><%= eventsSet[i].description %></p>
                         <% if (auth([all_user_role.Developer,
-                            all_user_role.ProjectManager,
                             all_user_role.Admin,
-                            all_user_role.EventExecutive,
-                            all_user_role.ProjectLeader], user_role)) { %>
+                            all_user_role.EventExecutive], user_role)) { %>
                             <div class="col-sm-8-offset" align="right">
                                 <a class="btn primary-button" href="/event/edit?id=<%= eventsSet[i].id %>">Edit Event</a>
                             </div>
@@ -111,10 +107,8 @@
                         <h2><%= eventsSet[i].location %></h2>
                         <p><%= eventsSet[i].description %></p>
                         <% if (auth([all_user_role.Developer,
-                            all_user_role.ProjectManager,
                             all_user_role.Admin,
-                            all_user_role.EventExecutive,
-                            all_user_role.ProjectLeader], user_role)) { %>
+                            all_user_role.EventExecutive], user_role)) { %>
                             <div class="col-sm-8-offset" align="right">
                                 <a class="btn primary-button" href="/event/edit?id=<%= eventsSet[i].id %>">Edit Event</a>
                             </div>
