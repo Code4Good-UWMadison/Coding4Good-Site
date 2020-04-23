@@ -21,7 +21,7 @@ router.get('/', function (req, res, next) {
             })
             let now = new Date();
             var centerIdx = eventsSet.length - 1;
-            for (var i = eventsSet.length - 1; i >= 0; i++) {
+            for (var i = eventsSet.length - 1; i >= 0; i--) {
                 let diff = eventsSet[i].event_time - now;
                 if (diff >= 0) {
                     centerIdx = i;
