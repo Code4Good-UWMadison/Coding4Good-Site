@@ -16,7 +16,19 @@ router.get('/', function (req, res, next) {
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            res.render('event/index', {eventsSet: eventsSet, uid: req.session.uid, all_user_role: authService.UserRole, user_role: user_role});
+            eventsSet = eventsSet.sort(function (a, b) {
+                return a.event_time - b.event_time
+            })
+            let now = new Date();
+            var centerIdx = eventsSet.length - 1;
+            for (var i = eventsSet.length - 1; i >= 0; i--) {
+                let diff = eventsSet[i].event_time - now;
+                if (diff >= 0) {
+                    centerIdx = i;
+                    break;
+                }
+            }
+            res.render('event/index', {eventsSet: eventsSet, uid: req.session.uid, all_user_role: authService.UserRole, user_role: user_role, centerIdx: centerIdx});
         });
     });
 });
@@ -67,8 +79,7 @@ router.get('/edit', function (req, res, next) {
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            //Not quite sure what is the part inside render
-            res.render('event/edit', {});
+            res.render('event/edit', {eventDetail: event});
         });
     });
 });

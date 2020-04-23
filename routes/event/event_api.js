@@ -45,13 +45,13 @@ router.post('/saveEvent', function (req, res, next) {
             return;
         }
 
-        event_db.editEvent(req.body, function (err) {
+        event_db.editEvent(req.body, function (err, event_id) {
             if (err) {
                 console.log(err);
-                res.status(400).json({msg: 'Failed to save'});
+                res.status(400).json({msg: 'Datebase Error; Failed to save'});
                 return;
             }
-            res.json({});
+            res.json({event_id: event_id});
         });
     });
 });
@@ -71,7 +71,7 @@ router.post('/removeEvent', function(req, res, next){
             return;
         }
 
-        event_db.removeEventById(req.body.id,function (err) {
+        event_db.removeEventById(req.body.event_id,function (err) {
             if(err){
                 console.log(err);
                 res.status(400).json({msg: 'Failed to remove'});

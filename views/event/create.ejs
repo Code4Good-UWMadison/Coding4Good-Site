@@ -3,12 +3,14 @@
 <head>
     <% include ../template/head.ejs %>
     <script>
-        // default date
-        window.onload= function() {
+        $(function() {
+            // default date
             let now = new Date();
             let day = ("0" + now.getDate()).slice(-2);
             let month = ("0" + (now.getMonth() + 1)).slice(-2);
-            let today = now.getFullYear() + "-" + (month) + "-" + (day);
+            let hour = ("0" + now.getHours().toString()).slice(-2);
+            let minute = ("0" + now.getMinutes().toString()).slice(-2);
+            let today = now.getFullYear() + "-" + (month) + "-" + (day) + "T" + hour + ":" + minute;
             $("#time").val(today);
             // editable selecte event type
             $("#event_type").editableSelect({effects: 'slide'});
@@ -16,9 +18,7 @@
                 $("#event_type").val("");
                 $("#event_type").trigger("change");
             });
-        }
-        // validate URL
-    	$(function() {
+            // set up handlers
             $("#submit-button").click(function() {
                 $("#submit-button").attr('disabled', true);
                 var validInput = true;
@@ -71,7 +71,7 @@
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
     <div class="col-sm-8-offset" align="right">
-        <a class="btn primary-button" href="/events">Back</a>
+        <a class="btn primary-button" href="/event">Back</a>
     </div>
     <p class="error-msg" id="error-msg"></p>
     <div>
@@ -82,7 +82,7 @@
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Time&nbsp;<span class="required-star" hidden>*</span></div>
-            <input class="form-control" type="date" id="time" placeholder="Event Time">
+            <input class="form-control" type="datetime-local" id="time" placeholder="Event Time">
         </div>
 
         <div class="input-group new-project-input">
@@ -93,11 +93,6 @@
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Image Url: &nbsp;</div>
             <input class="form-control" type="text" id="image" placeholder="Event Image Url">
-        </div>
-
-        <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Description&nbsp;<span class="required-star" hidden>*</span></div>
-            <input class="form-control" type="text" id="description" placeholder="Event Description">
         </div>
 
         <div class="input-group new-project-input">
@@ -112,6 +107,10 @@
                 <option>Kickoff</option>
                 <option>Group meeting</option>
             </select>
+        </div>
+
+        <div class="new-project-input">
+            <textarea class="form-control" type="text" id="description" placeholder="Event Description *" rows="5" maxlength="300" style="resize: none;"></textarea>
         </div>
 
     </div>
