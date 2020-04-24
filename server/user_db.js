@@ -136,7 +136,7 @@ exports.getUserById = function (uid, callback) {
       }
     }
   });
-}
+};
 
 exports.updateProfile = function(uid, profile, callback) {
   let insert =
@@ -221,13 +221,15 @@ exports.getUserRoleByUid = function(user_id, callback) {
   });
 };
 
+// replace all roles (that are not associated with a project) by new roles of a user of given id
+// input: user_id int
+// input: roles string[]
 exports.setUserRoleByUid = function(user_id, roles, callback){
   if(!roles){
     roles = [];
   }
-  const remove = `DELETE FROM user_role WHERE user_id = $1;`;
+  const remove = `DELETE FROM user_role WHERE user_id = $1 AND associated_project_id IS NULL;`;
   const insert = `INSERT INTO user_role (user_id, user_role) VALUES ($1, $2)`;
-  user_id = 1;
   db.query(remove, [user_id], function(err) {
     if(err){
       console.log(err);
@@ -261,6 +263,43 @@ exports.getAllUser = function(callback) {
       callback(err);
     } else {
       callback(null, result.rows);
+    }
+  });
+};
+
+exports.getUserByEmail = function(email, callback){
+  var query = `SELECT id FROM users WHERE email=$1;`;
+  db.query(query, [email], function (err, result) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      if (result.rows.length == 0) {
+        callback(null, null);
+      }
+      else {
+        callback(null, result.rows[0]);
+      }
+    }
+  });
+};
+
+exports.resetPassword = function(password, email, user_id, callback) {
+  var saltRounds = 10;
+  bcrypt.hash(password, saltRounds, function(err, hash) {
+    if (err) {
+      callback(err);
+    } 
+    else {
+      var query = `UPDATE users SET password = $1 WHERE email = $2 AND id = $3;`;
+      console.log(hash);
+      db.query(query, [hash, email, user_id], function(err) {
+        if (err) {
+          callback(err); 
+        } else {
+          callback(null);
+        }
+      });
     }
   });
 };

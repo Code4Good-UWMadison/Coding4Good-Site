@@ -1,0 +1,63 @@
+html, body {margin: 0; height: 100%; overflow: hidden}
+
+.top-stack, .bot-stack {
+    position: relative;
+    height: 10%;
+    width: 70%;
+    margin-left: 10%;
+}
+
+.center-stack {
+    position: relative;
+    z-index: 99999;
+    height: 80%;
+    width: 90%;
+}
+
+.sl-img {
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(254, 249, 247);
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.change-sl:hover {
+    color: rgb(227, 151, 90);
+    text-decoration: none;
+}
+
+.change-sl {
+    cursor:pointer;
+    text-align: right;
+    outline: none;
+    display: block;
+    color: rgb(227, 151, 90);
+    font-size: x-large;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.curr-info {
+    text-align: right;
+    padding-top: 5%;
+    height: 80%;
+}
+
+.cover-flow {
+    width: 60%;
+    height: 85vh;
+    float: left;
+    margin-top: -2vh;
+}
+
+.info-box {
+    width: 40%;
+    padding-left: 16px;
+    height: 80vh;
+    float: right;
+}

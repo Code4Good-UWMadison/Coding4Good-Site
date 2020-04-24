@@ -11,7 +11,7 @@
 <meta charset="utf-8">
 <title>Coding for Good</title>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/css/style.css"/>
 <link rel="stylesheet" type="text/css" href="/css/neutra/stylesheet.css"/>
 <link rel="stylesheet" type="text/css" href="/css/jquery-editable-select.min.css"/>
@@ -34,5 +34,17 @@ auth = function(auth_roles, user_role) {
         return intersection.length > 0;
     }
     return false;
+}
+%>
+<!-- Add https:// if link does not have it-->
+<%
+url_with_https = function (old_url) {
+    if (old_url.trim() === "") {
+        return "#";
+    }
+    if (!old_url.trim().match(/^[a-zA-Z]+:\/\//)) {
+        return "https://" + old_url;
+    }
+    return old_url;
 }
 %>

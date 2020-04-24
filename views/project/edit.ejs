@@ -20,18 +20,18 @@
         //TODO: $(  ).remove();
         function addMemberRow() {
             var currentRow = $('.member-list').length/2+1;
-            var html = `<div class="input-group new-project-input row">
-                            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member ${currentRow}:&nbsp;&nbsp;&nbsp;</div>
-                            <select placeholder="Member Name" id="name${currentRow}" class="form-control member-list">
-                                <% allUser.forEach(function(userChoice){ %>
-                                <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"><%= userChoice.name %> (<%= userChoice.email %>)</option>
-                                <% }) %>
-                            </select>
-                            <div class="input-group-addon">Member Role:</div>
-                            <select placeholder="Member Role" id="role${currentRow}" data-value="" class="form-control member-list">
-                                <option value=<%=role_list.ProjectMember%>>Member</option>
-                                <option value=<%=role_list.ProjectLeader%>>Leader</option>
-                            </select>
+            var html = `<div class="input-group new-project-input row">\
+                            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member ${currentRow}:&nbsp;&nbsp;&nbsp;</div>\
+                            <select placeholder="Member Name" id="name${currentRow}" class="form-control member-list">\
+                                <% allUser.forEach(function(userChoice){ %>\
+                                <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"><%= userChoice.name %> (<%= userChoice.email %>)</option>\
+                                <% }) %>\
+                            </select>\
+                            <div class="input-group-addon">Member Role:</div>\
+                            <select placeholder="Member Role" id="role${currentRow}" data-value="" class="form-control member-list">\
+                                <option value=<%=role_list.ProjectMember%>>Member</option>\
+                                <option value=<%=role_list.ProjectLeader%>>Leader</option>\
+                            </select>\
                         </div>`;
             $('#member-input-space').append(html);
             $(".member-list").editableSelect({effects: 'slide'});

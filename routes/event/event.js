@@ -1,15 +1,35 @@
-var express = require('express');
-var router = express.Router();
-var db = require("../../server/event_db");
+const express = require('express');
+const router = express.Router();
+const event_db = require("../../server/event_db");
+const user_db = require("../../server/user_db");
+const authService = require('../services/authorization_service');
 
 router.get('/', function (req, res, next) {
-    db.getEventSet(function (err, eventsSet) {
+    event_db.getEventSet(function (err, eventsSet) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        res.render('event/index', {eventsSet: eventsSet, uid: req.session.uid});
+        user_db.getUserRoleByUid(req.session.uid, function (err, user_role) {
+            if (err) {
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            eventsSet = eventsSet.sort(function (a, b) {
+                return a.event_time - b.event_time
+            })
+            let now = new Date();
+            var centerIdx = eventsSet.length - 1;
+            for (var i = eventsSet.length - 1; i >= 0; i--) {
+                let diff = eventsSet[i].event_time - now;
+                if (diff >= 0) {
+                    centerIdx = i;
+                    break;
+                }
+            }
+            res.render('event/index', {eventsSet: eventsSet, uid: req.session.uid, all_user_role: authService.UserRole, user_role: user_role, centerIdx: centerIdx});
+        });
     });
 });
 
@@ -18,12 +38,21 @@ router.get('/create', function (req, res, next) {
         res.redirect('../login');
         return;
     }
-    if (req.session.uid != 1) {
-        res.redirect('../');
-        return;
-    }
-    //Not quite sure what is the part inside render
-    res.render('event/create', {});
+    let roles = [authService.UserRole.Developer,
+        authService.UserRole.Admin,
+        authService.UserRole.EventExecutive];
+
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.status(403).json({msg: 'Not Authorized'});
+            return;
+        }
+        res.render('event/create', {uid: req.session.uid});
+    });
 });
 
 router.get('/edit', function (req, res, next) {
@@ -31,18 +60,27 @@ router.get('/edit', function (req, res, next) {
         res.redirect('/login');
         return;
     }
-    if (req.session.uid != 1) {
-        res.redirect('/events');
-        return;
-    }
-    db.getEventById(req.query.id, function (err, event) {
+    let roles = [authService.UserRole.Developer,
+        authService.UserRole.Admin,
+        authService.UserRole.EventExecutive];
+
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
-            console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        //Not quite sure what is the part inside render
-        res.render('event/edit', {});
+        else if(!authorized){
+            res.status(403).json({msg: 'Not Authorized'});
+            return;
+        }
+        event_db.getEventById(req.query.id, function (err, event) {
+            if (err) {
+                console.log(err);
+                res.status(400).json({msg: 'Database Error'});
+                return;
+            }
+            res.render('event/edit', {eventDetail: event});
+        });
     });
 });
 

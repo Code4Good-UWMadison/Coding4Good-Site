@@ -29,11 +29,16 @@
     </ul>
 </div>
 
-
-<div class="main-display" hidden="true">
-    <a class="btn primary-button" href="/profile">Create Profile</a>
-    <a class="btn primary-button" href="/about">About Us</a>
-    <a class="btn primary-button" href="/contact">Contact Us</a>
+<div class="main-display">
+    <div class="row">
+        <a class="btn primary-button" href="/profile">Create Profile</a>
+    </div>
+    <div class="row">
+        <a class="btn primary-button" href="/about">About Us</a>
+    </div>
+    <div class="row">
+        <a class="btn primary-button" href="/contact">Contact Us</a>
+    </div>
     <div class="index-sponsor-container">
         <h2 class="index-sponsor-text row center">Our Sponsors</h2>
         <div class="center">
@@ -74,24 +79,6 @@
         // $('.text').addClass('hidding')
       }
       , 2800);
-
-    setTimeout(function () {
-      $('.main-display').fadeIn(1000);
-    }, 1500);
-
-    setTimeout(function () {
-
-      setTimeout(function () {
-        // $('.main-display').fadeIn(500);
-      }, 350)
-    }, 4100);
-
-    // setTimeout(
-    // 	function(){
-    // 		$('.text').addClass('hidden')
-    // 	}
-    // ,6000)
-
   }
 
   function change() {
