@@ -15,7 +15,7 @@ router.post('/createEvent', function (req, res, next) {
             return;
         }
         else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
 
@@ -41,7 +41,7 @@ router.post('/saveEvent', function (req, res, next) {
             return;
         }
         else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
 
@@ -67,7 +67,7 @@ router.post('/removeEvent', function(req, res, next){
             return;
         }
         else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
 
