@@ -48,7 +48,7 @@ router.get('/create', function (req, res, next) {
             return;
         }
         else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
         res.render('event/create', {uid: req.session.uid});
@@ -70,7 +70,7 @@ router.get('/edit', function (req, res, next) {
             return;
         }
         else if(!authorized){
-            res.status(400).json({msg: 'Not Authorized'});
+            res.status(403).json({msg: 'Not Authorized'});
             return;
         }
         event_db.getEventById(req.query.id, function (err, event) {
