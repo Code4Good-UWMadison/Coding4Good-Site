@@ -41,7 +41,7 @@
             <input type="text" class="input searchable"
                    placeholder="keyword, key words, key words"/>
         </div>
-        <div class="col-sm-8-offset" align="right">
+        <div align="right">
             <% if (uid != null){ %>
             <%if (auth([all_user_role.Developer, all_user_role.ProjectManager, all_user_role.Admin], user_role)) { %>
             <a class="btn primary-button" href="/project/edit">New Project</a>
