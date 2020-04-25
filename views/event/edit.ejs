@@ -77,7 +77,7 @@
                         success: function() {
                             window.location.href = "/event?status=s";
                         },
-                        error: function(jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
                             $("#save-button").attr('disabled', false);
                         }
