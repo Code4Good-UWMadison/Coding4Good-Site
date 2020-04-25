@@ -1,5 +1,22 @@
 var isActing = false;
 
+$(function(){
+    let $top_stack = $(".top-stack");
+    let $bot_stack = $(".bot-stack");
+    if($top_stack.children(".sl-img").length < 1){
+        $top_stack.css("cursor", "");
+    }
+    else{
+        $top_stack.css("cursor", "pointer");
+    }
+    if($bot_stack.children(".sl-img").length < 1){
+        $bot_stack.css("cursor", "");
+    }
+    else{
+        $bot_stack.css("cursor", "pointer");
+    }
+});
+
 function clickUp(new_event_id) {
     if (!isActing) {
         let $top_stack = $(".top-stack");
@@ -80,5 +97,18 @@ function moveSlides(direction, new_stack, old_stack, curr_event_id) {
         $next.css({"top": "", "left": "", "height": "", "width": "", "position": ""});
         $next.attr("onclick", "").unbind("click");
         enable();
+
+        if(old_stack.children(".sl-img").length < 1){
+            old_stack.css("cursor", "");
+        }
+        else{
+            old_stack.css("cursor", "pointer");
+        }
+        if(new_stack.children(".sl-img").length < 1){
+            new_stack.css("cursor", "");
+        }
+        else{
+            new_stack.css("cursor", "pointer");
+        }
     });
 }
