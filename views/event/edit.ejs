@@ -39,50 +39,49 @@
                     });
                 });
                 $("#save-button").click(function() {
-                    $("#save-button").attr('disabled', true);
-                    var validInput = true;
-                    $("#error-msg").html("");
-                    if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '') | ($("#event_type").val() == '') | ($("#description").val() == '')) {
+                    if (($("#title").val() == '') | ($("#location").val() == '') | ($("#event_type").val() == '') | ($("#description").val() == '')) {
                         $("#error-msg").html('Please fill out all required fields (*)');
                         $(".required-star").removeAttr('hidden');
-                        validInput = false;
+                        return;
+                    }
+                    if ($("#time").val() == ''){
+                        $("#error-msg").html('Time should be selected, or typed in format of YYYY-MM-DDTHH:MM (EX: 2020-12-30T23:55)');
+                        $("#time").removeAttr('hidden');
+                        return;
                     }
                     if (($("#image").val() != '') && !validateURL($("#image").val())) {
                         $("#error-msg").html('Invalid Image URL');
-                        validInput = false;
+                        return;
                     }
                     if (($("#link").val() != '') && !validateURL($("#link").val())) {
                         $("#error-msg").html('Invalid Link');
-                        validInput = false;
+                        return;
                     }
-                    if (validInput) {
-                        $.ajax({
-                            url: "/event/saveEvent",
-                            method: "POST",
-                            dataType: "json",
-                            data: {
-                                id: eventDetail.id,
+                    $("#error-msg").html("");
+                    $("#submit-button").attr('disabled', true);
+                    $.ajax({
+                        url: "/event/saveEvent",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            id: eventDetail.id,
 
-                                event_time: $("#time").val(),
-                                title: $("#title").val(),
-                                location: $("#location").val(),
-                                image: $("#image").val(),
-                                description: $("#description").val(),
-                                link: $("#link").val(),
-                                type: $("#event_type").val()
-                            },
-                            success: function() {
-                                window.location.href = "/event?status=s";
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
-                                $("#error-msg").html(jqXHR.responseJSON);
-                                $("#save-button").attr('disabled', false);
-                            }
-                        });
-                    } else {
-                        $("#save-button").attr('disabled', false);
-                        return false;
-                    }
+                            event_time: $("#time").val(),
+                            title: $("#title").val(),
+                            location: $("#location").val(),
+                            image: $("#image").val(),
+                            description: $("#description").val(),
+                            link: $("#link").val(),
+                            type: $("#event_type").val()
+                        },
+                        success: function() {
+                            window.location.href = "/event?status=s";
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            $("#error-msg").html(jqXHR.responseJSON);
+                            $("#save-button").attr('disabled', false);
+                        }
+                    });
                 });
             });
         </script>
@@ -91,12 +90,14 @@
 <body>
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
-    <div class="col-sm-8-offset" align="right">
-        <a class="btn primary-button" href="/event">Back</a>
-        <button id="remove-confirmation" class="btn primary-button">Remove</button>
+    <div class="row">
+        <div align="right">
+            <button id="remove-confirmation" class="btn primary-button">Remove</button>
+            <a class="btn primary-button" href="/event">Back</a>
+        </div>
     </div>
-    <p class="error-msg" id="error-msg"></p>
-    <div>
+    <div class="row">
+        <p class="error-msg" id="error-msg"></p>
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Title&nbsp;<span class="required-star" hidden>*</span></div>
             <input class="form-control" type="text" id="title" placeholder="Event Title" value="<%= eventDetail.title %>">
@@ -104,8 +105,8 @@
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Time&nbsp;<span class="required-star" hidden>*</span></div>
-            <%let the_date = eventDetail.event_time.getFullYear() + "-" + ("0" + (eventDetail.event_time.getMonth() + 1)).slice(-2) + "-" + ("0" + eventDetail.event_time.getDate()).slice(-2)%>
-            <input class="form-control" type="date" id="time" placeholder="Event Time" value="<%= the_date %>">
+            <%let the_date = eventDetail.event_time.getFullYear() + "-" + ("0" + (eventDetail.event_time.getMonth() + 1)).slice(-2) + "-" + ("0" + eventDetail.event_time.getDate()).slice(-2) + "T" + ("0" + eventDetail.event_time.getHours()).slice(-2) + ":" + ("0" + eventDetail.event_time.getMinutes()).slice(-2)%>
+            <input class="form-control" type="datetime-local" id="time" value="<%= the_date %>">
         </div>
 
         <div class="input-group new-project-input">
@@ -143,8 +144,8 @@
             <textarea class="form-control" type="text" id="description" placeholder="Event Description" rows="5" maxlength="300" style="resize: none;"><%=eventDetail.description%></textarea>
         </div>
 
+        <button id="save-button" type="button" class="btn long-btn primary-button">Save!</button>
     </div>
-    <button id="save-button" type="button" class="btn long-btn primary-button">Save!</button>
 </div>
 
 <div id="remove-confirmation-box" class="modal fade confirmation-box">
