@@ -21,18 +21,18 @@
         <div class="cover-flow">
             <div class="top-stack">
                 <% for (var i = 0; i < centerIdx; i++) { %>
-                    <img class="top-img sl-img" onclick="clickUp(<%= i %>)" id="event<%= i %>" src="<%= eventsSet[i].image %>" alt="<%= eventsSet[i].description  %>" onerror="this.src='/img/icon.jpg'">
+                    <img class="sl-img" onclick="clickUp(<%= i %>)" id="event<%= i %>" src="<%= eventsSet[i].image %>" alt="<%= eventsSet[i].description  %>" onerror="this.src='/img/icon.jpg'">
                 <% } %>
             </div>
             <div class="center-stack">
-                <img class="curr-img sl-img" id="event<%= centerIdx %>"
+                <img class="sl-img" id="event<%= centerIdx %>"
                      src="<%= eventsSet[centerIdx].image %>"
                      alt="<%= eventsSet[centerIdx].description %>"
                      onerror="this.src='/img/icon.jpg'">
             </div>
             <div class="bot-stack">
                 <% for (var i = eventsSet.length - 1; i > centerIdx; i--) { %>
-                    <img class="bot-img sl-img" onclick="clickDown(<%= i %>)" id="event<%= i %>" src="<%= eventsSet[i].image %>"
+                    <img class="sl-img" onclick="clickDown(<%= i %>)" id="event<%= i %>" src="<%= eventsSet[i].image %>"
                          alt="<%= eventsSet[i].description %>"
                          onerror="this.src='/img/icon.jpg'">
                 <% } %>
@@ -44,8 +44,10 @@
                     <% } %>
             >
                 <% if (i > 0) { %>
-                    <a class="change-sl" onclick="clickUp(<%= i - 1 %>)">Previous: <%= eventsSet[i - 1].title
-                        %></a>
+                    <a class="change-sl" onclick="clickUp(<%= i - 1 %>)" >Previous: <%= eventsSet[i - 1].title%></a>
+                <% } else { %>
+                    <!-- Place holder -->
+                    <div class="change-sl invisible">&nbsp;</div>
                 <% } %>
                 <div class="curr-info">
                     <h2><%= eventsSet[i].title %></h1>

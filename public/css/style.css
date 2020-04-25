@@ -373,6 +373,11 @@ input::-webkit-calendar-picker-indicator {
     opacity: 0.8;
     box-shadow: 0 5px 5px #999999;
 }
+
+.invisible{
+    visibility: hidden;
+}
+
 /* JS animations are SO 2013*/
 @keyframes fadeIn {
   0% {opacity: 0}
