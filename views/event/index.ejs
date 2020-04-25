@@ -12,9 +12,7 @@
     <% if (auth([all_user_role.Developer,
         all_user_role.Admin,
         all_user_role.EventExecutive], user_role)) { %>
-        <div class="col-sm-8-offset" align="right">
-            <a class="btn primary-button" href="/event/create">Create Event</a>
-        </div>
+        <a class="btn primary-button right" href="/event/create">Create Event</a>
     <% } %>
 
     <% if (eventsSet.length == 0) { %>
@@ -46,7 +44,7 @@
                     <% } %>
             >
                 <% if (i > 0) { %>
-                    <a class="change-sl" onclick="clickUp(<%= i - 1 %>)"><%= eventsSet[i - 1].title
+                    <a class="change-sl" onclick="clickUp(<%= i - 1 %>)">Previous: <%= eventsSet[i - 1].title
                         %></a>
                 <% } %>
                 <div class="curr-info">
@@ -57,14 +55,14 @@
                         <% if (auth([all_user_role.Developer,
                             all_user_role.Admin,
                             all_user_role.EventExecutive], user_role)) { %>
-                            <div class="col-sm-8-offset" align="right">
+                            <div align="right">
                                 <a class="btn primary-button" href="/event/edit?id=<%= eventsSet[i].id %>">Edit Event</a>
                             </div>
                         <% } %>
                 </div>
                 <% if (i < eventsSet.length - 1) { %>
                     <a class="change-sl"
-                       onclick="clickDown(<%= i + 1 %>)"><%= eventsSet[i + 1].title %></a>
+                       onclick="clickDown(<%= i + 1 %>)">Next: <%= eventsSet[i + 1].title %></a>
                 <% } %>
             </div>
         <% } %>

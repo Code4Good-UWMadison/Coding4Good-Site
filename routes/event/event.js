@@ -22,11 +22,11 @@ router.get('/', function (req, res, next) {
             let now = new Date();
             var centerIdx = eventsSet.length - 1;
             for (var i = eventsSet.length - 1; i >= 0; i--) {
-                let diff = eventsSet[i].event_time - now;
-                if (diff >= 0) {
-                    centerIdx = i;
+                // show the event thats coming up soon
+                if (eventsSet[i].event_time < now) {
                     break;
                 }
+                centerIdx = i;
             }
             res.render('event/index', {eventsSet: eventsSet, uid: req.session.uid, all_user_role: authService.UserRole, user_role: user_role, centerIdx: centerIdx});
         });

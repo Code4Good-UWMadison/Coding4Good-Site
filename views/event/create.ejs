@@ -20,48 +20,47 @@
             });
             // set up handlers
             $("#submit-button").click(function() {
-                $("#submit-button").attr('disabled', true);
-                var validInput = true;
-                $("#error-msg").html("");
-                if (($("#title").val() == '') | ($("#time").val() == '') | ($("#location").val() == '') | ($("#event_type").val() == '') | ($("#description").val() == '')) {
+                if (($("#title").val() == '') | ($("#location").val() == '') | ($("#event_type").val() == '') | ($("#description").val() == '')) {
                     $("#error-msg").html('Please fill out all required fields (*)');
                     $(".required-star").removeAttr('hidden');
-                    validInput = false;
+                    return;
+                }
+                if ($("#time").val() == ''){
+                    $("#error-msg").html('Time should be selected, or typed in format of YYYY-MM-DDTHH:MM (EX: 2020-12-30T23:55)');
+                    $("#time").removeAttr('hidden');
+                    return;
                 }
                 if (($("#image").val() != '') && !validateURL($("#image").val())) {
                     $("#error-msg").html('Invalid Image URL');
-                    validInput = false;
+                    return;
                 }
                 if (($("#link").val() != '') && !validateURL($("#link").val())) {
                     $("#error-msg").html('Invalid Link');
-                    validInput = false;
+                    return;
                 }
-                if (validInput) {
-                    $.ajax({
-                        url: "/event/createEvent",
-                        method: "POST",
-                        dataType: "json",
-                        data: {
-                            event_time: $("#time").val(),
-                            title: $("#title").val(),
-                            location: $("#location").val(),
-                            image: $("#image").val(),
-                            description: $("#description").val(),
-                            link: $("#link").val(),
-                            type: $("#event_type").val()
-                        },
-                        success: function() {
-                            window.location.href = "/event?status=s";
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            $("#error-msg").html(jqXHR.responseJSON);
-                            $("#submit-button").attr('disabled', false);
-                        }
-                    });
-                } else {
-                    $("#submit-button").attr('disabled', false);
-                    return false;
-                }
+                $("#error-msg").html("");
+                $("#submit-button").attr('disabled', true);
+                $.ajax({
+                    url: "/event/createEvent",
+                    method: "POST",
+                    dataType: "json",
+                    data: {
+                        event_time: $("#time").val(),
+                        title: $("#title").val(),
+                        location: $("#location").val(),
+                        image: $("#image").val(),
+                        description: $("#description").val(),
+                        link: $("#link").val(),
+                        type: $("#event_type").val()
+                    },
+                    success: function() {
+                        window.location.href = "/event?status=s";
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $("#error-msg").html(jqXHR.responseJSON);
+                        $("#submit-button").attr('disabled', false);
+                    }
+                });
             });
         });
     </script>
@@ -70,11 +69,11 @@
 
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
-    <div class="col-sm-8-offset" align="right">
-        <a class="btn primary-button" href="/event">Back</a>
+    <div class="row">
+        <a class="btn primary-button right" href="/event">Back</a>
     </div>
-    <p class="error-msg" id="error-msg"></p>
-    <div>
+    <div class="row">
+        <p class="error-msg" id="error-msg"></p>
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Title&nbsp;<span class="required-star" hidden>*</span></div>
             <input class="form-control" type="text" id="title" placeholder="Event Title">
@@ -82,7 +81,7 @@
 
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;Event Time&nbsp;<span class="required-star" hidden>*</span></div>
-            <input class="form-control" type="datetime-local" id="time" placeholder="Event Time">
+            <input class="form-control" type="datetime-local" placeholder="YYYY-MM-DDTHH:MM" id="time">
         </div>
 
         <div class="input-group new-project-input">
@@ -113,8 +112,8 @@
             <textarea class="form-control" type="text" id="description" placeholder="Event Description *" rows="5" maxlength="300" style="resize: none;"></textarea>
         </div>
 
+        <button id="submit-button" type="button" class="btn long-btn primary-button">Create!</button>
     </div>
-    <button id="submit-button" type="button" class="btn long-btn primary-button">Create!</button>
 </div>
 
 <% include ../template/footer.ejs %>

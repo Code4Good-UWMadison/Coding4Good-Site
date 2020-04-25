@@ -228,11 +228,11 @@ section {
     width: 49%;
 }
 
-    .mid-btn.left{
+    .btn.left{
         float: left;
     }
 
-    .mid-btn.right{
+    .btn.right{
         float: right;
     }
     
