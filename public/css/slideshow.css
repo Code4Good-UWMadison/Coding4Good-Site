@@ -41,6 +41,7 @@ html, body {margin: 0; height: 100%; overflow: hidden}
     margin-left: auto;
     margin-right: 0;
     padding-bottom: 2.5%;
+    padding-top: 2.5%;
 }
 
 .curr-info {
