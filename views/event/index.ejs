@@ -39,10 +39,7 @@
             </div>
         </div>
         <% for (var i = 0; i < eventsSet.length; i++) { %>
-            <div class="info-box" id="info<%= i %>"
-                 <% if (i !== centerIdx) { %>hidden
-                    <% } %>
-            >
+            <div class="info-box" id="info<%= i %>" <% if (i !== centerIdx) { %>hidden<% } %>>
                 <% if (i > 0) { %>
                     <a class="change-sl" onclick="clickUp(<%= i - 1 %>)" >Previous: <%= eventsSet[i - 1].title%></a>
                 <% } else { %>
@@ -54,7 +51,11 @@
                     <h3><%= eventsSet[i].event_time.toDateString() + " " + eventsSet[i].event_time.toLocaleTimeString() %></h3>
                     <h3><%= eventsSet[i].location %></h3>
                     <% if (eventsSet[i].link) { %>
-                        <h4><a href="<%= eventsSet[i].link %>">Event Link</a></h4>
+                        <% if (uid == null) { %>
+                            <h4><a href="/login">Login to see link</a></h4>
+                        <% } else { %>
+                            <h4><a href="<%= eventsSet[i].link %>">Event Link</a></h4>
+                        <% } %>
                     <% } %>
                     <p><%= eventsSet[i].description %></p>
                     <% if (auth([all_user_role.Developer,
@@ -67,7 +68,7 @@
                 </div>
                 <% if (i < eventsSet.length - 1) { %>
                     <a class="change-sl"
-                       onclick="clickDown(<%= i + 1 %>)">Next: <%= eventsSet[i + 1].title %></a>
+                        onclick="clickDown(<%= i + 1 %>)">Next: <%= eventsSet[i + 1].title %></a>
                 <% } %>
             </div>
         <% } %>
