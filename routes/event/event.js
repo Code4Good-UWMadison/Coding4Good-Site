@@ -20,7 +20,7 @@ router.get('/', function (req, res, next) {
                 return a.event_time - b.event_time
             })
             let now = new Date();
-            now = new Date(now + (300 - now.getTimezoneOffset()) * 60 * 1000);
+            now = new Date(now - (5.5 * 60 * 60 * 1000));
             var centerIdx = eventsSet.length - 1;
             for (var i = eventsSet.length - 1; i >= 0; i--) {
                 // show the event thats coming up soon
