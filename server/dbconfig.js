@@ -1,3 +1,4 @@
+require('dotenv').config();
 var url = require('url');
 var self = this;
 
