@@ -4,7 +4,7 @@
 <head>
     <% include ../template/head.ejs %>
         <script>
-            var eventDetail = <%-JSON.stringify(eventDetail)%>;
+            let eventDetail = <%-JSON.stringify(eventDetail)%>;
             $(function() {
                 // editable select event type
                 $("#event_type").editableSelect({effects: 'slide'});
