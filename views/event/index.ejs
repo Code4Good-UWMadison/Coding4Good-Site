@@ -50,9 +50,11 @@
                     <div class="change-sl invisible">&nbsp;</div>
                 <% } %>
                 <div class="curr-info">
-                    <h2><%= eventsSet[i].title %></h1>
-                        <h3><%= eventsSet[i].event_time.toDateString() + " " + eventsSet[i].event_time.toLocaleTimeString() %></h2>
-                    <h3><%= eventsSet[i].location %></h2>
+                    <% if (eventsSet[i].status === 1) { %>
+                        <h2>[Cancelled]&nbsp;<strike><%= eventsSet[i].title %></strike></h2>
+                    <% } else { %>
+                        <h2><%= eventsSet[i].title %></h2>
+                    <% } %>
                         <p><%= eventsSet[i].description %></p>
                         <% if (auth([all_user_role.Developer,
                             all_user_role.Admin,
