@@ -82,4 +82,29 @@ router.post('/removeEvent', function(req, res, next){
     });
 });
 
+router.post('/changeEventStatus', function(req, res, next){
+    let roles = [authService.UserRole.Developer,
+        authService.UserRole.Admin,
+        authService.UserRole.EventExecutive]; // event executive can create event
+
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.status(403).json({msg: 'Not Authorized'});
+            return;
+        }
+        event_db.changeEventStatusCodeById(req.body.event_id, req.body.new_status_code, function (err) {
+            if(err){
+                console.log(err);
+                res.status(400).json({msg: 'Failed to remove'});
+                return;
+            }
+            res.json({});
+        });
+    });
+});
+
 module.exports = router;
