@@ -64,24 +64,27 @@
                         });
                     });
                 });
-                $("#remove-confirmed").click(function () {
-                    $("#remove-confirmed").attr('disabled', true);
+                $('#uncancel-confirmation').click(function () {
                     $.ajax({
-                        url: "/event/removeEvent",
+                        url: "/event/changeEventStatus",
                         method: "POST",
                         dataType: "json",
                         data: {
                             event_id: eventDetail.id,
+                            new_status_code: EventStatus.Active,
                         },
                         success: function () {
-                            window.location.href="/event?status=s";
+                            const window_location = window.location.href;
+                            const success_flag = '&status=s';
+                            window.location.href = window_location.endsWith(success_flag) ? window_location : window_location + success_flag;
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             $("#error-msg").html(jqXHR.responseJSON);
-                            $("#remove-confirmation-box").modal('hide');
-                            $("#remove-confirmed").attr('disabled', false);
                         }
                     });
+                });
+                $("#modal-canceled").click(function(){
+                    $("#modal-confirmation-box").modal('hide');
                 });
                 $("#save-button").click(function() {
                     if (($("#title").val() == '') | ($("#location").val() == '') | ($("#event_type").val() == '') | ($("#description").val() == '')) {
@@ -137,7 +140,13 @@
 <div class="container body-layout">
     <div class="row">
         <div align="right">
-            <button id="remove-confirmation" class="btn primary-button">Remove</button>
+            <% if (eventDetail.status === 0) { %>
+                <button id="cancel-confirmation" class="btn primary-button">Cancel Event</button>
+            <% } %>
+            <% if (eventDetail.status === 1) { %>
+                <button id="uncancel-confirmation" class="btn primary-button">Un-cancel Event</button>
+            <% } %>
+            <button id="remove-confirmation" class="btn primary-button">Remove Event</button>
             <a class="btn primary-button" href="/event">Back</a>
         </div>
     </div>
