@@ -92,3 +92,17 @@ exports.removeEventById = function (eventId, callback) {
         }
     });
 }
+
+exports.changeEventStatusCodeById = function (eventId, statusCode, callback) {
+    let query = `update event set status = $2 where id = $1;`;
+    db.query(query, [eventId, statusCode], function (err, result) {
+        if (err) {
+            callback(err);
+        }
+        if (result.rowCount > 0) {
+            callback(null);
+        } else {
+            callback('No matching event id');
+        }
+    });
+}
