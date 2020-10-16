@@ -6,7 +6,7 @@
         <script>
             var eventDetail = <%-JSON.stringify(eventDetail)%>;
             $(function() {
-                // editable selecte event type
+                // editable select event type
                 $("#event_type").editableSelect({effects: 'slide'});
                 $("#event_type").click(function(){
                     $("#event_type").val("");
