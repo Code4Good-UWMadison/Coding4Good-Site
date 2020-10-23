@@ -18,11 +18,48 @@
             function afterSort(){
                 addLink();
             }
+
+            //Used to copy columns of applicants table
+            $(document).ready(function() {
+                let tableData = $("#projectTbody tr");
+                
+                $("#copyButton").click(function() {
+                    let colsArray = [];
+                    $("#copyTable input").each(function(index) {
+                        if($(this).is(':checked')) {
+                            colsArray.push(index);
+                            $(this).prop('checked', false);
+                        }
+                    })
+                    if(colsArray.length > 0) {
+                        copyColumns(colsArray);
+                    }
+                })
+
+                function copyColumns(colsArray) {
+                    let $temp = $("<textarea>");
+                    let copyString = '';
+
+                    $("#projectTbody tr").each(function() {
+                        for(let i = 0; i < colsArray.length; i++) {
+                            copyString += $(`td:nth-of-type(${colsArray[i] + 1})`,this).text();
+                            if(i != colsArray.length - 1) {
+                                copyString += ","
+                            }
+                        }
+                        copyString += "\n";
+                    }) 
+                    
+                    $("body").append($temp);
+                    $temp.val(copyString).select();
+                    document.execCommand("copy");
+                    $temp.remove();
+                }
+            });
         </script>
 </head>
 
 <body>
-
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
     <div class="row margin-htop">
@@ -63,6 +100,32 @@
         <% } %>
         </tbody>
     </table>
+
+    <section id="copyTable" class="row">
+        <div class="col-md-2 col-sm-12">
+            <h4>Copy Columns: </h4>
+        </div>
+        <label class="col-md-2 col-sm-3" for="checkbox1">
+            <input type="checkbox" id="checkbox1"> 
+                Applicant Name
+        </label>
+        <label class="col-md-2 col-sm-3" for="checkbox2">
+            <input type="checkbox" id="checkbox2"> 
+                Email
+        </label>
+        <label class="col-md-2 col-sm-3" for="checkbox3">
+            <input type="checkbox" id="checkbox3"> 
+                Has Project
+
+        </label>
+        <label class="col-md-2 col-sm-3" for="checkbox4">
+            <input type="checkbox" id="checkbox4"> 
+                Intended Leader
+        </label>
+        <div class="col-md-2 col-sm-12">
+            <button id="copyButton" class="primary-button">Copy</button>
+        </div>
+    </section>
 </div>
 
 <% include ../template/footer.ejs %>
