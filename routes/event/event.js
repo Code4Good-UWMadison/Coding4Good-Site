@@ -11,26 +11,39 @@ router.get('/', function (req, res, next) {
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        user_db.getUserRoleByUid(req.session.uid, function (err, user_role) {
+        user_db.getUserFollowedEventsByUid(req.session.uid, (err, followed_event) => {
             if (err) {
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            eventsSet = eventsSet.sort(function (a, b) {
-                return a.event_time - b.event_time
-            })
-            let now = new Date();
-            now = new Date(now - (5.5 * 60 * 60 * 1000));
-            var centerIdx = eventsSet.length - 1;
-            for (var i = eventsSet.length - 1; i >= 0; i--) {
-                // show the event thats coming up soon
-                if (eventsSet[i].event_time < now) {
-                    break;
+            user_db.getUserRoleByUid(req.session.uid, function (err, user_role) {
+                if (err) {
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
                 }
-                centerIdx = i;
-            }
-            res.render('event/index', {eventsSet: eventsSet, uid: req.session.uid, all_user_role: authService.UserRole, user_role: user_role, centerIdx: centerIdx});
-        });
+                eventsSet = eventsSet.sort(function (a, b) {
+                    return a.event_time - b.event_time
+                })
+                let now = new Date();
+                now = new Date(now - (5.5 * 60 * 60 * 1000));
+                var centerIdx = eventsSet.length - 1;
+                for (var i = eventsSet.length - 1; i >= 0; i--) {
+                    // show the event thats coming up soon
+                    if (eventsSet[i].event_time < now) {
+                        break;
+                    }
+                    centerIdx = i;
+                }
+                res.render('event/index', {
+                    followed_event: JSON.parse(followed_event),
+                    eventsSet: eventsSet,
+                    uid: req.session.uid,
+                    all_user_role: authService.UserRole,
+                    user_role: user_role,
+                    centerIdx: centerIdx
+                });
+            });
+        })
     });
 });
 
