@@ -1,5 +1,6 @@
 const express = require('express');
 const event_db = require('../../server/event_db');
+const user_db = require('../../server/user_db');
 const router = express.Router();
 const authService = require('../services/authorization_service');
 
@@ -105,6 +106,28 @@ router.post('/changeEventStatus', function(req, res, next){
             res.json({});
         });
     });
+});
+
+router.post('/followEvent', function(req, res, next) {
+    user_db.followEvent(req.body.uid, req.body.eid, ((err) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Failed to follow event'});
+            return;
+        }
+        res.json({});
+    }))
+});
+
+router.post('/unfollowEvent', function(req, res, next) {
+    user_db.unfollowEvent(req.body.uid, req.body.eid, ((err) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Failed to unfollow event'});
+            return;
+        }
+        res.json({});
+    }))
 });
 
 module.exports = router;
