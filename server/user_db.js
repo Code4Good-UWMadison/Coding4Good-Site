@@ -303,3 +303,66 @@ exports.resetPassword = function(password, email, user_id, callback) {
     }
   });
 };
+
+exports.getUserFollowedEventsByUid = (user_id, callback) => {
+  if (!user_id) {
+    return callback(null, '[]');
+  }
+  let query = 'SELECT followed_event FROM user_profile WHERE uid = $1';
+  db.query(query, [user_id], (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result.rows[0]['followed_event']);
+    }
+  });
+}
+
+exports.followEvent = function(uid, eid, callback) {
+  db.query('BEGIN;');
+  let query = 'SELECT followed_event FROM user_profile WHERE uid = $1 FOR UPDATE;';
+  db.query(query, [uid], function (err, result) {
+    if (err) {
+      db.query('COMMIT;');
+      callback(err);
+    } else {
+      var followed_event = JSON.parse(result.rows[0]['followed_event']);
+      followed_event.push(parseInt(eid));
+      query = 'UPDATE user_profile SET followed_event = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
+      db.query(query, [uid], function (err_update) {
+        db.query('COMMIT;');
+        if (err_update) {
+          callback(err_update);
+        } else {
+          callback(null);
+        }
+      });
+    }
+  });
+};
+
+exports.unfollowEvent = function(uid, eid, callback) {
+  db.query('BEGIN;');
+  let query = 'SELECT followed_event FROM user_profile WHERE uid = $1 FOR UPDATE;';
+  db.query(query, [uid], function (err, result) {
+    if (err) {
+      db.query('COMMIT;');
+      callback(err);
+    } else {
+      var followed_event = JSON.parse(result.rows[0]['followed_event']);
+      const index = followed_event.indexOf(parseInt(eid));
+      if (index > -1) {
+        followed_event.splice(index, 1);
+      }
+      query = 'UPDATE user_profile SET followed_event = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
+      db.query(query, [uid], function (err_update) {
+        db.query('COMMIT;');
+        if (err_update) {
+          callback(err_update);
+        } else {
+          callback(null);
+        }
+      });
+    }
+  });
+};
