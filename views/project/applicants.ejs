@@ -21,8 +21,6 @@
 
             //Used to copy columns of applicants table
             $(document).ready(function() {
-                let tableData = $("#projectTbody tr");
-                
                 $("#copyButton").click(function() {
                     let colsArray = [];
                     $("#copyTable input").each(function(index) {
@@ -40,15 +38,27 @@
                     let $temp = $("<textarea>");
                     let copyString = '';
 
+                    if($("#copyHeaders").is(":checked")) {
+                        $("#projectThead tr").each(function() {
+                            for(let i = 0; i < colsArray.length; i++) {
+                                copyString += $(`th:nth-of-type(${colsArray[i] + 1})`,this).text();
+                                if(i != colsArray.length - 1) {
+                                    copyString += "\t"
+                                }
+                            }
+                            copyString += "\n";
+                        })
+                    };
+
                     $("#projectTbody tr").each(function() {
                         for(let i = 0; i < colsArray.length; i++) {
                             copyString += $(`td:nth-of-type(${colsArray[i] + 1})`,this).text();
                             if(i != colsArray.length - 1) {
-                                copyString += ","
+                                copyString += "\t"
                             }
                         }
                         copyString += "\n";
-                    }) 
+                    });
                     
                     $("body").append($temp);
                     $temp.val(copyString).select();
@@ -75,7 +85,7 @@
         </div>
     </div>
     <table class="table margin-htop sortable searchable">
-        <thead class="row margin-top">
+        <thead class="row margin-top" id="projectThead">
         <tr class="tr clickable">
             <th>Applicant Name</th>
             <th>E-mail</th>
@@ -101,29 +111,38 @@
         </tbody>
     </table>
 
-    <section id="copyTable" class="row">
-        <div class="col-md-2 col-sm-12">
-            <h4>Copy Columns: </h4>
-        </div>
-        <label class="col-md-2 col-sm-3" for="checkbox1">
-            <input type="checkbox" id="checkbox1"> 
-                Applicant Name
-        </label>
-        <label class="col-md-2 col-sm-3" for="checkbox2">
-            <input type="checkbox" id="checkbox2"> 
-                Email
-        </label>
-        <label class="col-md-2 col-sm-3" for="checkbox3">
-            <input type="checkbox" id="checkbox3"> 
-                Has Project
-
-        </label>
-        <label class="col-md-2 col-sm-3" for="checkbox4">
-            <input type="checkbox" id="checkbox4"> 
-                Intended Leader
-        </label>
-        <div class="col-md-2 col-sm-12">
-            <button id="copyButton" class="primary-button">Copy</button>
+    <section>
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                <h4>Copy Columns: </h4>
+            </div>
+            <div class="col-md-10 col-sm-12 row" style="margin-top: 10px;">
+                <div class="col-xs-12 row" style="margin-bottom: 10px;"  id="copyTable">
+                    <label class="col-md-3 col-sm-3" for="checkbox1">
+                        <input type="checkbox" id="checkbox1"> 
+                            Applicant Name
+                    </label>
+                    <label class="col-md-3 col-sm-3" for="checkbox2">
+                        <input type="checkbox" id="checkbox2"> 
+                            Email
+                    </label>
+                    <label class="col-md-3 col-sm-3" for="checkbox3">
+                        <input type="checkbox" id="checkbox3"> 
+                            Has Project
+                    </label>
+                    <label class="col-md-3 col-sm-3" for="checkbox4">
+                        <input type="checkbox" id="checkbox4"> 
+                            Intended Leader
+                    </label>
+                </div>
+                <div class="col-xs-12 row">
+                    <button id="copyButton" class="primary-button" style="margin: 0px 15px;">Copy</button>
+                    <label for="copyHeaders">
+                        <input type="checkbox" id="copyHeaders"> 
+                            Copy Headers
+                    </label>
+                </div>
+            </div>
         </div>
     </section>
 </div>
