@@ -32,14 +32,32 @@ router.post('/saveProject', function (req, res, next) {
                 res.json({});
             });
         }else{
-            project_db.createProject(req.body, function (err, pid) {
-                if (err) {
-                    console.log(err);
-                    res.status(400).json({msg: 'Failed to create'});
-                    return;
-                }
-                res.json({pid: pid});
+            var hasErr = false;
+            var pid = -1;
+            project_db.createProject(req.body).catch(err => {
+                console.log(err);
+                hasErr = true;
+            }).then(result => {
+                pid = result;
+            }).catch(err => {
+                hasErr = true;
+                console.log(err);
+                //return;
             });
+            if(hasErr){
+                res.status(400).json({msg: 'Failed to create'});
+            }
+            else{
+                res.json({pid: pid})
+            }
+            // project_db.createProject(req.body, function (err, pid) {
+            //     if (err) {
+            //         console.log(err);
+            //         res.status(400).json({msg: 'Failed to create'});
+            //         return;
+            //     }
+            //     res.json({pid: pid});
+            // });
         }
     });
 });
@@ -117,44 +135,108 @@ router.post('/approveApplicant', function(req, res, next){
         else{
             var project_id = req.body.project_id;
             var user_id = req.body.user.id;
-            project_db.approveApplicant(project_id, user_id, authService.UserRole.ProjectMember, function(err){
-                if (err){
-                    console.log(err);
-                    res.status(400).json({msg: "Database error"});
-                }else{
-                    project_db.getProjectById(project_id, function(err, project){
-                        if(err){
-                            console.log(err);
-                            res.status(400).json({msg: "Database error"});
-                        }
-                        else if(!project){
-                            res.status(404).json({msg: "Not found"});
-                        }
-                        else{
-                            const url = `https://${baseUrl}/project/detail?id=${project_id}`;
-                            const emailDetail = {
-                                to: req.body.user.email,
-                                subject: "Project application result from Coding4Good",
-                                html: `Thank you for your interest in the project ${project.title}.&nbsp;<br>
-                                        Congratulations! Your application to team ${project.title} has been accepted! &nbsp;<br>
-                                        Please follow the link to checkout your Project Leader, and Other Members &nbsp;<br>
-                                        <a href='${url}'>${url}</a>`
-                            };
-                            emailService.sendEmail(emailDetail, function(err){
-                                if(err){
-                                    console.log(err);
-                                    res.status(400).json({msg: 'Failed to send email'});
-                                }else{
-                                    res.json({});
-                                }
-                            });
-                        }
-                    })
-                }            
+            project_db.approveApplicant(project_id, user_id, authService.UserRole.ProjectMember).then(() =>{
+                project_db.getProjectById(project_id, function(err, project){
+                    if(err){
+                        console.log(err);
+                        res.status(400).json({msg: "Database error"});
+                    }
+                    else if(!project){
+                        res.status(404).json({msg: "Not found"});
+                    }
+                    else{
+                        const url = `https://${baseUrl}/project/detail?id=${project_id}`;
+                        const emailDetail = {
+                            to: req.body.user.email,
+                            subject: "Project application result from Coding4Good",
+                            html: `Thank you for your interest in the project ${project.title}.&nbsp;<br>
+                                    Congratulations! Your application to team ${project.title} has been accepted! &nbsp;<br>
+                                    Please follow the link to checkout your Project Leader, and Other Members &nbsp;<br>
+                                    <a href='${url}'>${url}</a>`
+                        };
+                        emailService.sendEmail(emailDetail, function(err){
+                            if(err){
+                                console.log(err);
+                                res.status(400).json({msg: 'Failed to send email'});
+                            }else{
+                                res.json({});
+                            }
+                        });
+                    }
+                })
+            }).catch(err => {
+                console.log("hahahahah");
+                console.log(err);
+                res.status(400).json({msg: "Database error"});
+                return;
             });
+            // project_db.approveApplicant(project_id, user_id, authService.UserRole.ProjectMember, function(){
+            //     if (err){
+            //         console.log(err);
+            //         res.status(400).json({msg: "Database error"});
+            //     }else{
+                    
+            //     }            
+            // });
         }
     });
 });
+
+// router.post('/approveApplicant', function(req, res, next){
+//     let roles = [authService.UserRole.Developer, 
+//                 authService.UserRole.Admin,
+//                 authService.UserRole.ProjectManager];
+//     authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+//         if (err) {
+//             console.log(err);
+//             res.status(400).json({msg: 'Database Error'});
+//             return;
+//         }
+//         else if(!authorized){
+//             res.status(403).json({msg: 'Not Authorized'});
+//             return;
+//         }
+//         else{
+//             var project_id = req.body.project_id;
+//             var user_id = req.body.user.id;
+//             project_db.approveApplicant(project_id, user_id, authService.UserRole.ProjectMember, function(err){
+//                 if (err){
+//                     console.log(err);
+//                     res.status(400).json({msg: "Database error"});
+//                 }else{
+//                     project_db.getProjectById(project_id, function(err, project){
+//                         if(err){
+//                             console.log(err);
+//                             res.status(400).json({msg: "Database error"});
+//                         }
+//                         else if(!project){
+//                             res.status(404).json({msg: "Not found"});
+//                         }
+//                         else{
+//                             const url = `https://${baseUrl}/project/detail?id=${project_id}`;
+//                             const emailDetail = {
+//                                 to: req.body.user.email,
+//                                 subject: "Project application result from Coding4Good",
+//                                 html: `Thank you for your interest in the project ${project.title}.&nbsp;<br>
+//                                         Congratulations! Your application to team ${project.title} has been accepted! &nbsp;<br>
+//                                         Please follow the link to checkout your Project Leader, and Other Members &nbsp;<br>
+//                                         <a href='${url}'>${url}</a>`
+//                             };
+//                             emailService.sendEmail(emailDetail, function(err){
+//                                 if(err){
+//                                     console.log(err);
+//                                     res.status(400).json({msg: 'Failed to send email'});
+//                                 }else{
+//                                     res.json({});
+//                                 }
+//                             });
+//                         }
+//                     })
+//                 }            
+//             });
+//         }
+//     });
+// });
 
 router.post('/rejectApplicant', function(req, res, next){
     authService.authorizationCheck(null, req.session.uid, function(err, authorized){

@@ -54,13 +54,15 @@ exports.editProject = function (project, callback) {
     );
 };
 
-exports.createProject = function (project, callback) {
-    var query = `INSERT INTO project (title, description, contact, org_name, creation_time, status, project_link, video_link, applyable) 
+exports.createProject = async (project) => {
+    let query = `INSERT INTO project (title, description, contact, org_name, creation_time, status, project_link, video_link, applyable) 
                 VALUES ($1,$2,$3,$4,(now() at time zone 'America/Chicago'),$5, $6, $7, $8) returning id;`;
-    var link = `INSERT INTO user_role(associated_project_id, user_id, user_role) VALUES ($1,$2,$3);`;
-    db.query(
-        query,
-        [
+    let link = `INSERT INTO user_role(associated_project_id, user_id, user_role) VALUES ($1,$2,$3);`;
+    
+    const client = await db.connect();
+    try{
+        await client.query('BEGIN');
+        var projectId = await client.query(query, [
             project.title,
             project.description,
             project.contact,
@@ -69,33 +71,65 @@ exports.createProject = function (project, callback) {
             project.project_link,
             project.video_link,
             project.applyable
-        ],
-        function (err, projectId) {
-            if (err) {
-                console.log(err);
-                callback(err);
-            } else if (project.team != null && project.team.length > 0) {
-                // make sure callback is only called after loop finish
-                Promise.all(project.team.map(function (member) {
-                    return new Promise(function (resolve, reject) {
-                        db.query(link, [projectId.rows[0].id, parseInt(member.id), member.user_role], function (err) {
-                            if (err) {
-                                return reject(err);
-                            }
-                            resolve();
-                        });
-                    });
-                })).then(function () {
-                    callback(null, projectId.rows[0].id);
-                }, function (err) {
-                    console.log(err);
-                    callback(err);
-                });
-            } else {
-                callback(null, projectId.rows[0].id);
-            }
+        ]);
+        console.log("haha "+projectId.rows[0].id);
+        for (var member in project.team){
+            console.log(member);
+            await client.query(link, [projectId.rows[0].id, parseInt(member.id), member.user_role]);   
         }
-    );
+    
+    //     Promise.all(project.team.map(async (member) => {         
+    //         await client.query(link, [projectId.rows[0].id, parseInt(member.id), member.user_role]);    
+    //     }))
+
+        await client.query('COMMIT');
+        return projectId.rows[0].id;
+    } catch(err){
+        await client.query('ROLLBACK');
+        throw err;
+    } finally{
+        client.release();
+    }
+    // console.log("line 89: " + projectId);
+    // db.query(
+    //     query,
+    //     [
+    //         project.title,
+    //         project.description,
+    //         project.contact,
+    //         project.org_name,
+    //         project.status,
+    //         project.project_link,
+    //         project.video_link,
+    //         project.applyable
+    //     ],   
+    //     function (err, projectId) {
+    //         console.log("line 103: " + projectId.rows[0].id);
+    //         if (err) {
+    //             console.log(err);
+    //             callback(err);
+    //         } else if (project.team != null && project.team.length > 0) {
+    //             // make sure callback is only called after loop finish
+    //             Promise.all(project.team.map(function (member) {
+    //                 return new Promise(function (resolve, reject) {
+    //                     db.query(link, [projectId.rows[0].id, parseInt(member.id), member.user_role], function (err) {
+    //                         if (err) {
+    //                             return reject(err);
+    //                         }
+    //                         resolve();
+    //                     });
+    //                 });
+    //             })).then(function () {
+    //                 callback(null, projectId.rows[0].id);
+    //             }, function (err) {
+    //                 console.log(err);
+    //                 callback(err);
+    //             });
+    //         } else {
+    //             callback(null, projectId.rows[0].id);
+    //         }
+    //     }
+    // );
 };
 
 exports.getProjectSet = function (callback) {
@@ -195,29 +229,44 @@ exports.checkApplied = function (project_id, user_id, callback) {
 }
 
 // the project manager approves the application request
-exports.approveApplicant = function (project_id, user_id, user_role, callback) {
+exports.approveApplicant = async (project_id, user_id, user_role, callback) => {
     // when manager approves the application
     // add relation to project relation
-    const query = `INSERT INTO user_role (associated_project_id, user_id, user_role) VALUES($1,$2,$3);`;
-    const remove = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
-    db.query(query, [project_id, user_id, user_role], function (err) {
-        if (err) {
-            console.log(err);
-            callback(err);
-        }
-        else {
-            // if insertion has no error, delete the relationship in application table
-            db.query(remove, [project_id, user_id], function (err) {
-                if (err) {
-                    console.log(err);
-                    callback(err);
-                }
-                else {
-                    callback(null);
-                }
-            });
-        }
-    });
+    const client = await db.connect();
+    try{
+        await client.query('BEGIN');
+        const query = `INSERT INTO user_role (associated_project_id, user_id, user_role) VALUES($1,$2,$3);`;
+        const remove = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
+        await client.query(query, [project_id, user_id, user_role]);
+        await client.query(remove, [project_id, user_id]);
+        await client.query('COMMIT');
+    } catch (err){
+        await client.query('ROLLBACK');
+        console.log(err);
+        throw err;
+    } finally {
+        client.release();
+    }
+    
+    
+    // db.query(query, [project_id, user_id, user_role], function (err) {
+    //     if (err) {
+    //         console.log(err);
+    //         callback(err);
+    //     }
+    //     else {
+    //         // if insertion has no error, delete the relationship in application table
+    //         db.query(remove, [project_id, user_id], function (err) {
+    //             if (err) {
+    //                 console.log(err);
+    //                 callback(err);
+    //             }
+    //             else {
+    //                 callback(null);
+    //             }
+    //         });
+    //     }
+    // });
 };
 
 // the project manager rejects the application request
