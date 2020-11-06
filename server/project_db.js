@@ -250,7 +250,6 @@ exports.approveApplicant = async (project_id, user_id, user_role, callback) => {
         await client.query('COMMIT');
     } catch (err){
         await client.query('ROLLBACK');
-        console.log(err);
         throw err;
     } finally {
         client.release();

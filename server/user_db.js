@@ -245,7 +245,6 @@ exports.setUserRoleByUid = async (user_id, roles) => {
     await client.query("COMMIT");
   }catch(err){
     await client.query("ROLLBACK");
-    console.log(err);
     throw err;
   }finally{
     client.release();
