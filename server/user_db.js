@@ -224,7 +224,7 @@ exports.getUserRoleByUid = function(user_id, callback) {
 // replace all roles (that are not associated with a project) by new roles of a user of given id
 // input: user_id int
 // input: roles string[]
-exports.setUserRoleByUid = async (user_id, roles, callback) => {
+exports.setUserRoleByUid = async (user_id, roles) => {
   if(!roles){
     roles = [];
   }

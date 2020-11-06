@@ -158,43 +158,47 @@ router.post('/approveApplicant', function(req, res, next){
             return;
         }
         else{
-            var project_id = req.body.project_id;
-            var user_id = req.body.user.id;
-            project_db.approveApplicant(project_id, user_id, authService.UserRole.ProjectMember).then(() =>{
-                project_db.getProjectById(project_id, function(err, project){
-                    if(err){
-                        console.log(err);
-                        res.status(400).json({msg: "Database error"});
-                    }
-                    else if(!project){
-                        res.status(404).json({msg: "Not found"});
-                    }
-                    else{
-                        const url = `https://${baseUrl}/project/detail?id=${project_id}`;
-                        const emailDetail = {
-                            to: req.body.user.email,
-                            subject: "Project application result from Coding4Good",
-                            html: `Thank you for your interest in the project ${project.title}.&nbsp;<br>
-                                    Congratulations! Your application to team ${project.title} has been accepted! &nbsp;<br>
-                                    Please follow the link to checkout your Project Leader, and Other Members &nbsp;<br>
-                                    <a href='${url}'>${url}</a>`
-                        };
-                        emailService.sendEmail(emailDetail, function(err){
-                            if(err){
-                                console.log(err);
-                                res.status(400).json({msg: 'Failed to send email'});
-                            }else{
-                                res.json({});
-                            }
-                        });
-                    }
-                })
-            }).catch(err => {
+            let project_id = req.body.project_id;
+            let user_id = req.body.user.id;
+            let hasErr = false;
+            project_db.approveApplicant(project_id, user_id, authService.UserRole.ProjectMember).catch(err => {
                 console.log("hahahahah");
                 console.log(err);
-                res.status(400).json({msg: "Database error"});
-                return;
-            });
+                hasErr = true;
+            }).then(() =>{
+                if(hasErr){
+                    res.status(400).json({msg: 'Failed to approve applicant'});
+                }
+                else{
+                    project_db.getProjectById(project_id, function(err, project){
+                        if(err){
+                            console.log(err);
+                            res.status(400).json({msg: "Database error"});
+                        }
+                        else if(!project){
+                            res.status(404).json({msg: "Not found"});
+                        }
+                        else{
+                            const url = `https://${baseUrl}/project/detail?id=${project_id}`;
+                            const emailDetail = {
+                                to: req.body.user.email,
+                                subject: "Project application result from Coding4Good",
+                                html: `Thank you for your interest in the project ${project.title}.&nbsp;<br>
+                                        Congratulations! Your application to team ${project.title} has been accepted! &nbsp;<br>
+                                        Please follow the link to checkout your Project Leader, and Other Members &nbsp;<br>
+                                        <a href='${url}'>${url}</a>`
+                            };
+                            emailService.sendEmail(emailDetail, function(err){
+                                if(err){
+                                    console.log(err);
+                                    res.status(400).json({msg: 'Failed to send email'});
+                                }else{
+                                    res.json({});
+                                }
+                            });
+                        }
+                    });
+                }
             // project_db.approveApplicant(project_id, user_id, authService.UserRole.ProjectMember, function(){
             //     if (err){
             //         console.log(err);
@@ -203,6 +207,7 @@ router.post('/approveApplicant', function(req, res, next){
                     
             //     }            
             // });
+            });
         }
     });
 });
