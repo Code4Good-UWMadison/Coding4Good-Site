@@ -73,9 +73,17 @@ exports.createProject = async (project) => {
             project.applyable
         ]);
         console.log("haha "+projectId.rows[0].id);
-        for (var member in project.team){
-            console.log(member);
-            await client.query(link, [projectId.rows[0].id, parseInt(member.id), member.user_role]);   
+        console.log("team is " + project.team);
+        console.log("team member 0 " + project.team[0].id);
+        // for (var member in project.team){
+        //     console.log("member id in for is " + member.id);
+        //     await client.query(link, [projectId.rows[0].id, parseInt(member.id), member.user_role]);   
+        // }
+        for (var i = 0; i < project.team.length; i++){
+            console.log("team member id in for: " + project.team[i].id);
+            console.log("type id in for " + typeof project.team[i].id);
+            console.log("type user_role in for " + typeof project.team[i].user_role);
+            await client.query(link, [projectId.rows[0].id, parseInt(project.team[i].id), project.team[i].user_role]);
         }
     
     //     Promise.all(project.team.map(async (member) => {         

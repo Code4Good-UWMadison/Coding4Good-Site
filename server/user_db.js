@@ -224,36 +224,82 @@ exports.getUserRoleByUid = function(user_id, callback) {
 // replace all roles (that are not associated with a project) by new roles of a user of given id
 // input: user_id int
 // input: roles string[]
-exports.setUserRoleByUid = function(user_id, roles, callback){
+exports.setUserRoleByUid = async (user_id, roles, callback) => {
   if(!roles){
     roles = [];
   }
   const remove = `DELETE FROM user_role WHERE user_id = $1 AND associated_project_id IS NULL;`;
   const insert = `INSERT INTO user_role (user_id, user_role) VALUES ($1, $2)`;
-  db.query(remove, [user_id], function(err) {
-    if(err){
-      console.log(err);
-      callback(err);
+  const client = await db.connect();
+
+  try{
+    await client.query("BEGIN");
+    await client.query(remove, [user_id]);
+
+    for (var i = 0; i < roles.length; i++){
+      console.log("line 240 user_id: " + user_id);
+      console.log("line 241 roles[i]: " + roles[i]);
+      await client.query(insert, [user_id, roles[i]]);
     }
-    else{
-      // make sure callback is only called after loop finish
-      Promise.all(roles.map(function(role) {
-        return new Promise(function(resolve, reject){
-          db.query(insert, [user_id, role], function(err) {
-            if(err){
-              return reject(err);
-            }
-            resolve();
-          });
-        });
-      })).then(function(){
-        callback();
-      }, function(err){
-        console.log(err);
-        callback(err);
-      });
-    }
-  });
+
+    await client.query("COMMIT");
+  }catch(err){
+    await client.query("ROLLBACK");
+    console.log(err);
+    throw err;
+  }finally{
+    client.release();
+  }
+
+  // db.query(remove, [user_id], function(err) {
+  //   if(err){
+  //     console.log(err);
+  //     callback(err);
+  //   }
+  //   else{
+  //     // make sure callback is only called after loop finish
+  //     Promise.all(roles.map(function(role) {
+  //       return new Promise(function(resolve, reject){
+  //         db.query(insert, [user_id, role], function(err) {
+  //           if(err){
+  //             return reject(err);
+  //           }
+  //           resolve();
+  //         });
+  //       });
+  //     })).then(function(){
+  //       callback();
+  //     }, function(err){
+  //       console.log(err);
+  //       callback(err);
+  //     });
+  //   }
+  // });
+
+  // db.query(remove, [user_id], function(err) {
+  //   if(err){
+  //     console.log(err);
+  //     callback(err);
+  //   }
+  //   else{
+  //     // make sure callback is only called after loop finish
+  //     Promise.all(roles.map(function(role) {
+  //       return new Promise(function(resolve, reject){
+  //         db.query(insert, [user_id, role], function(err) {
+  //           if(err){
+  //             return reject(err);
+  //           }
+  //           resolve();
+  //         });
+  //       });
+  //     })).then(function(){
+  //       callback();
+  //     }, function(err){
+  //       console.log(err);
+  //       callback(err);
+  //     });
+  //   }
+  // });
 };
 
 exports.getAllUser = function(callback) {

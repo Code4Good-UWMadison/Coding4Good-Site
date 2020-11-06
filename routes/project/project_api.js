@@ -32,18 +32,24 @@ router.post('/saveProject', function (req, res, next) {
                 res.json({});
             });
         }else{
+            // async issue (?) so pid is -1 in line 52(47) despite it being changed to the correct value 
             var hasErr = false;
             var pid = -1;
             project_db.createProject(req.body).catch(err => {
-                console.log(err);
+                console.log("err in line 38 "+err);
                 hasErr = true;
             }).then(result => {
+                console.log("enters then in line 41");
                 pid = result;
+                console.log("line 43 pid: " + pid);
+                console.log("line 44 result: " + result);
             }).catch(err => {
+                console.log("line 44 hasErr " + hasErr);
                 hasErr = true;
                 console.log(err);
                 //return;
             });
+            console.log("pid in line 47: "+pid);
             if(hasErr){
                 res.status(400).json({msg: 'Failed to create'});
             }
