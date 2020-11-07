@@ -18,11 +18,58 @@
             function afterSort(){
                 addLink();
             }
+
+            //Used to copy columns of applicants table
+            $(document).ready(function() {
+                $("#copyButton").click(function() {
+                    let colsArray = [];
+                    $("#copyTable input").each(function(index) {
+                        if($(this).is(':checked')) {
+                            colsArray.push(index);
+                            $(this).prop('checked', false);
+                        }
+                    })
+                    if(colsArray.length > 0) {
+                        copyColumns(colsArray);
+                    }
+                })
+
+                function copyColumns(colsArray) {
+                    let $temp = $("<textarea>");
+                    let copyString = '';
+
+                    if($("#copyHeaders").is(":checked")) {
+                        $("#projectThead tr").each(function() {
+                            for(let i = 0; i < colsArray.length; i++) {
+                                copyString += $(`th:nth-of-type(${colsArray[i] + 1})`,this).text();
+                                if(i != colsArray.length - 1) {
+                                    copyString += "\t"
+                                }
+                            }
+                            copyString += "\n";
+                        })
+                    };
+
+                    $("#projectTbody tr").each(function() {
+                        for(let i = 0; i < colsArray.length; i++) {
+                            copyString += $(`td:nth-of-type(${colsArray[i] + 1})`,this).text();
+                            if(i != colsArray.length - 1) {
+                                copyString += "\t"
+                            }
+                        }
+                        copyString += "\n";
+                    });
+                    
+                    $("body").append($temp);
+                    $temp.val(copyString).select();
+                    document.execCommand("copy");
+                    $temp.remove();
+                }
+            });
         </script>
 </head>
 
 <body>
-
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
     <div class="row margin-htop">
@@ -38,7 +85,7 @@
         </div>
     </div>
     <table class="table margin-htop sortable searchable">
-        <thead class="row margin-top">
+        <thead class="row margin-top" id="projectThead">
         <tr class="tr clickable">
             <th>Applicant Name</th>
             <th>E-mail</th>
@@ -63,6 +110,43 @@
         <% } %>
         </tbody>
     </table>
+
+    <section>
+        <div class="control-group row">
+            <p class="pull-left col-lg-2 col-sm-12 col-xs-12 font-weight-bold">Copy Columns: </p>
+            <div class="controls col-lg-10" id="copyTable" style="vertical-align: middle;">
+                <label class="col-lg-3 col-sm-6 col-xs-6" for="checkbox1">
+                    <input type="checkbox" id="checkbox1"> 
+                        Applicant Name
+                </label>
+                <label class="col-lg-3 col-sm-6 col-xs-6" for="checkbox2">
+                    <input type="checkbox" id="checkbox2"> 
+                        Email
+                </label>
+                <label class="col-lg-3 col-sm-6 col-xs-6" for="checkbox3">
+                    <input type="checkbox" id="checkbox3"> 
+                        Has Project
+                </label>
+                <label class="col-lg-3 col-sm-6 col-xs-6" for="checkbox4">
+                    <input type="checkbox" id="checkbox4"> 
+                        Intended Leader
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-offset-2 col-lg-10">
+                <div  class="col-lg-offset-6 col-lg-3 col-sm-6 col-xs-6">
+                    <label for="copyHeaders">
+                        <input type="checkbox" id="copyHeaders"> 
+                            Copy Headers
+                    </label>
+                </div>
+                <div class="col-lg-3 col-sm-6 col-xs-6">
+                    <button id="copyButton" class="btn primary-button mid-btn">Copy</button>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 <% include ../template/footer.ejs %>
