@@ -112,35 +112,37 @@
     </table>
 
     <section>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                <h4>Copy Columns: </h4>
+        <div class="control-group row">
+            <p class="pull-left col-lg-2 col-sm-12 col-xs-12 font-weight-bold">Copy Columns: </p>
+            <div class="controls col-lg-10" id="copyTable" style="vertical-align: middle;">
+                <label class="col-lg-3 col-sm-6 col-xs-6" for="checkbox1">
+                    <input type="checkbox" id="checkbox1"> 
+                        Applicant Name
+                </label>
+                <label class="col-lg-3 col-sm-6 col-xs-6" for="checkbox2">
+                    <input type="checkbox" id="checkbox2"> 
+                        Email
+                </label>
+                <label class="col-lg-3 col-sm-6 col-xs-6" for="checkbox3">
+                    <input type="checkbox" id="checkbox3"> 
+                        Has Project
+                </label>
+                <label class="col-lg-3 col-sm-6 col-xs-6" for="checkbox4">
+                    <input type="checkbox" id="checkbox4"> 
+                        Intended Leader
+                </label>
             </div>
-            <div class="col-md-10 col-sm-12 row" style="margin-top: 10px;">
-                <div class="col-xs-12 row" style="margin-bottom: 10px;"  id="copyTable">
-                    <label class="col-md-3 col-sm-3" for="checkbox1">
-                        <input type="checkbox" id="checkbox1"> 
-                            Applicant Name
-                    </label>
-                    <label class="col-md-3 col-sm-3" for="checkbox2">
-                        <input type="checkbox" id="checkbox2"> 
-                            Email
-                    </label>
-                    <label class="col-md-3 col-sm-3" for="checkbox3">
-                        <input type="checkbox" id="checkbox3"> 
-                            Has Project
-                    </label>
-                    <label class="col-md-3 col-sm-3" for="checkbox4">
-                        <input type="checkbox" id="checkbox4"> 
-                            Intended Leader
-                    </label>
-                </div>
-                <div class="col-xs-12 row">
-                    <button id="copyButton" class="primary-button" style="margin: 0px 15px;">Copy</button>
+        </div>
+        <div class="row">
+            <div class="col-lg-offset-2 col-lg-10">
+                <div  class="col-lg-offset-6 col-lg-3 col-sm-6 col-xs-6">
                     <label for="copyHeaders">
                         <input type="checkbox" id="copyHeaders"> 
                             Copy Headers
                     </label>
+                </div>
+                <div class="col-lg-3 col-sm-6 col-xs-6">
+                    <button id="copyButton" class="btn primary-button mid-btn">Copy</button>
                 </div>
             </div>
         </div>
