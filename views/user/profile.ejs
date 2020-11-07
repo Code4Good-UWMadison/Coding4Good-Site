@@ -13,12 +13,14 @@
             year: -1,
             intended_teamleader: false,
             pl: [],
-            dev: []
+            dev: [],
+            description:""
           };
 
           profile.nickname = $("#nickname").val();
           profile.year = $("#year").val();
           profile.intended_teamleader = $("#teamleader").prop('checked');
+          profile.description=$("#intro").val();
           if($(".pl-checkbox:checked").length > 0){
             $(".pl-checkbox:checked").each(function () {
               profile.pl.push($(this).val());
@@ -206,6 +208,11 @@
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-communication" <%=dev.includes('\"dev-communication\"') ? 'checked' : ''%>> Communicate with people :) <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="commRange"> <br>
         </div>
+        <div class="login-signup-input" > 
+          <p style="font-size:15px;">What else do you like to share with us?</p>
+          <textarea <%= others ? 'disabled' : '' %> id="intro" placeholder="Any fun fact? expectation?" rows="4" cols="50"><%=profile ? profile.description : ''%></textarea>
+          <br>
+        </div>   
         <div class="login-signup-input">
             <br>
             <p>When developing softwares in team, there has to be a team leader who directs the development.</p>

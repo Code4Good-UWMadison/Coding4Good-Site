@@ -140,9 +140,9 @@ exports.getUserById = function (uid, callback) {
 
 exports.updateProfile = function(uid, profile, callback) {
   let insert =
-    "INSERT INTO user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time) VALUES ($1,$2,$3,$4,$5,$6,$7, now() at time zone 'America/Chicago')";
+    "INSERT INTO user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time,description) VALUES ($1,$2,$3,$4,$5,$6,$7, now() at time zone 'America/Chicago',$8)";
   let update =
-    "DO UPDATE SET nickname=$2, year=$3, intended_teamleader=$4, pl=$5, dev=$6, resume=$7, submission_time=now() at time zone 'America/Chicago';";
+    "DO UPDATE SET nickname=$2, year=$3, intended_teamleader=$4, pl=$5, dev=$6, resume=$7, submission_time=now() at time zone 'America/Chicago',description=$8;";
   let query = insert + " ON CONFLICT (uid)" + update;
   db.query(
     query,
@@ -153,7 +153,8 @@ exports.updateProfile = function(uid, profile, callback) {
       profile.intended_teamleader,
       profile.pl,
       profile.dev,
-      profile.resume ? profile.resume : ""
+      profile.resume ? profile.resume : "",
+      profile.description ? profile.description : ""
     ],
     function(err, result) {
       if (err) {
