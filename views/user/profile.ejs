@@ -134,15 +134,15 @@
 <!--            <input class="form-control" type="text" id="nickname" placeholder="Nickname" value="<%=profile.nickname%>">-->
 <!--        </div>-->
     <div class="input-group login-signup-input">
-      <div class="input-group-addon">Name:</div>
+      <div class="input-group-prepend input-group-text" style="min-width: 100px; padding: 6px 25px;">Name:</div>
       <input class="form-control" type="text" id="name" value="<%=user ? user.name : ''%>" disabled>
     </div>
     <div class="input-group login-signup-input">
-      <div class="input-group-addon">Email:</div>
+      <div class="input-group-prepend input-group-text" style="min-width: 100px; padding: 6px 25px;">Email:</div>
       <input class="form-control" type="text" id="email" value="<%=user ? user.email : ''%>" disabled>
     </div>
         <div class="input-group login-signup-input" >
-            <div class="input-group-addon">Years:</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 100px; padding: 6px 25px;">Years:</div>
             <select class="form-control" id="year" <%= others ? 'disabled' : '' %> >
                 <option value="1" <%=(profile.year==1)?'selected':''%>>Freshman</option>
                 <option value="2" <%=(profile.year==2)?'selected':''%>>Sophomore</option>

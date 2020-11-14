@@ -69,28 +69,28 @@
 <% include template/nav.ejs %>
 
 <div class="container body-layout mid-body-layout">
-    <div class="col-md-offset-11">
-        <a class="long-btn btn primary-button" href="/">Back</a>
+    <div class="col-md-offset-11" align="right">
+        <a class=" btn primary-button" href="/">Back</a>
     </div>
     <p class="error-msg" id="error-msg"></p>
     <div class="input-group login-signup-input">
-        <div class="input-group-addon">Your Name:</div>
+        <div class="input-group-prepend input-group-text">Your Name:</div>
         <input class="form-control" type="text" id="name" placeholder="Full Name">
     </div>
     <div class="input-group login-signup-input">
-        <div class="input-group-addon">Organization(optional):</div>
+        <div class="input-group-prepend input-group-text">Organization(optional):</div>
         <input class="form-control" type="text" id="organization" placeholder="Company, School, Organization, etc">
     </div>
     <div class="input-group login-signup-input">
-        <div class="input-group-addon">Your Email:</div>
+        <div class="input-group-prepend input-group-text">Your Email:</div>
         <input class="form-control" type="email" id="email" placeholder="Email">
     </div>
     <div class="input-group login-signup-input">
-        <div class="input-group-addon">Your Phone:</div>
+        <div class="input-group-prepend input-group-text">Your Phone:</div>
         <input class="form-control" type="tel" id="phone" placeholder="Phone">
     </div>
     <div class="login-signup-input">
-        <h5>So tell us what's going on! We'll get back to you as soon as possible!</h5>
+        <h6>So tell us what's going on! We'll get back to you as soon as possible!</h6>
         <textarea class="form-control" type="text" id="content" rows="10"></textarea>
     </div>
     <button id="submit-button" class="btn long-btn primary-button">Submit</button>
