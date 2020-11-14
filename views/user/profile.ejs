@@ -158,8 +158,20 @@
             <p style="font-size:15px;">What programming languages are you familiar with?</p>
             <% var pl = profile.pl ? profile.pl : [] %>
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> Java <br>
-            <input <%= others ? 'disabled' : '' %> type="range" min="0" max="5" value="0" class="slider" id="javaRange"> <br>
-            
+
+            <input <%= others ? 'disabled' : '' %> type="range" min="0" max="5" value="0" style="display:none" class="slider" id="javaRange"> <br>
+            <script>
+              // get checkbox
+              var javaCheck = document.getElementById("pl-java");
+              // get the slider
+              var javaSlider = document.getElementById("javaRange");
+              //display javaslider only when pl-java is checked
+              if (checkBox.checked == true){
+                javaSlider.style.display = "flex";
+              }else{
+                javaSlider.style.display = "none"
+              }
+            </script>
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript" <%=pl.includes('\"pl-javascript\"') ? 'checked' : ''%>> Javascript <br>
             <input <%= others ? 'disabled' : '' %> type="range" min="0" max="5" value="0" class="slider" id="jsRange"> <br>
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-c" value="pl-c" <%=pl.includes('\"pl-c\"') ? 'checked' : ''%>> C <br>
