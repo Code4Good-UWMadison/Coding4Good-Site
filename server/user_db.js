@@ -239,10 +239,8 @@ exports.setUserRoleByUid = async (user_id, roles) => {
     for (var i = 0; i < roles.length; i++){
       console.log("line 240 user_id: " + user_id);
       console.log("line 241 roles[i]: " + roles[i]);
-      //await client.query(insert, [user_id, roles[i]]);
-      await client.query(insert, ["user_id231231sdf", roles[i]]);
+      await client.query(insert, [user_id, roles[i]]);
     }
-
     await client.query("COMMIT");
   }catch(err){
     await client.query("ROLLBACK");
@@ -250,56 +248,6 @@ exports.setUserRoleByUid = async (user_id, roles) => {
   }finally{
     client.release();
   }
-
-  // db.query(remove, [user_id], function(err) {
-  //   if(err){
-  //     console.log(err);
-  //     callback(err);
-  //   }
-  //   else{
-  //     // make sure callback is only called after loop finish
-  //     Promise.all(roles.map(function(role) {
-  //       return new Promise(function(resolve, reject){
-  //         db.query(insert, [user_id, role], function(err) {
-  //           if(err){
-  //             return reject(err);
-  //           }
-  //           resolve();
-  //         });
-  //       });
-  //     })).then(function(){
-  //       callback();
-  //     }, function(err){
-  //       console.log(err);
-  //       callback(err);
-  //     });
-  //   }
-  // });
-
-  // db.query(remove, [user_id], function(err) {
-  //   if(err){
-  //     console.log(err);
-  //     callback(err);
-  //   }
-  //   else{
-  //     // make sure callback is only called after loop finish
-  //     Promise.all(roles.map(function(role) {
-  //       return new Promise(function(resolve, reject){
-  //         db.query(insert, [user_id, role], function(err) {
-  //           if(err){
-  //             return reject(err);
-  //           }
-  //           resolve();
-  //         });
-  //       });
-  //     })).then(function(){
-  //       callback();
-  //     }, function(err){
-  //       console.log(err);
-  //       callback(err);
-  //     });
-  //   }
-  // });
 };
 
 exports.getAllUser = function(callback) {
