@@ -360,7 +360,6 @@ input::-webkit-calendar-picker-indicator {
     padding-top: 10px;
     z-index: 1050;
     font-size: 15px;
-    background-color: #51a351;
     color: #ffffff;
     text-align: center;
     border-bottom-left-radius: 20px 10px;
