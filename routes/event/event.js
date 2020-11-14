@@ -98,4 +98,38 @@ router.get('/edit', function (req, res, next) {
     });
 });
 
+router.get('/followed', function (req, res, next) {
+    let uid = req.query.user_id ? req.query.user_id : req.session.uid;
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+        }
+        else if(!authorized) {
+            res.redirect('/login');
+        } else {
+            user_db.getUserFollowedEventsByUid(uid, (err, followed_events) => {
+                event_db.getEventSet((err, event_set) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: 'Database Error'});
+                    }
+                    let followed_event_ids = JSON.parse(followed_events);
+                    let followed_event_set = [];
+
+                    event_set.forEach(function(event) {
+                        if (followed_event_ids.includes(event.id)) {
+                            followed_event_set.push(event);
+                        }
+                    });
+
+                    res.render('event/followed', {
+                        event_set: followed_event_set
+                    });
+                })
+            })
+        }
+    });
+});
+
 module.exports = router;
