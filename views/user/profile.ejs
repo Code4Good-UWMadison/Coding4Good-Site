@@ -157,7 +157,7 @@
         <div class="login-signup-input">
             <p style="font-size:15px;">What programming languages are you familiar with?</p>
             <% var pl = profile.pl ? profile.pl : [] %>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-java" onclick="javaCheck()" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> Java <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-java" onclick="javaCheck()" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> Java
 
             <input <%= others ? 'disabled' : '' %> type="range" min="0" max="5" value="0" style="display:none" class="slider" id="javaRange"> <br>
             <script>
