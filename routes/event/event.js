@@ -161,19 +161,18 @@ router.get('/rsvp', function (req, res, next) {
 
                     const emailDetail = {
                         to: user_email,
-                        subject: event_info.title,
-                        html: event_info.description
+                        subject: '[Coding 4 Good] ' + event_info.title,
+                        html: "This email regards event" + event_info.title + "<br>" + event_info.description + "."
                     };
 
-                    res.redirect('/event?status=s&msg=RSVP_email_has_been_sent');
-                    /*
-                    emailService.sendEmail(emailDetail, function(err){
+                    emailService.sendEmail(emailDetail, (err) => {
                         if(err){
                             console.log(err);
-                            res.redirect('/event?status=f');
+                            res.redirect('/event?status=f&msg=Failed_to_send_RSVP_email');
+                        } else {
+                            res.redirect('/event?status=s&msg=RSVP_email_has_been_sent');
                         }
-                    });
-                     */
+                    })
                 });
             });
         }
