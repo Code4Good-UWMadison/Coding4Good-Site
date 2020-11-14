@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const event_db = require("../../server/event_db");
 const user_db = require("../../server/user_db");
+const emailService = require('../services/email_service');
 const authService = require('../services/authorization_service');
 
 router.get('/', function (req, res, next) {
@@ -128,6 +129,53 @@ router.get('/followed', function (req, res, next) {
                     });
                 })
             })
+        }
+    });
+});
+
+router.get('/rsvp', function (req, res, next) {
+    let event_id = req.query.id;
+    let uid = req.query.user_id ? req.query.user_id : req.session.uid;
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+        }
+        else if(!authorized) {
+            res.redirect('/login');
+        } else {
+
+            user_db.getUserById(uid, (err, user_info) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                }
+
+                let user_email = user_info.email;
+
+                event_db.getEventById(event_id, (err, event_info) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: 'Database Error'});
+                    }
+
+                    const emailDetail = {
+                        to: user_email,
+                        subject: event_info.title,
+                        html: event_info.description
+                    };
+
+                    res.redirect('/event?status=s&msg=RSVP_email_has_been_sent');
+                    /*
+                    emailService.sendEmail(emailDetail, function(err){
+                        if(err){
+                            console.log(err);
+                            res.redirect('/event?status=f');
+                        }
+                    });
+                     */
+                });
+            });
         }
     });
 });
