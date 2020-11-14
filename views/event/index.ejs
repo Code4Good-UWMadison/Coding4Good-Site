@@ -57,6 +57,9 @@
 <body>
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
+    <% if (uid) { %>
+        <a class="btn primary-button right" style="margin-left: 3px;" href="/event/followed">My Followed Events</a>
+    <% } %>
     <% if (auth([all_user_role.Developer,
         all_user_role.Admin,
         all_user_role.EventExecutive], user_role)) { %>
@@ -124,6 +127,7 @@
                             <% } else { %>
                                 <button class="btn primary-button unfollow-button" onclick="unfollow_event(<%= eventsSet[i].id %>, <%= uid %>)">Unfollow Event</button>
                             <% } %>
+                            <a class="btn primary-button" href="/event/rsvp?id=<%= eventsSet[i].id %>">RSVP</a>
                             <% if (auth([all_user_role.Developer,
                                 all_user_role.Admin,
                                 all_user_role.EventExecutive], user_role)) { %>
