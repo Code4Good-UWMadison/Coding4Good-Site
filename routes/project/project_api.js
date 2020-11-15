@@ -169,7 +169,10 @@ router.post('/approveApplicant', function(req, res, next){
 });
 
 router.post('/rejectApplicant', function(req, res, next){
-    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+    let roles = [authService.UserRole.Developer, 
+        authService.UserRole.Admin,
+        authService.UserRole.ProjectManager];
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
             return;
