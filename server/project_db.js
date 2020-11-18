@@ -164,14 +164,14 @@ exports.checkApplied = function (project_id, user_id, callback) {
 }
 
 // the project manager approves the application request
-exports.approveApplicant = async (project_id, user_id, user_role, callback) => {
+exports.approveApplicant = async (project_id, user_id, user_role) => {
     // when manager approves the application
     // add relation to project relation
+    const query = `INSERT INTO user_role (associated_project_id, user_id, user_role) VALUES($1,$2,$3);`;
+    const remove = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
     const client = await db.connect();
     try{
         await client.query('BEGIN');
-        const query = `INSERT INTO user_role (associated_project_id, user_id, user_role) VALUES($1,$2,$3);`;
-        const remove = `DELETE FROM project_application_relation WHERE project_id = $1 AND user_id = $2`;
         await client.query(query, [project_id, user_id, user_role]);
         await client.query(remove, [project_id, user_id]);
         await client.query('COMMIT');

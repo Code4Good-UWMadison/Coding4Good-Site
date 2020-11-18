@@ -237,8 +237,6 @@ exports.setUserRoleByUid = async (user_id, roles) => {
     await client.query(remove, [user_id]);
 
     for (var i = 0; i < roles.length; i++){
-      console.log("line 240 user_id: " + user_id);
-      console.log("line 241 roles[i]: " + roles[i]);
       await client.query(insert, [user_id, roles[i]]);
     }
     await client.query("COMMIT");

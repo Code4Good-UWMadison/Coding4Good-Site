@@ -26,9 +26,10 @@ router.post('/saveProject', function (req, res, next) {
             let hasErr = false;
             project_db.editProject(req.body).catch(err => {
                 hasErr = true;
+                console.log(err);
             }).then(() => {
-                if(hasErr){
-                    res.status(400).json({msg: 'Failed to create'});
+                if(hasErr){                    
+                    res.status(400).json({msg: 'Failed to edit project'});
                 }
                 else{
                     res.json({})
@@ -36,11 +37,10 @@ router.post('/saveProject', function (req, res, next) {
             });
         }else{
             var hasErr = false;
-            var pid = -1;
             project_db.createProject(req.body).catch(err => {
                 hasErr = true;
-            }).then(result => {
-                pid = result;
+                console.log(err);
+            }).then(pid => {
                 if(hasErr){
                     res.status(400).json({msg: 'Failed to create'});
                 }
