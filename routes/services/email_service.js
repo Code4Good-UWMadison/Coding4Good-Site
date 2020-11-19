@@ -29,7 +29,7 @@ exports.sendEmail = function(emailDetail, callback){
                     Please do not reply to this email.`,
             attachments: [{
                 filename: 'icon.jpg',
-                path: './public/img/icon.jpg',
+                path: '/app/public/img/icon.jpg',
                 cid: 'club-icon'
             }]
         }
