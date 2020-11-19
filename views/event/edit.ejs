@@ -30,8 +30,8 @@
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
                                 $("#error-msg").html(jqXHR.responseJSON);
+                                $("#modal-todo").attr('disabled', false);
                                 $("#modal-confirmation-box").modal('hide');
-                                $("#remove-confirmed").attr('disabled', false);
                             }
                         });
                     });
@@ -56,6 +56,8 @@
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
                                 $("#error-msg").html(jqXHR.responseJSON);
+                                $("#modal-todo").attr('disabled', false);
+                                $("#modal-confirmation-box").modal('hide');
                             }
                         });
                     });
@@ -64,6 +66,7 @@
                     let title = 'Un-cancel Confirmation';
                     let msg = 'Ary you sure you want to un-cancel the event?';
                     show_modal(title, msg, function () {
+                        $("#modal-todo").attr('disabled', true);
                         $.ajax({
                             url: "/event/changeEventStatus",
                             method: "POST",
@@ -79,6 +82,8 @@
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
                                 $("#error-msg").html(jqXHR.responseJSON);
+                                $("#modal-todo").attr('disabled', false);
+                                $("#modal-confirmation-box").modal('hide');
                             }
                         });
                     });
