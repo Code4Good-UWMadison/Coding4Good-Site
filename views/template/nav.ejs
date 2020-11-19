@@ -2,18 +2,19 @@
     $(function () {
         const urlParams = new URLSearchParams(window.location.search);
         const status = urlParams.get('status');
-        // notification message each word in the msg should be separated by _
-        const msg = urlParams.get('msg').replaceAll('_', ' ') || 'Your submission has successfully been saved!';
-        if(status === 's'){
-            $('#notification-bar').css("visibility","visible");
-            $('#notification-bar').css("background-color","#51a351");
+        if (status) {
+            // notification message each word in the msg should be separated by _
+            let msg = urlParams.get('msg');
+            if (msg)
+                msg = msg.replaceAll('_', ' ');
+            else
+                msg = 'Your submission has successfully been saved!';
+            $('#notification-bar').css("visibility", "visible");
             $('#notification-msg').html(msg);
-            $('#notification-bar').fadeOut(4000, "swing");
-        }
-        if(status === 'f'){
-            $('#notification-bar').css("visibility","visible");
-            $('#notification-bar').css("background-color","#fa8072");
-            $('#notification-msg').html(msg);
+            if (status === 's')
+                $('#notification-bar').css("background-color", "#51a351");
+            if (status === 'f')
+                $('#notification-bar').css("background-color", "#fa8072");
             $('#notification-bar').fadeOut(4000, "swing");
         }
     })
