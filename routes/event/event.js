@@ -110,25 +110,30 @@ router.get('/followed', function (req, res, next) {
             res.redirect('/login');
         } else {
             user_db.getUserFollowedEventsByUid(uid, (err, followed_events) => {
-                event_db.getEventSet((err, event_set) => {
-                    if (err) {
-                        console.log(err);
-                        res.status(400).json({msg: 'Database Error'});
-                    }
-                    let followed_event_ids = JSON.parse(followed_events);
-                    let followed_event_set = [];
-
-                    event_set.forEach(function(event) {
-                        if (followed_event_ids.includes(event.id)) {
-                            followed_event_set.push(event);
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                } else {
+                    event_db.getEventSet((err, event_set) => {
+                        if (err) {
+                            console.log(err);
+                            res.status(400).json({msg: 'Database Error'});
                         }
-                    });
+                        let followed_event_ids = JSON.parse(followed_events);
+                        let followed_event_set = [];
 
-                    res.render('event/followed', {
-                        event_set: followed_event_set
+                        event_set.forEach(function (event) {
+                            if (followed_event_ids.includes(event.id)) {
+                                followed_event_set.push(event);
+                            }
+                        });
+
+                        res.render('event/followed', {
+                            event_set: followed_event_set
+                        });
                     });
-                })
-            })
+                }
+            });
         }
     });
 });
