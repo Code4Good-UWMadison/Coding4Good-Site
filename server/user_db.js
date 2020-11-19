@@ -304,11 +304,30 @@ exports.resetPassword = function(password, email, user_id, callback) {
   });
 };
 
+exports.hasProfile = (user_id, callback) => {
+  if (!user_id) {
+    callback(null, 'NO_USR_ID');
+    return;
+  }
+  let query = 'SELECT * FROM user_profile WHERE uid = $1;';
+  db.query(query, [user_id], (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+        if (result.rows[0])
+          callback(null, 'TRUE');
+        else
+          callback(null, 'FALSE');
+    }
+  });
+}
+
 exports.getUserFollowedEventsByUid = (user_id, callback) => {
   if (!user_id) {
-    return callback(null, '[]');
+    callback(null, '[]');
+    return;
   }
-  let query = 'SELECT followed_event FROM user_profile WHERE uid = $1';
+  let query = 'SELECT followed_event FROM user_profile WHERE uid = $1;';
   db.query(query, [user_id], (err, result) => {
     if (err) {
       callback(err);
