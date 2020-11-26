@@ -22,6 +22,7 @@
 <script src="/js/account.js"></script>
 <script src="/js/enum.js"></script>
 <script src="/js/formatchecker.js"></script>
+<script src="/js/modal.js"></script>
 
 <%
 auth = function(auth_roles, user_role) {
@@ -48,3 +49,21 @@ url_with_https = function (old_url) {
     return old_url;
 }
 %>
+
+<div id="modal-confirmation-box" class="modal fade confirmation-box">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <p id="modal-warning-title" class="modal-title"></p>
+            </div>
+            <div class="modal-body">
+                <h4 id="modal-warning-msg"></h4>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-todo" class="btn highPriority-button modal-confirmed">Yes</button>
+                <button id="modal-canceled" class="btn primary-button">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
