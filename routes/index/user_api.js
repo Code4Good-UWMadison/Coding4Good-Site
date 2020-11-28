@@ -174,12 +174,14 @@ router.post('/update_user', function (req, res, next) {
             res.status(403).json({msg: 'Not Authorized'});
             return;
         }
-        user_db.setUserRoleByUid(req.body.user_id, req.body.user_roles, function(err){
-            if(err) {
-                console.log(err);
-                res.status(400).json({msg: 'Database Error'});
-            }
-            else{
+        let hasErr = false;
+        user_db.setUserRoleByUid(req.body.user_id, req.body.user_roles).catch(err => {
+            console.log(err);
+            hasErr = true;
+        }).then(() =>{
+            if(hasErr){
+                res.status(400).json({msg: 'Failed to set the role for the user successfully'});
+            }else{
                 res.json({});
             }
         })

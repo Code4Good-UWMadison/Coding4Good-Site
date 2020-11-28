@@ -4,7 +4,6 @@ const user_db = require('../../server/user_db');
 const router = express.Router();
 const authService = require('../services/authorization_service');
 
-//might be createEvents, not quite sure where will this be posted?
 router.post('/createEvent', function (req, res, next) {
     let roles = [authService.UserRole.Developer,
         authService.UserRole.Admin,

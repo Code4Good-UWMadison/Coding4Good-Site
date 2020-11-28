@@ -30,8 +30,8 @@
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
                                 $("#error-msg").html(jqXHR.responseJSON);
+                                $("#modal-todo").attr('disabled', false);
                                 $("#modal-confirmation-box").modal('hide');
-                                $("#remove-confirmed").attr('disabled', false);
                             }
                         });
                     });
@@ -53,34 +53,39 @@
                                 const window_location = window.location.href;
                                 const success_flag = '&status=s';
                                 window.location.href = window_location.endsWith(success_flag) ? window_location : window_location + success_flag;
-                                $("#modal-confirmation-box").modal('hide');
-                                $("#remove-confirmed").attr('disabled', false);
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
                                 $("#error-msg").html(jqXHR.responseJSON);
+                                $("#modal-todo").attr('disabled', false);
                                 $("#modal-confirmation-box").modal('hide');
-                                $("#remove-confirmed").attr('disabled', false);
                             }
                         });
                     });
                 });
                 $('#uncancel-confirmation').click(function () {
-                    $.ajax({
-                        url: "/event/changeEventStatus",
-                        method: "POST",
-                        dataType: "json",
-                        data: {
-                            event_id: eventDetail.id,
-                            new_status_code: EventStatus.Active,
-                        },
-                        success: function () {
-                            const window_location = window.location.href;
-                            const success_flag = '&status=s';
-                            window.location.href = window_location.endsWith(success_flag) ? window_location : window_location + success_flag;
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            $("#error-msg").html(jqXHR.responseJSON);
-                        }
+                    let title = 'Un-cancel Confirmation';
+                    let msg = 'Ary you sure you want to un-cancel the event?';
+                    show_modal(title, msg, function () {
+                        $("#modal-todo").attr('disabled', true);
+                        $.ajax({
+                            url: "/event/changeEventStatus",
+                            method: "POST",
+                            dataType: "json",
+                            data: {
+                                event_id: eventDetail.id,
+                                new_status_code: EventStatus.Active,
+                            },
+                            success: function () {
+                                const window_location = window.location.href;
+                                const success_flag = '&status=s';
+                                window.location.href = window_location.endsWith(success_flag) ? window_location : window_location + success_flag;
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                $("#error-msg").html(jqXHR.responseJSON);
+                                $("#modal-todo").attr('disabled', false);
+                                $("#modal-confirmation-box").modal('hide');
+                            }
+                        });
                     });
                 });
                 $("#modal-canceled").click(function(){
@@ -201,7 +206,6 @@
         <button id="save-button" type="button" class="btn long-btn primary-button">Save!</button>
     </div>
 </div>
-
 
 <% include ../template/footer.ejs %>
 <script src="../js/modal.js"></script>
