@@ -341,10 +341,11 @@ exports.followEvent = function(uid, eid, callback) {
       followed_event.push(parseInt(eid));
       query = 'UPDATE user_profile SET followed_event = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
       db.query(query, [uid], function (err_update) {
-        db.query('COMMIT;');
         if (err_update) {
+          db.query('ROLLBACK;')
           callback(err_update);
         } else {
+          db.query('COMMIT;');
           callback(null);
         }
       });
@@ -367,10 +368,11 @@ exports.unfollowEvent = function(uid, eid, callback) {
       }
       query = 'UPDATE user_profile SET followed_event = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
       db.query(query, [uid], function (err_update) {
-        db.query('COMMIT;');
         if (err_update) {
+          db.query('ROLLBACK;')
           callback(err_update);
         } else {
+          db.query('COMMIT;');
           callback(null);
         }
       });

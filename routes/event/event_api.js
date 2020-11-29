@@ -108,6 +108,10 @@ router.post('/changeEventStatus', function(req, res, next){
 });
 
 router.post('/followEvent', function(req, res, next) {
+    if(!req.body.uid){
+        res.status(403).json({msg: 'Not Authorized'});
+        return;
+    }
     user_db.followEvent(req.body.uid, req.body.eid, ((err) => {
         if (err) {
             console.log(err);
@@ -119,6 +123,10 @@ router.post('/followEvent', function(req, res, next) {
 });
 
 router.post('/unfollowEvent', function(req, res, next) {
+    if(!req.body.uid){
+        res.status(403).json({msg: 'Not Authorized'});
+        return;
+    }
     user_db.unfollowEvent(req.body.uid, req.body.eid, ((err) => {
         if (err) {
             console.log(err);
