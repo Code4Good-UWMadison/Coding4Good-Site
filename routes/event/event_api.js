@@ -3,7 +3,6 @@ const event_db = require('../../server/event_db');
 const router = express.Router();
 const authService = require('../services/authorization_service');
 
-//might be createEvents, not quite sure where will this be posted?
 router.post('/createEvent', function (req, res, next) {
     let roles = [authService.UserRole.Developer,
         authService.UserRole.Admin,
@@ -72,6 +71,31 @@ router.post('/removeEvent', function(req, res, next){
         }
 
         event_db.removeEventById(req.body.event_id,function (err) {
+            if(err){
+                console.log(err);
+                res.status(400).json({msg: 'Failed to remove'});
+                return;
+            }
+            res.json({});
+        });
+    });
+});
+
+router.post('/changeEventStatus', function(req, res, next){
+    let roles = [authService.UserRole.Developer,
+        authService.UserRole.Admin,
+        authService.UserRole.EventExecutive]; // event executive can create event
+
+    authService.authorizationCheck(roles, req.session.uid, function(err, authorized){
+        if (err) {
+            res.status(400).json({msg: 'Database Error'});
+            return;
+        }
+        else if(!authorized){
+            res.status(403).json({msg: 'Not Authorized'});
+            return;
+        }
+        event_db.changeEventStatusCodeById(req.body.event_id, req.body.new_status_code, function (err) {
             if(err){
                 console.log(err);
                 res.status(400).json({msg: 'Failed to remove'});

@@ -4,9 +4,9 @@
 <head>
     <% include ../template/head.ejs %>
         <script>
-            var eventDetail = <%-JSON.stringify(eventDetail)%>;
+            let eventDetail = <%-JSON.stringify(eventDetail)%>;
             $(function() {
-                // editable selecte event type
+                // editable select event type
                 $("#event_type").editableSelect({effects: 'slide'});
                 $("#event_type").click(function(){
                     $("#event_type").val("");
@@ -14,29 +14,82 @@
                 });
                 // set up handlers
                 $("#remove-confirmation").click(function () {
-                    $("#remove-confirmation-box").modal('show');
-                });
-                $("#remove-canceled").click(function(){
-                    $("#remove-confirmation-box").modal('hide');
-                });
-                $("#remove-confirmed").click(function () {
-                    $("#remove-confirmed").attr('disabled', true);
-                    $.ajax({
-                        url: "/event/removeEvent",
-                        method: "POST",
-                        dataType: "json",
-                        data: {
-                            event_id: eventDetail.id,
-                        },
-                        success: function () {
-                            window.location.href="/event?status=s";
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            $("#error-msg").html(jqXHR.responseJSON);
-                            $("#remove-confirmation-box").modal('hide');
-                            $("#remove-confirmed").attr('disabled', false);
-                        }
+                    let title = 'Remove Confirmation';
+                    let msg = 'Are you sure you want to permanently remove this event?';
+                    show_modal(title, msg, function () {
+                        $("#modal-todo").attr('disabled', true);
+                        $.ajax({
+                            url: "/event/removeEvent",
+                            method: "POST",
+                            dataType: "json",
+                            data: {
+                                event_id: eventDetail.id,
+                            },
+                            success: function () {
+                                window.location.href="/event?status=s";
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                $("#error-msg").html(jqXHR.responseJSON);
+                                $("#modal-todo").attr('disabled', false);
+                                $("#modal-confirmation-box").modal('hide');
+                            }
+                        });
                     });
+                });
+                $('#cancel-confirmation').click(function () {
+                    let title = 'Cancel Confirmation';
+                    let msg = 'Ary you sure you want to cancel the event?';
+                    show_modal(title, msg, function () {
+                        $("#modal-todo").attr('disabled', true);
+                        $.ajax({
+                            url: "/event/changeEventStatus",
+                            method: "POST",
+                            dataType: "json",
+                            data: {
+                                event_id: eventDetail.id,
+                                new_status_code: EventStatus.Cancelled,
+                            },
+                            success: function () {
+                                const window_location = window.location.href;
+                                const success_flag = '&status=s';
+                                window.location.href = window_location.endsWith(success_flag) ? window_location : window_location + success_flag;
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                $("#error-msg").html(jqXHR.responseJSON);
+                                $("#modal-todo").attr('disabled', false);
+                                $("#modal-confirmation-box").modal('hide');
+                            }
+                        });
+                    });
+                });
+                $('#uncancel-confirmation').click(function () {
+                    let title = 'Un-cancel Confirmation';
+                    let msg = 'Ary you sure you want to un-cancel the event?';
+                    show_modal(title, msg, function () {
+                        $("#modal-todo").attr('disabled', true);
+                        $.ajax({
+                            url: "/event/changeEventStatus",
+                            method: "POST",
+                            dataType: "json",
+                            data: {
+                                event_id: eventDetail.id,
+                                new_status_code: EventStatus.Active,
+                            },
+                            success: function () {
+                                const window_location = window.location.href;
+                                const success_flag = '&status=s';
+                                window.location.href = window_location.endsWith(success_flag) ? window_location : window_location + success_flag;
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                $("#error-msg").html(jqXHR.responseJSON);
+                                $("#modal-todo").attr('disabled', false);
+                                $("#modal-confirmation-box").modal('hide');
+                            }
+                        });
+                    });
+                });
+                $("#modal-canceled").click(function(){
+                    $("#modal-confirmation-box").modal('hide');
                 });
                 $("#save-button").click(function() {
                     if (($("#title").val() == '') | ($("#location").val() == '') | ($("#event_type").val() == '') | ($("#description").val() == '')) {
@@ -92,7 +145,13 @@
 <div class="container body-layout">
     <div class="row">
         <div align="right">
-            <button id="remove-confirmation" class="btn primary-button">Remove</button>
+            <% if (eventDetail.status === 0) { %>
+                <button id="cancel-confirmation" class="btn primary-button">Cancel Event</button>
+            <% } %>
+            <% if (eventDetail.status === 1) { %>
+                <button id="uncancel-confirmation" class="btn primary-button">Un-cancel Event</button>
+            <% } %>
+            <button id="remove-confirmation" class="btn primary-button">Remove Event</button>
             <a class="btn primary-button" href="/event">Back</a>
         </div>
     </div>
@@ -145,24 +204,6 @@
         </div>
 
         <button id="save-button" type="button" class="btn long-btn primary-button">Save!</button>
-    </div>
-</div>
-
-<div id="remove-confirmation-box" class="modal fade confirmation-box">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <p class="modal-title">Remove Confirmation</p>
-            </div>
-            <div class="modal-body">
-                <h4>Are you sure you want to permanently remove this event?</h4>
-            </div>
-            <div class="modal-footer">
-                <button id="remove-confirmed" class="btn highPriority-button">Remove</button>
-                <button id="remove-canceled" class="btn primary-button">Cancel</button>
-            </div>
-        </div>
     </div>
 </div>
 
