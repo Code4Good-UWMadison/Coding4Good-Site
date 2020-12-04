@@ -143,8 +143,8 @@
 <body>
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
-    <div class="row">
-        <div align="right">
+    <div align="right">
+        <div >
             <% if (eventDetail.status === 0) { %>
                 <button id="cancel-confirmation" class="btn primary-button">Cancel Event</button>
             <% } %>
@@ -155,36 +155,36 @@
             <a class="btn primary-button" href="/event">Back</a>
         </div>
     </div>
-    <div class="row">
+    <div >
         <p class="error-msg" id="error-msg"></p>
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Title&nbsp;<span class="required-star" hidden>*</span></div>
+            <div class="input-group-prepend input-group-text" style="min-width: 165px; padding-left: 35px;">&nbsp;Event Title&nbsp;<span class="required-star" hidden>*</span></div>
             <input class="form-control" type="text" id="title" placeholder="Event Title" value="<%= eventDetail.title %>">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Time&nbsp;<span class="required-star" hidden>*</span></div>
+            <div class="input-group-prepend input-group-text" style="min-width: 165px; padding-left: 35px;">&nbsp;Event Time&nbsp;<span class="required-star" hidden>*</span></div>
             <%let the_date = eventDetail.event_time.getFullYear() + "-" + ("0" + (eventDetail.event_time.getMonth() + 1)).slice(-2) + "-" + ("0" + eventDetail.event_time.getDate()).slice(-2) + "T" + ("0" + eventDetail.event_time.getHours()).slice(-2) + ":" + ("0" + eventDetail.event_time.getMinutes()).slice(-2)%>
             <input class="form-control" type="datetime-local" id="time" value="<%= the_date %>">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Location&nbsp;<span class="required-star" hidden>*</span></div>
+            <div class="input-group-prepend input-group-text" style="min-width: 165px; padding-left: 25px;">&nbsp;Event Location&nbsp;<span class="required-star" hidden>*</span></div>
             <input class="form-control" type="text" id="location" placeholder="Event Location" value="<%= eventDetail.location %>">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Image Url: &nbsp;</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 165px; padding-left: 15px;">&nbsp;Event Image Url: &nbsp;</div>
             <input class="form-control" type="text" id="image" placeholder="Event Image Url" value="<%= eventDetail.image %>">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Link: &nbsp;</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 165px; padding-left: 35px;">&nbsp;Event Link: &nbsp;</div>
             <input class="form-control" type="text" id="link" placeholder="Event Link" value="<%= eventDetail.link %>">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Event Type&nbsp;<span class="required-star" hidden>*</span></div>
+            <div class="input-group-prepend input-group-text" style="min-width: 165px; padding-left: 35px;">&nbsp;Event Type&nbsp;<span class="required-star" hidden>*</span></div>
             <select class="form-control" id="event_type" placeholder="Input For Other Types">
                 <%
                 let set = new Set();
@@ -200,7 +200,7 @@
         </div>
 
         <div class="new-project-input">
-            <textarea class="form-control" type="text" id="description" placeholder="Event Description" rows="5" maxlength="300" style="resize: none;"><%=eventDetail.description%></textarea>
+            <textarea class="form-control" type="text" id="description" placeholder="Event Description" rows="5" style="resize: none;"><%=eventDetail.description%></textarea>
         </div>
 
         <button id="save-button" type="button" class="btn long-btn primary-button">Save!</button>

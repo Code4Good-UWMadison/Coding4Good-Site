@@ -85,12 +85,12 @@
     </div>
     <p class="error-msg" id="error-msg"></p>
     <div class="input-group new-project-input">
-        <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
+        <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 40px;">Project Title:</div>
         <div class="form-control" type="text" id="title"><%= projectDetail.title %></div>
     </div>
 
     <div class="input-group new-project-input row">
-        <div class="input-group-addon">Leaders:</div>
+        <div class="input-group-prepend input-group-text" style="min-width: 100px; padding-left: 25px;">Leaders:&nbsp;</div>
         <div class="form-control" type="text">
             <%= members.filter(e => e.user_role===role_list.ProjectLeader).map(e=>(e.name + " (" + e.email) + ")").join(", ")%>
         </div>
@@ -98,7 +98,7 @@
 
     <% members.filter(e => e.user_role===role_list.ProjectMember).forEach(member => { %>
     <div class="input-group new-project-input row">
-        <div class="input-group-addon">Members:</div>
+        <div class="input-group-prepend input-group-text" style="min-width: 100px; padding-left: 20px;">Members:</div>
         <div class="form-control" type="text">
             <%=member.name + " (" + member.email + ")"%>
         </div>
@@ -106,26 +106,26 @@
     <%});%>
 
     <div class="input-group new-project-input row">
-        <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
-        <div class="form-control" type="text" id="status"><%= projectDetail.status %></div>
-        <div class="input-group-addon">&nbsp;Creation time: &nbsp;</div>
-        <div class="form-control" type="text" id="creation_time"><%= projectDetail.creation_time %></div>
+        <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 30px;">&nbsp;Project status: &nbsp;</div>
+        <div class="form-control" type="text" id="status" style="max-width: 200px;"><%= projectDetail.status %></div>
+        <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 30px;">&nbsp;Creation time: &nbsp;</div>
+        <div class="form-control" type="text" id="creation_time" ><%= projectDetail.creation_time %></div>
 
     </div>
 
     <div class="input-group new-project-input">
-        <div class="input-group-addon">Contact Information:</div>
+        <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 10px;">Contact Information:</div>
         <div class="form-control" type="text" id="ontact"><%= projectDetail.contact %></div>
     </div>
 
     <div class="input-group new-project-input">
-        <div class="input-group-addon">Organization Name:</div>
+        <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 15px;">Organization Name:</div>
         <div class="form-control" type="text" id="org_name"><%= projectDetail.org_name %></div>
     </div>
 
     <% if (projectDetail.project_link) { %>
         <div class="input-group new-project-input">
-            <div class="input-group-addon">Project Link:</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 45px;">Project Link:</div>
             <div class="form-control" type="text" id="link"><a href="<%= projectDetail.project_link %>"><%= projectDetail.project_link %></a></div>
         </div>
     <% } %>
