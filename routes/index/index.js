@@ -115,6 +115,10 @@ router.get('/logout', function (req, res, next) {
 });
 
 router.get('/user-admin', function (req, res) {
+    if (req.session.uid == null) {
+        res.redirect('../login');
+        return;
+    }
     let roles = [authService.UserRole.Admin,
                 authService.UserRole.Developer];
     authService.authorizationCheck(roles, req.session.uid, function(err, authorized){

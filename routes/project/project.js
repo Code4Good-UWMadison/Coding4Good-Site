@@ -157,6 +157,10 @@ router.get('/edit', function (req, res, next) {
 });
 
 router.get('/applicants', function (req, res, next) {
+    if (req.session.uid == null) {
+        res.redirect('../login');
+        return;
+    }
     let roles = [authService.UserRole.Admin,
                 authService.UserRole.Developer,
                 authService.UserRole.ProjectManager,
