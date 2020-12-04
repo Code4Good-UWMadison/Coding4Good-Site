@@ -30,12 +30,12 @@ $(function () {
             display_name += ".";
           }
         }
-        $(".navbar-right").html(`<ul class="nav navbar-nav">
-          <li><a>Welcome! ` + display_name + `</a></li>
-          <li><a>|</a></li>
-          <li><a href="/profile">Profile</a></li>
-          <li><a>|</a></li>
-          <li><a href="/logout">Log out</a></li>
+        $(".name-display").html(`<ul class="nav navbar-nav">
+          <li class="nav-item"><a class="nav-link">Welcome! ` + display_name + `</a></li>
+          <li class="nav-link">|</li>
+          <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+          <li class="nav-link">|</li>
+          <li class="nav-item"><a class="nav-link" href="/logout">Log out</a></li>
         </ul>`);
       }
     },

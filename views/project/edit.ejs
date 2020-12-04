@@ -21,13 +21,13 @@
         function addMemberRow() {
             var currentRow = $('.member-list').length/2+1;
             var html = `<div class="input-group new-project-input row">\
-                            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member ${currentRow}:&nbsp;&nbsp;&nbsp;</div>\
+                            <div class="input-group-prepend input-group-text" style="min-width: 100px; padding-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member ${currentRow}:&nbsp;&nbsp;&nbsp;</div>\
                             <select placeholder="Member Name" id="name${currentRow}" class="form-control member-list">\
                                 <% allUser.forEach(function(userChoice){ %>\
                                 <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"><%= userChoice.name %> (<%= userChoice.email %>)</option>\
                                 <% }) %>\
                             </select>\
-                            <div class="input-group-addon">Member Role:</div>\
+                            <div class="input-group-prepend input-group-text" style="min-width: 100px; padding-left: 20px;">Member Role:</div>\
                             <select placeholder="Member Role" id="role${currentRow}" data-value="" class="form-control member-list">\
                                 <option value=<%=role_list.ProjectMember%>>Member</option>\
                                 <option value=<%=role_list.ProjectLeader%>>Leader</option>\
@@ -186,12 +186,12 @@
     <p class="error-msg" id="error-msg"></p>
     <div>
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 30px;">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
             <input class="form-control" type="text" id="title" placeholder="Project Title" value="<%=projectDetail.title%>">
         </div>
         <div class="input-group new-project-input row">
-            <div class="input-group-addon">Team Members: </div>
-            <div class="form-control ">
+            <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 30px;">Team Members: </div>
+            <div class="form-control input-group-text">
                 <div class="col-sm-6 center divider-vertical">Name</div>
                 <div class="col-sm-6 center">Member Role</div>
             </div>
@@ -203,14 +203,14 @@
             <!--member row goes here-->
             <% currentRow = 1; %>
             <% members.forEach(function(member){ %>
-            <div class="input-group new-project-input row">
-                <div class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member <%=currentRow%>:&nbsp;&nbsp;&nbsp;</div>
+            <div class="input-group new-project-input row ">
+                <div class="input-group-prepend input-group-text" style="min-width: 100px; padding-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Member <%=currentRow%>:&nbsp;&nbsp;&nbsp;</div>
                 <select placeholder="Member Name" data-value="<%=member.uid%>" id="name<%=currentRow%>" class="form-control member-list">
                     <% allUser.forEach(function(userChoice){ %>
                     <option id="<%= userChoice.id %>" value="<%= userChoice.id %>"<% if(userChoice.id==member.uid){ %> selected="selected"<% }%>><%= userChoice.name %> (<%= userChoice.email %>)</option>
                     <% }) %>
                 </select>
-                <div class="input-group-addon">Member Role:</div>
+                <div class="input-group-prepend input-group-text" style="min-width: 100px; padding-left: 20px;">Member Role:</div>
                 <select placeholder="Member Role" id="role<%=currentRow%>" data-value="<%=member.user_role%>" class="form-control member-list">
                     <option <%=(member.user_role==role_list.ProjectMember)?'selected':''%> value="<%=role_list.ProjectMember%>">Member</option>
                     <option <%=(member.user_role==role_list.ProjectLeader)?'selected':''%> value="<%=role_list.ProjectLeader%>">Leader</option>
@@ -220,14 +220,14 @@
             <% }) %>
         </div>
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Project status: &nbsp;</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 30px;">&nbsp;Project status: &nbsp;</div>
             <select value="" class="form-control" id="status">
                 <!--status option goes here-->
             </select>
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">&nbsp;Open to Apply: &nbsp;</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 30px;">&nbsp;Open to Apply: &nbsp;</div>
             <select class="form-control" id="applyable">
                 <option <%= projectDetail.applyable ? '' : 'selected' %> value="false">No</option>
                 <option <%= projectDetail.applyable ? 'selected' : '' %> value="true">Yes</option>
@@ -235,22 +235,22 @@
         </div>
         
         <div class="input-group new-project-input">
-            <div class="input-group-addon">Contact Information:</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 10px;">Contact Information:</div>
             <input class="form-control" type="text" id="contact" placeholder="Contact Information" value="<%=projectDetail.contact%>">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">Organization Name:</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 15px;">Organization Name:</div>
             <input class="form-control" type="text" id="org_name" placeholder="Organization Name" value="<%= projectDetail.org_name%>">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">Project Link:</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 35px;">Project Link:</div>
             <input class="form-control" type="text" id="project_link" placeholder="Project Link" value="<%= projectDetail.project_link %>">
         </div>
 
         <div class="input-group new-project-input">
-            <div class="input-group-addon">Project Youtube Link:</div>
+            <div class="input-group-prepend input-group-text" style="min-width: 180px; padding-left: 10px;">Project Youtube Link:</div>
             <input class="form-control" type="text" id="video_link" placeholder="Project Video Link" value="<%= projectDetail.video_link %>">
         </div>
 

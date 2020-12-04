@@ -28,9 +28,9 @@
 <div class="container body-layout">
     <div class="row center">
         <% if(isMy){ %>
-        <h2>My Projects</h2>
+        <h2 class="mx-auto">My Projects</h2>
         <% } else{ %>
-        <h2>Projects</h2>
+        <h2 class="mx-auto">Projects</h2>
         <% } %>
     </div>
     <div class="row margin-htop">
@@ -41,7 +41,7 @@
             <input type="text" class="input searchable"
                    placeholder="keyword, key words, key words"/>
         </div>
-        <div align="right">
+        <div style="margin-left: 320px;">
             <% if (uid != null){ %>
             <%if (auth([all_user_role.Developer, all_user_role.ProjectManager, all_user_role.Admin], user_role)) { %>
             <a class="btn primary-button" href="/project/edit">New Project</a>
@@ -53,12 +53,12 @@
         </div>
     </div>
     <table class="table margin-htop sortable searchable" align="center">
-        <thead class="row margin-top">
-        <tr class="tr clickable">
+        <thead class="margin-top">
+        <tr class="clickable">
             <th>Project Name</th>
             <th>Organization Name</th>
-            <th class="center">Project Status</th>
-            <th class="center">Open to Apply</th>
+            <th>Project Status</th>
+            <th>Open to Apply</th>
         </tr>
         </thead>
         <tbody id="projectTbody">
@@ -69,7 +69,7 @@
         <% } %>
 
         <% projectSet.forEach(function(row){ %>
-        <tr class="tr clickable projectRow" id=<%= row.id %>>
+        <tr class="clickable projectRow" id=<%= row.id %>>
             <td class="td"><%= row.title %></td>
             <td class="td"><%= row.org_name %></td>
             <td class="td center"><%= row.status %></td>

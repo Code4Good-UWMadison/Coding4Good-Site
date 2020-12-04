@@ -53,13 +53,18 @@
 <div class="container body-layout min-body-layout">
     <p class="error-msg margin-dtop" id="error-msg"></p>
     <form id="login-form">
-        <div class="input-group login-signup-input">
-            <div class="input-group-addon">Email:</div>
-            <input class="form-control" type="text" id="email" placeholder="Email">
+        <div class="input-group mb-3 login-signup-input">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Email:</span>
+          </div>
+          <input type="text" class="form-control" id="email" placeholder="Email">
         </div>
-        <div class="input-group login-signup-input">
-            <div class="input-group-addon">Password:</div>
-            <input class="form-control" type="password" id="password" placeholder="Password">
+        
+        <div class="input-group mb-3 login-signup-input">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Password:</span>
+          </div>
+          <input type="password" class="form-control" id="password" placeholder="Password">
         </div>
         <p>I don't have an account yet, <a href="/signup">sign me up!</a></p>
         <p>Forget your password, <a href="/forget-password">reset password.</a> </p>
