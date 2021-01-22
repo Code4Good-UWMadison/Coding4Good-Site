@@ -325,12 +325,30 @@ exports.hasProfile = (user_id, callback) => {
   });
 }
 
+/**
+ * Get events that the user corresponding to the `user_id` has followed.
+ * If `user_id` is empty, i.e. no user logs in, or the user has not followed any events, return `[]`
+ * @param user_id user id
+ * @param callback callback function
+ */
 exports.getUserFollowedEventsByUid = (user_id, callback) => {
   if (!user_id) {
     callback(null, '[]');
     return;
   }
-  let query = 'SELECT followed_event FROM user_profile WHERE uid = $1;';
+  const query = 'SELECT * FROM user_event WHERE uid = $1;';
+  db.query(query, [user_id], (err, result) => {
+    if (err)  {
+      callback(err);
+    } else {
+      if (result.rows[0]) {
+        callback(null, result.rows[0].followed_events);
+      } else {
+        callback(null, '[]');
+      }
+    }
+  });
+}
   db.query(query, [user_id], (err, result) => {
     if (err) {
       callback(err);
