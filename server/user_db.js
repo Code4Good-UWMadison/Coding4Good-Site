@@ -390,10 +390,20 @@ exports.hasUserEventEntry = (user_id, callback) => {
     }
   });
 }
+
+/**
+ * Create an entry corresponding to `user_id` and add the `event_id` to `followed_events` in the entry
+ * @param user_id user id
+ * @param event_id event id
+ * @param callback callback function
+ */
+exports.createEntryAndFollowEvent = (user_id, event_id, callback) => {
+  const insert = 'INSERT INTO user_event (uid, followed_events, rsvp_events) VALUES ($1, $2, $3)';
+  db.query(insert, [user_id, JSON.stringify([parseInt(event_id)]), "[]"], (err) => {
     if (err) {
       callback(err);
     } else {
-      callback(null, result.rows[0]['followed_event']);
+      callback(null);
     }
   });
 }
