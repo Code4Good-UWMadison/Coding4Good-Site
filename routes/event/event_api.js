@@ -137,4 +137,20 @@ router.post('/unfollowEvent', function(req, res, next) {
     }))
 });
 
+
+router.post('/unrsvpEvent', function(req, res, next) {
+    if(!req.body.uid){
+        res.status(403).json({msg: 'Not Authorized'});
+        return;
+    }
+    user_db.unrsvpEvent(req.body.uid, req.body.eid, ((err) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Failed to unfollow event'});
+            return;
+        }
+        res.json({});
+    }))
+});
+
 module.exports = router;
