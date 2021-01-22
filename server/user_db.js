@@ -437,6 +437,23 @@ exports.unfollowEvent = function(uid, eid, callback) {
   let query = 'SELECT followed_event FROM user_profile WHERE uid = $1 FOR UPDATE;';
   db.query(query, [uid], function (err, result) {
 
+/**
+ * Create an entry corresponding to `user_id` and add the `event_id` to `rsvp_events` in the entry
+ * @param user_id user id
+ * @param event_id event id
+ * @param callback callback function
+ */
+exports.createEntryAndRSVPEvent = (user_id, event_id, callback) => {
+  const insert = 'INSERT INTO user_event (uid, followed_events, rsvp_events) VALUES ($1, $2, $3)';
+  db.query(insert, [user_id, "[]", JSON.stringify([parseInt(event_id)])], (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null);
+    }
+  });
+}
+
 exports.rsvpEvent = function(user_id, event_id, callback) {
   db.query('BEGIN;');
   let query = 'SELECT rsvp_events FROM user_event WHERE uid = $1 FOR UPDATE;';
