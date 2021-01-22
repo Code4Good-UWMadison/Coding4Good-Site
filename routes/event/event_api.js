@@ -112,14 +112,32 @@ router.post('/followEvent', function(req, res, next) {
         res.status(403).json({msg: 'Not Authorized'});
         return;
     }
-    user_db.followEvent(req.body.uid, req.body.eid, ((err) => {
+    user_db.hasUserEventEntry(req.body.uid, (err, has_entry) => {
         if (err) {
             console.log(err);
-            res.status(400).json({msg: 'Failed to follow event'});
+            res.status(400).json({msg: 'Failed to check entry'});
             return;
         }
-        res.json({});
-    }))
+        if (has_entry) {
+            user_db.followEvent(req.body.uid, req.body.eid, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Failed to follow event'});
+                    return;
+                }
+                res.json({});
+            });
+        } else {
+            user_db.createEntryAndFollowEvent(req.body.uid, req.body.eid, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Failed to create entry and follow event'});
+                    return;
+                }
+                res.json({});
+            })
+        }
+    });
 });
 
 router.post('/unfollowEvent', function(req, res, next) {
