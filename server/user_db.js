@@ -437,6 +437,30 @@ exports.unfollowEvent = function(uid, eid, callback) {
   let query = 'SELECT followed_event FROM user_profile WHERE uid = $1 FOR UPDATE;';
   db.query(query, [uid], function (err, result) {
 
+exports.rsvpEvent = function(user_id, event_id, callback) {
+  db.query('BEGIN;');
+  let query = 'SELECT rsvp_events FROM user_event WHERE uid = $1 FOR UPDATE;';
+  db.query(query, [user_id], function (err, result) {
+    if (err) {
+      db.query('COMMIT;');
+      callback(err);
+    } else {
+      const followed_event = JSON.parse(result.rows[0]['rsvp_events']);
+      followed_event.push(parseInt(event_id));
+      query = 'UPDATE user_event SET rsvp_events = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
+      db.query(query, [user_id], function (err_update) {
+        if (err_update) {
+          db.query('ROLLBACK;')
+          callback(err_update);
+        } else {
+          db.query('COMMIT;');
+          callback(null);
+        }
+      });
+    }
+  });
+};
+
 exports.unrsvpEvent = function(user_id, event_id, callback) {
   db.query('BEGIN;');
   let query = 'SELECT rsvp_events FROM user_event WHERE uid = $1 FOR UPDATE;';
