@@ -137,6 +137,39 @@ router.post('/unfollowEvent', function(req, res, next) {
     }))
 });
 
+router.post('/rsvpEvent', function (req, res, next) {
+    if(!req.body.uid){
+        res.status(403).json({msg: 'Not Authorized'});
+        return;
+    }
+    user_db.hasUserEventEntry(req.body.uid, (err, has_entry) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Failed to check entry'});
+            return;
+        }
+        if (has_entry) {
+            user_db.rsvpEvent(req.body.uid, req.body.eid, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Failed to RSVP event'});
+                    return;
+                }
+
+                res.json({});
+            });
+        } else {
+            user_db.createEntryAndRSVPEvent(req.body.uid, req.body.eid, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Failed to create entry and RSVP event'});
+                    return;
+                }
+                res.json({});
+            });
+        }
+    });
+});
 
 router.post('/unrsvpEvent', function(req, res, next) {
     if(!req.body.uid){
