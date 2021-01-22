@@ -408,18 +408,18 @@ exports.createEntryAndFollowEvent = (user_id, event_id, callback) => {
   });
 }
 
-exports.followEvent = function(uid, eid, callback) {
+exports.followEvent = function(user_id, event_id, callback) {
   db.query('BEGIN;');
-  let query = 'SELECT followed_event FROM user_profile WHERE uid = $1 FOR UPDATE;';
-  db.query(query, [uid], function (err, result) {
+  let query = 'SELECT followed_events FROM user_event WHERE uid = $1 FOR UPDATE;';
+  db.query(query, [user_id], function (err, result) {
     if (err) {
       db.query('COMMIT;');
       callback(err);
     } else {
-      var followed_event = JSON.parse(result.rows[0]['followed_event']);
-      followed_event.push(parseInt(eid));
-      query = 'UPDATE user_profile SET followed_event = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
-      db.query(query, [uid], function (err_update) {
+      const followed_event = JSON.parse(result.rows[0]['followed_events']);
+      followed_event.push(parseInt(event_id));
+      query = 'UPDATE user_event SET followed_events = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
+      db.query(query, [user_id], function (err_update) {
         if (err_update) {
           db.query('ROLLBACK;')
           callback(err_update);
