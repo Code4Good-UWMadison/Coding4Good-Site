@@ -349,6 +349,31 @@ exports.getUserFollowedEventsByUid = (user_id, callback) => {
     }
   });
 }
+
+/**
+ * Get events that the user corresponding to the `user_id` has RSVP.
+ * If `user_id` is empty, i.e. no user logs in, or the user has not followed any events, return `[]`
+ * @param user_id user id
+ * @param callback callback function
+ */
+exports.getUserRSVPEventsByUid = (user_id, callback) => {
+  if (!user_id) {
+    callback(null, '[]');
+    return;
+  }
+  const query = 'SELECT * FROM user_event WHERE uid = $1;';
+  db.query(query, [user_id], (err, result) => {
+    if (err)  {
+      callback(err);
+    } else {
+      if (result.rows[0]) {
+        callback(null, result.rows[0].rsvp_events);
+      } else {
+        callback(null, '[]');
+      }
+    }
+  });
+}
   db.query(query, [user_id], (err, result) => {
     if (err) {
       callback(err);
