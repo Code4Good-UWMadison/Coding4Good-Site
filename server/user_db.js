@@ -276,6 +276,17 @@ exports.getUserByEmail = function(email, callback){
   });
 };
 
+exports.getUserEmailById = (user_id, callback) => {
+  const query = 'SELECT email FROM users WHERE id=$1;';
+  db.query(query, [user_id], (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result.rows[0]);
+    }
+  })
+}
+
 exports.resetPassword = function(password, email, user_id, callback) {
   var saltRounds = 10;
   bcrypt.hash(password, saltRounds, function(err, hash) {
