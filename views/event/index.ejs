@@ -52,6 +52,52 @@
             window.location.href = "/login";
         }
     }
+
+    function rsvp_event(eid, uid) {
+        if (uid) {
+            $(".rsvp-button").attr('enabled', false);
+            $.ajax({
+                url: "/event/rsvpEvent",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    uid: uid,
+                    eid: eid
+                },
+                success: function () {
+                    window.location.href = "/event?status=s";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".rsvp-button").attr('disabled', false);
+                }
+            });
+        } else {
+            window.location.href = "/login";
+        }
+    }
+
+    function unrsvp_event(eid, uid) {
+        if (uid) {
+            $(".unrsvp-button").attr('enabled', false);
+            $.ajax({
+                url: "/event/unrsvpEvent",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    uid: uid,
+                    eid: eid
+                },
+                success: function () {
+                    window.location.href = "/event?status=s";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".unrsvp-button").attr('disabled', false);
+                }
+            });
+        } else {
+            window.location.href = "/login";
+        }
+    }
 </script>
 
 <body>
@@ -116,9 +162,15 @@
                         <div align="right">
                             <%
                                 var canFollow = true;
-                                for (var j = 0; j < followed_event.length; j++) {
-                                    if (followed_event[j] === eventsSet[i].id) {
+                                for (var j = 0; j < followed_events.length; j++) {
+                                    if (followed_events[j] === eventsSet[i].id) {
                                         canFollow = false;
+                                    }
+                                }
+                                var canRSVP = true;
+                                for (var j = 0; j < rsvp_events.length; j++) {
+                                    if (rsvp_events[j] === eventsSet[i].id) {
+                                        canRSVP = false;
                                     }
                                 }
                             %>
@@ -127,7 +179,11 @@
                             <% } else { %>
                                 <button class="btn primary-button unfollow-button" onclick="unfollow_event(<%= eventsSet[i].id %>, <%= uid %>)">Unfollow Event</button>
                             <% } %>
-                            <a class="btn primary-button" href="/event/rsvp?id=<%= eventsSet[i].id %>">RSVP</a>
+                            <% if (canRSVP) { %>
+                                <button class="btn primary-button rsvp-button" onclick="rsvp_event(<%= eventsSet[i].id %>, <%= uid %>)">RSVP</button>
+                            <% } else { %>
+                                <button class="btn primary-button unrsvp-button" onclick="unrsvp_event(<%= eventsSet[i].id %>, <%= uid %>)">Cancel RSVP</button>
+                            <% } %>
                             <% if (auth([all_user_role.Developer,
                                 all_user_role.Admin,
                                 all_user_role.EventExecutive], user_role)) { %>
