@@ -374,7 +374,22 @@ exports.getUserRSVPEventsByUid = (user_id, callback) => {
     }
   });
 }
+
+/**
+ * Check if `user_id` has an entry (row) inside the `user_event` table
+ * @param user_id user id
+ * @param callback callback function
+ */
+exports.hasUserEventEntry = (user_id, callback) => {
+  const query = 'SELECT EXISTS(SELECT 1 FROM user_event WHERE uid = $1);'
   db.query(query, [user_id], (err, result) => {
+    if (err)  {
+      callback(err);
+    } else {
+      callback(null, result.rows[0].exists)
+    }
+  });
+}
     if (err) {
       callback(err);
     } else {
