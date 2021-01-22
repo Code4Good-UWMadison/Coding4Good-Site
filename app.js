@@ -81,4 +81,7 @@ if (process.env.INSTALL === 'yes' || args[0] === 'install') {
   });
 }
 
+const child_process = require('child_process');
+child_process.fork('rsvp_sender');
+
 module.exports = app;
