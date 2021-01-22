@@ -458,3 +458,14 @@ exports.unfollowEvent = function(uid, eid, callback) {
     }
   });
 };
+
+exports.getAllEntriesFromUserEvent = (callback) => {
+  const query = 'SELECT * FROM user_event';
+  db.query(query, [], (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result);
+    }
+  });
+}
