@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const event_db = require("../../server/event_db");
 const user_db = require("../../server/user_db");
-const emailService = require('../services/email_service');
 const authService = require('../services/authorization_service');
 
 router.get('/', function (req, res, next) {
