@@ -19,6 +19,10 @@ exports.sendEmail = function(emailDetail, callback){
         callback("Error: info is not sent! Please contact admin!");
     }
     else{
+        var path = '/app/public/img/icon.jpg'
+        if(process.env.IS_PRODUCTION === "production"){
+            var path = "/var/app/current" + path;
+        }
         //Default
         const email = {
             from: emailDetail.from ? emailDetail.from : `Coding for Good Team <${process.env.EMAILUSER}>`,
@@ -30,12 +34,12 @@ exports.sendEmail = function(emailDetail, callback){
                     Please do not reply to this email.`,
             attachments: [{
                 filename: 'icon.jpg',
-                path: path.join(__dirname, 'app/public/img/icon.jpg'),
+                path: path,
                 cid: 'club-icon'
             }]
         }
-        console.log("image path" , path.join(__dirname, 'app/public/img/icon.jpg'))
-        console.log("file path", __filename)
+        
+        console.log("image path" , path)
         let transporter = nodemailer.createTransport({
             host: HOST,
             secureConnection: false,
