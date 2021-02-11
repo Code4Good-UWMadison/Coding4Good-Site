@@ -21,8 +21,9 @@ exports.sendEmail = function(emailDetail, callback){
     else{
         var path = '/app/public/img/icon.jpg'
         console.log(process.env.ISPRODUCTION)
+        console.log("filename ", __filename)
         if(process.env.ISPRODUCTION === "production"){
-            var path = "/var/app/current" + path;
+            var path = "~/var/app/current" + path;
         }
         //Default
         const email = {
