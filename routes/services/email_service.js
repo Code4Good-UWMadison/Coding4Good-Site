@@ -20,8 +20,6 @@ exports.sendEmail = function(emailDetail, callback){
     }
     else{
         var path = '/app/public/img/icon.jpg'
-        console.log(process.env.ISPRODUCTION)
-        console.log("filename ", __filename)
         if(process.env.ISPRODUCTION === "aws"){
             path = "/var/app/current/public/img/icon.jpg";
         }
