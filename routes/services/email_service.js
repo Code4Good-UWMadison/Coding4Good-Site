@@ -20,7 +20,7 @@ exports.sendEmail = function(emailDetail, callback){
     }
     else{
         var path = '/app/public/img/icon.jpg'
-        print(process.env.ISPRODUCTION)
+        console.log(process.env.ISPRODUCTION)
         if(process.env.ISPRODUCTION === "production"){
             var path = "/var/app/current" + path;
         }
