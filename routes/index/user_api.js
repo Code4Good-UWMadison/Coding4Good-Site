@@ -93,7 +93,10 @@ router.post('/login', function (req, res, next) {
                     return;
                 }
                 else if (verified === false){
-                    res.json({status: false, msg: "Please verify your email before login."});
+                    // TODO: resend email
+                    //res.json({status: false, msg: "Please verify your email before login."});
+                    console.log("Not verified");
+                    res.redirect('/resend-email');
                     return;
                 }
                 else {
@@ -249,4 +252,8 @@ router.post('/reset_password', function (req, res, next) {
     });
 });
 
+router.post('/resend_email', function () {
+    res.json({});
+    console.log("enter resend page");
+});
 module.exports = router;
