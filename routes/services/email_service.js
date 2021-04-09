@@ -1,6 +1,7 @@
 
 const nodemailer = require('nodemailer');
 const HOST = "smtp-mail.outlook.com";
+const path = require('path');
 
 /* service to send emails using nodemailer
 * param:
@@ -18,6 +19,10 @@ exports.sendEmail = function(emailDetail, callback){
         callback("Error: info is not sent! Please contact admin!");
     }
     else{
+        var path = '/app/public/img/icon.jpg'
+        if(process.env.ISPRODUCTION === "aws"){
+            path = "/var/app/current/public/img/icon.jpg";
+        }
         //Default
         const email = {
             from: emailDetail.from ? emailDetail.from : `Coding for Good Team <${process.env.EMAILUSER}>`,
@@ -29,10 +34,12 @@ exports.sendEmail = function(emailDetail, callback){
                     Please do not reply to this email.`,
             attachments: [{
                 filename: 'icon.jpg',
-                path: '/app/public/img/icon.jpg',
+                path: path,
                 cid: 'club-icon'
             }]
         }
+        
+        console.log("image path" , path)
         let transporter = nodemailer.createTransport({
             host: HOST,
             secureConnection: false,
