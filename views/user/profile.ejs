@@ -5,7 +5,7 @@
     <script>
       var user =<%-JSON.stringify(user)%>;
       var project_id = Number(<%- JSON.stringify(project_id)%>);
-      $(function () {
+      $(function () {  // can add a function right after this line to make the slider appear when check box is checked
         $("#submit-button").click(function () {
           $("#submit-button").attr('disabled',true);
           var profile = {
@@ -13,6 +13,8 @@
             year: -1,
             intended_teamleader: false,
             pl: [],
+            // try pl = {Language: experience}?
+            // or maybe keep the array and make each element a dictionary
             dev: [],
             description:""
           };
@@ -24,6 +26,15 @@
           if($(".pl-checkbox:checked").length > 0){
             $(".pl-checkbox:checked").each(function () {
               profile.pl.push($(this).val());
+              // if we are going with making pl a dictionary:
+              //TODO: show slider $(".slider").show().filter(matching slider)
+              //profile.pl.($(this).val()) = slider's value
+              
+              //if we are keeping pl as an array and each thing inside array as indie dictionary:
+              //TODO:show slider
+              //profile.pl.push({
+                //($(this).val()) : slider's value
+              //})
             }).promise().done(function () {
               $(".dev-checkbox:checked").each(function () {
                 profile.dev.push($(this).val());
@@ -158,6 +169,8 @@
             <p style="font-size:15px;">What programming languages are you familiar with?</p>
             <% var pl = profile.pl ? profile.pl : [] %>
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> Java <br>
+            <!--TODO: bind slider to oncheck -->
+            <!-- would be better to hide pre-made sliders-->
             <input type="range" min="0" max="5" value="0" class="slider" id="javaRange"> <br>
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript" <%=pl.includes('\"pl-javascript\"') ? 'checked' : ''%>> Javascript <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="jsRange"> <br>
