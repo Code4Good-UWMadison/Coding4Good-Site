@@ -9,6 +9,7 @@
           const msg = $("#error-msg");
           const password = $("#password").val();
           const email = $("#email").val();
+          const resend = $("#resend-email");
 
           submit.attr('disabled',true);
 
@@ -17,7 +18,6 @@
             submit.attr('disabled',false);
             return false;
           }
-
           $.ajax({
             url: "/login",
             method: "POST",
@@ -27,8 +27,14 @@
               password: password
             },
             success: function (result) {
-              if(result.status){
+              if(result.status === "true"){
                 window.location.href = "/";
+              }
+              else if(result.status === "emailNotVerified"){
+                console.log("hahaha");
+                msg.html(result.msg);
+                resend.show();
+                //resend:visible;
               }
               else {
                 msg.html(result.msg);
@@ -41,6 +47,9 @@
             }
           });
           return false;
+        });
+        $("#resend-email").click(function(){
+          console.log("line 52 haha");
         });
       });
     </script>
@@ -65,6 +74,7 @@
         <p>Forget your password, <a href="/forget-password">reset password.</a> </p>
     </form>
     <button id="submit-button" type="submit" form="login-form" class="btn long-btn primary-button">Log In</button>
+    <button id="resend-email" type="submit" class="btn long-btn primary-button" style="display:none">Resend email</button>
 </div>
 
 <% include ../template/footer.ejs %>

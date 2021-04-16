@@ -94,14 +94,13 @@ router.post('/login', function (req, res, next) {
                 }
                 else if (verified === false){
                     // TODO: resend email
-                    //res.json({status: false, msg: "Please verify your email before login."});
+                    res.json({status: "emailNotVerified", msg: "Please verify your email before login."});
                     console.log("Not verified");
-                    res.redirect('/resend-email');
                     return;
                 }
                 else {
                     req.session.uid = uid;
-                    res.json({status: true, msg: ""});
+                    res.json({status: "true", msg: ""});
                 }
             });
         }
