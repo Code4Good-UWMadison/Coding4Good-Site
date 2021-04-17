@@ -16,6 +16,7 @@
     "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "node-cron": "^3.0.0",
     "nodemailer": "^6.5.0",
     "pg": "^7.18.2",
     "serve-favicon": "^2.5.0",
@@ -23,7 +24,6 @@
   },
   "description": "CORGi",
   "main": "app.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Code4Good-UWMadison/Coding4Good-Site.git"
