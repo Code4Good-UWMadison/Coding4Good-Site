@@ -6,6 +6,9 @@
       var user =<%-JSON.stringify(user)%>;
       var project_id = Number(<%- JSON.stringify(project_id)%>);
       $(function () {  // can add a function right after this line to make the slider appear when check box is checked
+        $(".slider").each(function(){
+            $(this).hide();
+          })
         $("#pl-java").click(function(){
           $("#javaRange").toggle(this.checked);
         });
