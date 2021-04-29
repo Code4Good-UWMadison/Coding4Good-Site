@@ -9,6 +9,74 @@
         $("#pl-java").click(function(){
           $("#javaRange").toggle(this.checked);
         });
+        $("#pl-javascript").click(function(){
+          $("#jsRange").toggle(this.checked);
+        });
+        $("#pl-c").click(function(){
+          $("#cRange").toggle(this.checked);
+        });
+        $("#pl-cpp").click(function(){
+          $("#cppRange").toggle(this.checked);
+        });
+        $("#pl-csharp").click(function(){
+          $("#cshRange").toggle(this.checked);
+        });
+        $("#pl-objectivec").click(function(){
+          $("#objcRange").toggle(this.checked);
+        });
+        $("#pl-swift").click(function(){
+          $("#swRange").toggle(this.checked);
+        });
+        $("#pl-python").click(function(){
+          $("#pyRange").toggle(this.checked);
+        });
+        $("#pl-matlab").click(function(){
+          $("#matRange").toggle(this.checked);
+        });
+        $("#pl-assembly").click(function(){
+          $("#assRange").toggle(this.checked);
+        });
+        $("#pl-lisp").click(function(){
+          $("#lispRange").toggle(this.checked);
+        });
+
+        $("#dev-frontend").click(function(){
+          $("#fnRange").toggle(this.checked);
+        });
+        $("#dev-backend").click(function(){
+          $("#bnRange").toggle(this.checked);
+        });
+        $("#dev-ios").click(function(){
+          $("#iosRange").toggle(this.checked);
+        });
+        $("#dev-android").click(function(){
+          $("#andrRange").toggle(this.checked);
+        });
+        $("#dev-windows").click(function(){
+          $("#windowsRange").toggle(this.checked);
+        });
+        $("#dev-mac").click(function(){
+          $("#macRange").toggle(this.checked);
+        });
+        $("#dev-linux").click(function(){
+          $("#linuxRange").toggle(this.checked);
+        });
+        $("#dev-algorithm").click(function(){
+          $("#algoRange").toggle(this.checked);
+        });
+        $("#dev-network").click(function(){
+          $("#netRange").toggle(this.checked);
+        });
+        $("#dev-ml").click(function(){
+          $("#mlRange").toggle(this.checked);
+        });
+        $("#dev-ds").click(function(){
+          $("#dsRange").toggle(this.checked);
+        });
+        $("#dev-communication").click(function(){
+          $("#commRange").toggle(this.checked);
+        });
+       
 
         $("#submit-button").click(function () {
           $("#submit-button").attr('disabled',true);
@@ -173,55 +241,54 @@
             <p style="font-size:15px;">What programming languages are you familiar with?</p>
             <% var pl = profile.pl ? profile.pl : [] %>
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> Java <br>
-            <!-- should i do some parenting in here or...-->
             <input type="range" min="0" max="5" value="0" class="slider" id="javaRange"> <br>
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript" <%=pl.includes('\"pl-javascript\"') ? 'checked' : ''%>> Javascript <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="jsRange"> <br>
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-c" value="pl-c" <%=pl.includes('\"pl-c\"') ? 'checked' : ''%>> C <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="cRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-cpp" <%=pl.includes('\"pl-cpp\"') ? 'checked' : ''%>> C++ <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-cpp" value="pl-cpp" <%=pl.includes('\"pl-cpp\"') ? 'checked' : ''%>> C++ <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="cppRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-csharp" <%=pl.includes('\"pl-csharp\"') ? 'checked' : ''%>> C# <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-csharp" value="pl-csharp" <%=pl.includes('\"pl-csharp\"') ? 'checked' : ''%>> C# <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="cshRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-objectivec" <%=pl.includes('\"pl-objectivec\"') ? 'checked' : ''%>> Objective-C <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-objectivec" value="pl-objectivec" <%=pl.includes('\"pl-objectivec\"') ? 'checked' : ''%>> Objective-C <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="objcRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-swift" <%=pl.includes('\"pl-swift\"') ? 'checked' : ''%>> Swift <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-swift" value="pl-swift" <%=pl.includes('\"pl-swift\"') ? 'checked' : ''%>> Swift <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="swRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-python" <%=pl.includes('\"pl-python\"') ? 'checked' : ''%>> Python <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-python" value="pl-python" <%=pl.includes('\"pl-python\"') ? 'checked' : ''%>> Python <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="pyRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-matlab" <%=pl.includes('\"pl-matlab\"') ? 'checked' : ''%>> Matlab <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-matlab" value="pl-matlab" <%=pl.includes('\"pl-matlab\"') ? 'checked' : ''%>> Matlab <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="matRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-assembly" <%=pl.includes('\"pl-assembly\"') ? 'checked' : ''%>> Assembly <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-assembly" value="pl-assembly" <%=pl.includes('\"pl-assembly\"') ? 'checked' : ''%>> Assembly <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="assRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-lisp" <%=pl.includes('\"pl-lisp\"') ? 'checked' : ''%>> LISP <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id=""pl-lisp" value="pl-lisp" <%=pl.includes('\"pl-lisp\"') ? 'checked' : ''%>> LISP <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="lispRange"> <br>
         </div>
         <div class="login-signup-input" >
             <% var dev = profile.dev ? profile.dev : [] %>
             <p style="font-size:15px;">What kinds of development are you familiar with?</p>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-frontend" <%=dev.includes('\"dev-frontend\"') ? 'checked' : ''%>> Front End (Web) <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-frontend" value="dev-frontend" <%=dev.includes('\"dev-frontend\"') ? 'checked' : ''%>> Front End (Web) <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="fnRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-backend" <%=dev.includes('\"dev-backend\"') ? 'checked' : ''%>> Back End (Web) <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-backend" value="dev-backend" <%=dev.includes('\"dev-backend\"') ? 'checked' : ''%>> Back End (Web) <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="bnRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-ios" <%=dev.includes('\"dev-ios\"') ? 'checked' : ''%>> IOS <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-ios" value="dev-ios" <%=dev.includes('\"dev-ios\"') ? 'checked' : ''%>> IOS <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="iosRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-android" <%=dev.includes('\"dev-android\"') ? 'checked' : ''%>> Android <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-android" value="dev-android" <%=dev.includes('\"dev-android\"') ? 'checked' : ''%>> Android <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="andrRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-windows" <%=dev.includes('\"dev-windows\"') ? 'checked' : ''%>> Windows Desktop Application <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-windows" value="dev-windows" <%=dev.includes('\"dev-windows\"') ? 'checked' : ''%>> Windows Desktop Application <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="windowsRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-mac" <%=dev.includes('\"dev-mac\"') ? 'checked' : ''%>> Mac OS X Desktop Application <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-mac" value="dev-mac" <%=dev.includes('\"dev-mac\"') ? 'checked' : ''%>> Mac OS X Desktop Application <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="macRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-linux" <%=dev.includes('\"dev-linux\"') ? 'checked' : ''%>> Linux software <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-linux" value="dev-linux" <%=dev.includes('\"dev-linux\"') ? 'checked' : ''%>> Linux software <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="linuxRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-algorithm" <%=dev.includes('\"dev-algorithm\"') ? 'checked' : ''%>> Algorithm <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-algorithm" value="dev-algorithm" <%=dev.includes('\"dev-algorithm\"') ? 'checked' : ''%>> Algorithm <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="algoRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-network" <%=dev.includes('\"dev-network\"') ? 'checked' : ''%>> Networking <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-network" value="dev-network" <%=dev.includes('\"dev-network\"') ? 'checked' : ''%>> Networking <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="netRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-ml" <%=dev.includes('\"dev-ml\"') ? 'checked' : ''%>> Machine Learning <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-ml" value="dev-ml" <%=dev.includes('\"dev-ml\"') ? 'checked' : ''%>> Machine Learning <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="mlRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-ds" <%=dev.includes('\"dev-ds\"') ? 'checked' : ''%>> Data Science <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-ds" value="dev-ds" <%=dev.includes('\"dev-ds\"') ? 'checked' : ''%>> Data Science <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="dsRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-communication" <%=dev.includes('\"dev-communication\"') ? 'checked' : ''%>> Communicate with people :) <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" id="dev-communication" value="dev-communication" <%=dev.includes('\"dev-communication\"') ? 'checked' : ''%>> Communicate with people :) <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="commRange"> <br>
         </div>
         <div class="login-signup-input" > 
