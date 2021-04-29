@@ -6,6 +6,11 @@
       var user =<%-JSON.stringify(user)%>;
       var project_id = Number(<%- JSON.stringify(project_id)%>);
       $(function () {  // can add a function right after this line to make the slider appear when check box is checked
+        if($("#pl-java").checked == true){
+          $('javaRange').show();
+        }else{
+          $('javaRange').hide();
+        }
         $("#submit-button").click(function () {
           $("#submit-button").attr('disabled',true);
           var profile = {
@@ -169,8 +174,6 @@
             <p style="font-size:15px;">What programming languages are you familiar with?</p>
             <% var pl = profile.pl ? profile.pl : [] %>
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> Java <br>
-            <!--TODO: bind slider to oncheck -->
-            <!-- would be better to hide pre-made sliders-->
             <input type="range" min="0" max="5" value="0" class="slider" id="javaRange"> <br>
             <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript" <%=pl.includes('\"pl-javascript\"') ? 'checked' : ''%>> Javascript <br>
             <input type="range" min="0" max="5" value="0" class="slider" id="jsRange"> <br>
