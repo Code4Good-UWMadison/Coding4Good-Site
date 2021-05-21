@@ -5,6 +5,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cron = require('node-cron');
 const args = process.argv.slice(2);
 
 const app = express();
@@ -54,6 +55,27 @@ const proposal_api = require('./routes/proposal/proposal_api');
 app.use('/proposal', proposal);
 app.use('/proposal', proposal_api);
 
+const user_db = require('./server/user_db');
+cron.schedule('59 23 * * 6', function() { // run at midnight every Saturday
+  user_db.getUnconfirmedUsers(function(err, users) {
+    if (err) {
+      console.log(err);
+    } else {
+      let limitDate = new Date(); // get current date
+      limitDate.setDate(limitDate.getDate() - 10); // go 10 days before current date
+      // remove all users with unconfirmed emails created before limit date
+      for (let user of users) {
+        if (limitDate > user.create_date.getDate()) {
+          user_db.removeUser(user.id, function(err) {
+            if (err) {
+              console.log(err);
+            }
+          })
+        }
+      }
+    }
+  })
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

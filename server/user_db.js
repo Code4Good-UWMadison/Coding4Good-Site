@@ -2,7 +2,7 @@ var self = this;
 var pg = require("pg");
 var config = require("./dbconfig.js");
 var db = new pg.Pool(config.db);
-var bcrypt = require("bcrypt");
+var bcrypt = require("bcryptjs");
 
 // exports.reset = function (callback) {
 //   var query = `drop table if exists user_profile;
@@ -307,6 +307,16 @@ exports.resetPassword = function(password, email, user_id, callback) {
   });
 };
 
+exports.getUnconfirmedUsers = function(callback) {
+  var query = `SELECT id, create_date FROM users WHERE email_verified = false;`;
+  db.query(query, function(err, result) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result.rows);
+    }
+  })
+};
 exports.hasProfile = (user_id, callback) => {
   if (!user_id) {
     callback(null, 'NO_USR_ID');

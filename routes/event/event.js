@@ -5,8 +5,9 @@ const user_db = require("../../server/user_db");
 const authService = require('../services/authorization_service');
 
 router.get('/', function (req, res, next) {
+    let offset = 0;
     let uid = req.session.uid;
-    event_db.getEventSet(function (err, events_set) {
+    event_db.getEventSet(offset, function (err, events_set) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
