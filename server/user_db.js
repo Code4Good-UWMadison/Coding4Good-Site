@@ -2,7 +2,7 @@ var self = this;
 var pg = require("pg");
 var config = require("./dbconfig.js");
 var db = new pg.Pool(config.db);
-var bcrypt = require("bcrypt");
+var bcrypt = require("bcryptjs");
 
 // exports.reset = function (callback) {
 //   var query = `drop table if exists user_profile;
