@@ -1,7 +1,6 @@
 
 const nodemailer = require('nodemailer');
 const HOST = "smtp-mail.outlook.com";
-const path = require('path');
 
 /* service to send emails using nodemailer
 * param:
@@ -39,7 +38,6 @@ exports.sendEmail = function(emailDetail, callback){
             }]
         }
         
-        console.log("image path" , path)
         let transporter = nodemailer.createTransport({
             host: HOST,
             secureConnection: false,
