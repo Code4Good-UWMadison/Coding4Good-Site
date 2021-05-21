@@ -2,9 +2,9 @@ var pg = require('pg');
 var config = require('./dbconfig.js');
 var db = new pg.Pool(config.db);
 
-exports.getEventSet = function (callback) {
-    let query = `SELECT * FROM event;`;
-    db.query(query, function (err, result) {
+exports.getEventSet = function (offset, callback) {
+    let query = `SELECT * FROM event ORDER BY event_time DESC LIMIT 20 OFFSET $1;`;
+    db.query(query, [offset], function (err, result) {
         if (err) {
             callback(err);
         } else {
