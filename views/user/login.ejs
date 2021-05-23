@@ -6,12 +6,11 @@
       $(function () {
         $("#login-form").submit(() => {
           const submit = $("#submit-button");
+          submit.attr('disabled',true);
           const msg = $("#error-msg");
           const password = $("#password").val();
           const email = $("#email").val();
           const resend = $("#resend-email");
-
-          submit.attr('disabled',true);
 
           if ((password=== '') || (email === '')) {
             msg.html('Please fill out all the fields');
@@ -31,10 +30,9 @@
                 window.location.href = "/";
               }
               else if(result.status === "emailNotVerified"){
-                console.log("hahaha");
                 msg.html(result.msg);
                 resend.show();
-                //resend:visible;
+                submit.attr('disabled',false);
               }
               else {
                 msg.html(result.msg);
@@ -48,8 +46,34 @@
           });
           return false;
         });
+
         $("#resend-email").click(function(){
-          console.log("line 52 haha");
+          const resend = $("#resend-email");
+          resend.attr('disabled',true);
+          const password = $("#password").val();
+          const email = $("#email").val();
+          $.ajax({
+            url: "/resend_email",
+            method: "POST",
+            dataType: "json",
+            data: {
+              email: email,
+              password: password
+            },
+            success: function(result){
+              if(result.status == true){
+                window.location.href = "/email-confirmation";
+              }
+              else {
+                msg.html(result.msg);
+                resend.attr('disabled',false);
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              $("#error-msg").html(jqXHR.responseJSON);
+              resend.attr('disabled',false);
+            }
+          });
         });
       });
     </script>
@@ -74,7 +98,7 @@
         <p>Forget your password, <a href="/forget-password">reset password.</a> </p>
     </form>
     <button id="submit-button" type="submit" form="login-form" class="btn long-btn primary-button">Log In</button>
-    <button id="resend-email" type="submit" class="btn long-btn primary-button" style="display:none">Resend email</button>
+    <button id="resend-email" class="btn long-btn primary-button button-position" style="display:none">Resend email</button>
 </div>
 
 <% include ../template/footer.ejs %>
