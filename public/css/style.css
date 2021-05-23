@@ -283,11 +283,21 @@ section {
 }
 
 .index-sponsor-img {
-    width:50px;
+    height:50px;
 }
 
 .index-sponsor-text {
     font-size: 20px;
+}
+
+.sponsor-img {
+    height: 80px;
+}
+
+a.sponsor-img-container {
+    text-decoration: none;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .input {
@@ -318,10 +328,6 @@ section {
         -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
     }
-
-.sponsor-img {
-    width: 300px;
-}
 
 .divider-vertical {
     height: 100%;

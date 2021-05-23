@@ -295,3 +295,14 @@ exports.resetPassword = function(password, email, user_id, callback) {
     }
   });
 };
+
+exports.getUnconfirmedUsers = function(callback) {
+  var query = `SELECT id, create_date FROM users WHERE email_verified = false;`;
+  db.query(query, function(err, result) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result.rows);
+    }
+  })
+};
