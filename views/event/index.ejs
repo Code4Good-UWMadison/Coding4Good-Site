@@ -6,9 +6,106 @@
     <link rel="stylesheet" type="text/css" href="/css/slideshow.css"/>
 </head>
 
+<script>
+    function follow_event(eid, uid) {
+        if (uid) {
+            $(".follow-button").attr('enabled', false);
+            $.ajax({
+                url: "/event/followEvent",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    uid: uid,
+                    eid: eid
+                },
+                success: function () {
+                    window.location.href = "/event?status=s";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".follow-button").attr('disabled', false);
+                }
+            });
+        } else {
+            window.location.href = "/login";
+        }
+    }
+
+    function unfollow_event(eid, uid) {
+        if (uid) {
+            $(".unfollow-button").attr('enabled', false);
+            $.ajax({
+                url: "/event/unfollowEvent",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    uid: uid,
+                    eid: eid
+                },
+                success: function () {
+                    window.location.href = "/event?status=s";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".follow-button").attr('disabled', false);
+                }
+            });
+        } else {
+            window.location.href = "/login";
+        }
+    }
+
+    function rsvp_event(eid, uid) {
+        if (uid) {
+            $(".rsvp-button").attr('enabled', false);
+            $.ajax({
+                url: "/event/rsvpEvent",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    uid: uid,
+                    eid: eid
+                },
+                success: function () {
+                    window.location.href = "/event?status=s";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".rsvp-button").attr('disabled', false);
+                }
+            });
+        } else {
+            window.location.href = "/login";
+        }
+    }
+
+    function unrsvp_event(eid, uid) {
+        if (uid) {
+            $(".unrsvp-button").attr('enabled', false);
+            $.ajax({
+                url: "/event/unrsvpEvent",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    uid: uid,
+                    eid: eid
+                },
+                success: function () {
+                    window.location.href = "/event?status=s";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $(".unrsvp-button").attr('disabled', false);
+                }
+            });
+        } else {
+            window.location.href = "/login";
+        }
+    }
+</script>
+
 <body>
 <% include ../template/nav.ejs %>
 <div class="container body-layout">
+    <% if (uid) { %>
+        <a class="btn primary-button right" style="margin-left: 3px;" href="/event/followed">My Followed Events</a>
+    <% } %>
     <% if (auth([all_user_role.Developer,
         all_user_role.Admin,
         all_user_role.EventExecutive], user_role)) { %>
@@ -62,13 +159,37 @@
                         <% } %>
                     <% } %>
                     <p><%= eventsSet[i].description %></p>
-                    <% if (auth([all_user_role.Developer,
-                        all_user_role.Admin,
-                        all_user_role.EventExecutive], user_role)) { %>
                         <div align="right">
-                            <a class="btn primary-button" href="/event/edit?id=<%= eventsSet[i].id %>">Edit Event</a>
+                            <%
+                                var canFollow = true;
+                                for (var j = 0; j < followed_events.length; j++) {
+                                    if (followed_events[j] === eventsSet[i].id) {
+                                        canFollow = false;
+                                    }
+                                }
+                                var canRSVP = true;
+                                for (var j = 0; j < rsvp_events.length; j++) {
+                                    if (rsvp_events[j] === eventsSet[i].id) {
+                                        canRSVP = false;
+                                    }
+                                }
+                            %>
+                            <% if (canFollow) { %>
+                                <button class="btn primary-button follow-button" onclick="follow_event(<%= eventsSet[i].id %>, <%= uid %>)">Follow Event</button>
+                            <% } else { %>
+                                <button class="btn primary-button unfollow-button" onclick="unfollow_event(<%= eventsSet[i].id %>, <%= uid %>)">Unfollow Event</button>
+                            <% } %>
+                            <% if (canRSVP) { %>
+                                <button class="btn primary-button rsvp-button" onclick="rsvp_event(<%= eventsSet[i].id %>, <%= uid %>)">RSVP</button>
+                            <% } else { %>
+                                <button class="btn primary-button unrsvp-button" onclick="unrsvp_event(<%= eventsSet[i].id %>, <%= uid %>)">Cancel RSVP</button>
+                            <% } %>
+                            <% if (auth([all_user_role.Developer,
+                                all_user_role.Admin,
+                                all_user_role.EventExecutive], user_role)) { %>
+                                <a class="btn primary-button" href="/event/edit?id=<%= eventsSet[i].id %>">Edit Event</a>
+                            <% } %>
                         </div>
-                    <% } %>
                 </div>
                 <% if (i < eventsSet.length - 1) { %>
                     <a class="change-sl"

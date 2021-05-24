@@ -2,8 +2,19 @@
     $(function () {
         const urlParams = new URLSearchParams(window.location.search);
         const status = urlParams.get('status');
-        if(status == 's'){
-            $('#notification-bar').css("visibility","visible");
+        if (status) {
+            // notification message each word in the msg should be separated by _
+            let msg = urlParams.get('msg');
+            if (msg)
+                msg = msg.replaceAll('_', ' ');
+            else
+                msg = 'Your submission has successfully been saved!';
+            $('#notification-bar').css("visibility", "visible");
+            $('#notification-msg').html(msg);
+            if (status === 's')
+                $('#notification-bar').css("background-color", "#51a351");
+            if (status === 'f')
+                $('#notification-bar').css("background-color", "#fa8072");
             $('#notification-bar').fadeOut(4000, "swing");
         }
     })
@@ -41,5 +52,5 @@
     </div>
 </nav>
 <div id="notification-bar">
-    <p>Your submission has successfully been saved!</p>
+    <p id="notification-msg">Your submission has successfully been saved!</p>
 </div>

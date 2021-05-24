@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../template/head.ejs %>
+    <script src="/js/SearchScript.js"></script>
+    <script src="/js/SortScript.js"></script>
+    <script type="text/javascript">
+    </script>
+</head>
+
+
+<body>
+<% include ../template/nav.ejs %>
+<div class="container body-layout">
+
+    <div class="row margin-htop">
+        <div class="col-sm-1">
+            <h4>Search: </h4>
+        </div>
+        <div class="col-sm-5">
+            <input type="text" class="input searchable"
+                   placeholder="keyword, key words, key words"/>
+        </div>
+    </div>
+
+    <table class="table margin-htop sortable searchable" align="center">
+        <thead class="row margin-top">
+        <tr class="tr clickable">
+            <th style="width: 220px;">Event Name</th>
+            <th>Event Detail</th>
+            <th class="center" style="width: 120px;">Location</th>
+            <th class="center" style="width: 100px;">Time</th>
+        </tr>
+        </thead>
+        <tbody id="projectTbody">
+        <% if (event_set.length === 0) { %>
+        <tr>
+            <td class="error-msg">You are not following any event.</td>
+        </tr>
+        <% } %>
+
+        <% event_set.forEach(function(event) { %>
+        <tr class="tr clickable projectRow" id=<%= event.id %>>
+            <td class="td"><a href="<%= event.link %>"><%= event.title %></a></td>
+            <td class="td"><%= event.description %></td>
+            <td class="td center"><%= event.event_time.toLocaleTimeString() %></td>
+            <td class="td center"><%= event.location %></td>
+        </tr>
+        <% }); %>
+
+        </tbody>
+    </table>
+</div>
+
+<% include ../template/footer.ejs %>
+</body>
+</html>
