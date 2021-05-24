@@ -71,7 +71,7 @@
               }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-              $("#error-msg").html(jqXHR.responseJSON);
+              msg.html(jqXHR.responseJSON);
               resend.attr('disabled',false);
             }
           });
