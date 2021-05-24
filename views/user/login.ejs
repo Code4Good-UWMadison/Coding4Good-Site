@@ -50,6 +50,7 @@
         $("#resend-email").click(function(){
           const resend = $("#resend-email");
           resend.attr('disabled',true);
+          const msg = $("#error-msg");
           const password = $("#password").val();
           const email = $("#email").val();
           $.ajax({

@@ -19,9 +19,12 @@ exports.sendEmail = function(emailDetail, callback){
         callback("Error: info is not sent! Please contact admin!");
     }
     else{
-        var path = '/app/public/img/icon.jpg'
+        let path = '/app/public/img/icon.jpg'
         if(process.env.ISPRODUCTION === "aws"){
             path = "/var/app/current/public/img/icon.jpg";
+        }
+        else if(process.env.ISPRODUCTION === "dev"){
+            path = "./public/img/icon.jpg"
         }
         //Default
         const email = {
@@ -39,7 +42,6 @@ exports.sendEmail = function(emailDetail, callback){
             }]
         }
         
-        console.log("image path" , path)
         let transporter = nodemailer.createTransport({
             host: HOST,
             secureConnection: false,

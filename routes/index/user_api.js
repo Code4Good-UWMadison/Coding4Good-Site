@@ -250,43 +250,41 @@ router.post('/reset_password', function (req, res, next) {
 });
 
 router.post('/resend_email', function (req, res, next) {
-    user_db.getUserByEmail(req.body.email, function (err, user) {
+    user_db.verifyUser(req.body, function (err, uid) {
         if (err) {
             console.log(err);
-            res.status(400).json({msg: 'Database Error'});            
+            res.status(400).json({msg: 'Database Error'});
             return;
         }
+        else if (uid) {
+            const emailToken = jwt.sign({ 
+                "uid": uid,
+                "email": req.body.email,
+                "password": req.body.password
+            },
+            process.env.SECRET,
+            {
+                expiresIn: "1d",
+            });
+            const url = `https://${baseUrl}/confirmation/${emailToken}`;
+        
+            const emailDetail = { 
+                to: req.body.email, // list of receivers 
+                subject: "Re-verification email from Coding4Good",
+                html: `Please click this link to verify your account: <a href='${url}'>${url}</a>`
+            };
+            emailService.sendEmail(emailDetail, function(err){
+                if(!err){
+                    res.json({status: true});
+                }
+                else {
+                    console.log(err);
+                    res.json({status: false, msg: 'Failed to send Email, please try again later, or contact us if you are having trouble.'});
+                }
+            });
+        }
         else {
-            if (!user.id){
-                res.json({status: false, msg: "The email has not been registered, please sign up or use another email."});                
-            }
-            else{
-                const emailToken = jwt.sign({ 
-                    "uid": user.id,
-                    "email": req.body.email,
-                    "password": req.body.password
-                },
-                process.env.SECRET,
-                {
-                    expiresIn: "1d",
-                });
-                const url = `https://${baseUrl}/confirmation/${emailToken}`;
-            
-                const emailDetail = { 
-                    to: req.body.email, // list of receivers 
-                    subject: "Re-verification email from Coding4Good",
-                    html: `Please click this link to verify your account: <a href='${url}'>${url}</a>`
-                };
-                emailService.sendEmail(emailDetail, function(err){
-                    if(!err){
-                        res.json({status: true});
-                    }
-                    else {
-                        console.log(err);
-                        res.json({status: false, msg: 'Failed to send Email, please try again later, or contact us if you are having trouble.'});
-                    }
-                });
-            } 
+            res.json({status: false, msg: "Your username or password is wrong, please try again!"});
         }
     });
 });

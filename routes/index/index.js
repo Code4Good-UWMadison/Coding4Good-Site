@@ -187,8 +187,4 @@ router.get('/confirmation/:token', function (req, res){
     });
 });
 
-router.get('/resend-email', function (req, res, next) {
-    res.render('user/resend-email', {});
-});
-
 module.exports = router;
