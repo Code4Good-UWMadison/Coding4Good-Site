@@ -77,6 +77,7 @@ router.post('/removeProject', function(req, res, next){
 });
 
 router.post('/applyProject', function(req, res, next){
+    const {project_id}=req.query;
     authService.authorizationCheck(null, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -91,13 +92,22 @@ router.post('/applyProject', function(req, res, next){
                 res.status(400).json({msg: "Database Error"});
             }else{
                 if (hasProfile){
-                    project_db.applyProject(req.body.project_id, req.session.uid, function(err){    
+                    project_db.applyProject(req.body, req.session.uid, function(err){    
                         if(err){
                             console.log(err);
                             res.status(400).json({msg: 'Failed to apply'});
                             return;
                         }
-                        res.json({});
+                        else
+                        {   user_db.updateProfile(req.session.uid, req.body, function (err) {
+                            if (err) {
+                                console.log(err);
+                                res.status(400).json({msg: 'Database Error'});
+                                return;
+                            }
+                            res.json({});
+                        });
+                        }
                     });
                 }
                 else{
@@ -105,6 +115,11 @@ router.post('/applyProject', function(req, res, next){
                 }
             }
         });
+
+
+        
+
+
     });
 });
 

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -20,6 +20,7 @@
     "node-cron": "^3.0.0",
     "nodemailer": "^6.6.1",
     "pg": "^8.6.0",
+    
     "serve-favicon": "^2.5.0",
     "uuid4": "^1.1.4"
   },

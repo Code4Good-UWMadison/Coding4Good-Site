@@ -17,7 +17,7 @@ router.get('/', function (req, res, next) {
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-
+           
             res.render('project/index', {
                 projectSet: projectSet,
                 isMy: false,

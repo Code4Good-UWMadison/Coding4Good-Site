@@ -1,84 +1,118 @@
-<!doctype html>
-<html>
-<head>
-    <% include ../template/head.ejs %>
-    <script>
-      var user =<%-JSON.stringify(user)%>;
-      var project_id = Number(<%- JSON.stringify(project_id)%>);
-      $(function () {
-        $("#submit-button").click(function () {
-          $("#submit-button").attr('disabled',true);
-          var profile = {
-            nickname: "",
-            year: -1,
-            intended_teamleader: false,
-            pl: [],
-            dev: []
-          };
+       <!doctype html>
+    <html>
+    <head>
+        <% include ../template/head.ejs %>
+        <script>
+          var user =<%-JSON.stringify(user)%>;
+          var project_id = Number(<%- JSON.stringify(project_id)%>);
+          var applying =<%- JSON.stringify(applying)%>;
+          var fromApply=<%- JSON.stringify(fromApply)%>;
+          $(function () {
+            var error="none";
+            $("#submit-button").click(function () {
+              $("#submit-button").attr('disabled',true);
+              var profile = {
+                nickname: "",
+                year: -1,
+                intended_teamleader: false,
+                pl: [],
+                dev: [],
+                reason:"",
+                project_id,
+                contribution:"",
+                time_for_project:0,
+                interests:"",
+                active_participation:""
+              };
+              profile.nickname = $("#nickname").val();
+              profile.year = $("#year").val();
 
-          profile.nickname = $("#nickname").val();
-          profile.year = $("#year").val();
-          profile.intended_teamleader = $("#teamleader").prop('checked');
-          if($(".pl-checkbox:checked").length > 0){
-            $(".pl-checkbox:checked").each(function () {
-              profile.pl.push($(this).val());
-            }).promise().done(function () {
-              $(".dev-checkbox:checked").each(function () {
-                profile.dev.push($(this).val());
-              }).promise().done(function () {
-                if ($("#resume")[0].files.length > 0) {
-                  var file = $("#resume")[0].files[0];
-                  var reader = new FileReader();
-                  reader.readAsDataURL(file);
-                  reader.onload = function () {
-                    profile.resume = reader.result;
-                    $.ajax({
-                      url: "/upload_profile",
-                      method: "POST",
-                      dataType: "json",
-                      data: profile,
-                      success: function () {
-                        window.location.href = "/profile?status=s";
-                      },
-                      error: function (jqXHR, textStatus, errorThrown) {
-                        $(".error-msg").html(jqXHR.responseJSON);
-                        $("#submit-button").attr('disabled',false);
-                      }
-                    });
-                  };
-                  reader.onerror = function (error) {
-                    console.log('Error: ', error);
-                  };
-                }
-                else {
-                  $.ajax({
-                    url: "/upload_profile",
-                    method: "POST",
-                    dataType: "json",
-                    data: profile,
-                    success: function () {
-                      window.location.href = "/profile?status=s";
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                      $(".error-msg").html(jqXHR.responseJSON);
-                      $("#submit-button").attr('disabled',false);
+              if(applying)
+              {
+              profile.intended_teamleader = $("#teamleader").prop('checked');
+
+     
+              profile.reason=$("#reason").val();
+
+             profile.time_for_project=$("#time_for_project").val();
+             profile.interests=$("#interests").val();
+             profile.contribution=$("#contribution").val();
+             profile.active_participation=$("#active_participation").val();
+
+             if(!$.isNumeric(profile.time_for_project))
+             error="Please fill in the number of hours you will be able to commit for the project!";
+             else if(!$.trim(profile.reason).length>0)
+             error="Please fill in the reason you want to join this project";
+             else if(!$.trim(profile.interests).length>0)
+             error="Please fill in your interests to help us know you better";
+             else if(!$.trim(profile.active_participation).length>0)
+             error="Please fill in how you plan on being an active member of the project";
+             else
+             error="none"
+            
+            }
+
+              if(error==="none"){
+                $(".pl-checkbox:checked").each(function () {
+                  profile.pl.push($(this).val());
+                }).promise().done(function () {
+                  $(".dev-checkbox:checked").each(function () {
+                    profile.dev.push($(this).val());
+                  }).promise().done(function () {
+                    if ($("#resume")[0].files.length > 0) {
+                      var file = $("#resume")[0].files[0];
+                      var reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      reader.onload = function () {
+                        profile.resume = reader.result;
+                        $.ajax({
+                          url: "/upload_profile",
+                          method: "POST",
+                          dataType: "json",
+                          data: profile,
+                          success: function () {
+                            window.location.href = "/profile?status=s";
+                          },
+                          error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(errorThrown)
+                            $(".error-msg").html(jqXHR.responseJSON);
+                            $("#submit-button").attr('disabled',false);
+                          }
+                        });
+                      };
+                      reader.onerror = function (error) {
+                        console.log(error);
+                      };
+                    }
+                    else {                       
+                      $.ajax({
+                        url: applying?"/project/applyProject":"/upload_profile",
+                        method: "POST",
+                        dataType: "json",
+                        data: profile,
+                        success: function () {
+                          window.location.href = !applying?"/profile?status=s":`../project/detail?id=${project_id}`;
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                          $(".error-msg").html(jqXHR.responseJSON);
+                          $("#submit-button").attr('disabled',false);
+                        }
+                      });
                     }
                   });
-                }
-              });
-            });
-          }
+                });
+              }
           else{
-            $(".error-msg").html("Please fill in at least one programming language!");
+            $(".error-msg").html(error);
             $("#submit-button").attr('disabled',false);
           }
         });
         var url;
-        $("#confirmation").click(function () {
+         $("#confirmation").click(function () {
             url = "/project/approveApplicant";
             $("#box-info-text").text("approve");
             $("#box-info-title").text("Approve");
-            $("#confirmation-box").modal('show'); 
+            $("#confirmation-box").modal('show');
         });
         $("#rejectConfirmation").click(function () {
             url = "/project/rejectApplicant";
@@ -128,21 +162,21 @@
         </div>
       <% } %>
     </div>
-    <form id="profile-form">
+    <form id="profile-form" class="form-group">
 <!--        <div class="input-group login-signup-input">-->
 <!--            <div class="input-group-addon">Nickname:</div>-->
 <!--            <input class="form-control" type="text" id="nickname" placeholder="Nickname" value="<%=profile.nickname%>">-->
 <!--        </div>-->
     <div class="input-group login-signup-input">
-      <div class="input-group-addon">Name:</div>
-      <input class="form-control" type="text" id="name" value="<%=user ? user.name : ''%>" disabled>
+      <label class="input-group-addon" for="name" >Name:</label>
+      <input class="form-control"  type="text" id="name" value="<%=user?user.name: "hi" %>" readonly="readonly">
     </div>
     <div class="input-group login-signup-input">
-      <div class="input-group-addon">Email:</div>
+      <label class="input-group-addon" or="email">Email:</label>
       <input class="form-control" type="text" id="email" value="<%=user ? user.email : ''%>" disabled>
     </div>
         <div class="input-group login-signup-input" >
-            <div class="input-group-addon">Years:</div>
+            <label class="input-group-addon" for="year">Year:</label>
             <select class="form-control" id="year" <%= others ? 'disabled' : '' %>>
                 <option value="1" <%=(profile.year==1)?'selected':''%>>Freshman</option>
                 <option value="2" <%=(profile.year==2)?'selected':''%>>Sophomore</option>
@@ -152,45 +186,200 @@
                 <option value="6" <%=(profile.year==6)?'selected':''%>>Graduate or Above</option>
             </select>
         </div>
+        <br/>
+
+        <% if(fromApply) { %>
+          <div class="login-signup-input" style="font-size:17px;font-weight: bold;">
+            <br>
+            <% if(user.application_date){ %>
+            <p>Applied on <%- user.application_date.toLocaleDateString() %></p>
+            <% } else {  %>
+            <p>  Date for this application was not recorded</p>
+            <% } %>
+      
+            <br>
+          </div>
+          <% } %>
+
         <div class="login-signup-input">
-            <p style="font-size:15px;">What programming languages are you familiar with?</p>
+            <p style="font-size:17px;">What programming languages are you familiar with?</p>
             <% var pl = profile.pl ? profile.pl : [] %>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> Java <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript" <%=pl.includes('\"pl-javascript\"') ? 'checked' : ''%>> Javascript <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-c" value="pl-c" <%=pl.includes('\"pl-c\"') ? 'checked' : ''%>> C <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-cpp" <%=pl.includes('\"pl-cpp\"') ? 'checked' : ''%>> C++ <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-csharp" <%=pl.includes('\"pl-csharp\"') ? 'checked' : ''%>> C# <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-objectivec" <%=pl.includes('\"pl-objectivec\"') ? 'checked' : ''%>> Objective-C <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-swift" <%=pl.includes('\"pl-swift\"') ? 'checked' : ''%>> Swift <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-python" <%=pl.includes('\"pl-python\"') ? 'checked' : ''%>> Python <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-matlab" <%=pl.includes('\"pl-matlab\"') ? 'checked' : ''%>> Matlab <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-assembly" <%=pl.includes('\"pl-assembly\"') ? 'checked' : ''%>> Assembly <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-lisp" <%=pl.includes('\"pl-lisp\"') ? 'checked' : ''%>> LISP <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" value="pl-php" <%=pl.includes('\"pl-php\"') ? 'checked' : ''%>> PHP <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> <label for="pl-java">  Java  </label> <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript" <%=pl.includes('\"pl-javascript\"') ? 'checked' : ''%>> <label id="pl-javascript" >  Javascript</label> <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-c" value="pl-c" <%=pl.includes('\"pl-c\"') ? 'checked' : ''%>> <label for="pl-c">  C</label>  <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-cpp" value="pl-cpp" <%=pl.includes('\"pl-cpp\"') ? 'checked' : ''%>> <label for="pl-cpp">  C++ </label><br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-csharp" value="pl-csharp" <%=pl.includes('\"pl-csharp\"') ? 'checked' : ''%>> <label for="pl-objectivec">  C#</label> <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-objectivec" value="pl-objectivec" <%=pl.includes('\"pl-objectivec\"') ? 'checked' : ''%>> <label  for="pl-csharp">  Objective-C</label>  <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-swift" value="pl-swift" <%=pl.includes('\"pl-swift\"') ? 'checked' : ''%>> <label for="pl-swift">  Swift</label> <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-python" value="pl-python" <%=pl.includes('\"pl-python\"') ? 'checked' : ''%>> <label for="pl-python">  Python</label>  <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-matlab" value="pl-matlab" <%=pl.includes('\"pl-matlab\"') ? 'checked' : ''%>> <label for="pl-matlab" >  Matlab</label> <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-assembly" value="pl-assembly" <%=pl.includes('\"pl-assembly\"') ? 'checked' : ''%>> <label for="pl-assembly">  Assembly</label> <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-lisp" value="pl-lisp" <%=pl.includes('\"pl-lisp\"') ? 'checked' : ''%>> <label for="pl-lisp">  LISP</label> <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-php" value="pl-php" <%=pl.includes('\"pl-php\"') ? 'checked' : ''%>> <label for="pl-php">  PHP</label>  <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-sql" value="pl-sql" <%=pl.includes('\"pl-sql\"') ? 'checked' : ''%>> <label id="pl-sql">  SQL</label>  <br>
+            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-mongodb" value="pl-mongodb" <%=pl.includes('\"pl-mongodb\"') ? 'checked' : ''%>> <label id="pl-mongodb">  MongoDB </label>  <br>
+
         </div>
+      <br/>
         <div class="login-signup-input" >
             <% var dev = profile.dev ? profile.dev : [] %>
-            <p style="font-size:15px;">What kinds of development are you familiar with?</p>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-frontend" <%=dev.includes('\"dev-frontend\"') ? 'checked' : ''%>> Front End (Web) <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-backend" <%=dev.includes('\"dev-backend\"') ? 'checked' : ''%>> Back End (Web) <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-ios" <%=dev.includes('\"dev-ios\"') ? 'checked' : ''%>> IOS <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-android" <%=dev.includes('\"dev-android\"') ? 'checked' : ''%>> Android <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-windows" <%=dev.includes('\"dev-windows\"') ? 'checked' : ''%>> Windows Desktop Application <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-mac" <%=dev.includes('\"dev-mac\"') ? 'checked' : ''%>> Mac OS X Desktop Application <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-linux" <%=dev.includes('\"dev-linux\"') ? 'checked' : ''%>> Linux software <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-algorithm" <%=dev.includes('\"dev-algorithm\"') ? 'checked' : ''%>> Algorithm <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-network" <%=dev.includes('\"dev-network\"') ? 'checked' : ''%>> Networking <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-ml" <%=dev.includes('\"dev-ml\"') ? 'checked' : ''%>> Machine Learning <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-ds" <%=dev.includes('\"dev-ds\"') ? 'checked' : ''%>> Data Science <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-automation" <%=dev.includes('\"dev-automation\"') ? 'checked' : ''%>> Automation <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-communication" <%=dev.includes('\"dev-communication\"') ? 'checked' : ''%>> Communicate with people :) <br>
+            <p style="font-size:17px;">What kinds of development are you familiar with?</p>
+            <input id="dev-react" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-react" <%=dev.includes('\"dev-react\"') ? 'checked' : ''%>> <label for="dev-react">  React </label> <br>
+            <input id="dev-angular" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-angular" <%=dev.includes('\"dev-angular\"') ? 'checked' : ''%>> <label for="dev-angular"> Angular </label> <br>
+            <input id="dev-reactnative" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-reactnative" <%=dev.includes('\"dev-reactnative\"') ? 'checked' : ''%>> <label for="dev-reactnative">  React Native</label> <br>
+            <input id="dev-express" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-express" <%=dev.includes('\"dev-express\"') ? 'checked' : ''%>> <label for="dev-express" > Express </label><br>
+            <input id="dev-django" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-django" <%=dev.includes('\"dev-django\"') ? 'checked' : ''%>> <label for="dev-django">  Django</label>  <br>
+            <input id="dev-flask" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-flask" <%=dev.includes('\"dev-flask\"') ? 'checked' : ''%>> <label for="dev-flask"> Flask </label>  <br>
+            <input id="dev-ui" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-ui" <%=dev.includes('\"dev-ui\"') ? 'checked' : ''%>> <label for="dev-ui"> UI design</label> <br>
+            <input id="dev-databases" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-databases" <%=dev.includes('\"dev-databases\"') ? 'checked' : ''%>> <label for="dev-databases">  Databases</label> <br>
+            <input id="dev-testing" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-testing" <%=dev.includes('\"dev-testing\"') ? 'checked' : ''%>> <label for="dev-testing"> QA Testing/Automated Testing </label><br>
+            <input id="dev-ios" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-ios" <%=dev.includes('\"dev-ios\"') ? 'checked' : ''%>> <label for="dev-ios"> IOS </label> <br>
+            <input id="dev-android" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-android" <%=dev.includes('\"dev-android\"') ? 'checked' : ''%>> <label for="dev-android"> Android</label>  <br>
+            <input id="dev-windows" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-windows" <%=dev.includes('\"dev-windows\"') ? 'checked' : ''%>> <label for="dev-windows"> Windows Desktop Application</label> <br>
+            <input id="dev-mac" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-mac" <%=dev.includes('\"dev-mac\"') ? 'checked' : ''%>> <label for="dev-mac"> Mac OS X Desktop Application  </label><br>
+            <input id="dev-linux" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-linux" <%=dev.includes('\"dev-linux\"') ? 'checked' : ''%>> <label for="dev-linux"> Linux software </label> <br>
+            <input id="dev-algorithm" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-algorithm" <%=dev.includes('\"dev-algorithm\"') ? 'checked' : ''%>> <label for="dev-algorithm"> Algorithm  </label> <br>
+            <input id="dev-network" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-network" <%=dev.includes('\"dev-network\"') ? 'checked' : ''%>> <label for="dev-network"> Networking  </label><br>
+            <input id="dev-ml" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-ml" <%=dev.includes('\"dev-ml\"') ? 'checked' : ''%>> <label for="dev-ml"> Machine Learning </label> <br>
+            <input id="dev-ds" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-ds" <%=dev.includes('\"dev-ds\"') ? 'checked' : ''%>> <label for="dev-ds"> Data Science  </label> <br>
+            <input id="dev-automation" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-automation" <%=dev.includes('\"dev-automation\"') ? 'checked' : ''%>> <label for="dev-automation"> Automation</label>  <br>
+            <input id="dev-communication" <%= others ? 'disabled' : '' %> type="checkbox" class="dev-checkbox" value="dev-communication" <%=dev.includes('\"dev-communication\"') ? 'checked' : ''%>> <label for="dev-communication"> Communicate with people :) </label> <br>
         </div>
-        <div class="login-signup-input">
-            <br>
-            <p>When developing softwares in team, there has to be a team leader who directs the development.</p>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" id="teamleader" <%=profile.intended_teamleader ? 'checked' : ''%>> Check this box if you want to be a team leader
-            <br>
-        </div>
+
+     
+
+       <% if(applying||fromApply) { %>
+
+    <br/>
+     <div class="login-signup-input" >
+        <% var dev = profile.dev ? profile.dev : [] %>
+        <label style="font-size:15px;" for="time_for_project"> Roughly how many hours a week will you be able to commit for the project this semester?</label>
+        <input id="time_for_project" class="form-control"  type="number"  value="<%= others&&user?user.time_for_project:'' %>" <%= others ? 'disabled' : '' %>   placeholder="" />  <br> 
+     </div>
+
+  
+    <div class="login-signup-input" >
+      <% var dev = profile.dev ? profile.dev : [] %>
+      <label style="font-size:15px;" for="reason"> Why do you want to join this team? </label>
+      <% if(!fromApply) { %>
+        <textarea id="reason" type="text" placeholder=""  class="form-control"  rows="5">  </textarea>
+        <% } else { %>
+         <p>
+         <%- user? user.reason :' '%>
+         </p>
+        <% } %>
+     </div>
+
+     <div class="login-signup-input" >
+      <% var dev = profile.dev ? profile.dev : [] %>
+      <label style="font-size:15px;" for="interests">What are your interests?</label>
+      <% if(!fromApply) { %>
+        <textarea id="interests" type="text" class="form-control"  rows="1" placeholder="" >  </textarea>
+        <% } else { %>
+         <p>
+         <%- user? user.interests :' '%>
+         </p>
+        <% } %>
+     </div>
+
+    <div class="login-signup-input" >
+      <% var dev = profile.dev ? profile.dev : [] %>
+      <label for="active_participation" style="font-size:15px;">What would you do to be an active team member?</label>
+      <% if(!fromApply) { %>
+        <textarea id="active_participation" type="text" placeholder="" class="form-control"  rows="3" >  </textarea>
+        <% } else { %>
+         <p>
+         <%- user? user.active_participation :' '%>
+         </p>
+        <% } %>
+    </div>
+
+    <div class="login-signup-input" >
+      <% var dev = profile.dev ? profile.dev : [] %>
+      <label style="font-size:15px;" for="contribution">What can you bring to this team, technical or otherwise?  (Optional) </label>
+      <% if(!fromApply) { %>
+        <textarea id="contribution" type="text" placeholder="" class="form-control"  rows="5" >  </textarea>
+        <% } else { %>
+         <p>
+         <%- user&&user.contribution.trim().length>0? user.contribution :'No Answer'%>
+         </p>
+        <% } %>
+    </div>
+
+
+
+  <div class="login-signup-input">
+    <br>
+    <p>When developing softwares in team, there has to be a team leader who directs the development.</p>
+    <input class="form-check-input" <%= others ? 'disabled' : '' %> type="checkbox" id="teamleader" <%=fromApply && user.intended_teamleader ? 'checked' : ''%>>  <label for="teamleader">Check this box if you want to be a team leader</label>
+    <br>
+  </div>
+
+<!-- <% var dev = profile.dev ? profile.dev : [] %>
+         <p style="font-size:15px;">Roughly how many hours will you be able to give for this project this semester?</p>
+         <input id="time_for_project" type="number"  value="<%= others&&user?user.projecthours:'' %>" <%= others ? 'disabled' : '' %>   placeholder="" />  <br>
+     </div>
+ 
+       <div class="login-signup-input" >
+         <% var dev = profile.dev ? profile.dev : [] %>
+         <p style="font-size:15px;">Why do you want to join this team</p>
+         <% if(!fromApply) { %>
+           <textarea id="reason" type="text" placeholder="" >  </textarea>
+           <% } else { %>
+            <p>
+            <%- user? user.reason :' '%>
+            </p>
+           <% } %>
+       </div>
+ 
+ 
+       <div class="login-signup-input" >
+         <% var dev = profile.dev ? profile.dev : [] %>
+         <p style="font-size:15px;">What are your interests?</p>
+         <% if(!fromApply) { %>
+           <textarea id="interests" type="text" placeholder="" >  </textarea>
+           <% } else { %>
+            <p>
+            <%- user? user.interests :' '%>
+            </p>
+           <% } %>
+       </div>
+ 
+       <div class="login-signup-input" >
+         <% var dev = profile.dev ? profile.dev : [] %>
+         <p style="font-size:15px;">What would they bring to the team/what would you do to be an active team member?</p>
+         <% if(!fromApply) { %>
+           <textarea id="active_participation" type="text" placeholder="" >  </textarea>
+           <% } else { %>
+            <p>
+            <%- user? user.active_participation :' '%>
+            </p>
+           <% } %>
+       </div>
+ 
+       <div class="login-signup-input" >
+         <% var dev = profile.dev ? profile.dev : [] %>
+         <p style="font-size:15px;">What can you bring to this team? (Optional) </p>
+         <% if(!fromApply) { %>
+           <textarea id="contribution" type="text" placeholder="" >  </textarea>
+           <% } else { %>
+            <p>
+            <%- user? user.contribution :' '%>
+            </p>
+           <% } %>
+       </div>
+ 
+            <div class="login-signup-input">
+           <br>
+           <p>When developing softwares in team, there has to be a team leader who directs the development.</p>
+           <input <%= others ? 'disabled' : '' %> type="checkbox" id="teamleader" <%=profile.intended_teamleader ? 'checked' : ''%>> Check this box if you want to be a team leader
+           <br>
+       </div>
+-->
+
+  
+        <% } %>
+       
     </form>
     <div class="login-signup-input" hidden>
         <br>
@@ -200,7 +389,13 @@
 
     <p class="error-msg" id="error-msg"></p>
     <% if (!others) { %>
-        <button id="submit-button" class="btn long-btn primary-button">Update Profile</button>
+        <button id="submit-button" class="btn long-btn primary-button">
+          <% if(!applying) { %>
+          Update Profile
+          <% } else { %>
+          Submit 
+          <% } %>
+        </button>
     <% } %>
 
     <% if (fromApply) { %>
@@ -230,3 +425,5 @@
 <% include ../template/footer.ejs %>
 </body>
 </html>
+
+

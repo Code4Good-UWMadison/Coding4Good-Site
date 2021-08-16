@@ -30,7 +30,7 @@
                     }
                 });
             });
-            $("#apply-button").click(function () {
+            /**$("#apply-button").click(function () {
                 $("#apply-button").attr('disabled', true);
                 $.ajax({
                     url: "/project/applyProject",
@@ -53,6 +53,9 @@
                         $("#apply-button").attr('disabled',false);
                     }
                 });
+            });*/
+            $("#apply-button").click(function () {
+                window.location.href = `../apply?project_id=${projectDetail.id}` ;
             });
 
             $("#applicants-button").click(function () {

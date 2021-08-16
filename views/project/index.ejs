@@ -6,8 +6,29 @@
     <script src="/js/SortScript.js"></script>
     <script type="text/javascript">
         $(function () {
+            
             addLink();
+            mod()
+   
         });
+
+        function mod(){
+            $("#guidelines").click(function (){
+                
+                $(this).text(function(i, text){
+                  if( $( ".guidelines" ).hasClass( "hide" ))
+                 {   $( ".guidelines" ).hide();
+                     $( ".guidelines" ).removeClass( "hide" )}
+                  $( ".guidelines" ).toggle( "slow" )
+
+                  return text.trim() === "Show Guidelines" ? "Hide Guidelines" : "Show Guidelines";
+    })
+
+            
+        })
+            
+ 
+        }
         function addLink(){
             $(".projectRow").click(function () {
                 var projectId = this.id;
@@ -18,6 +39,7 @@
         function afterSort(){
             addLink();
         }
+
     </script>
 </head>
 
@@ -42,6 +64,10 @@
                    placeholder="keyword, key words, key words"/>
         </div>
         <div align="right">
+            <a class="btn primary-button" id="guidelines">
+                Show Guidelines
+             </a>
+
             <% if (uid != null){ %>
             <%if (auth([all_user_role.Developer, all_user_role.ProjectManager, all_user_role.Admin], user_role)) { %>
             <a class="btn primary-button" href="/project/edit">New Project</a>
@@ -51,6 +77,29 @@
             <a class="btn primary-button" href="/project">Back</a>
             <% } %>
         </div>
+    </div>
+    <div class="guidelines margin-htop hide">
+      <ul>  
+      <h4 class="text-info">Team Leaders</h4>
+      <li> Prepare for meetings, take attendance, and setup communication rules and expectations </li>  
+      <li>   Check in with project manager frequently to check up on progress and report any issues that may arise  </li>  
+      <li>  Be responsible  </li>  
+      <li>   Encourage a learning environment/pair programming. Provide resources early.  </li>  
+      <li> Support a variety of roles. For example, UI/UX/design roles or DBA.  </li>  
+      <li>  Reward the team for hitting milestones (funding will be provided) and encourage the team to be social  </li>  
+    </ul>
+    <ul>
+    <h4 class="text-info">Team Members</h4>
+    <li>  Can only miss two consecutive meetings without an excuse before becoming inactive and removed from the team</li>
+    <li>  Be honest and open if you are struggling with the concepts or have limited time </li>  
+    <li>  Be accountable for tasks </li>  
+    </ul>
+    <ul>
+    <h4 class="text-info">Everyone</h4>
+    <li>  Have fun </li>  
+
+    </ul>
+
     </div>
     <table class="table margin-htop sortable searchable" align="center">
         <thead class="row margin-top">

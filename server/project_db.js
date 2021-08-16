@@ -1,3 +1,4 @@
+var update_profile=require("./user_db").updateProfile;
 var self = this;
 var pg = require("pg");
 var config = require("./dbconfig.js");
@@ -134,20 +135,25 @@ exports.removeProjectById = function (projectId, callback) {
 };
 
 // if user has registered profile, put this application info into database
-exports.applyProject = function (project_id, user_id, callback) {
+exports.applyProject = function (profile, user_id, callback) {
+    const {year,intended_teamleader,contribution,active_participation,reason,project_id,time_for_project,interests}=profile;
     // add member's application interest into project_application_relation table
     // the database has already checked uniqueness
-    const query = `INSERT INTO project_application_relation (project_id, user_id) VALUES ($1,$2);`;
-    db.query(query, [project_id, user_id], function (err) {
+    const query = `INSERT INTO project_application_relation (project_id, user_id,intended_teamleader,reason,contribution,active_participation,interests,time_for_project,application_date=now() at time zone 'America/Chicago') VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
+    db.query(query, [project_id, user_id,intended_teamleader,reason,contribution,active_participation,interests,time_for_project], function (err) {
         if (err) {
-            console.log(err);
             callback(err);
         }
         else {
-            callback(null);
+            update_profile(user_id,{year},function(err){
+                if(err)
+                callback(err);
+                else
+                callback(null);})
         }
     });
-};
+ };
+ 
 
 // check if a user has applied to the project
 exports.checkApplied = function (project_id, user_id, callback) {
@@ -202,13 +208,13 @@ exports.rejectApplicant = function (project_id, user_id, callback) {
 // the manager can see all the applicants
 exports.getAllApplicantByProjectId = function (project_id, callback) {
     // select all applicants of this project
-    const query = `SELECT u.id AS user_id, u.name, u.email, p.intended_teamleader,
-                    (CASE WHEN u.id IN 
-                        (SELECT DISTINCT user_id FROM user_role
-                        WHERE associated_project_id IS NOT NULL) 
-                    THEN True ELSE False END) AS has_project
-                    FROM project_application_relation r, users u, user_profile p
-                    WHERE u.id = r.user_id AND r.project_id = $1 AND p.uid = u.id`;
+    const query = `SELECT u.id AS user_id, u.name, u.email, r.intended_teamleader,r.reason,r.contribution,r.active_participation,r.interests,r.time_for_project,r.application_date,
+    (CASE WHEN u.id IN
+        (SELECT DISTINCT user_id FROM user_role
+        WHERE associated_project_id IS NOT NULL)
+    THEN True ELSE False END) AS has_project
+    FROM project_application_relation AS r, users AS u, user_profile AS p
+    WHERE u.id = r.user_id AND r.project_id = $1 AND p.uid = u.id`;
     db.query(query, [project_id], function (err, result) {
         if (err) {
             console.log(err);

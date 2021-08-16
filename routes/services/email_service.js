@@ -54,11 +54,10 @@ exports.sendEmail = function(emailDetail, callback){
     
         transporter.sendMail(email, function (err, info) {
                 if(err){
-                    //console.log(err);
+                    console.log(err);
                     callback(err);
                 }
                 else{
-                    //console.log(info);
                     callback(null);
                 }
         });
