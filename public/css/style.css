@@ -393,3 +393,19 @@ input::-webkit-calendar-picker-indicator {
 .font-weight-bold{
     font-weight: bold;
 }
+
+.delete-button{
+    background-color: rgb(255, 249, 246);
+    width:3%;
+    color:red;
+    border: 0;
+}
+
+.delete-button:hover{
+    color: rgb(255, 240, 232);;
+    background-color: rgb(246, 115, 45);
+    -moz-transition: all 0.2s linear;
+    -webkit-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}

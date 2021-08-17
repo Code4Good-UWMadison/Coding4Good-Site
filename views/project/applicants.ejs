@@ -91,6 +91,8 @@
             <th>E-mail</th>
             <th class="center">Has Project</th>
             <th class="center">Intended Leader</th>
+            <th class="center">Application Date</th>
+
         </tr>
         </thead>
         <tbody id="projectTbody">
@@ -101,6 +103,8 @@
                     <td class="td"><%= users[i].email %></td>
                     <td class="td center"><%= users[i].has_project ? 'Yes' : 'No'%></td>
                     <td class="td center"><%= users[i].intended_teamleader ? 'Yes' : 'No'%></td>
+                    <td class="td center"><%= users[i].application_date? users[i].application_date.toLocaleDateString(): 'Not Recorded'%></td>
+
                 </tr>
             <% } %>
         <% } else { %>

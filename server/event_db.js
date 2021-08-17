@@ -55,7 +55,6 @@ exports.editEvent = function (event, callback) {
         ],
         function (err, event_id) {
             if (err) {
-                console.log(err, event_id);
                 callback(err, event_id);
             } else {
                 callback(null, event_id);

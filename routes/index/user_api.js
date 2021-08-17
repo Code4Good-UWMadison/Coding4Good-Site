@@ -109,6 +109,7 @@ router.post('/login', function (req, res, next) {
 });
 
 router.post('/upload_profile', function (req, res, next) {
+    
     if (req.session.uid == null) {
         res.status(400).json({msg: 'Please login first'});
         return;
@@ -121,6 +122,7 @@ router.post('/upload_profile', function (req, res, next) {
         }
         res.json({});
     });
+
 });
 
 router.post('/get_user_info', function (req, res, next) {
@@ -135,7 +137,7 @@ router.post('/get_user_info', function (req, res, next) {
             res.status(403).json({msg: 'Not Authorized'});
             return;
         }
-        user_db.getUserById(req.body.user_id, function (err, user) {
+        user_db.getUserById(req.body.user_id,null, function (err, user) {
             if(err) {
                 console.log(err);
             }
