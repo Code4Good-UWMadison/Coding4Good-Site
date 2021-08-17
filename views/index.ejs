@@ -1,7 +1,6 @@
 <!doctype html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="/css/index.css"/> <!-- This stylesheet is included twice because it needs to be loaded before AND after for the background animations to work -->
     <% include template/head.ejs %>
     <link rel="stylesheet" type="text/css" href="/css/index.css"/>
 </head>
@@ -58,9 +57,6 @@
 
 
     $(function () {
-      $('body').addClass('animated');
-      $('html').addClass('animated');
-
       loop1();
       // setInterval(loop1,9000);
     });
