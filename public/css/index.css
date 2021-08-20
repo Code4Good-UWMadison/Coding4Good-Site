@@ -6,15 +6,20 @@
   padding: 0;
 }
 
-body {
-  transition: background-color 2s linear; /*changes background color from that orange to pale orange*/
-  background-color: rgb(255, 166, 118); /*starting background color*/
+body, html {
   background-size: cover;  /*changed viewport settings to cover*/
+  animation: ColorLoad 2s linear; 
 }
 
-  body.animated {
-    background-color: rgb(255, 240, 232); /*destination color*/
+@keyframes ColorLoad {
+  from {
+    background-color: rgb(255, 166, 118);
   }
+  
+  to {
+    background-color: rgb(255, 240, 232);
+  }
+}
 
 .text {
   list-style: none;

@@ -121,28 +121,37 @@ exports.getUserInfo = function(uid, callback) {
   });
 };
 
-exports.getUserById = function (uid, callback) {
-  var query = `SELECT id, email, name, create_date FROM users WHERE id=$1;`;
+exports.getUserById = function (uid, project_id, callback) {
+  var query = `SELECT u.id, u.email, u.name FROM users as u WHERE u.id=$1;`;
+  
   db.query(query, [uid], function (err, result) {
     if (err) {
       callback(err);
     }
-    else {
-      if (result.rows.length == 0) {
-        callback(null, null);
-      }
-      else {
-        callback(null, result.rows[0]);
-      }
-    }
+    else if(!project_id)
+    {
+      callback(null, result.rows[0]);
+    } 
+    else  
+    { 
+      var query2=`SELECT  reason, intended_teamleader,contribution,active_participation,interests,time_for_project,application_date FROM project_application_relation WHERE user_id=$1 AND project_id=$2;`
+         db.query(query2,[uid,project_id], function(err, res) {
+          if (err) {
+            console.log(err)
+            callback(err);
+          } else {
+            callback(null,{...result.rows[0],...res.rows[0]})
+          }
+    })}
+
   });
 };
 
 exports.updateProfile = function(uid, profile, callback) {
   let insert =
-    "INSERT INTO user_profile (uid, nickname, year, intended_teamleader, pl, dev, resume, submission_time) VALUES ($1,$2,$3,$4,$5,$6,$7, now() at time zone 'America/Chicago')";
+    "INSERT INTO user_profile (uid, nickname, year, pl, dev, resume, submission_time) VALUES ($1,$2,$3,$4,$5,$6, now() at time zone 'America/Chicago')";
   let update =
-    "DO UPDATE SET nickname=$2, year=$3, intended_teamleader=$4, pl=$5, dev=$6, resume=$7, submission_time=now() at time zone 'America/Chicago';";
+    "DO UPDATE SET nickname=$2, year=$3, pl=$4, dev=$5, resume=$6, submission_time=now() at time zone 'America/Chicago';";
   let query = insert + " ON CONFLICT (uid)" + update;
   db.query(
     query,
@@ -150,7 +159,6 @@ exports.updateProfile = function(uid, profile, callback) {
       uid,
       profile.nickname ? profile.nickname : "",
       profile.year,
-      profile.intended_teamleader,
       profile.pl,
       profile.dev,
       profile.resume ? profile.resume : ""
@@ -231,7 +239,6 @@ exports.setUserRoleByUid = async (user_id, roles) => {
   const remove = `DELETE FROM user_role WHERE user_id = $1 AND associated_project_id IS NULL;`;
   const insert = `INSERT INTO user_role (user_id, user_role) VALUES ($1, $2)`;
   const client = await db.connect();
-
   try{
     await client.query("BEGIN");
     await client.query(remove, [user_id]);
@@ -284,7 +291,6 @@ exports.resetPassword = function(password, email, user_id, callback) {
     } 
     else {
       var query = `UPDATE users SET password = $1 WHERE email = $2 AND id = $3;`;
-      console.log(hash);
       db.query(query, [hash, email, user_id], function(err) {
         if (err) {
           callback(err); 

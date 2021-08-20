@@ -1,7 +1,6 @@
 
 const nodemailer = require('nodemailer');
 const HOST = "smtp-mail.outlook.com";
-const path = require('path');
 
 /* service to send emails using nodemailer
 * param:
@@ -55,11 +54,10 @@ exports.sendEmail = function(emailDetail, callback){
     
         transporter.sendMail(email, function (err, info) {
                 if(err){
-                    //console.log(err);
+                    console.log(err);
                     callback(err);
                 }
                 else{
-                    //console.log(info);
                     callback(null);
                 }
         });
