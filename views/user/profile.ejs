@@ -87,9 +87,7 @@
             nickname: "",
             year: -1,
             intended_teamleader: false,
-            pl: [],
-            // try pl = {Language: experience}?
-            // or maybe keep the array and make each element a dictionary
+            pl: {},
             dev: [],
             description:""
           };
@@ -110,6 +108,20 @@
               //profile.pl.push({
                 //($(this).val()) : slider's value
               //})
+
+              // use a whole div to include both check box and range
+              // go through all div groups named pl-group
+              // check first element: the check box, if it's checked, then read the second element
+
+              // vue, react, angular
+              // separate front end and back end, so it relieves some load for the server
+              // front end is cached by browser
+              // right now our website makes render + data process together
+              // http://www.axios-js.com/
+              // ex6
+              // callback hell
+              // https://en.wikipedia.org/wiki/Flutter_(software)
+              
             }).promise().done(function () {
               $(".dev-checkbox:checked").each(function () {
                 profile.dev.push($(this).val());
@@ -243,28 +255,50 @@
         <div class="login-signup-input">
             <p style="font-size:15px;">What programming languages are you familiar with?</p>
             <% var pl = profile.pl ? profile.pl : [] %>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> Java <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="javaRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript" <%=pl.includes('\"pl-javascript\"') ? 'checked' : ''%>> Javascript <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="jsRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-c" value="pl-c" <%=pl.includes('\"pl-c\"') ? 'checked' : ''%>> C <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="cRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-cpp" value="pl-cpp" <%=pl.includes('\"pl-cpp\"') ? 'checked' : ''%>> C++ <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="cppRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-csharp" value="pl-csharp" <%=pl.includes('\"pl-csharp\"') ? 'checked' : ''%>> C# <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="cshRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-objectivec" value="pl-objectivec" <%=pl.includes('\"pl-objectivec\"') ? 'checked' : ''%>> Objective-C <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="objcRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-swift" value="pl-swift" <%=pl.includes('\"pl-swift\"') ? 'checked' : ''%>> Swift <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="swRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-python" value="pl-python" <%=pl.includes('\"pl-python\"') ? 'checked' : ''%>> Python <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="pyRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-matlab" value="pl-matlab" <%=pl.includes('\"pl-matlab\"') ? 'checked' : ''%>> Matlab <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="matRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-assembly" value="pl-assembly" <%=pl.includes('\"pl-assembly\"') ? 'checked' : ''%>> Assembly <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="assRange"> <br>
-            <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id=""pl-lisp" value="pl-lisp" <%=pl.includes('\"pl-lisp\"') ? 'checked' : ''%>> LISP <br>
-            <input type="range" min="0" max="5" value="0" class="slider" id="lispRange"> <br>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-java" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : ''%>> Java <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="javaRange"> <br>
+            </div>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-javascript" value="pl-javascript" <%=pl.includes('\"pl-javascript\"') ? 'checked' : ''%>> Javascript <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="jsRange"> <br>
+            </div>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-c" value="pl-c" <%=pl.includes('\"pl-c\"') ? 'checked' : ''%>> C <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="cRange"> <br>
+            </div>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-cpp" value="pl-cpp" <%=pl.includes('\"pl-cpp\"') ? 'checked' : ''%>> C++ <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="cppRange"> <br>
+            </div>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-csharp" value="pl-csharp" <%=pl.includes('\"pl-csharp\"') ? 'checked' : ''%>> C# <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="cshRange"> <br>
+            </div>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-objectivec" value="pl-objectivec" <%=pl.includes('\"pl-objectivec\"') ? 'checked' : ''%>> Objective-C <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="objcRange"> <br>
+            </div>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-swift" value="pl-swift" <%=pl.includes('\"pl-swift\"') ? 'checked' : ''%>> Swift <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="swRange"> <br>
+            </div>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-python" value="pl-python" <%=pl.includes('\"pl-python\"') ? 'checked' : ''%>> Python <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="pyRange"> <br>
+            </div>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-matlab" value="pl-matlab" <%=pl.includes('\"pl-matlab\"') ? 'checked' : ''%>> Matlab <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="matRange"> <br>
+            </div>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-assembly" value="pl-assembly" <%=pl.includes('\"pl-assembly\"') ? 'checked' : ''%>> Assembly <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="assRange"> <br>
+            </div>
+            <div class="pl-group">
+              <input <%= others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id=""pl-lisp" value="pl-lisp" <%=pl.includes('\"pl-lisp\"') ? 'checked' : ''%>> LISP <br>
+              <input type="range" min="0" max="5" value="0" class="slider" id="lispRange"> <br>
+            </div>
         </div>
         <div class="login-signup-input" >
             <% var dev = profile.dev ? profile.dev : [] %>
