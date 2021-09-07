@@ -88,7 +88,7 @@
             year: -1,
             intended_teamleader: false,
             pl: {},
-            dev: [],
+            dev: {},
             description:""
           };
 
@@ -97,8 +97,7 @@
           profile.intended_teamleader = $("#teamleader").prop('checked');
           profile.description=$("#intro").val();
           if($(".pl-checkbox:checked").length > 0){
-            $(".pl-checkbox:checked").each(function () {
-              profile.pl.push($(this).val());
+            $(".pl-group").each(function () {
               // if we are going with making pl a dictionary:
               //TODO: show slider $(".slider").show().filter(matching slider)
               //profile.pl.($(this).val()) = slider's value
@@ -107,21 +106,12 @@
               //TODO:show slider
               //profile.pl.push({
                 //($(this).val()) : slider's value
-              //})
-
-              // use a whole div to include both check box and range
-              // go through all div groups named pl-group
-              // check first element: the check box, if it's checked, then read the second element
-
-              // vue, react, angular
-              // separate front end and back end, so it relieves some load for the server
-              // front end is cached by browser
-              // right now our website makes render + data process together
-              // http://www.axios-js.com/
-              // ex6
-              // callback hell
-              // https://en.wikipedia.org/wiki/Flutter_(software)
-              
+              //}) 
+              var name = (".pl-group").children[0];
+              var exp = (".pl-group").children[1];
+              if (name.checked == true){
+                profile.pl[ name ] = exp;
+              }            
             }).promise().done(function () {
               $(".dev-checkbox:checked").each(function () {
                 profile.dev.push($(this).val());
