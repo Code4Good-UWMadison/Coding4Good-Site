@@ -139,7 +139,7 @@ exports.applyProject = function (profile, user_id, callback) {
     const {year,intended_teamleader,contribution,active_participation,reason,project_id,time_for_project,interests}=profile;
     // add member's application interest into project_application_relation table
     // the database has already checked uniqueness
-    const query = `INSERT INTO project_application_relation (project_id, user_id,intended_teamleader,reason,contribution,active_participation,interests,time_for_project,application_date=now() at time zone 'America/Chicago') VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`;
+    const query = `INSERT INTO project_application_relation (project_id, user_id,intended_teamleader,reason,contribution,active_participation,interests,time_for_project,application_date) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,now() at time zone 'America/Chicago');`;
     db.query(query, [project_id, user_id,intended_teamleader,reason,contribution,active_participation,interests,time_for_project], function (err) {
         if (err) {
             callback(err);
