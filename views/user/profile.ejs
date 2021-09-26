@@ -107,8 +107,8 @@
               //profile.pl.push({
                 //($(this).val()) : slider's value
               //}) 
-              var name = elem.find("input[type='checkbox']");
-              var exp = elem.find("input[type='range']")[0].attr("value");
+              var name = elem.children[0];
+              var exp = elem.children[2];
               if (name.checked == true){
                 profile.pl[ name ] = exp;
               }            
