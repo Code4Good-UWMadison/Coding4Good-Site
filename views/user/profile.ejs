@@ -113,8 +113,12 @@
                 profile.pl[ name ] = exp;
               }            
             }).promise().done(function () {
-              $(".dev-checkbox:checked").each(function () {
-                profile.dev.push($(this).val());
+              $(".dev-group"),each(function(index,elem){
+                  var group = elem.children[0];
+                  var groupex = elem.children[1].val;
+                  if (group.checked == true){
+                    profile.dev[group] = groupex;
+                  }
               }).promise().done(function () {
                 if ($("#resume")[0].files.length > 0) {
                   var file = $("#resume")[0].files[0];
