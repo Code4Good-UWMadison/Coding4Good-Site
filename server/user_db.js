@@ -283,6 +283,17 @@ exports.getUserByEmail = function(email, callback){
   });
 };
 
+exports.getUserEmailById = (user_id, callback) => {
+  const query = 'SELECT email FROM users WHERE id=$1;';
+  db.query(query, [user_id], (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result.rows[0]);
+    }
+  })
+}
+
 exports.resetPassword = function(password, email, user_id, callback) {
   var saltRounds = 10;
   bcrypt.hash(password, saltRounds, function(err, hash) {
@@ -312,3 +323,233 @@ exports.getUnconfirmedUsers = function(callback) {
     }
   })
 };
+exports.hasProfile = (user_id, callback) => {
+  if (!user_id) {
+    callback(null, 'NO_USR_ID');
+    return;
+  }
+  let query = 'SELECT * FROM user_profile WHERE uid = $1;';
+  db.query(query, [user_id], (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+        if (result.rows[0])
+          callback(null, 'TRUE');
+        else
+          callback(null, 'FALSE');
+    }
+  });
+}
+
+/**
+ * Get events that the user corresponding to the `user_id` has followed.
+ * If `user_id` is empty, i.e. no user logs in, or the user has not followed any events, return `[]`
+ * @param user_id user id
+ * @param callback callback function
+ */
+exports.getUserFollowedEventsByUid = (user_id, callback) => {
+  if (!user_id) {
+    callback(null, '[]');
+    return;
+  }
+  const query = 'SELECT * FROM user_event WHERE uid = $1;';
+  db.query(query, [user_id], (err, result) => {
+    if (err)  {
+      callback(err);
+    } else {
+      if (result.rows[0]) {
+        callback(null, result.rows[0].followed_events);
+      } else {
+        callback(null, '[]');
+      }
+    }
+  });
+}
+
+/**
+ * Get events that the user corresponding to the `user_id` has RSVP.
+ * If `user_id` is empty, i.e. no user logs in, or the user has not followed any events, return `[]`
+ * @param user_id user id
+ * @param callback callback function
+ */
+exports.getUserRSVPEventsByUid = (user_id, callback) => {
+  if (!user_id) {
+    callback(null, '[]');
+    return;
+  }
+  const query = 'SELECT * FROM user_event WHERE uid = $1;';
+  db.query(query, [user_id], (err, result) => {
+    if (err)  {
+      callback(err);
+    } else {
+      if (result.rows[0]) {
+        callback(null, result.rows[0].rsvp_events);
+      } else {
+        callback(null, '[]');
+      }
+    }
+  });
+}
+
+/**
+ * Check if `user_id` has an entry (row) inside the `user_event` table
+ * @param user_id user id
+ * @param callback callback function
+ */
+exports.hasUserEventEntry = (user_id, callback) => {
+  const query = 'SELECT EXISTS(SELECT 1 FROM user_event WHERE uid = $1);'
+  db.query(query, [user_id], (err, result) => {
+    if (err)  {
+      callback(err);
+    } else {
+      callback(null, result.rows[0].exists)
+    }
+  });
+}
+
+/**
+ * Create an entry corresponding to `user_id` and add the `event_id` to `followed_events` in the entry
+ * @param user_id user id
+ * @param event_id event id
+ * @param callback callback function
+ */
+exports.createEntryAndFollowEvent = (user_id, event_id, callback) => {
+  const insert = 'INSERT INTO user_event (uid, followed_events, rsvp_events) VALUES ($1, $2, $3)';
+  db.query(insert, [user_id, JSON.stringify([parseInt(event_id)]), "[]"], (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null);
+    }
+  });
+}
+
+exports.followEvent = function(user_id, event_id, callback) {
+  db.query('BEGIN;');
+  let query = 'SELECT followed_events FROM user_event WHERE uid = $1 FOR UPDATE;';
+  db.query(query, [user_id], function (err, result) {
+    if (err) {
+      db.query('COMMIT;');
+      callback(err);
+    } else {
+      const followed_event = JSON.parse(result.rows[0]['followed_events']);
+      followed_event.push(parseInt(event_id));
+      query = 'UPDATE user_event SET followed_events = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
+      db.query(query, [user_id], function (err_update) {
+        if (err_update) {
+          db.query('ROLLBACK;')
+          callback(err_update);
+        } else {
+          db.query('COMMIT;');
+          callback(null);
+        }
+      });
+    }
+  });
+};
+
+exports.unfollowEvent = function(user_id, event_id, callback) {
+  db.query('BEGIN;');
+  let query = 'SELECT followed_events FROM user_event WHERE uid = $1 FOR UPDATE;';
+  db.query(query, [user_id], function (err, result) {
+    if (err) {
+      db.query('COMMIT;');
+      callback(err);
+    } else {
+      const followed_event = JSON.parse(result.rows[0]['followed_events']);
+      const index = followed_event.indexOf(parseInt(event_id));
+      if (index > -1) {
+        followed_event.splice(index, 1);
+      }
+      query = 'UPDATE user_event SET followed_events = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
+      db.query(query, [user_id], function (err_update) {
+        if (err_update) {
+          db.query('ROLLBACK;')
+          callback(err_update);
+        } else {
+          db.query('COMMIT;');
+          callback(null);
+        }
+      });
+    }
+  });
+};
+
+/**
+ * Create an entry corresponding to `user_id` and add the `event_id` to `rsvp_events` in the entry
+ * @param user_id user id
+ * @param event_id event id
+ * @param callback callback function
+ */
+exports.createEntryAndRSVPEvent = (user_id, event_id, callback) => {
+  const insert = 'INSERT INTO user_event (uid, followed_events, rsvp_events) VALUES ($1, $2, $3)';
+  db.query(insert, [user_id, "[]", JSON.stringify([parseInt(event_id)])], (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null);
+    }
+  });
+}
+
+exports.rsvpEvent = function(user_id, event_id, callback) {
+  db.query('BEGIN;');
+  let query = 'SELECT rsvp_events FROM user_event WHERE uid = $1 FOR UPDATE;';
+  db.query(query, [user_id], function (err, result) {
+    if (err) {
+      db.query('COMMIT;');
+      callback(err);
+    } else {
+      const followed_event = JSON.parse(result.rows[0]['rsvp_events']);
+      followed_event.push(parseInt(event_id));
+      query = 'UPDATE user_event SET rsvp_events = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
+      db.query(query, [user_id], function (err_update) {
+        if (err_update) {
+          db.query('ROLLBACK;')
+          callback(err_update);
+        } else {
+          db.query('COMMIT;');
+          callback(null);
+        }
+      });
+    }
+  });
+};
+
+exports.unrsvpEvent = function(user_id, event_id, callback) {
+  db.query('BEGIN;');
+  let query = 'SELECT rsvp_events FROM user_event WHERE uid = $1 FOR UPDATE;';
+  db.query(query, [user_id], function (err, result) {
+    if (err) {
+      db.query('COMMIT;');
+      callback(err);
+    } else {
+      const followed_event = JSON.parse(result.rows[0]['rsvp_events']);
+      const index = followed_event.indexOf(parseInt(event_id));
+      if (index > -1) {
+        followed_event.splice(index, 1);
+      }
+      query = 'UPDATE user_event SET rsvp_events = ' + "'" + JSON.stringify(followed_event) + "'" + ' WHERE uid = $1;';
+      db.query(query, [user_id], function (err_update) {
+        if (err_update) {
+          db.query('ROLLBACK;')
+          callback(err_update);
+        } else {
+          db.query('COMMIT;');
+          callback(null);
+        }
+      });
+    }
+  });
+};
+
+exports.getAllEntriesFromUserEvent = (callback) => {
+  const query = 'SELECT * FROM user_event';
+  db.query(query, [], (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result);
+    }
+  });
+}

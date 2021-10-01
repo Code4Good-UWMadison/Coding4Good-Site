@@ -6,31 +6,54 @@ const authService = require('../services/authorization_service');
 
 router.get('/', function (req, res, next) {
     let offset = 0;
-    event_db.getEventSet(offset, function (err, eventsSet) {
+    let uid = req.session.uid;
+    event_db.getEventSet(offset, function (err, events_set) {
         if (err) {
             console.log(err);
             res.status(400).json({msg: 'Database Error'});
             return;
         }
-        user_db.getUserRoleByUid(req.session.uid, function (err, user_role) {
+        user_db.getUserRoleByUid(uid, (err, user_role) => {
             if (err) {
+                console.log(err);
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-            eventsSet = eventsSet.sort(function (a, b) {
-                return a.event_time - b.event_time
-            })
-            let now = new Date();
-            now = new Date(now - (5.5 * 60 * 60 * 1000));
-            var centerIdx = eventsSet.length - 1;
-            for (var i = eventsSet.length - 1; i >= 0; i--) {
-                // show the event thats coming up soon
-                if (eventsSet[i].event_time < now) {
-                    break;
+            user_db.getUserFollowedEventsByUid(uid, (err, followed_events) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                    return;
                 }
-                centerIdx = i;
-            }
-            res.render('event/index', {eventsSet: eventsSet, uid: req.session.uid, all_user_role: authService.UserRole, user_role: user_role, centerIdx: centerIdx});
+                user_db.getUserRSVPEventsByUid(uid, (err, rsvp_events) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: 'Database Error'});
+                        return;
+                    }
+                    events_set = events_set.sort((event_a, event_b) => {
+                        return event_a.event_time - event_b.event_time
+                    })
+                    let now = new Date();
+                    now = new Date(now - (5.5 * 60 * 60 * 1000));
+                    let center_idx = events_set.length - 1;
+                    for (let i = events_set.length - 1; i >= 0; i--) {
+                        if (events_set[i].event_time < now) {
+                            break;
+                        }
+                        center_idx = i;
+                    }
+                    res.render('event/index', {
+                        followed_events: JSON.parse(followed_events),
+                        rsvp_events: JSON.parse(rsvp_events),
+                        eventsSet: events_set,
+                        uid: req.session.uid,
+                        all_user_role: authService.UserRole,
+                        user_role: user_role,
+                        centerIdx: center_idx
+                    });
+                });
+            });
         });
     });
 });
@@ -83,6 +106,45 @@ router.get('/edit', function (req, res, next) {
             }
             res.render('event/edit', {eventDetail: event});
         });
+    });
+});
+
+router.get('/followed', function (req, res, next) {
+    let uid = req.query.user_id ? req.query.user_id : req.session.uid;
+    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: 'Database Error'});
+        }
+        else if(!authorized) {
+            res.redirect('/login');
+        } else {
+            user_db.getUserFollowedEventsByUid(uid, (err, followed_events) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: 'Database Error'});
+                } else {
+                    event_db.getEventSet((err, event_set) => {
+                        if (err) {
+                            console.log(err);
+                            res.status(400).json({msg: 'Database Error'});
+                        }
+                        let followed_event_ids = JSON.parse(followed_events);
+                        let followed_event_set = [];
+
+                        event_set.forEach(function (event) {
+                            if (followed_event_ids.includes(event.id)) {
+                                followed_event_set.push(event);
+                            }
+                        });
+
+                        res.render('event/followed', {
+                            event_set: followed_event_set
+                        });
+                    });
+                }
+            });
+        }
     });
 });
 
