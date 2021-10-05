@@ -1,5 +1,0 @@
-//TODO:
-$( ".hello" ).remove(); for removing members input line on edit and create pages
-Add "not authorized page" with auto redirection for none authorized accesses
-After redirection, show why is redirected, e.g. "Log in to access this page"
-Combine Query that Yuanchen talked about together

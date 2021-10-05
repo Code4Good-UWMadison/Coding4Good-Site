@@ -6,37 +6,30 @@
     <script src="/js/SortScript.js"></script>
     <script type="text/javascript">
         $(function () {
-            
             addLink();
-            mod()
-   
+            mod();
         });
 
-        function mod(){
-            $("#guidelines").click(function (){
-                
-                $(this).text(function(i, text){
-                  if( $( ".guidelines" ).hasClass( "hide" ))
-                 {   $( ".guidelines" ).hide();
-                     $( ".guidelines" ).removeClass( "hide" )}
-                  $( ".guidelines" ).toggle( "slow" )
-
-                  return text.trim() === "Show Guidelines" ? "Hide Guidelines" : "Show Guidelines";
-    })
-
-            
-        })
-            
- 
+        function mod() {
+            $("#guidelines").click(function () {
+                $(this).text(function (i, text) {
+                    if ($(".guidelines").hasClass("hide")) {
+                        $(".guidelines").hide();
+                        $(".guidelines").removeClass("hide")
+                    }
+                    $(".guidelines").toggle("slow")
+                    return text.trim() === "Show Guidelines" ? "Hide Guidelines" : "Show Guidelines";
+                });
+            });
         }
-        function addLink(){
+        function addLink() {
             $(".projectRow").click(function () {
                 var projectId = this.id;
                 $(location).attr('href', '/project/detail?id=' + projectId);
             });
         }
         //this is used by sortscript for sorting purpose
-        function afterSort(){
+        function afterSort() {
             addLink();
         }
 
@@ -45,91 +38,93 @@
 
 <body>
 
-<% include ../template/nav.ejs %>
+    <% include ../template/nav.ejs %>
 
-<div class="container body-layout">
-    <div class="row center">
+    <div class="container body-layout">
+        <div class="row center">
         <% if(isMy){ %>
-        <h2>My Projects</h2>
+            <h2>My Projects</h2>
         <% } else{ %>
-        <h2>Projects</h2>
+            <h2>Projects</h2>
         <% } %>
-    </div>
-    <div class="row margin-htop">
-        <div class="col-sm-1">
-            <h4>Search: </h4>
         </div>
-        <div class="col-sm-5">
-            <input type="text" class="input searchable"
-                   placeholder="keyword, key words, key words"/>
-        </div>
-        <div align="right">
-            <a class="btn primary-button" id="guidelines">
-                Show Guidelines
-             </a>
+        <div class="row margin-htop">
+            <div class="col-sm-1">
+                <h4>Search: </h4>
+            </div>
+            <div class="col-sm-5">
+                <input type="text" class="input searchable" placeholder="keyword, key words, key words" />
+            </div>
+            <div align="right">
+                <a class="btn primary-button" id="guidelines">
+                    Show Guidelines
+                </a>
 
-            <% if (uid != null){ %>
-            <%if (auth([all_user_role.Developer, all_user_role.ProjectManager, all_user_role.Admin], user_role)) { %>
-            <a class="btn primary-button" href="/project/edit">New Project</a>
-            <% } %>
-            <a class="btn primary-button" href="/project/my">My Project</a>
+            <% if (uid !=null){ %>
+                <%if (auth([all_user_role.Developer, all_user_role.ProjectManager, all_user_role.Admin], user_role)) { %>
+                    <a class="btn primary-button" href="/project/edit">New Project</a>
+                <% } %>
+                <a class="btn primary-button" href="/project/my">My Project</a>
             <% } else if(isMy) { %>
-            <a class="btn primary-button" href="/project">Back</a>
+                <a class="btn primary-button" href="/project">Back</a>
             <% } %>
+            </div>
         </div>
+        <div class="guidelines margin-htop hide">
+            <ul>
+                <h4 class="text-info">Team Leaders</h4>
+                <li> Prepare for meetings, take attendance, and setup communication rules and expectations </li>
+                <li> Check in with project manager frequently to check up on progress and report any issues that may
+                    arise </li>
+                <li> Be responsible </li>
+                <li> Encourage a learning environment/pair programming. Provide resources early. </li>
+                <li> Support a variety of roles. For example, UI/UX/design roles or DBA. </li>
+                <li> Reward the team for hitting milestones (funding will be provided) and encourage the team to be
+                    social </li>
+            </ul>
+            <ul>
+                <h4 class="text-info">Team Members</h4>
+                <li> Can only miss two consecutive meetings without an excuse before becoming inactive and removed
+                    from the team</li>
+                <li> Be honest and open if you are struggling with the concepts or have limited time </li>
+                <li> Be accountable for tasks </li>
+            </ul>
+            <ul>
+                <h4 class="text-info">Everyone</h4>
+                <li> Have fun </li>
+
+            </ul>
+
+        </div>
+        <table class="table margin-htop sortable searchable" align="center">
+            <thead class="row margin-top">
+                <tr class="tr clickable">
+                    <th>Project Name</th>
+                    <th>Organization Name</th>
+                    <th class="center">Project Status</th>
+                    <th class="center">Open to Apply</th>
+                </tr>
+            </thead>
+            <tbody id="projectTbody">
+                <% if(projectSet.length==0){ %>
+                <tr>
+                    <td class="error-msg">Sorry! Currently, there are no project available</td>
+                </tr>
+                <% } %>
+
+                <% projectSet.forEach(function(row){ %>
+                <tr class="tr clickable projectRow" id=<%=row.id %>>
+                    <td class="td"><%= row.title %></td>
+                    <td class="td"><%= row.org_name %></td>
+                    <td class="td center"><%= row.status %></td>
+                    <td class="td center"><%= (row.applyable ? "Yes" : "No" ) %></td>
+                </tr>
+                <% }); %>
+
+            </tbody>
+        </table>
     </div>
-    <div class="guidelines margin-htop hide">
-      <ul>  
-      <h4 class="text-info">Team Leaders</h4>
-      <li> Prepare for meetings, take attendance, and setup communication rules and expectations </li>  
-      <li>   Check in with project manager frequently to check up on progress and report any issues that may arise  </li>  
-      <li>  Be responsible  </li>  
-      <li>   Encourage a learning environment/pair programming. Provide resources early.  </li>  
-      <li> Support a variety of roles. For example, UI/UX/design roles or DBA.  </li>  
-      <li>  Reward the team for hitting milestones (funding will be provided) and encourage the team to be social  </li>  
-    </ul>
-    <ul>
-    <h4 class="text-info">Team Members</h4>
-    <li>  Can only miss two consecutive meetings without an excuse before becoming inactive and removed from the team</li>
-    <li>  Be honest and open if you are struggling with the concepts or have limited time </li>  
-    <li>  Be accountable for tasks </li>  
-    </ul>
-    <ul>
-    <h4 class="text-info">Everyone</h4>
-    <li>  Have fun </li>  
 
-    </ul>
-
-    </div>
-    <table class="table margin-htop sortable searchable" align="center">
-        <thead class="row margin-top">
-        <tr class="tr clickable">
-            <th>Project Name</th>
-            <th>Organization Name</th>
-            <th class="center">Project Status</th>
-            <th class="center">Open to Apply</th>
-        </tr>
-        </thead>
-        <tbody id="projectTbody">
-        <% if(projectSet.length == 0){ %>
-        <tr>
-            <td class="error-msg">Sorry! Currently, there are no project available</td>
-        </tr>
-        <% } %>
-
-        <% projectSet.forEach(function(row){ %>
-        <tr class="tr clickable projectRow" id=<%= row.id %>>
-            <td class="td"><%= row.title %></td>
-            <td class="td"><%= row.org_name %></td>
-            <td class="td center"><%= row.status %></td>
-            <td class="td center"><%= (row.applyable ? "Yes" : "No") %></td>
-        </tr>
-        <% }); %>
-
-        </tbody>
-    </table>
-</div>
-
-<% include ../template/footer.ejs %>
+    <% include ../template/footer.ejs %>
 </body>
 </html>

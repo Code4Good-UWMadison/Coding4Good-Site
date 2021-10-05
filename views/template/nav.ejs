@@ -3,10 +3,16 @@
         const urlParams = new URLSearchParams(window.location.search);
         const status = urlParams.get('status');
         if(status == 's'){
-            $('#notification-bar').css("visibility","visible");
-            $('#notification-bar').fadeOut(4000, "swing");
+            let notificationText = "Your submission has successfully been saved!";
+            showNotificationBar(notificationText);
         }
     })
+
+    function showNotificationBar (notificationText){
+        $('#notification-text').html(notificationText);
+        $('#notification-bar').css("visibility","visible");
+        $('#notification-bar').fadeOut(4000, "swing");
+    }
 </script>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
@@ -41,5 +47,5 @@
     </div>
 </nav>
 <div id="notification-bar">
-    <p>Your submission has successfully been saved!</p>
+    <p id="notification-text"></p>
 </div>

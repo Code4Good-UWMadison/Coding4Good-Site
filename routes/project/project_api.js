@@ -77,7 +77,6 @@ router.post('/removeProject', function(req, res, next){
 });
 
 router.post('/applyProject', function(req, res, next){
-    const {project_id}=req.query;
     authService.authorizationCheck(null, req.session.uid, function(err, authorized){
         if (err) {
             res.status(400).json({msg: 'Database Error'});
@@ -87,39 +86,21 @@ router.post('/applyProject', function(req, res, next){
             res.status(403).json({msg: 'Not Authorized'});
             return;
         }
-        user_db.getProfileByUserId(req.session.uid, function(err, hasProfile){
-            if (err){
-                res.status(400).json({msg: "Database Error"});
-            }else{
-                if (hasProfile){
-                    project_db.applyProject(req.body, req.session.uid, function(err){    
-                        if(err){
-                            console.log(err);
-                            res.status(400).json({msg: 'Failed to apply'});
-                            return;
-                        }
-                        else
-                        {   user_db.updateProfile(req.session.uid, req.body, function (err) {
-                            if (err) {
-                                console.log(err);
-                                res.status(400).json({msg: 'Database Error'});
-                                return;
-                            }
-                            res.json({});
-                        });
-                        }
-                    });
+        project_db.applyProject(req.body, req.session.uid, function(err){    
+            if(err){
+                if(err.code == 23505){
+                    res.json({status: false, msg: 'You have already applied to this project!'});
                 }
                 else{
-                    res.json({msg: "Please complete your Profile before applying for a project."});
+                    console.log(err);
+                    res.status(400).json({msg: 'Failed to apply'});
+                    return;
                 }
             }
+            else{
+                res.json({status: true});
+            }
         });
-
-
-        
-
-
     });
 });
 
