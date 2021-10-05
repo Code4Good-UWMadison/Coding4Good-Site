@@ -2,9 +2,9 @@ var pg = require('pg');
 var config = require('./dbconfig.js');
 var db = new pg.Pool(config.db);
 
-exports.getEventSet = function (callback) {
-    let query = `SELECT * FROM event;`;
-    db.query(query, function (err, result) {
+exports.getEventSet = function (offset, callback) {
+    let query = `SELECT * FROM event ORDER BY event_time DESC LIMIT 20 OFFSET $1;`;
+    db.query(query, [offset], function (err, result) {
         if (err) {
             callback(err);
         } else {
@@ -55,7 +55,6 @@ exports.editEvent = function (event, callback) {
         ],
         function (err, event_id) {
             if (err) {
-                console.log(err, event_id);
                 callback(err, event_id);
             } else {
                 callback(null, event_id);
@@ -82,6 +81,20 @@ exports.getEventById = function (eventId, callback) {
 exports.removeEventById = function (eventId, callback) {
     let queryEvent = `DELETE FROM event WHERE id=$1;`
     db.query(queryEvent, [eventId], function (err, result) {
+        if (err) {
+            callback(err);
+        }
+        if (result.rowCount > 0) {
+            callback(null);
+        } else {
+            callback('No matching event id');
+        }
+    });
+}
+
+exports.changeEventStatusCodeById = function (eventId, statusCode, callback) {
+    let query = 'UPDATE event SET status = $2 WHERE id = $1;';
+    db.query(query, [eventId, statusCode], function (err, result) {
         if (err) {
             callback(err);
         }

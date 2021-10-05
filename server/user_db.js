@@ -2,7 +2,7 @@ var self = this;
 var pg = require("pg");
 var config = require("./dbconfig.js");
 var db = new pg.Pool(config.db);
-var bcrypt = require("bcrypt");
+var bcrypt = require("bcryptjs");
 
 // exports.reset = function (callback) {
 //   var query = `drop table if exists user_profile;
@@ -121,20 +121,29 @@ exports.getUserInfo = function(uid, callback) {
   });
 };
 
-exports.getUserById = function (uid, callback) {
-  var query = `SELECT id, email, name, create_date FROM users WHERE id=$1;`;
+exports.getUserById = function (uid, project_id, callback) {
+  var query = `SELECT u.id, u.email, u.name FROM users as u WHERE u.id=$1;`;
+  
   db.query(query, [uid], function (err, result) {
     if (err) {
       callback(err);
     }
-    else {
-      if (result.rows.length == 0) {
-        callback(null, null);
-      }
-      else {
-        callback(null, result.rows[0]);
-      }
-    }
+    else if(!project_id)
+    {
+      callback(null, result.rows[0]);
+    } 
+    else  
+    { 
+      var query2=`SELECT  reason, intended_teamleader,contribution,active_participation,interests,time_for_project,application_date FROM project_application_relation WHERE user_id=$1 AND project_id=$2;`
+         db.query(query2,[uid,project_id], function(err, res) {
+          if (err) {
+            console.log(err)
+            callback(err);
+          } else {
+            callback(null,{...result.rows[0],...res.rows[0]})
+          }
+    })}
+
   });
 };
 
@@ -150,7 +159,6 @@ exports.updateProfile = function(uid, profile, callback) {
       uid,
       profile.nickname ? profile.nickname : "",
       profile.year,
-      profile.intended_teamleader,
       profile.pl,
       profile.dev,
       profile.resume ? profile.resume : "",
@@ -225,36 +233,27 @@ exports.getUserRoleByUid = function(user_id, callback) {
 // replace all roles (that are not associated with a project) by new roles of a user of given id
 // input: user_id int
 // input: roles string[]
-exports.setUserRoleByUid = function(user_id, roles, callback){
+exports.setUserRoleByUid = async (user_id, roles) => {
   if(!roles){
     roles = [];
   }
   const remove = `DELETE FROM user_role WHERE user_id = $1 AND associated_project_id IS NULL;`;
   const insert = `INSERT INTO user_role (user_id, user_role) VALUES ($1, $2)`;
-  db.query(remove, [user_id], function(err) {
-    if(err){
-      console.log(err);
-      callback(err);
+  const client = await db.connect();
+  try{
+    await client.query("BEGIN");
+    await client.query(remove, [user_id]);
+
+    for (var i = 0; i < roles.length; i++){
+      await client.query(insert, [user_id, roles[i]]);
     }
-    else{
-      // make sure callback is only called after loop finish
-      Promise.all(roles.map(function(role) {
-        return new Promise(function(resolve, reject){
-          db.query(insert, [user_id, role], function(err) {
-            if(err){
-              return reject(err);
-            }
-            resolve();
-          });
-        });
-      })).then(function(){
-        callback();
-      }, function(err){
-        console.log(err);
-        callback(err);
-      });
-    }
-  });
+    await client.query("COMMIT");
+  }catch(err){
+    await client.query("ROLLBACK");
+    throw err;
+  }finally{
+    client.release();
+  }
 };
 
 exports.getAllUser = function(callback) {
@@ -293,7 +292,6 @@ exports.resetPassword = function(password, email, user_id, callback) {
     } 
     else {
       var query = `UPDATE users SET password = $1 WHERE email = $2 AND id = $3;`;
-      console.log(hash);
       db.query(query, [hash, email, user_id], function(err) {
         if (err) {
           callback(err); 
@@ -303,4 +301,15 @@ exports.resetPassword = function(password, email, user_id, callback) {
       });
     }
   });
+};
+
+exports.getUnconfirmedUsers = function(callback) {
+  var query = `SELECT id, create_date FROM users WHERE email_verified = false;`;
+  db.query(query, function(err, result) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result.rows);
+    }
+  })
 };

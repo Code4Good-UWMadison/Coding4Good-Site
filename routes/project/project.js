@@ -17,7 +17,7 @@ router.get('/', function (req, res, next) {
                 res.status(400).json({msg: 'Database Error'});
                 return;
             }
-
+           
             res.render('project/index', {
                 projectSet: projectSet,
                 isMy: false,
@@ -157,6 +157,10 @@ router.get('/edit', function (req, res, next) {
 });
 
 router.get('/applicants', function (req, res, next) {
+    if (req.session.uid == null) {
+        res.redirect('../login');
+        return;
+    }
     let roles = [authService.UserRole.Admin,
                 authService.UserRole.Developer,
                 authService.UserRole.ProjectManager,

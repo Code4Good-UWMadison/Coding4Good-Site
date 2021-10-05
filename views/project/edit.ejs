@@ -4,8 +4,14 @@
     <% include ../template/head.ejs %>
     <script>
         var data =<%-JSON.stringify(allUser)%>;
+
         var projectDetail = <%-JSON.stringify(projectDetail)%>;
         var roleList = <%-JSON.stringify(role_list)%>;
+     //   $(document).ready(function(){
+       //     $(".delete-button").click(function(){
+         //       $(this).parent().remove();
+           //   })
+        //})
         function selectListFocus(){
             var list = $(".member-list").toArray();
             list.forEach(function (input) {
@@ -40,6 +46,9 @@
         }
         $(function () {
             addMemberRow();
+            $(".delete-button").click(function(){
+                $(this).parent().remove();
+              })
             $('.member-list').editableSelect({effects: 'slide'});
             $('#member-input-space').removeClass('hide');
             selectListFocus();
@@ -183,7 +192,6 @@
             <a class="btn primary-button" href="/project">Back</a>
         <%}%>
     </div>
-    <p class="error-msg" id="error-msg"></p>
     <div>
         <div class="input-group new-project-input">
             <div class="input-group-addon">&nbsp;&nbsp;&nbsp;Project Title:&nbsp;&nbsp;&nbsp;</div>
@@ -215,6 +223,9 @@
                     <option <%=(member.user_role==role_list.ProjectMember)?'selected':''%> value="<%=role_list.ProjectMember%>">Member</option>
                     <option <%=(member.user_role==role_list.ProjectLeader)?'selected':''%> value="<%=role_list.ProjectLeader%>">Leader</option>
                 </select>
+                <div class="input-group-addon delete-button">
+                    X 
+                </div>
             </div>
             <% currentRow++; %>
             <% }) %>

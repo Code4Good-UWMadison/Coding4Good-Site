@@ -18,6 +18,13 @@ exports.sendEmail = function(emailDetail, callback){
         callback("Error: info is not sent! Please contact admin!");
     }
     else{
+        let path = '/app/public/img/icon.jpg'
+        if(process.env.ISPRODUCTION === "aws"){
+            path = "/var/app/current/public/img/icon.jpg";
+        }
+        else if(process.env.ISPRODUCTION === "dev"){
+            path = "./public/img/icon.jpg"
+        }
         //Default
         const email = {
             from: emailDetail.from ? emailDetail.from : `Coding for Good Team <${process.env.EMAILUSER}>`,
@@ -29,10 +36,11 @@ exports.sendEmail = function(emailDetail, callback){
                     Please do not reply to this email.`,
             attachments: [{
                 filename: 'icon.jpg',
-                path: '/app/public/img/icon.jpg',
+                path: path,
                 cid: 'club-icon'
             }]
         }
+        
         let transporter = nodemailer.createTransport({
             host: HOST,
             secureConnection: false,
@@ -46,11 +54,10 @@ exports.sendEmail = function(emailDetail, callback){
     
         transporter.sendMail(email, function (err, info) {
                 if(err){
-                    //console.log(err);
+                    console.log(err);
                     callback(err);
                 }
                 else{
-                    //console.log(info);
                     callback(null);
                 }
         });

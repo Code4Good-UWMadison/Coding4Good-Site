@@ -15,7 +15,7 @@
         <a class="btn primary-button right" href="/event/create">Create Event</a>
     <% } %>
 
-    <% if (eventsSet.length == 0) { %>
+    <% if (eventsSet.length === 0) { %>
         <p class="error-msg">Sorry! Currently, there are no events available</p>
     <% } else { %>
         <div class="cover-flow">
@@ -47,7 +47,11 @@
                     <div class="change-sl invisible">&nbsp;</div>
                 <% } %>
                 <div class="curr-info">
-                    <h2><%= eventsSet[i].title %></h2>
+                    <% if (eventsSet[i].status === 1) { %>
+                        <h2>[Cancelled]&nbsp;<strike><%= eventsSet[i].title %></strike></h2>
+                    <% } else { %>
+                        <h2><%= eventsSet[i].title %></h2>
+                    <% } %>
                     <h3><%= eventsSet[i].event_time.toDateString() + " " + eventsSet[i].event_time.toLocaleTimeString() %></h3>
                     <h3><%= eventsSet[i].location %></h3>
                     <% if (eventsSet[i].link) { %>
