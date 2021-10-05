@@ -30,36 +30,12 @@
                     }
                 });
             });
-            /**$("#apply-button").click(function () {
-                $("#apply-button").attr('disabled', true);
-                $.ajax({
-                    url: "/project/applyProject",
-                    method: "POST",
-                    dataType: "json",
-                    data: {
-                        project_id: projectDetail.id
-                    },
-                    success: function (result) {
-                        if (result.msg) {
-                            $(".error-msg").html(result.msg);
-                            $("#apply-button").attr('disabled', false);
-                        }
-                        else {
-                            window.location.reload();
-                        }  
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        $("#error-msg").html(jqXHR.responseJSON);
-                        $("#apply-button").attr('disabled',false);
-                    }
-                });
-            });*/
             $("#apply-button").click(function () {
-                window.location.href = `../apply?project_id=${projectDetail.id}` ;
+                window.location.href = `/profile?project_id=${projectDetail.id}&applying=true`;
             });
 
             $("#applicants-button").click(function () {
-                window.location.href = "/project/applicants?project_id=" + projectDetail.id;
+                window.location.href = `/project/applicants?project_id=${projectDetail.id}`;
             });
 
         });

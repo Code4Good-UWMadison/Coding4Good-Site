@@ -26,8 +26,11 @@ router.get('/sponsor', function (req, res) {
 });
 
 router.get('/profile', function (req, res) {
-    var profile_uid = req.query.user_id ? req.query.user_id : req.session.uid;
-    var project_id = req.query.project_id;
+    let profile_uid = req.query.user_id ? req.query.user_id : req.session.uid;
+    let project_id = req.query.project_id;
+    // TODO, auth for approve/reject button
+    let canApprove = true;
+    // TODO, add team leader to be able to approve members
     authService.authorizationCheck(null, req.session.uid, function(err, authorized){
         if (err) {
             console.log(err);
@@ -57,10 +60,12 @@ router.get('/profile', function (req, res) {
                             {
                                 profile: profile, 
                                 others: profile_uid != req.session.uid, 
-                                fromApply: req.query.fromApply ? true : false, 
+                                fromApplicants: req.query.fromApplicants ? true : false, 
                                 user: user, 
                                 project_id: project_id,
-                                applying:false});
+                                applying: req.query.applying ? true : false,
+                                canApprove: canApprove,
+                            });
                         }
                     })
                 }
@@ -68,68 +73,6 @@ router.get('/profile', function (req, res) {
         }
     });
 });
-
-
-router.get('/apply', function (req, res) {
-    var profile_uid = req.query.user_id ? req.query.user_id : req.session.uid;
-    var project_id = req.query.project_id;
-    authService.authorizationCheck(null, req.session.uid, function(err, authorized){
-        if (err) {
-            console.log(err);
-            res.status(400).json({msg: 'Database Error'});
-        }
-        else if(!authorized){
-            res.redirect('/login');
-        }
-        else{
-            db.getProfileByUserId(profile_uid, function (err, profile) {
-                if(err){
-                    console.log(err);
-                    res.status(400).json({msg: err});
-                    return;
-                }
-                else{
-                    if(!profile){
-                        profile = {};
-                    }
-                    db.getUserById(profile_uid , project_id, function (err, user){
-                        if(err){
-                            console.log(err);
-                            res.status(400).json({msg: err});
-                        }
-                        else{
-                           
-                            res.render('user/profile', 
-                            {
-                                profile: profile, 
-                                others: profile_uid != req.session.uid, 
-                                fromApply: req.query.fromApply ? true : false, 
-                                user: user, 
-                                project_id: project_id,
-                                applying:true})
-                        }
-                    })
-                }
-            });
-        }
-    });
-});
-
-// router.get('/upload-complete', function (req, res) {
-//     authService.authorizationCheck(null, req.session.uid, function(err, authorized){
-//         if (err) {
-//             res.status(400).json({msg: 'Database Error'});
-//             return;
-//         }
-//         else if(!authorized){
-//             res.redirect('/login');
-//             return;
-//         }
-//         else{
-//             res.render('user/upload-complete');
-//         }
-//     });
-// });
 
 router.get('/login', function (req, res, next) {
     res.render('user/login', {});
@@ -202,34 +145,40 @@ router.get('/confirmation/:token', function (req, res){
         }
         else{
             var id = decoded.uid;
-            var user = {
-                "email": decoded.email,
-                "password": decoded.password 
-            };
-            db.verifyUser(user, function(err, uid){
-                if (err) {
-                    console.log(err);
-                    res.status(400).json({msg: err});
-                    return;
-                }
-                else if(!uid) {
-                    res.status(400).json({msg: "Wrong token information, unauthorized!"});
-                    return;
-                }
-                else {
-                    db.verifyEmailByUserId(uid, function (err){
-                        if (err) {
-                            console.log(err);
-                            res.status(400).json({msg: err});
-                            return;
-                        }
-                        else{
-                            req.session.uid = uid;
-                            res.redirect('/?status=s');                           
-                        }
-                    });
-                }
-            })
+            if(!id) {
+                res.status(400).json({msg: "Invalid token information, unauthorized!"});
+                return;
+            }
+            else{
+                var user = {
+                    "email": decoded.email,
+                    "password": decoded.password 
+                };
+                db.verifyUser(user, function(err, uid){
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: err});
+                        return;
+                    }
+                    else if(!uid || uid != id) {
+                        res.status(400).json({msg: "Invalid token information, unauthorized!"});
+                        return;
+                    }
+                    else {
+                        db.verifyEmailByUserId(uid, function (err){
+                            if (err) {
+                                console.log(err);
+                                res.status(400).json({msg: err});
+                                return;
+                            }
+                            else{
+                                req.session.uid = uid;
+                                res.redirect('/?status=s');                           
+                            }
+                        });
+                    }
+                })
+            }
         }
     });
 });

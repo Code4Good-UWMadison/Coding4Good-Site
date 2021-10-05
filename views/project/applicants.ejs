@@ -11,7 +11,7 @@
             });
             function addLink(){
                 $(".projectRow").click(function () {
-                    $(location).attr('href', `/profile?fromApply=true&project_id=${project_id}&user_id=${this.id}`);
+                    $(location).attr('href', `/profile?fromApplicants=true&project_id=${project_id}&user_id=${this.id}`);
                 });
             }
             //this is used by sortscript for sorting purpose
@@ -20,17 +20,19 @@
             }
 
             //Used to copy columns of applicants table
-            $(document).ready(function() {
+            $(function() {
                 $("#copyButton").click(function() {
                     let colsArray = [];
                     $("#copyTable input").each(function(index) {
-                        if($(this).is(':checked')) {
+                        if($(this).is(':checked') && this.id != "copyHeaders") {
                             colsArray.push(index);
                             $(this).prop('checked', false);
                         }
                     })
                     if(colsArray.length > 0) {
                         copyColumns(colsArray);
+                        let notificationText = "Selected columns have been successfully copied to clipboard!";
+                        showNotificationBar(notificationText);
                     }
                 })
 
@@ -48,6 +50,7 @@
                             }
                             copyString += "\n";
                         })
+                        $("#copyHeaders").prop('checked', false);
                     };
 
                     $("#projectTbody tr").each(function() {
@@ -135,20 +138,20 @@
                     <input type="checkbox" id="checkbox4"> 
                         Intended Leader
                 </label>
+                <label class="col-lg-3 col-sm-6 col-xs-6" for="checkbox5">
+                    <input type="checkbox" id="checkbox5"> 
+                        Application Date
+                </label>
+                <label class = "col-lg-3 col-sm-6 col-xs-6" for="copyHeaders">
+                    <input type="checkbox" id="copyHeaders"> 
+                        Copy Headers
+                </label>
+                <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <button id="copyButton" class="col-lg-offset-6 btn primary-button mid-btn">Copy to click board</button>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-offset-2 col-lg-10">
-                <div  class="col-lg-offset-6 col-lg-3 col-sm-6 col-xs-6">
-                    <label for="copyHeaders">
-                        <input type="checkbox" id="copyHeaders"> 
-                            Copy Headers
-                    </label>
-                </div>
-                <div class="col-lg-3 col-sm-6 col-xs-6">
-                    <button id="copyButton" class="btn primary-button mid-btn">Copy</button>
-                </div>
-            </div>
         </div>
     </section>
 </div>

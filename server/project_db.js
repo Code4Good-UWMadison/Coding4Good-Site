@@ -1,4 +1,4 @@
-var update_profile=require("./user_db").updateProfile;
+var updateProfile=require("./user_db").updateProfile;
 var self = this;
 var pg = require("pg");
 var config = require("./dbconfig.js");
@@ -136,7 +136,7 @@ exports.removeProjectById = function (projectId, callback) {
 
 // if user has registered profile, put this application info into database
 exports.applyProject = function (profile, user_id, callback) {
-    const {year,intended_teamleader,contribution,active_participation,reason,project_id,time_for_project,interests}=profile;
+    const {intended_teamleader,contribution,active_participation,reason,project_id,time_for_project,interests}=profile;
     // add member's application interest into project_application_relation table
     // the database has already checked uniqueness
     const query = `INSERT INTO project_application_relation (project_id, user_id,intended_teamleader,reason,contribution,active_participation,interests,time_for_project,application_date) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,now() at time zone 'America/Chicago');`;
@@ -145,11 +145,12 @@ exports.applyProject = function (profile, user_id, callback) {
             callback(err);
         }
         else {
-            update_profile(user_id,{year},function(err){
+            updateProfile(user_id, profile, function(err){
                 if(err)
-                callback(err);
+                    callback(err);
                 else
-                callback(null);})
+                    callback(null);
+            });
         }
     });
  };
