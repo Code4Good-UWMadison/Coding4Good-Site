@@ -4,87 +4,27 @@
 <head>
     <% include ../template/head.ejs %>
     <script>
-        var user = <% -JSON.stringify(user == null ? "": user) %>;
-        var project_id = Number(<% - JSON.stringify(project_id) %>);
-        var applying =<% - JSON.stringify(applying??"") %>;
-        var fromApply =<% - JSON.stringify(fromApply??"") %>;
-        <% if (!fromApply) { %>
-        $(function () {
-            $(".slider").each(function () {
-                $(this).hide();
-            });
-            
-            $("#pl-java").click(function () {
-                $("#javaRange").toggle(this.checked);
-            });
-            $("#pl-javascript").click(function () {
-                $("#jsRange").toggle(this.checked);
-            });
-            $("#pl-c").click(function () {
-                $("#cRange").toggle(this.checked);
-            });
-            $("#pl-cpp").click(function () {
-                $("#cppRange").toggle(this.checked);
-            });
-            $("#pl-csharp").click(function () {
-                $("#cshRange").toggle(this.checked);
-            });
-            $("#pl-objectivec").click(function () {
-                $("#objcRange").toggle(this.checked);
-            });
-            $("#pl-swift").click(function () {
-                $("#swRange").toggle(this.checked);
-            });
-            $("#pl-python").click(function () {
-                $("#pyRange").toggle(this.checked);
-            });
-            $("#pl-matlab").click(function () {
-                $("#matRange").toggle(this.checked);
-            });
-            $("#pl-assembly").click(function () {
-                $("#assRange").toggle(this.checked);
-            });
-            $("#pl-lisp").click(function () {
-                $("#lispRange").toggle(this.checked);
+        var user = <%- JSON.stringify(user) %>;
+        var project_id = Number(<%- JSON.stringify(project_id) %>);
+        var applying =<%- JSON.stringify(applying??"") %>;
+        var fromApplicants =<%- JSON.stringify(fromApplicants??"") %>;
+        <% var plskill = ["Java", "Javascript", "C", "C++", "C#", "Objective-C", "Swift", "Python", "Matlab", "Assembly", "LISP", "PHP", "SQL", "MongoDB"] %> 
+        <% var devskill = ["React", "Angular", "React Native", "Express", "Django", "Flask", "UI design", "Databases", "QA/Automated Testing", "IOS", "Android", "Windows Desktop", "Mac OS Desktop", "Linux software", "Algorithm", "Networking", "Machine Learning", "Data Science", "Automation", "Communication"] %>
+        $(function() {
+            $(".skill-group").each((index, elem) => {
+                var $checkbox = $(elem).find("input[type='checkbox']");
+                var $slidebar = $(elem).find(".slider");
+                if(!$checkbox.prop("checked")){
+                    $slidebar.hide();
+                }
+                <% if (!others) {%>
+                    $checkbox.click(() => $slidebar.toggle());
+                <% } else { %>
+                    $slidebar.prop("disabled", "true");
+                <% } %>
             });
 
-            $("#dev-frontend").click(function () {
-                $("#fnRange").toggle(this.checked);
-            });
-            $("#dev-backend").click(function () {
-                $("#bnRange").toggle(this.checked);
-            });
-            $("#dev-ios").click(function () {
-                $("#iosRange").toggle(this.checked);
-            });
-            $("#dev-android").click(function () {
-                $("#andrRange").toggle(this.checked);
-            });
-            $("#dev-windows").click(function () {
-                $("#windowsRange").toggle(this.checked);
-            });
-            $("#dev-mac").click(function () {
-                $("#macRange").toggle(this.checked);
-            });
-            $("#dev-linux").click(function () {
-                $("#linuxRange").toggle(this.checked);
-            });
-            $("#dev-algorithm").click(function () {
-                $("#algoRange").toggle(this.checked);
-            });
-            $("#dev-network").click(function () {
-                $("#netRange").toggle(this.checked);
-            });
-            $("#dev-ml").click(function () {
-                $("#mlRange").toggle(this.checked);
-            });
-            $("#dev-ds").click(function () {
-                $("#dsRange").toggle(this.checked);
-            });
-            $("#dev-communication").click(function () {
-                $("#commRange").toggle(this.checked);
-            });
-            var error = "none";
+            <% if (!others) { %>
             $("#submit-button").click(function () {
                 $("#submit-button").attr('disabled', true);
                 var profile = {
@@ -99,45 +39,45 @@
                     time_for_project: 0,
                     interests: "",
                     active_participation: "",
-                    description: ""
-            };
-            profile.nickname = $("#nickname").val();
-            profile.year = $("#year").val();
-            profile.description = $("#intro").val();
+                    description: "",
+                    resume: "<%= profile.resume %>"
+                };
+                profile.nickname = $("#nickname").val();
+                profile.year = $("#year").val();
+                profile.description = $.trim($("#intro").val());
 
-            var error = null;
-            if (applying) {
-                profile.intended_teamleader = $("#teamleader").prop('checked');
-                profile.reason = $("#reason").val();
-                profile.time_for_project = $("#time_for_project").val();
-                profile.interests = $("#interests").val();
-                profile.contribution = $("#contribution").val();
-                profile.active_participation = $("#active_participation").val();
-                if (!$.isNumeric(profile.time_for_project))
-                    error = "Please fill in the number of hours you will be able to commit for the project!";
-                else if (!$.trim(profile.reason).length > 0)
-                    error = "Please fill in the reason you want to join this project";
-                else if (!$.trim(profile.interests).length > 0)
-                    error = "Please fill in your interests to help us know you better";
-                else if (!$.trim(profile.active_participation).length > 0)
-                    error = "Please fill in how you plan on being an active member of the project";
-                else
-                    error = "none";
-            }
-            if (!error) {
-                if ($(".pl-checkbox:checked").length > 0) {
+                var error = null;
+                if (applying) {
+                    profile.intended_teamleader = $("#teamleader").prop('checked');
+                    profile.reason = $.trim($("#reason").val());
+                    profile.time_for_project = $("#time_for_project").val();
+                    profile.interests = $.trim($("#interests").val());
+                    profile.contribution = $.trim($("#contribution").val());
+                    profile.active_participation = $.trim($("#active_participation").val());
+                    if (!$.isNumeric(profile.time_for_project))
+                        error = "Please fill in the number of hours you will be able to commit for the project!";
+                    else if (!profile.reason)
+                        error = "Please fill in the reason you want to join this project";
+                    else if (!profile.interests)
+                        error = "Please fill in your interests to help us know you better";
+                    else if (!profile.active_participation)
+                        error = "Please fill in how you plan on being an active member of the project";
+                }
+                if (!error) {
                     $(".pl-group").each(function (index, elem) {
-                        var name = elem.children[0];
-                        var exp = elem.children[1].val;
-                        if (name.checked == true) {
-                            profile.pl[name] = exp;
+                        var $checkbox = $(elem).find("input[type='checkbox']");
+                        if ($checkbox.prop("checked")) {
+                            var dev = $checkbox.val();
+                            var devlvl = $(elem).find(".slider").val();
+                            profile.pl[dev] = devlvl;
                         }
                     }).promise().done(function () {
-                        $(".dev-group"), each(function (index, elem) {
-                            var group = elem.children[0];
-                            var groupex = elem.children[1].val;
-                            if (group.checked == true) {
-                                profile.dev[group] = groupex;
+                        $(".dev-group").each(function (index, elem) {
+                            var $checkbox = $(elem).find("input[type='checkbox']");
+                            if ($checkbox.prop("checked")) {
+                                var dev = $checkbox.val();
+                                var devlvl = $(elem).find(".slider").val();
+                                profile.dev[dev] = devlvl;
                             }
                         }).promise().done(function () {
                             if ($("#resume")[0].files.length > 0) {
@@ -147,15 +87,22 @@
                                 reader.onload = function () {
                                     profile.resume = reader.result;
                                     $.ajax({
-                                        url: "/upload_profile",
+                                        url: applying ? "/project/applyProject" : "/upload_profile",
                                         method: "POST",
                                         dataType: "json",
                                         data: profile,
-                                        success: function () {
-                                            window.location.href = "/profile?status=s";
+                                        success: function (result) {
+                                            if(result.status){
+                                                window.location.href = !applying ? "/profile?status=s" : `../project/detail?id=${project_id}&status=s`;
+                                            }
+                                            else {
+                                                $(".error-msg").html(result.msg);
+                                                setTimeout(() => {  
+                                                    window.location.href = !applying ? "/profile?status=s" : `../project/detail?id=${project_id}`;
+                                                }, 3000);
+                                            }
                                         },
                                         error: function (jqXHR, textStatus, errorThrown) {
-                                            console.log(errorThrown)
                                             $(".error-msg").html(jqXHR.responseJSON);
                                             $("#submit-button").attr('disabled', false);
                                         }
@@ -163,16 +110,25 @@
                                 };
                                 reader.onerror = function (error) {
                                     console.log(error);
+                                    $("#submit-button").attr('disabled', false);
                                 };
                             }
-                            else {
+                            else{
                                 $.ajax({
                                     url: applying ? "/project/applyProject" : "/upload_profile",
                                     method: "POST",
                                     dataType: "json",
                                     data: profile,
-                                    success: function () {
-                                        window.location.href = !applying ? "/profile?status=s" : `../project/detail?id=${project_id}`;
+                                    success: function (result) {
+                                        if(result.status){
+                                            window.location.href = !applying ? "/profile?status=s" : `../project/detail?id=${project_id}&status=s`;
+                                        }
+                                        else {
+                                            $(".error-msg").html(result.msg);
+                                            setTimeout(() => {  
+                                                window.location.href = !applying ? "/profile?status=s" : `../project/detail?id=${project_id}`;
+                                            }, 3000);
+                                        }
                                     },
                                     error: function (jqXHR, textStatus, errorThrown) {
                                         $(".error-msg").html(jqXHR.responseJSON);
@@ -190,42 +146,47 @@
             });
             <% } %>
 
-            var url;
-            $("#confirmation").click(function () {
-                url = "/project/approveApplicant";
-                $("#box-info-text").text("approve");
-                $("#box-info-title").text("Approve");
-                $("#confirmation-box").modal('show');
-            });
-            $("#rejectConfirmation").click(function () {
-                url = "/project/rejectApplicant";
-                $("#box-info-text").text("reject");
-                $("#box-info-title").text("Reject");
-                $("#confirmation-box").modal('show');
-            });
-            $("#canceled").click(function () {
-                $("#confirmation-box").modal('hide');
-            });
-            $("#confirmed").click(function () {
-                $("#confirmed").attr('disabled', true);
-                $.ajax({
-                    url: url,
-                    method: "POST",
-                    dataType: "json",
-                    data: {
-                        user: user,
-                        project_id: project_id
-                    },
-                    success: function () {
-                        window.location.href = "/project/applicants?project_id=" + project_id + "&status=s";
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        $("#error-msg").html(jqXHR.responseJSON);
-                        $("#confirmation-box").modal('hide');
-                        $("#confirmed").attr('disabled', false);
-                    }
+            <% if (fromApplicants&&others&&project_id&&canApprove) { %>
+                var url;
+                $("#confirmation").click(function () {
+                    url = "/project/approveApplicant";
+                    $("#box-info-text").text("approve");
+                    $("#box-info-title").text("Approve");
+                    $("#confirmation-box").modal('show');
                 });
-            });
+                $("#rejectConfirmation").click(function () {
+                    url = "/project/rejectApplicant";
+                    $("#box-info-text").text("reject");
+                    $("#box-info-title").text("Reject");
+                    $("#confirmation-box").modal('show');
+                });
+                $("#canceled").click(function () {
+                    $("#confirmation-box").modal('hide');
+                });
+                $("#confirmed").click(function () {
+                    $("#confirmed").attr('disabled', true);
+                    $.ajax({
+                        url: url,
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            user: user,
+                            project_id: project_id
+                        },
+                        success: function () {
+                            window.location.href = "/project/applicants?project_id=" + project_id + "&status=s";
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#error-msg").html(jqXHR.responseJSON);
+                            $("#confirmation-box").modal('hide');
+                            $("#confirmed").attr('disabled', false);
+                        }
+                    });
+                });
+            <% } %>
+
+            $("#resume-frame").hide();
+            $("#show-resume").click(() => $("#resume-frame").toggle());
         });
     </script>
 </head>
@@ -235,22 +196,26 @@
     <div class="container body-layout min-body-layout">
         <p class="error-msg" id="error-msg"> </p>
         <div class="row">
-            <h3 class="col-md-10">So tell us a bit about yourself!</h3>
-            <% if (fromApply) { %>
+            <% if (!others) { %>
+                <h3 class="col-md-10">So tell us a bit about yourself!</h3>
+            <% } else { %>
+                <h3 class="col-md-10">This is <%= user?user.name : "" %>'s profile!</h3>
+            <% } %>
+            <% if (fromApplicants) { %>
                 <div class="col-md-2">
                     <a class="btn primary-button margin-15top"
                         href="/project/applicants?project_id=<%=project_id%>">Back</a>
                 </div>
             <% } %>
         </div>
-        <form id="profile-form" class="form-group">
+        <div id="profile-form" class="form-group">
             <!--<div class="input-group login-signup-input">-->
             <!--    <div class="input-group-addon">Nickname:</div>-->
             <!--    <input class="form-control" type="text" id="nickname" placeholder="Nickname" value="<%=profile.nickname%>">-->
             <!--</div>-->
             <div class="input-group login-signup-input">
                 <label class="input-group-addon" for="name">Name:</label>
-                <input class="form-control" type="text" id="name" value="<%=user?user.name: " hi" %>"
+                <input class="form-control" type="text" id="name" value="<%=user?user.name: "" %>"
                 readonly="readonly">
             </div>
             <div class="input-group login-signup-input">
@@ -268,12 +233,23 @@
                     <option value="6" <%=(profile.year==6)?'selected':''%> >Graduate or Above</option>
                 </select>
             </div>
+            <div class="login-signup-input row">
+                <% if(!others) { %>
+                <p>(Optional) Resume</p>
+                <input type="file" id="resume">
+                <% } %>
+                <% if(profile&&profile.resume) { %>
+                    <br>
+                    <button id="show-resume" class="btn primary-button">Show resume</button>
+                    <iframe id="resume-frame" width="700" height="800" src="<%= profile.resume %>"></iframe>
+                <% } %>
+            </div>
             <br>
 
-            <% if(fromApply) { %>
-                <div class="login-signup-input" style="foFnt-size:17px;font-weight: bold;"> <br>
+            <% if(fromApplicants) { %>
+                <div class="login-signup-input" style="font-size:17px;font-weight: bold;"> <br>
                     <% if(user.application_date){ %>
-                        <p>Applied on <%- user.application_date.toLocaleDateString() %></p>
+                        <p>Applied on <%= user.application_date.toLocaleDateString() %></p>
                     <% } else { %>
                         <p> Date for this application was not recorded</p>
                     <% } %>
@@ -281,510 +257,136 @@
                 </div>
             <% } %>
 
-            <div class="login-signup-input">
+            <!-- pl checkboxes -->
+            <div class="login-signup-input row">
                 <p style="font-size:17px;">What programming languages are you familiar with?</p>
-                <% var pl=profile.pl ? profile.pl : [] %>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-java" value="pl-java" <%=pl.includes('\"pl-java\"') ? 'checked' : '' %> >
-                        <label for="pl-java"> Java </label> <br>
-                        <input type="range" min="0" max="5" value="0" class="slider" id="javaRange"><br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-javascript"
-                        value="pl-javascript" <%=pl.includes('\"pl-javascript\"') ? 'checked' : '' %> >
-                            <label id="pl-javascript"> Javascript </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="jsRange"> <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox" id="pl-c"
-                        value="pl-c"
-                        <%=pl.includes('\"pl-c\"') ? 'checked' : '' %> > <label for="pl-c"> C </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="cRange"> <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-cpp" value="pl-cpp"
-                        <%=pl.includes('\"pl-cpp\"') ? 'checked' : '' %> > <label for="pl-cpp"> C++ </label>
-                            <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="cppRange"> <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-csharp"
-                        value="pl-csharp" <%=pl.includes('\"pl-csharp\"') ? 'checked' : '' %> > <label
-                                for="pl-csharp"> C# </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="cshRange"> <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-objectivec"
-                        value="pl-objectivec" <%=pl.includes('\"pl-objectivec\"') ? 'checked' : '' %> >
-                            <label for="pl-objectivec"> Objective-C </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="objcRange">
-                            <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-swift" value="pl-swift"
-                        <%=pl.includes('\"pl-swift\"') ? 'checked' : '' %> > <label for="pl-swift"> Swift
-                            </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="swRange"> <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-python"
-                        value="pl-python" <%=pl.includes('\"pl-python\"') ? 'checked' : '' %> > <label
-                                for="pl-python"> Python </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="pyRange"> <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-matlab"
-                        value="pl-matlab" <%=pl.includes('\"pl-matlab\"') ? 'checked' : '' %> > <label
-                                for="pl-matlab"> Matlab </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="matRange"> <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-assembly"
-                        value="pl-assembly" <%=pl.includes('\"pl-assembly\"') ? 'checked' : '' %> > <label
-                                for="pl-assembly"> Assembly </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="assRange"> <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-lisp" value="pl-lisp"
-                        <%=pl.includes('\"pl-lisp\"') ? 'checked' : '' %> > <label for="pl-lisp"> LISP
-                            </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="lispRange">
-                            <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-php" value="pl-php"
-                        <%=pl.includes('\"pl-php\"') ? 'checked' : '' %> > <label for="pl-php"> PHP </label>
-                            <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="phpRange"> <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-sql" value="pl-sql"
-                        <%=pl.includes('\"pl-sql\"') ? 'checked' : '' %> > <label id="pl-sql"> SQL </label>
-                            <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="sqlRange"> <br>
-                    </div>
-                    <div class="pl-group">
-                        <input <%=others ? 'disabled' : '' %> type="checkbox" class="pl-checkbox"
-                        id="pl-mongodb" value="pl-mongodb"
-                        <%=pl.includes('\"pl-mongodb\"') ? 'checked' : '' %> > <label id="pl-mongodb">
-                                MongoDB </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider" id="mongodbRange">
-                            <br>
-                    </div>
+                <% var pl = (profile.pl ? eval("("+profile.pl+")") : {}) %>
+                <% plskill.forEach(function(skill) { %>
+                <div class="pl-group skill-group col-md-6">
+                    <input <%= others ? 'disabled' : '' %> type="checkbox" value="<%= skill %>" id="<%= skill %>"
+                        <%= pl.hasOwnProperty(skill) ? 'checked' : '' %> >
+                    <label for="<%= skill %>"> <%= skill %> </label>
+                    <input type="range" min="0" max="5" value="<%= pl[skill] %>" class="slider"> <br>
+                </div>
+                <% }) %>
             </div>
-            <br>
+
+            <!-- dev checkboxes -->
+            <div class="login-signup-input row">
+                <p style="font-size:17px;">What kinds of development are you familiar with?</p>
+                <% var dev = (profile.dev ? eval("("+profile.dev+")") : {}) %>
+                <% devskill.forEach(function(skill) { %>
+                <div class="dev-group skill-group col-md-6">
+                    <input <%= others ? 'disabled' : '' %> type="checkbox" value="<%= skill %>" id="<%= skill %>"
+                        <%= dev.hasOwnProperty(skill) ? 'checked' : '' %> >
+                    <label for="<%= skill %>"> <%= skill %> </label>
+                    <input type="range" min="0" max="5" value="<%= dev[skill] %>" class="slider">
+                </div>
+                <% }) %>
+            </div>
+
             <div class="login-signup-input">
-                <% var dev=profile.dev ? profile.dev : [] %>
-                    <p style="font-size:17px;">What kinds of development are you familiar with?</p>
-                    <div class="pl-group">
-                        <input id="dev-react" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox" value="dev-react"
-                        <%=dev.includes('\"dev-react\"') ? 'checked' : '' %> > <label for="dev-react"> React
-                            </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-angular" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-angular" <%=dev.includes('\"dev-angular\"') ? 'checked' : '' %> > <label
-                                for="dev-angular">
-                                Angular </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-reactnative" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-reactnative" <%=dev.includes('\"dev-reactnative\"') ? 'checked' : '' %> >
-                            <label for="dev-reactnative"> React Native</label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-express" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-express" <%=dev.includes('\"dev-express\"') ? 'checked' : '' %> >
-                            <label for="dev-express">
-                                Express </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-django" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-django" <%=dev.includes('\"dev-django\"') ? 'checked' : '' %>
-                            > <label for="dev-django">
-                                Django</label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-flask" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-flask" <%=dev.includes('\"dev-flask\"') ? 'checked' : '' %> > <label
-                                for="dev-flask">
-                                Flask </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider">
-                            <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-ui" <%=others ? 'disabled' : '' %>
-                        type="checkbox" class="dev-checkbox"
-                        value="dev-ui" <%=dev.includes('\"dev-ui\"') ? 'checked' : '' %>
-                            > <label for="dev-ui"> UI
-                                design</label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-databases" <%=others ? 'disabled' : '' %>
-                        type="checkbox" class="dev-checkbox"
-                        value="dev-databases" <%=dev.includes('\"dev-databases\"') ? 'checked' : '' %> >
-                            <label for="dev-databases">
-                                Databases</label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-testing" <%=others ? 'disabled' : '' %>
-                        type="checkbox" class="dev-checkbox"
-                        value="dev-testing" <%=dev.includes('\"dev-testing\"') ? 'checked' : '' %> > <label
-                                for="dev-testing"> QA
-                                Testing/Automated Testing </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-ios" <%=others ? 'disabled' : '' %>
-                        type="checkbox" class="dev-checkbox"
-                        value="dev-ios" <%=dev.includes('\"dev-ios\"') ? 'checked' : '' %> > <label
-                                for="dev-ios">
-                                IOS </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-android" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox" value="dev-android"
-                        <%=dev.includes('\"dev-android\"') ? 'checked' : '' %> > <label for="dev-android">
-                                Android</label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-windows" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox" value="dev-windows"
-                        <%=dev.includes('\"dev-windows\"') ? 'checked' : '' %> > <label for="dev-windows">
-                                Windows Desktop
-                                Application</label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-mac" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox" value="dev-mac"
-                        <%=dev.includes('\"dev-mac\"') ? 'checked' : '' %> >
-                            <label for="dev-mac"> Mac OS Desktop
-                                Application </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-linux" <%=others ? 'disabled' : '' %>
-                        type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-linux"
-                        <%=dev.includes('\"dev-linux\"') ? 'checked' : '' %> > <label for="dev-linux"> Linux
-                                software </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-algorithm" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-algorithm"
-                        <%=dev.includes('\"dev-algorithm\"') ? 'checked' : '' %> > <label
-                                for="dev-algorithm">
-                                Algorithm </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-network" <%=others ? 'disabled' : '' %> type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-network"
-                        <%=dev.includes('\"dev-network\"') ? 'checked' : '' %> >
-                            <label for="dev-network">
-                                Networking </label>
-                            <br>
-                            <input type="range" min="0" max="5" value="0" class="slider"> <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-ml" <%=others ? 'disabled' : '' %>
-                        type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-ml"
-                        <%=dev.includes('\"dev-ml\"') ? 'checked' : '' %> >
-                            <label for="dev-ml">
-                                Machine Learning
-                            </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider">
-                            <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-ds" <%=others ? 'disabled' : '' %>
-                        type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-ds"
-                        <%=dev.includes('\"dev-ds\"') ? 'checked' : '' %> > <label for="dev-ds">
-                                Data Science
-                            </label> <br>
-                            <input type="range" min="0" max="5" value="0" class="slider">
-                            <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-automation" <%=others ? 'disabled' : '' %>
-                        type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-automation"
-                        <%=dev.includes('\"dev-automation\"') ? 'checked' : '' %> >
-                            <label for="dev-automation">
-                                Automation</label>
-                            <br>
-                            <input type="range" min="0" max="5" value="0" class="slider">
-                            <br>
-                    </div>
-
-                    <div class="pl-group">
-                        <input id="dev-communication" <%=others ? 'disabled' : '' %>
-                        type="checkbox"
-                        class="dev-checkbox"
-                        value="dev-communication"
-                        <%=dev.includes('\"dev-communication\"') ? 'checked' : '' %> >
-                            <label for="dev-communication">
-                                Communicate
-                                with
-                                people
-                                :)
-                            </label>
-                            <br>
-                            <input type="range" min="0" max="5" value="0" class="slider">
-                            <br>
-                    </div>
-
-                    <div class="login-signup-input">
-                        <p style="font-size:17px;">What else do you like to share with us?</p>
-                        <textarea <%=others ? 'disabled' : ''
-                            %> id="intro" placeholder="Any fun fact? expectation?" rows="4" cols="50"> <%=profile ? profile.description : ''%> </textarea>
-                        <br>
-                    </div>
+                <label style="font-size:15px;" for="intro"> What else do you like to share with us?</label>
+                <% if(!fromApplicants) { %>
+                    <textarea class="form-control" <%= others ? 'disabled' : '' %> id="intro" 
+                        placeholder="Any fun fact? expectation?" rows="4" cols="50"><%=profile ? profile.description : ''%></textarea>
+                <% } else { %>
+                    <p> <%=profile ? profile.description : ''%> </p>
+                <% } %>
             </div>
 
-            <% if(applying||fromApply) { %>
-
-                <br>
+            <% if(applying||fromApplicants) { %>
                 <div class="login-signup-input">
-                    <% var dev=profile.dev ? profile.dev : [] %>
-                        <label style="font-size:15px;" for="time_for_project"> Roughly how many hours a week
-                            will you be able to
-                            commit for the project this semester?</label>
-                        <input id="time_for_project" class="form-control" type="number"
-                            value="<%= others&&user?user.time_for_project:'' %>" <%=others ? 'disabled' : ''
-                            %> placeholder="" /> <br>
+                    <label style="font-size:15px;" for="time_for_project"> Roughly how many hours a week
+                        will you be able to commit for the project this semester?</label>
+                    <input id="time_for_project" class="form-control" type="number"
+                        value="<%= user?user.time_for_project:'' %>" <%= others ? 'disabled' : '' %> placeholder="" /> <br>
                 </div>
 
+                <div class="login-signup-input">
+                    <label style="font-size:15px;" for="reason"> Why do you want to join this team?</label>
+                    <% if(!fromApplicants) { %>
+                        <textarea id="reason" type="text" placeholder="" class="form-control" rows="5"><%= user? user.reason :''%></textarea>
+                    <% } else { %>
+                        <p><%= user? user.reason :''%></p>
+                    <% } %>
+                </div>
+
+                <div class="login-signup-input" >
+                    <label style="font-size:15px;" for="interests">What role or tasks are your interests?</label>
+                    <% if(!fromApplicants) { %>
+                        <textarea id="interests" type="text" class="form-control" rows="1" placeholder=""><%= user? user.interests :''%></textarea>
+                    <% } else { %>
+                        <p><%= user? user.interests :''%></p>
+                    <% } %>
+                </div>
+
+                <div class="login-signup-input" >
+                    <label for="active_participation" style="font-size:15px;">What would you do to be an active team member?</label>
+                    <% if(!fromApplicants) { %>
+                        <textarea id="active_participation" type="text" placeholder="" class="form-control" rows="3"><%= user? user.active_participation :''%></textarea>
+                    <% } else { %>
+                        <p><%= user? user.active_participation :''%></p>
+                    <% } %>
+                </div>
+
+                <div class="login-signup-input" >
+                    <label style="font-size:15px;" for="contribution">What can you bring to this team, technical or otherwise? (Optional) </label>
+                    <% if(!fromApplicants) { %>
+                        <textarea id="contribution" type="text" placeholder="" class="form-control" rows="5"><%= user ? user.contribution : ''%></textarea>
+                    <% } else { %>
+                        <p><%= user ? user.contribution : 'No Answer'%></p>
+                    <% } %>
+                </div>
 
                 <div class="login-signup-input">
-                    <% var dev=profile.dev ? profile.dev : [] %>
-                        <label style="font-size:15px;" for="reason"> Why do you want to join this team?
-                        </label>
-                        <% if(!fromApply) { %>
-                            <textarea id="reason" type="text" placeholder="" class="form-control"
-                                rows="5"> </textarea>
-                            <% } else { %>
-                                <p>
-                                    <%- user? user.reason :' '%>
-            </p>
-        <% } %>
-        </div>
-
-        <div class="login-signup-input" >
-        <% var dev = profile.dev ? profile.dev : [] %>
-        <label style="font-size:15px;" for="interests">What are your interests?</label>
-        <% if(!fromApply) { %>
-            <textarea id="interests" type="text" class="form-control" rows="1" placeholder=""> </textarea>
-            <% } else { %>
-                <p>
-                <%- user? user.interests :' '%>
-                </p>
+                    <p>When developing softwares in team, there has to be a team leader who directs the
+                        development.</p>
+                    <input class="form-check-input" <%=others ? 'disabled' : '' %> type="checkbox"
+                    id="teamleader" <%= user&&user.intended_teamleader ? 'checked' : '' %> > 
+                    <label for="teamleader">Check this box if you want to be the team leader</label>
+                </div>
             <% } %>
-        </div>
-
-    <div class="login-signup-input" >
-        <% var dev = profile.dev ? profile.dev : [] %>
-        <label for="active_participation" style="font-size:15px;">What would you do to be an active team member?</label>
-        <% if(!fromApply) { %>
-            <textarea id="active_participation" type="text" placeholder="" class="form-control" rows="3"> </textarea>
-            <% } else { %>
-                <p>
-                <%- user? user.active_participation :' '%>
-                </p>
-            <% } %>
-    </div>
-
-    <div class="login-signup-input" >
-        <% var dev = profile.dev ? profile.dev : [] %>
-        <label style="font-size:15px;" for="contribution">What can you bring to this team, technical or otherwise?    (Optional) </label>
-        <% if(!fromApply) { %>
-            <textarea id="contribution" type="text" placeholder="" class="form-control" rows="5"> </textarea>
-            <% } else { %>
-                <p>
-                <%- user&&user.contribution.trim().length>0 ? user.contribution : ' No Answer'%>
-                                        </p>
-                                        <% } %>
-                        </div>
-
-
-
-                        <div class="login-signup-input">
-                            <br>
-                            <p>When developing softwares in team, there has to be a team leader who directs the
-                                development.</p>
-                            <input class="form-check-input" <%=others ? 'disabled' : '' %> type="checkbox"
-                            id="teamleader" <%=fromApply && user.intended_teamleader ? 'checked' : '' %> > <label
-                                    for="teamleader">Check this box if you want to be a
-                                    team leader</label>
-                                <br>
-                        </div>
-
-                        <!-- <% var dev = profile.dev ? profile.dev : [] %>
-                <p style="font-size:15px;">Roughly how many hours will you be able to give for this project this semester?</p>
-                <input id="time_for_project" type="number"    value="<%= others&&user?user.projecthours:'' %>" <%= others ? 'disabled' : '' %>     placeholder="" /> <br>
-        </div>
-
-            <div class="login-signup-input" >
-                <% var dev = profile.dev ? profile.dev : [] %>
-                <p style="font-size:15px;">Why do you want to join this team</p>
-                <% if(!fromApply) { %>
-                    <textarea id="reason" type="text" placeholder=""> </textarea>
-                    <% } else { %>
-                    <p>
-                    <%- user? user.reason :' '%>
-                    </p>
-                    <% } %>
-            </div>
-
-
-            <div class="login-signup-input" >
-                <% var dev = profile.dev ? profile.dev : [] %>
-                <p style="font-size:15px;">What are your interests?</p>
-                <% if(!fromApply) { %>
-                    <textarea id="interests" type="text" placeholder=""> </textarea>
-                    <% } else { %>
-                    <p>
-                    <%- user? user.interests :' '%>
-                    </p>
-                    <% } %>
-            </div>
-
-            <div class="login-signup-input" >
-                <% var dev = profile.dev ? profile.dev : [] %>
-                <p style="font-size:15px;">What would they bring to the team/what would you do to be an active team member?</p>
-                <% if(!fromApply) { %>
-                    <textarea id="active_participation" type="text" placeholder=""> </textarea>
-                    <% } else { %>
-                    <p>
-                    <%- user? user.active_participation :' '%>
-                    </p>
-                    <% } %>
-            </div>
-
-            <div class="login-signup-input" >
-                <% var dev = profile.dev ? profile.dev : [] %>
-                <p style="font-size:15px;">What can you bring to this team? (Optional) </p>
-                <% if(!fromApply) { %>
-                    <textarea id="contribution" type="text" placeholder=""> </textarea>
-                    <% } else { %>
-                    <p>
-                    <%- user? user.contribution :' '%>
-                    </p>
-                    <% } %>
-            </div>
-
-                    <div class="login-signup-input">
-                    <br>
-                    <p>When developing softwares in team, there has to be a team leader who directs the development.</p>
-                    <input <%= others ? 'disabled' : '' %> type="checkbox" id="teamleader" <%=profile.intended_teamleader ? 'checked' : ''%> > Check this box if you want to be a team leader
-                    <br>
-            </div>
--->
-
-
-                        <% } %>
-
-        </form>
-        <div class="login-signup-input" hidden>
-            <br>
-            <p>(Optional) Resume</p>
-            <input type="file" id="resume">
         </div>
 
         <p class="error-msg" id="error-msg"> </p>
         <% if (!others) { %>
             <button id="submit-button" class="btn long-btn primary-button">
-                <% if(!applying) { %>
-                    Update Profile
-                    <% } else { %>
-                        Submit
-                        <% } %>
-            </button>
+            <% if(!applying) { %>
+                Update Profile
+            <% } else { %>
+                Submit
             <% } %>
+            </button>
+        <% } %>
 
-                <% if (fromApply) { %>
-                    <button id="confirmation" class="btn mid-btn primary-button">Approve</button>
-                    <button id="rejectConfirmation" class="btn mid-btn primary-button">Reject</button>
-                    <% } %>
-
-                        <div id="confirmation-box" class="modal fade confirmation-box">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"
-                                            aria-hidden="true">&times;</button>
-                                        <p class="modal-title"> <span id="box-info-title"> </span>&nbsp;Confirmation
-                                        </p>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h4>Are you sure you want to <span id="box-info-text"> </span>?</h4>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button id="confirmed" class="btn highPriority-button">Yes</button>
-                                        <button id="canceled" class="btn primary-button">No</button>
-                                    </div>
-                                </div>
-                            </div>
+        <% if (fromApplicants&&others&&project_id&&canApprove) { %>
+            <button id="confirmation" class="btn mid-btn primary-button">Approve</button>
+            <button id="rejectConfirmation" class="btn mid-btn primary-button">Reject</button>
+            
+            <div id="confirmation-box" class="modal fade confirmation-box">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                            <p class="modal-title"> <span id="box-info-title"> </span>&nbsp;Confirmation
+                            </p>
                         </div>
-        </div>
+                        <div class="modal-body">
+                            <h4>Are you sure you want to <span id="box-info-text"> </span>?</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="confirmed" class="btn highPriority-button">Yes</button>
+                            <button id="canceled" class="btn primary-button">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
 
-        <% include ../template/footer.ejs %>
+    </div>
+    <% include ../template/footer.ejs %>
 </body>
 
 </html>
